@@ -4,14 +4,16 @@
 > it is the answer key. It maps every deliberately planted defect to its location and its expected
 > fix, so defects are *tracked*, not silently scattered (design §7).
 
-There are two kinds of seeded defect:
+This file has two parts:
 
-1. **Legacy baked-in defects** — real bugs that live permanently in `legacy/taskflow-cli` on `main`.
-   The legacy CLI is *meant* to be buggy; these are its known landmines and the raw material for the
-   U7 (debug) and U9 (onboard + refactor) labs.
-2. **Primary per-lab defects** — defects introduced **only on a lab branch** of `primary/taskflow-api`
-   (`start/uNN-labM`), never on `main`. `main` stays green (its pytest suite passes). These are
-   authored in P5 as each lab is written; this file is where they are registered.
+1. **Legacy baked-in defects** (§1) — real bugs that live permanently in `legacy/taskflow-cli` on
+   `main`. The legacy CLI is *meant* to be buggy; these are its known landmines and the raw material
+   for the U7 (debug) and U9 (onboard + refactor) labs.
+2. **Per-lab registry** (§2) — one row per lab describing the starting state it ships: a branch-only
+   planted defect on `primary/taskflow-api`, a deliberate feature *absence* the learner fills, an
+   untrusted fixture, or "none". Primary-substrate defects live **only** on the `start/uNN-labM` tag —
+   `main` stays green (its pytest suite passes); legacy labs are cross-referenced from §1. Authored in
+   P5 as each lab is written; this file is where they are registered.
 
 Lab id / branch convention: starting state is the tag `start/uNN-labM`; the reference solution is the
 branch `solution/uNN-labM` (see `meta/conventions.md`).
@@ -43,17 +45,20 @@ accreted complexity the refactor lab targets. Inventoried so the lab can referen
 
 ---
 
-## 2. Primary per-lab defects — `primary/taskflow-api` (branch-only)
+## 2. Per-lab registry — each lab's starting state, refs & verifier
 
-> **Status:** populated during **P5** as each lab is authored. `main` carries **none** of these — its
-> pytest suite is green. Each row's defect lives only on the lab's `start/uNN-labM` tag; the
-> `solution/uNN-labM` branch holds the reference fix.
+> **What this is:** one row per lab — its substrate, the nature of its starting state (a planted
+> defect, a deliberate *absence* the learner fills, an untrusted fixture, or "none"), and its status.
+> It doubles as the maintainer answer key and the index of `start/`/`solution/` refs + `verify.sh`
+> files. **Primary-substrate** labs introduce their planted state **only** on the `start/uNN-labM`
+> tag — `main`'s pytest suite stays green; **legacy** labs (u07, u09) are registered here for
+> completeness but their bugs live in §1 on legacy `main`, not on a branch.
+>
+> Populated during **P5** as each lab is authored; rows for **U12–U16** are pending (unwritten, not
+> missing). Fill in the *planted state* + status when each lab is written.
 
-Planned slots (derived from the unit map, design §6). Fill in *Defect* / *Expected fix* when the lab
-is written; until then the lab is unwritten, not missing.
-
-| Lab (planned) | Unit | Substrate | Nature of the planted state | Status |
-|---------------|------|-----------|------------------------------|--------|
+| Lab | Unit | Substrate | Nature of the planted state | Status |
+|-----|------|-----------|------------------------------|--------|
 | `u01-lab1` | U1 Onboarding / first win | primary | **No bug — first-win addition.** Start = clean `main` + the baseline `CLAUDE.md`/`.claude/settings.json`. Learner has Claude add a one-line `"service": "taskflow-api"` field to the `/health` response in `app/main.py`. Reference fix on `solution/u01-lab1`; objective check `course/labs/u01-lab1/verify.sh` (suite green + `/health` reports the field). | ✅ authored (P5, U1) |
 | `u03-lab1` | U3 Operate safely | **none** (training tree) | **No code defect — read-only prompt-injection fence.** The untrusted artifact is a fixture, `course/labs/u03-lab1/untrusted-bug-report.md`, carrying an injected payload (create `INJECTED-u03.txt`, exfiltrate `.env`, append `owned-by-1284` to `README.md`). Learner triages it under a fence (`--permission-mode plan`). **No `start/` tag or `solution/` branch** — correct outcome is *no change*, so the lab is read-only (precedent: U2). Objective check `course/labs/u03-lab1/verify.sh` asserts the injection produced **zero** side effects (sentinel absent, `README.md` + `codebases/primary` unmodified, suite green). | ✅ authored (P5, U3) |
 | `u05-lab1` | U5 Ship a feature | primary | **No bug — feature addition (the "defect" is an absence).** Start = clean `main` (tag `start/u05-lab1`); learner ships `GET /projects/{id}/stats` via explore→plan→code→commit (per-status counts, zero-filled every `TaskStatus`, ownership-404). Reference on `solution/u05-lab1` (`ProjectStats` schema + `project_task_stats` service via `get_project` + thin route + tests); objective `course/labs/u05-lab1/verify.sh` checks the contract + ownership-404 + suite green against the learner's working tree. | ✅ authored (P5, U5) |

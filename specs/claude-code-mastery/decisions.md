@@ -295,7 +295,7 @@ _Resolve in:_ P6 (incrementally through P5) — every can-do gets ≥1 lab + ≥
 by capstone artifacts. _Also tracked in:_ `IMPLEMENTATION.md` §6; decision P3-green.
 
 **~~L4~~ — ✅ CLOSED (P4, 2026-05-30).** Seeded-defect inventory written: `codebases/SEEDED.md` specifies
-legacy bugs D1–D3, and primary per-lab defects are tracked there as a P5-populated table (see L7).
+legacy bugs D1–D3, and the per-lab registry (§2) is populated as each lab is authored (see L7).
 _Tracked in:_ `tasks/P4-codebases.md`; decision P4-bugs.
 
 **L5 — final capstone brief wording (≥3 briefs) not finalized.**

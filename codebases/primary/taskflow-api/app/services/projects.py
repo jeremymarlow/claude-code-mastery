@@ -30,10 +30,12 @@ def get_project(session: Session, owner: User, project_id: int) -> Project:
 
 
 def list_projects(
-    session: Session, owner: User, *, limit: int, offset: int
+    session: Session, owner: User, *, limit: int, offset: int, include_archived: bool
 ) -> tuple[list[Project], int]:
     """Return one page of the owner's projects plus the total count (for pagination metadata)."""
     base = select(Project).where(Project.owner_id == owner.id)
+    if not include_archived:
+        base = base.where(Project.archived == False)
     total = session.exec(
         select(func.count()).select_from(base.subquery())
     ).one()
@@ -60,3 +62,14 @@ def delete_project(session: Session, owner: User, project_id: int) -> None:
     project = get_project(session, owner, project_id)
     session.delete(project)  # tasks cascade-delete via the relationship
     session.commit()
+
+
+def archive_project(session: Session, owner: User, project_id: int) -> Project:
+    project = session.get(Project, project_id)
+    if project is None:
+        raise NotFoundError(f"Project {project_id} not found")
+    project.archived = True
+    session.add(project)
+    session.commit()
+    session.refresh(project)
+    return project

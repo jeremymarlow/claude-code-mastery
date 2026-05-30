@@ -25,12 +25,14 @@ def create_project(
 
 @router.get("", response_model=Page[ProjectRead])
 def list_projects(
+    include_archived: bool = True,
     page: Pagination = Depends(pagination_params),
     current_user: User = Depends(get_current_user),
     session: Session = Depends(get_session),
 ) -> Page[ProjectRead]:
     items, total = project_service.list_projects(
-        session, current_user, limit=page.limit, offset=page.offset
+        session, current_user, limit=page.limit, offset=page.offset,
+        include_archived=include_archived,
     )
     return Page(items=items, total=total, limit=page.limit, offset=page.offset)
 
@@ -61,3 +63,12 @@ def delete_project(
     session: Session = Depends(get_session),
 ) -> None:
     project_service.delete_project(session, current_user, project_id)
+
+
+@router.post("/{project_id}/archive", response_model=ProjectRead)
+def archive_project(
+    project_id: int,
+    current_user: User = Depends(get_current_user),
+    session: Session = Depends(get_session),
+) -> Project:
+    return project_service.archive_project(session, current_user, project_id)

@@ -63,3 +63,19 @@ def test_cannot_see_another_users_project(client):
 def test_project_routes_require_auth(client):
     assert client.get("/projects").status_code == 401
     assert client.post("/projects", json={"name": "x"}).status_code == 401
+
+
+def test_owner_can_archive_own_project(client):
+    h = _owner(client)
+    pid = client.post("/projects", json={"name": "Done with this"}, headers=h).json()["id"]
+    resp = client.post(f"/projects/{pid}/archive", headers=h)
+    assert resp.status_code == 200
+    assert resp.json()["archived"] is True
+
+
+def test_archived_project_shown_when_requested(client):
+    h = _owner(client)
+    pid = client.post("/projects", json={"name": "Keep visible on request"}, headers=h).json()["id"]
+    client.post(f"/projects/{pid}/archive", headers=h)
+    ids = {p["id"] for p in client.get("/projects?include_archived=true", headers=h).json()["items"]}
+    assert pid in ids

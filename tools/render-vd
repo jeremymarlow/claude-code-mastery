@@ -1,0 +1,52 @@
+#!/usr/bin/env python3
+"""Render {{vd:key}} tokens in prose by substituting values from meta/version-data.yaml.
+
+This is the version-resilience "build step" (R12.AC2): prose never hardcodes a version-specific
+value, it writes {{vd:key}}; this resolves them. An unresolved key is a HARD ERROR — that is the
+same failure surfaced by `check-version-refs`, kept here so the resolver and the checker share
+one implementation (tools/_common.py).
+
+Usage:
+  tools/render-vd FILE [FILE ...]   # print each file with tokens resolved (to stdout)
+  tools/render-vd --check [FILE...] # don't print; just verify every token resolves
+  tools/render-vd                   # --check across all of course/**/*.md
+"""
+import os
+import sys
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from _common import COURSE, iter_markdown, load_version_data, render_vd  # noqa: E402
+
+
+def main(argv):
+    check_only = "--check" in argv
+    files = [a for a in argv if not a.startswith("--")]
+    vd = load_version_data()
+
+    if files:
+        paths = [__import__("pathlib").Path(f) for f in files]
+    else:
+        check_only = True  # no explicit files => verify the whole course
+        paths = list(iter_markdown(COURSE))
+
+    unresolved_total = {}
+    for path in paths:
+        text = path.read_text(encoding="utf-8")
+        rendered, unresolved = render_vd(text, vd)
+        if unresolved:
+            unresolved_total[str(path)] = sorted(unresolved)
+        if files and not check_only:
+            sys.stdout.write(rendered)
+
+    if unresolved_total:
+        sys.stderr.write("error: unresolved {{vd:key}} references:\n")
+        for path, keys in unresolved_total.items():
+            sys.stderr.write(f"  {path}: {', '.join(keys)}\n")
+        return 1
+    if check_only:
+        print(f"render-vd: all {{vd:key}} references resolve ({len(paths)} file(s) scanned)")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main(sys.argv[1:]))

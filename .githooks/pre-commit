@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+# Local enforcement hook (R13.AC6): run the course's check suite before every commit so
+# authoring problems are caught immediately, not in CI.
+#
+# Activate once per clone:   git config core.hooksPath .githooks
+# Skip in an emergency:      git commit --no-verify   (CI is the backstop)
+set -euo pipefail
+
+repo_root="$(git rev-parse --show-toplevel)"
+cd "$repo_root"
+
+if command -v make >/dev/null 2>&1; then
+  echo "pre-commit: running make check…"
+  make check
+else
+  echo "pre-commit: make not found; running checks directly…"
+  for c in check-frontmatter check-coverage check-links check-version-refs check-traceability; do
+    python3 "tools/$c"
+  done
+fi

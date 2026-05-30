@@ -1,0 +1,65 @@
+#!/usr/bin/env python3
+"""check-links (R13.AC4c): Markdown link integrity.
+
+- Internal links (relative paths) must resolve to a file or directory that exists. A `#anchor`
+  suffix is tolerated (the path must exist; heading-anchor matching is intentionally not enforced
+  to avoid brittle false negatives).
+- External links (http/https) are checked only with `--external` (off by default) so `make check`
+  stays deterministic and offline-friendly (R15.AC1/AC5).
+
+Scans README.md, CLAUDE.md, course/**, and meta/** Markdown.
+"""
+import os
+import re
+import sys
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from _common import COURSE, META, ROOT, Reporter, iter_markdown  # noqa: E402
+
+LINK_RE = re.compile(r"(?<!\!)\[[^\]]*\]\(([^)]+)\)")  # [text](target); skip images ![..](..)
+
+
+def main(argv):
+    rep = Reporter("check-links")
+    do_external = "--external" in argv
+    external = []
+    files = [ROOT / "README.md", ROOT / "CLAUDE.md", *iter_markdown(COURSE, META)]
+
+    for path in files:
+        if not path.exists():
+            continue
+        rel = path.relative_to(ROOT)
+        for target in LINK_RE.findall(path.read_text(encoding="utf-8")):
+            target = target.strip()
+            if target.startswith("#") or target.startswith("mailto:"):
+                continue
+            if target.startswith(("http://", "https://")):
+                external.append((rel, target))
+                continue
+            local = target.split("#", 1)[0]
+            if not local:
+                continue
+            resolved = (path.parent / local).resolve()
+            rep.check(resolved.exists(), f"{rel} -> {target}",
+                      f"{rel}: broken link -> {target}")
+
+    if do_external and external:
+        import urllib.request
+        for rel, url in external:
+            try:
+                req = urllib.request.Request(url, method="HEAD",
+                                             headers={"User-Agent": "course-link-check"})
+                urllib.request.urlopen(req, timeout=10)
+                rep.ok(f"{rel} -> {url}")
+            except Exception as exc:  # noqa: BLE001
+                rep.fail(f"{rel}: external link failed -> {url} ({exc})")
+    elif external:
+        print(f"  note: {len(external)} external link(s) skipped (run with --external to check)")
+
+    if not rep.failures:
+        rep.ok("all internal links resolve")
+    return rep.done()
+
+
+if __name__ == "__main__":
+    raise SystemExit(main(sys.argv[1:]))

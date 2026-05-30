@@ -1,0 +1,34 @@
+#!/usr/bin/env python3
+"""check-version-refs (R13.AC4d): every {{vd:key}} in course prose resolves to a key in
+meta/version-data.yaml.
+
+Scope: course/**/*.md only. The {{vd:key}} token is documented (illustratively) in
+meta/templates/, meta/conventions.md and design.md, where "key" is a placeholder rather than a
+real reference — scanning those would create false positives, so they are intentionally excluded.
+"""
+import os
+import sys
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from _common import COURSE, Reporter, iter_markdown, load_version_data, render_vd  # noqa: E402
+
+
+def main(argv):
+    rep = Reporter("check-version-refs")
+    vd = load_version_data()
+    files = list(iter_markdown(COURSE))
+    any_tokens = False
+    for path in files:
+        _, unresolved = render_vd(path.read_text(encoding="utf-8"), vd)
+        rel = path.relative_to(COURSE.parent)
+        if unresolved:
+            rep.fail(f"{rel}: unresolved {{vd:...}} keys: {', '.join(sorted(unresolved))}")
+        any_tokens = any_tokens or "{{vd:" in path.read_text(encoding="utf-8")
+    if not rep.failures:
+        rep.ok(f"all version references resolve across {len(files)} course file(s)"
+               + ("" if any_tokens else " (no {{vd:}} tokens authored yet)"))
+    return rep.done()
+
+
+if __name__ == "__main__":
+    raise SystemExit(main(sys.argv[1:]))

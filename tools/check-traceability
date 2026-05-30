@@ -1,0 +1,80 @@
+#!/usr/bin/env python3
+"""check-traceability (R13.AC5): the two-way traceability the spec promises.
+
+  A. Every requirement R1–R15 is referenced by >= 1 course artifact (meta/, course/, tools/,
+     .claude/, .github/ — i.e. the built course, not the spec that defines the requirements).
+  B. Every can-do (C1–C17 + CV) traces to >= 1 LAB and >= 1 capstone-rubric dimension.
+
+Parts B (and any not-yet-referenced requirement) depend on content authored in P5/P6. This check
+is built before that content (so it guards as soon as content lands), therefore:
+  - default mode: unmet items are reported as PENDING and do NOT fail the build;
+  - `--strict` (the release / final Definition-of-Done gate): PENDING becomes FAIL.
+
+A lab is detected as a `## Lab` heading in a unit; the can-dos it exercises are the unit's
+front-matter `can_do`. Rubric dimensions are lines in course/capstone/rubric.md tagged with the
+can-do id they assess, e.g. `- [C6] ...` (convention consumed here; authored in P6).
+"""
+import os
+import re
+import sys
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from _common import (  # noqa: E402
+    COURSE, META, ROOT, Reporter, iter_text_files, load_yaml, parse_frontmatter, unit_files,
+)
+
+REQ_RE = re.compile(r"\bR(?:1[0-5]|[1-9])\b")
+CANDO_TAG_RE = re.compile(r"\b(C(?:1[0-7]|[1-9])|CV)\b")
+
+
+def main(argv):
+    strict = "--strict" in argv
+    rep = Reporter("check-traceability")
+    cap = load_yaml(META / "capability-map.yaml")
+    cids = {c["id"] for c in cap["capabilities"]}
+
+    # A. requirement references across the built course
+    scan_roots = [META, COURSE, ROOT / "tools", ROOT / ".claude", ROOT / ".github",
+                  ROOT / "README.md", ROOT / "CLAUDE.md"]
+    referenced = set()
+    for root in scan_roots:
+        files = [root] if root.is_file() else list(iter_text_files(root))
+        for path in files:
+            try:
+                referenced |= set(REQ_RE.findall(path.read_text(encoding="utf-8")))
+            except (UnicodeDecodeError, IsADirectoryError):
+                continue
+    all_reqs = {f"R{i}" for i in range(1, 16)}
+    missing_reqs = sorted(all_reqs - referenced, key=lambda r: int(r[1:]))
+    if missing_reqs:
+        rep.pending(f"requirements not yet referenced by a course artifact: {missing_reqs}")
+    else:
+        rep.ok("every requirement R1–R15 is referenced by a course artifact")
+
+    # B. can-do -> lab and can-do -> rubric dimension
+    lab_cands = set()
+    for path in unit_files():
+        fm = parse_frontmatter(path)
+        if fm and "## Lab" in path.read_text(encoding="utf-8"):
+            lab_cands |= set(fm.get("can_do", []))
+    rubric = COURSE / "capstone" / "rubric.md"
+    rubric_cands = set()
+    if rubric.exists():
+        rubric_cands = set(CANDO_TAG_RE.findall(rubric.read_text(encoding="utf-8")))
+
+    no_lab = sorted(cids - lab_cands)
+    no_rubric = sorted(cids - rubric_cands)
+    if no_lab:
+        rep.pending(f"can-do(s) not yet practiced by a lab: {no_lab}")
+    else:
+        rep.ok("every can-do is practiced by >=1 lab")
+    if no_rubric:
+        rep.pending(f"can-do(s) not yet assessed by a rubric dimension: {no_rubric}")
+    else:
+        rep.ok("every can-do is assessed by >=1 capstone-rubric dimension")
+
+    return rep.done(strict=strict)
+
+
+if __name__ == "__main__":
+    raise SystemExit(main(sys.argv[1:]))

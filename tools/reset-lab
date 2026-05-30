@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+# reset-lab <uNN-labM> — restore a lab's starting state so the next attempt begins clean (R7.AC6).
+#
+# Convention (meta/conventions.md): each lab's clean starting point is the git tag
+# `start/<id>`; the reference solution is the branch `solution/<id>`. This restores the working
+# tree under codebases/ to the `start/<id>` tag.
+#
+# Lab tags are created in P4/P5; until then this exits with a clear message rather than guessing.
+set -euo pipefail
+
+id="${1:-}"
+if [[ -z "$id" ]]; then
+  echo "usage: tools/reset-lab <uNN-labM>   (e.g. tools/reset-lab u05-lab1)" >&2
+  exit 2
+fi
+
+tag="start/${id}"
+if ! git rev-parse -q --verify "refs/tags/${tag}" >/dev/null; then
+  echo "reset-lab: no starting tag '${tag}' yet — is the lab id correct? (see meta/conventions.md)" >&2
+  exit 1
+fi
+
+if ! git diff --quiet || ! git diff --cached --quiet; then
+  echo "reset-lab: you have uncommitted changes. Commit or stash them first, then re-run." >&2
+  exit 1
+fi
+
+echo "reset-lab: restoring codebases/ to '${tag}'…"
+git checkout "${tag}" -- codebases/
+echo "reset-lab: done. Lab ${id} starts clean."

@@ -1,0 +1,104 @@
+#!/usr/bin/env python3
+"""doctor — the course preflight (R11.AC2).
+
+Checks, in order, and reports pass/fail for each:
+  1. install        — the `claude` CLI is on PATH
+  2. version        — `claude --version` parses; compared to the recorded verified version
+  3. auth + first   — a real non-interactive command round-trips (`claude -p`), proving auth works
+  4. tooling deps   — the course's own check suite can run (python + pyyaml + jsonschema)
+
+It doubles as a worked example of *scripting Claude Code* (R14.AC2): note how step 3 drives the
+CLI headlessly with `-p` and inspects the result — the same pattern U16 generalizes.
+
+Usage:
+  tools/doctor              # run all checks (step 3 makes one real API call)
+  tools/doctor --no-probe   # skip the API round-trip (offline / CI-safe)
+  tools/doctor --manual     # also print the manual checklist fallback
+"""
+import os
+import re
+import shutil
+import subprocess
+import sys
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from _common import META, Reporter, load_version_data  # noqa: E402
+
+MANUAL_CHECKLIST = """
+Manual checklist (if the doctor can't run, or to self-verify):
+  [ ] `claude --version` prints a version.
+  [ ] `claude` opens an interactive session (then type /exit).
+  [ ] You are authenticated (run `claude auth` if not).
+  [ ] `claude -p "reply with ok"` prints a reply — proves auth + a first command.
+  [ ] Python 3 is available with pyyaml + jsonschema (`make check` runs the course's own checks).
+If `claude --version` differs from meta/version-record.md, see that file: some version-specific
+details may have moved (they live in meta/version-data.yaml, referenced as {{vd:key}}).
+""".rstrip()
+
+
+def _ver_tuple(v):
+    return tuple(int(x) for x in v.split("."))
+
+
+def main(argv):
+    rep = Reporter("doctor")
+    probe = "--no-probe" not in argv
+    recorded = load_version_data().get("_verified_version")
+
+    # 1. install
+    claude = shutil.which("claude")
+    if not rep.check(bool(claude), f"claude is installed ({claude})", "claude not found on PATH"):
+        print(MANUAL_CHECKLIST)
+        return rep.done()
+
+    # 2. version
+    installed = None
+    try:
+        out = subprocess.run(["claude", "--version"], capture_output=True, text=True, timeout=30)
+        m = re.search(r"\d+\.\d+\.\d+", out.stdout)
+        installed = m.group(0) if m else None
+    except (subprocess.SubprocessError, OSError) as exc:
+        rep.fail(f"could not run `claude --version` ({exc})")
+    if installed:
+        if installed == recorded:
+            rep.ok(f"version {installed} (matches recorded verified version)")
+        elif _ver_tuple(installed) < _ver_tuple(recorded):
+            rep.pending(f"version {installed} is older than the verified {recorded}; "
+                        "some version-specific details may differ (see meta/version-record.md)")
+        else:
+            rep.ok(f"version {installed} (newer than verified {recorded}; latest-targeting)")
+    else:
+        rep.fail("could not parse `claude --version`")
+
+    # 3. auth + first command
+    if probe:
+        try:
+            out = subprocess.run(["claude", "-p", "Reply with exactly: ok"],
+                                 capture_output=True, text=True, timeout=120)
+            ok = out.returncode == 0 and "ok" in out.stdout.lower()
+            rep.check(ok, "auth + first command round-tripped (`claude -p`)",
+                      f"`claude -p` failed (exit {out.returncode}): "
+                      f"{(out.stderr or out.stdout).strip()[:200]}")
+        except subprocess.TimeoutExpired:
+            rep.fail("`claude -p` timed out — check network/auth")
+        except (subprocess.SubprocessError, OSError) as exc:
+            rep.fail(f"`claude -p` could not run ({exc})")
+    else:
+        rep.pending("skipped auth/first-command probe (--no-probe)")
+
+    # 4. tooling deps
+    try:
+        import yaml  # noqa: F401
+        import jsonschema  # noqa: F401
+        rep.ok("course tooling deps present (python, pyyaml, jsonschema)")
+    except ImportError as exc:
+        rep.fail(f"missing tooling dependency: {exc.name} (pip install pyyaml jsonschema)")
+
+    code = rep.done()
+    if code or "--manual" in argv:
+        print(MANUAL_CHECKLIST)
+    return code
+
+
+if __name__ == "__main__":
+    raise SystemExit(main(sys.argv[1:]))

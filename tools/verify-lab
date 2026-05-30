@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+# verify-lab <uNN-labM> — run a lab's objective self-check (R7.AC5).
+#
+# Convention (meta/conventions.md): each lab ships an executable verifier at
+# `course/labs/<id>/verify.sh` that exits 0 on success and non-zero on failure (it may run
+# `pytest -k …`, a script, or any objective check). Where automation is infeasible, the unit's
+# prose self-check (R7.AC3) is authoritative and no verifier file is provided.
+#
+# Lab verifiers are authored in P5; until then this reports that none exists yet.
+set -euo pipefail
+
+id="${1:-}"
+if [[ -z "$id" ]]; then
+  echo "usage: tools/verify-lab <uNN-labM>   (e.g. tools/verify-lab u05-lab1)" >&2
+  exit 2
+fi
+
+root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+verifier="${root}/course/labs/${id}/verify.sh"
+
+if [[ ! -f "$verifier" ]]; then
+  echo "verify-lab: no automated verifier at course/labs/${id}/verify.sh." >&2
+  echo "            Use the unit's prose self-check for this lab (R7.AC3)." >&2
+  exit 1
+fi
+
+echo "verify-lab: running ${verifier}…"
+if bash "$verifier"; then
+  echo "verify-lab: ${id} PASSED"
+else
+  echo "verify-lab: ${id} FAILED — see output above" >&2
+  exit 1
+fi

@@ -43,7 +43,7 @@ This is the meta-skill the course is teaching — Claude is also your debugger a
 ## FAQ
 
 - **"A command/flag in a unit doesn't exist on my CLI."** Your version differs from the verified one
-  (`meta/version-record.md`). Check the `{{vd:key}}` callout near it; report drift via
+  (`meta/version-record.md`). Check the version-detail callout near it; report drift via
   `tools/check-version-drift`.
 - **"My lab won't reset cleanly."** Commit or stash your work first, then `tools/reset-lab uNN-labM`.
 - **"Do I have to do the labs in order?"** No — follow the prerequisites in each unit's front matter

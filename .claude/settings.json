@@ -1,0 +1,18 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(make check:*)",
+      "Bash(make check-strict:*)",
+      "Bash(make drift:*)",
+      "Bash(make render:*)",
+      "Bash(make doctor:*)",
+      "Bash(./tools/check-frontmatter:*)",
+      "Bash(./tools/check-coverage:*)",
+      "Bash(./tools/check-links:*)",
+      "Bash(./tools/check-version-refs:*)",
+      "Bash(./tools/check-traceability:*)",
+      "Bash(./tools/check-version-drift:*)",
+      "Bash(./tools/render-vd:*)"
+    ]
+  }
+}

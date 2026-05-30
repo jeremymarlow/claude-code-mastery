@@ -151,6 +151,24 @@ Decisions/notes made during P2 (non-obvious calls):
 | P2-cov ✅ | **Awareness-area home units assigned** (design §4 left rows 27/28 "home unit TBD §6"): IDE→U1 (onboarding), output-styles→U4 (near memory/context customization), managed-settings→U3 mention (security/settings context); extended-thinking→U5 mention. | Resolves the deferred edge cases so coverage cross-validation is clean; depth can still grow later. |
 | P2-env ✅ | **Project virtualenv at `.venv`** (pyyaml, jsonschema) for YAML→JSON generation and the forthcoming P3 Python `tools/` suite; added to `.gitignore` along with Python artifacts. Also fixed a pre-existing `.gitignore` typo (`pecs/`→`specs/`). | Reproducible generation; the tooling stack is Python (design §8). |
 
+## P3 — Tooling & enforcement executed (2026-05-30)
+
+Built the Python `tools/` suite (design §8) **before** content so it guards authoring: `doctor`,
+`check-frontmatter`, `check-coverage`, `check-links`, `check-version-refs`, `check-traceability`,
+`check-version-drift`, `render-vd`, `verify-lab`/`reset-lab`, shared `_common.py`; `Makefile`
+(`make check` / `check-strict` / `drift` / `doctor` / `render` / `snapshot`); git pre-commit
+(`.githooks/`, active via `core.hooksPath`); GitHub Actions CI (`.github/workflows/checks.yml`);
+`.claude/settings.json` (permissions); `meta/cli-commands.snapshot`. **`make check` is green** against
+the P2 artifacts; `make check-strict` correctly fails on P5/P6-pending items; `doctor`, drift, and
+the pre-commit hook all verified working.
+
+| # | Decision | Rationale |
+|---|---|---|
+| P3-green ✅ | **Checks run green before content exists** by enforcing the fully-satisfiable meta-artifact invariants now, and treating not-yet-authored downstream (labs, rubric, the R8 requirement reference) as **PENDING** (non-failing) in default mode. **`--strict`** (and `make check-strict`) turn PENDING→FAIL — that's the final release/DoD gate. | Satisfies the P3 DoD ("green against P2 artifacts") while keeping the check meaningful and strict as content lands. |
+| P3-scope ✅ | **`check-version-refs` scans `course/**` only** (not meta/templates, conventions, or design.md, where `{{vd:key}}` is documented illustratively). `check-links` checks internal links always, external only with `--external` (offline-deterministic, R15). | Avoids false positives from the syntax being *documented*; keeps `make check` deterministic/offline. |
+| P3-hook ✅ | **Claude Code in-session hook deferred to U14.** Local enforcement now = git pre-commit + CI (R13.AC6 satisfied). The in-session hook is U14's authentic deliverable (R14.AC2) and authoring it requires verifying the hooks settings schema against the CLI (R12.AC3) — which belongs in its home unit, not seeded from memory here. | Honors the project's own "no version-specific config from memory" rule; the user's machine had no existing hooks config to verify the schema against. |
+| P3-tools ✅ | **Tools are no-extension kebab-case executables** (`tools/check-coverage`, `tools/verify-lab`, …) per `meta/conventions.md`, a minor deviation from design §7's `.sh` suffix (user-delegated, adjustable). Lab tools are bash; checks are Python (`.venv`: pyyaml, jsonschema). | Consistency with the conventions already committed in P2; references in README/stuck.md/templates stay valid. |
+
 ## Open decisions — 🔓 remaining (deferred to implementation, not blocking)
 
 - Per-feature awareness/core tier edge cases (coverage matrix rows 10, 27–29) — home units now assigned in P2 (see P2-cov above); revisit depth if a unit needs more.

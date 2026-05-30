@@ -1,0 +1,72 @@
+#!/usr/bin/env python3
+"""check-frontmatter (R13.AC4a): every authored unit's YAML front matter validates against
+meta/unit-frontmatter.schema.json, and a few cross-file invariants hold (id is unique and known
+to the catalog; declared can_do / coverage_areas / workflows reference real entries).
+
+Vacuously green until P5 authors units — exactly what we want from a guard built before content.
+"""
+import json
+import os
+import sys
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from _common import META, Reporter, load_yaml, parse_frontmatter, unit_files  # noqa: E402
+
+import jsonschema  # noqa: E402
+
+
+def main(argv):
+    rep = Reporter("check-frontmatter")
+    schema = json.loads((META / "unit-frontmatter.schema.json").read_text(encoding="utf-8"))
+    validator = jsonschema.Draft202012Validator(schema)
+
+    catalog = load_yaml(META / "use-case-catalog.yaml")
+    cap = load_yaml(META / "capability-map.yaml")
+    cov = load_yaml(META / "coverage-matrix.yaml")
+    known_units = {u["unit"] for u in catalog["use_cases"]}
+    known_caps = {c["id"] for c in cap["capabilities"]}
+    known_areas = {a["id"] for a in cov["areas"]}
+    valid_workflows = {f"W{i}" for i in range(1, 10)}
+
+    files = unit_files()
+    seen_ids = {}
+    for path in files:
+        rel = path.relative_to(META.parent)
+        fm = parse_frontmatter(path)
+        if fm is None:
+            rep.fail(f"{rel}: no YAML front matter found")
+            continue
+        errors = sorted(validator.iter_errors(fm), key=lambda e: e.path)
+        if errors:
+            for e in errors:
+                loc = "/".join(str(p) for p in e.path) or "(root)"
+                rep.fail(f"{rel}: {loc}: {e.message}")
+            continue
+        uid = fm["id"]
+        if uid in seen_ids:
+            rep.fail(f"{rel}: duplicate unit id {uid} (also in {seen_ids[uid]})")
+        seen_ids[uid] = rel
+        if uid not in known_units:
+            rep.fail(f"{rel}: id {uid} is not in the use-case catalog")
+        bad_caps = set(fm["can_do"]) - known_caps
+        bad_areas = set(fm["coverage_areas"]) - known_areas
+        bad_wf = set(fm["workflows"]) - valid_workflows
+        bad_prereq = set(fm["prerequisites"]) - known_units
+        if bad_caps:
+            rep.fail(f"{rel}: unknown can_do ids {sorted(bad_caps)}")
+        if bad_areas:
+            rep.fail(f"{rel}: unknown coverage_areas {sorted(bad_areas)}")
+        if bad_wf:
+            rep.fail(f"{rel}: unknown workflow ids {sorted(bad_wf)}")
+        if bad_prereq:
+            rep.fail(f"{rel}: unknown prerequisite unit ids {sorted(bad_prereq)}")
+        if not rep.failures:
+            rep.ok(f"{rel}: front matter valid ({uid})")
+
+    if not files:
+        rep.ok("no units authored yet — nothing to validate (guard is in place)")
+    return rep.done()
+
+
+if __name__ == "__main__":
+    raise SystemExit(main(sys.argv[1:]))

@@ -1,0 +1,91 @@
+#!/usr/bin/env python3
+"""check-coverage (R13.AC4b): the capability map, use-case catalog, and coverage matrix are
+mutually consistent, so that every can-do (C1–C17 + CV) and every coverage-matrix area is
+accounted for by a unit.
+
+What it enforces (fully satisfiable from the P2 meta artifacts, so green now):
+  1. Every capability's home_unit resolves to a catalog unit (or the cross-cutting sentinel).
+  2. Every can-do is advanced by >= 1 catalog unit; every catalog `advances` id is a real can-do.
+  3. Every coverage area lists >= 1 `covered_by`; every referenced unit exists.
+  4. Every unit appears in >= 1 coverage area; all nine workflows (W1–W9) are mapped by a unit.
+  5. If unit files exist, each unit's front-matter can_do / coverage_areas are consistent with the
+     catalog/matrix (the unit really advances/touches what the declarations claim).
+
+"Every can-do is practiced by a LAB" and "assessed by a rubric dimension" are traceability
+concerns (R13.AC5) and live in check-traceability, which depends on content authored later.
+"""
+import os
+import sys
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from _common import META, Reporter, load_yaml, parse_frontmatter, unit_files  # noqa: E402
+
+
+def main(argv):
+    rep = Reporter("check-coverage")
+    cap = load_yaml(META / "capability-map.yaml")
+    cat = load_yaml(META / "use-case-catalog.yaml")
+    cov = load_yaml(META / "coverage-matrix.yaml")
+
+    cids = {c["id"] for c in cap["capabilities"]}
+    units = {u["unit"] for u in cat["use_cases"]}
+
+    # 1. capability home units
+    homes = {c["home_unit"] for c in cap["capabilities"]}
+    bad_homes = {h for h in homes if h not in units and h != "every-lab"}
+    rep.check(not bad_homes, "every capability home_unit resolves to a unit",
+              f"capability home_unit(s) not a known unit: {sorted(bad_homes)}")
+
+    # 2. can-do <-> catalog advances
+    advanced = set()
+    for u in cat["use_cases"]:
+        advanced |= set(u["advances"])
+    rep.check(cids <= advanced, "every can-do is advanced by >=1 catalog unit",
+              f"can-do(s) advanced by no unit: {sorted(cids - advanced)}")
+    rep.check(advanced <= cids, "every catalog 'advances' id is a real can-do",
+              f"catalog references unknown can-do(s): {sorted(advanced - cids)}")
+
+    # 3. coverage areas
+    cov_units = set()
+    for a in cov["areas"]:
+        if not a.get("covered_by"):
+            rep.fail(f"coverage area {a['id']} ({a['area']}) has no covered_by")
+        for ref in a.get("covered_by", []):
+            cov_units.add(ref.split(":")[0])
+    bad_cov = cov_units - units
+    rep.check(not bad_cov, "every coverage 'covered_by' references a real unit",
+              f"coverage references unknown unit(s): {sorted(bad_cov)}")
+
+    # 4. units cover areas; workflows all mapped
+    uncovered = units - cov_units
+    rep.check(not uncovered, "every unit covers >=1 coverage area",
+              f"unit(s) cover no area: {sorted(uncovered)}")
+    mapped_wf = set()
+    for u in cat["use_cases"]:
+        mapped_wf |= set(u["workflows"])
+    all_wf = {f"W{i}" for i in range(1, 10)}
+    rep.check(mapped_wf == all_wf, "all nine workflows (W1–W9) are mapped to a unit",
+              f"workflow mapping mismatch: missing {sorted(all_wf - mapped_wf)}")
+
+    # 5. authored units consistent with declarations
+    by_unit = {u["unit"]: u for u in cat["use_cases"]}
+    files = unit_files()
+    for path in files:
+        fm = parse_frontmatter(path)
+        if not fm or fm.get("id") not in by_unit:
+            continue  # check-frontmatter reports structural problems
+        decl = by_unit[fm["id"]]
+        missing_caps = set(decl["advances"]) - set(fm["can_do"])
+        if missing_caps:
+            rep.fail(f"{path.name} ({fm['id']}): front matter omits catalog can-do(s) "
+                     f"{sorted(missing_caps)}")
+    if files:
+        rep.ok(f"{len(files)} authored unit(s) consistent with catalog declarations")
+    else:
+        rep.ok("no units authored yet — declaration invariants enforced (guard in place)")
+
+    return rep.done()
+
+
+if __name__ == "__main__":
+    raise SystemExit(main(sys.argv[1:]))

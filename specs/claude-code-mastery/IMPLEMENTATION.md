@@ -42,7 +42,7 @@ over memory for specifics; memory is a pointer, the spec is the source of truth.
 | Rationale (`decisions.md`) | ✅ Per-phase decisions + the canonical 🔓 open-loops ledger |
 
 **Phase 3 (Tasks) breakdown:** P1 ✅ · P2 ✅ · P3 ✅ · P4 ✅ (both lab codebases built; `SEEDED.md`
-inventory + offline mock) · **P5 🟦 authoring units — U1–U11 ✅, U12–U16 remaining** · P6 ⬜
+inventory + offline mock) · **P5 🟦 authoring units — U1–U12 ✅, U13–U16 remaining** · P6 ⬜
 (capstone, case study, finalization). Current branch: **`spec/tasks-phase`**.
 
 **Where the detail lives** (don't restate it here):

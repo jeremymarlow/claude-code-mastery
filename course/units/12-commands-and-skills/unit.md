@@ -1,0 +1,212 @@
+---
+id: U12
+title: "Package a repeatable routine as a custom command and a skill"
+stage: autonomy-scale
+depth_tier: core
+use_case: "Eliminate repetitive prompting"
+can_do: [C13]
+workflows: []
+coverage_areas: [17, 18]
+prerequisites: [U4]
+reading_time_min: 8
+lab_time_min: 20
+---
+
+# Package a repeatable routine as a custom command and a skill
+
+## Learning objectives
+
+By the end of this unit you can:
+
+- **Turn a routine you keep hand-typing into a custom slash command** — a saved, argument-taking
+  prompt you trigger with `/name` — so the routine is one keystroke instead of a paragraph. Advances
+  `C13`.
+- **Package a structured, reusable capability as a skill** — a named `SKILL.md` whose *description*
+  tells Claude when it applies — so the capability is available across tasks, not retyped per session.
+  Advances `C13`.
+- **Choose correctly between the two** — reach for a command when *you* deliberately trigger a prompt,
+  and a skill when a multi-step capability is worth naming and letting Claude recognize.
+- **Scope each one deliberately** — project (`.claude/`, committed, shared) vs. personal (`~/.claude/`),
+  the same source distinction you met for settings in [U4](../04-memory-and-context/unit.md).
+
+## Fast path (TL;DR)
+
+> Stop re-typing the same prompt. A **custom slash command** is a saved prompt in a markdown file
+> under `.claude/commands/` — its filename becomes `/name`, and it can take arguments ({{vd:custom-commands}}).
+> A **skill** is a packaged capability in `.claude/skills/<name>/SKILL.md` with a `name` + a
+> `description` that lets Claude pull it in when it fits ({{vd:skills}}). Rule of thumb: a prompt *you*
+> trigger on demand → command; a structured capability worth naming and reusing across tasks → skill.
+> This repo ships both as worked examples — `/new-unit` (command) and `unit-check` (skill). The lab has
+> you build one of each against `taskflow-api`; the self-check is a checklist on the two artifacts.
+
+## Skip-check
+
+**Skip this unit if you can already:** take a routine you repeat by hand and package it two ways — as a
+custom slash command (a saved, argument-taking prompt you invoke with `/name`) and as a skill (a named
+`SKILL.md` with a when-to-use description Claude can act on) — and explain which form fits which routine
+and why, rather than re-typing the same instructions into every session.
+
+## Concept
+
+Up to here you've been *typing* every instruction. The Autonomy stage is about the opposite move:
+**packaging** work so a routine you've proven runs again without re-deriving it. The two lightest-weight
+packages are the subject of this unit — custom **commands** and **skills**. Both kill repetitive
+prompting; they differ in how they're triggered and how much structure they carry.
+
+**1 — A custom slash command is a saved prompt.** It's a markdown file under `.claude/commands/`; the
+filename is the command, so `new-unit.md` becomes `/new-unit`. Invoking it expands the file's contents
+into the conversation exactly as if you'd typed them — including any arguments you pass (`$1`, `$2`,
+`$ARGUMENTS`). That's the whole model: a *prompt template you trigger deliberately*. Reach for a command
+when you catch yourself re-typing the same paragraph — a scaffolder, a "draft release notes from the
+diff," a "review this against our checklist" pass. The invocation surface (how it's called, argument
+syntax, how to disable them) is the version-specific part: {{vd:custom-commands}}.
+
+**2 — A skill is a packaged capability Claude can reach for.** It's a `SKILL.md` under
+`.claude/skills/<name>/`, with front matter carrying a `name` and — critically — a `description`. You
+can still invoke it explicitly (`/skill-name`), but the description is what lets Claude recognize *when
+the skill applies* and pull it in on its own. Reach for a skill when a routine has enough structure to
+be worth naming: several steps, conditions, references to specific tools or files — a capability you
+want available across many tasks rather than triggered by one keystroke. The resolution surface is
+{{vd:skills}}.
+
+**3 — Choosing between them.** Same goal — stop re-typing — so the line is about *trigger* and
+*structure*:
+
+- **Command** when the routine is a *prompt you fire on demand*, usually with an argument. Lightest
+  weight: it's literally a prompt with placeholders. You decide exactly when it runs.
+- **Skill** when the routine is a *capability worth a name and a when-to-use description*. Slightly more
+  structure, and Claude can surface it for you when the situation matches the description. The
+  description is the skill's most important line — a vague one means Claude never recognizes the moment.
+
+Don't agonize: many routines work as either, and the cost of picking "wrong" is small. The mistakes that
+actually bite are packaging a routine you *don't* repeat (over-automation) and writing a skill with a
+description so vague it never fires.
+
+**4 — Scope: project vs. personal.** Both live in `.claude/` (project-scoped — committed to the repo,
+shared with everyone who clones it) or `~/.claude/` (personal — your habits across every project). This
+is the same source distinction you met for `settings.json` in [U4](../04-memory-and-context/unit.md):
+put a command/skill the *team* should have in the project; keep your personal shortcuts in `~/.claude/`.
+A team scaffolder committed to `.claude/commands/` means every contributor scaffolds the same way — that
+is exactly why *this* repo commits `new-unit` and `unit-check`.
+
+**Version currency.** Verified against Claude Code `{{vd:_verified_version}}`. The on-disk locations
+(`.claude/commands/`, `.claude/skills/<name>/SKILL.md`) are filesystem **conventions** — confirm the
+exact paths and the invocation/argument syntax against `claude --help` and the docs before relying on a
+detail; the version-specific surfaces are {{vd:custom-commands}} and {{vd:skills}}, tracked in
+[`meta/version-record.md`](../../../meta/version-record.md).
+
+## Worked example
+
+This repository carries one of each, and they are the real tools used to build the course — read them
+as your templates (`cat` them as you follow along).
+
+**The skill — [`.claude/skills/unit-check/SKILL.md`](../../../.claude/skills/unit-check/SKILL.md).**
+Its front matter is two lines that do all the work: `name: unit-check`, and a `description` that says
+*when* to use it — "after authoring or editing a unit, to confirm front matter, coverage, links,
+version-refs, and traceability are green." That description is the trigger: it's specific about the
+situation, so Claude can recognize the moment ("I just edited a unit") and reach for the skill. The body
+is the structured part a bare prompt wouldn't carry well — run `make check`, branch on green vs. red,
+and a labelled list of what each of the five checks guards. It's a *capability* ("check a unit's
+health"), named and described, not a one-off prompt — which is exactly why it's a skill and not a
+command.
+
+**The command — [`.claude/commands/new-unit.md`](../../../.claude/commands/new-unit.md).** Its front
+matter is a `description` and an `argument-hint: <NN> <slug>`. The body is a prompt that uses those
+arguments (`$1`, `$2`) and instructs Claude to scaffold `course/units/$1-$2/unit.md` from the template,
+pulling every front-matter value from the single-source meta files rather than inventing them. You run
+it deliberately — `/new-unit 13 13-subagents` when you start the next unit — and it expands into that
+instruction. It's a *prompt you trigger*, with arguments, so it's a command, not a skill. (We used it to
+scaffold the units after this one — authentic dogfooding, R14.)
+
+Side by side: the skill is named and self-describing so Claude can pull it in; the command is a saved
+prompt you fire on demand with arguments. Same intent — never type the routine again — different
+trigger.
+
+## Lab
+
+> **This lab has no automated verifier.** Whether a command or skill is *good* is a judgment call, and
+> the artifacts you produce live in your own `.claude/` (R7.AC3/AC7). So the self-check is an objective
+> checklist you apply to what you built, with this repo's `new-unit` / `unit-check` as the reference
+> patterns to compare against.
+
+**Goal:** take two routines you'd otherwise hand-type while working in `taskflow-api` and package each
+in the form that fits — **one custom command and one skill** — so each runs without re-typing, and so
+you can say *why* each took the form it did.
+
+**Starting state:** the clean primary codebase. `cd codebases/primary/taskflow-api`; create your
+artifacts under that project's `.claude/` so they're scoped to it (nothing here is pushed for you).
+
+**Build these two:**
+
+1. **A custom command** — a *prompt you trigger*, with at least one argument. Suggested:
+   `/scaffold-route <name>` → a saved prompt that scaffolds a new FastAPI route + schema + a test stub
+   following `taskflow-api`'s existing conventions, for the resource you name. Put it in
+   `.claude/commands/scaffold-route.md` and invoke `/scaffold-route reports`.
+2. **A skill** — a *named capability with a when-to-use description*. Suggested: `api-test-triage` →
+   runs `pytest`, and when something fails, summarizes which tests broke and the likely cause. Put it in
+   `.claude/skills/api-test-triage/SKILL.md`; write the `description` so it states the situation
+   ("after editing the API, to confirm the suite is green and triage failures") — specific enough that
+   Claude would reach for it on its own.
+
+**Steps:**
+
+1. Pick the two routines (the suggestions above, or two of your own you genuinely repeat).
+2. For each, decide *command or skill first* — is this a prompt I fire on demand (command), or a named
+   capability worth a when-to-use description (skill)? Write down the reason.
+3. Author the files. Lean on the two repo artifacts as templates; don't author the front-matter or
+   invocation format from memory — check the current convention ({{vd:custom-commands}}, {{vd:skills}}).
+4. Run each: invoke `/scaffold-route ...`, and trigger the skill, and confirm each produces the routine's
+   outcome with less typing than doing it by hand.
+
+**Self-check (objective checklist — R7.AC3):** you're done when **all** hold:
+
+- [ ] The command file exists under `.claude/commands/`, and invoking `/name` expands its prompt; it
+      takes **at least one argument** and uses it.
+- [ ] The skill exists at `.claude/skills/<name>/SKILL.md` with a `name` and a `description` that states
+      **when** to use it (not just what it does) — specific enough that Claude could surface it unasked.
+- [ ] Each genuinely **replaces a routine you were hand-typing** — running it yields the same outcome
+      with materially less typing.
+- [ ] You can **articulate why each is a command vs. a skill** (on-demand prompt + arguments → command;
+      named, described, reusable capability → skill) — not a coin flip.
+- [ ] Neither **hardcodes a version-specific value**; both reference `taskflow-api`'s own
+      files/conventions rather than restating them, and version-specifics are confirmed against
+      `claude --help` rather than baked in.
+
+**Reference:** there's no `solution/` branch — the artifacts are *yours*. The repo's
+[`new-unit`](../../../.claude/commands/new-unit.md) and
+[`unit-check`](../../../.claude/skills/unit-check/SKILL.md) are the reference patterns; compare your two
+against them and the checklist above.
+
+## Common pitfalls
+
+- **Building a "skill" that's really a command (or vice-versa).** A `SKILL.md` with no when-to-use
+  description is just a prompt in the wrong place; a command that needs Claude to *recognize* when to run
+  it wants to be a skill. Decide on trigger + structure first, then pick the form.
+- **A vague skill description.** "Helps with tests" never fires — Claude can't match it to a moment.
+  Name the *situation* ("after editing the API, to confirm the suite is green") so the description earns
+  its keep.
+- **Automating a routine you don't actually repeat.** Packaging a one-off costs more than it saves and
+  rots. Package what you've typed three times, not what you might type once.
+- **Hardcoding what should be an argument or a project reference.** A command that bakes in one resource
+  name, or restates conventions instead of pointing at the code, only works for the case you wrote it
+  for. Parameterize; reference the source.
+- **Authoring the format from memory.** Front-matter fields, argument syntax, and on-disk paths are the
+  version-specific surface — copy the working repo artifacts and confirm against `claude --help` rather
+  than trusting recall ({{vd:custom-commands}}, {{vd:skills}}).
+- **Scope confusion.** A personal shortcut committed to project `.claude/` gets pushed onto the whole
+  team; a team scaffolder left in `~/.claude/` never reaches them. Decide project vs. personal on
+  purpose ([U4](../04-memory-and-context/unit.md)).
+
+## Going deeper
+
+- **Next:** the rest of the Autonomy stage extends "package the work." U13 (subagents) delegates a
+  scoped task to a **subagent**; U14 (hooks) automates enforcement with **hooks** — and this repo's own
+  check suite (the one `unit-check` wraps) is U14's worked example; U16 (automate & scale) runs these
+  packaged routines headlessly and in parallel.
+- **Scope & sources** — project vs. personal `.claude/` is the same distinction as settings sources in
+  [U4](../04-memory-and-context/unit.md).
+- The invocation, argument, and resolution surfaces — {{vd:custom-commands}} and {{vd:skills}};
+  version-specifics in [`meta/version-record.md`](../../../meta/version-record.md). Confirm with
+  `claude --help`.
+- Stuck? [`course/stuck.md`](../../stuck.md) and the
+  [progress checklist](../../progress-checklist.md).

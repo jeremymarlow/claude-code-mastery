@@ -268,6 +268,15 @@ _Format: **decision-id** — the decision; **Why:** the rationale._
 **P5-U11-vd ✅** — U11 consumes only the *verified* `review-cmds` key (`/code-review`, `/security-review`, `ultrareview`) plus `_verified_version`. **No new L1 debt.**
 **Why:** `review-cmds` is `unverified: false` (ultrareview verified from `--help`; the slash-command names noted as the soft spot but the key is not flagged). The review *method* (triage findings, confirm with a test) is version-independent.
 
+**P5-U12-artifacts ✅** — U12 dogfoods two *real* artifacts built for the purpose (R14.AC1): `.claude/commands/new-unit.md` — a `/new-unit <NN> <slug>` slash command that scaffolds `course/units/NN-slug/unit.md` from `meta/templates/unit-core.md`, pulling all front matter from the single-source meta files (`use-case-catalog.yaml`, `coverage-matrix.yaml`, the design dependency graph) rather than inventing values — and `.claude/skills/unit-check/SKILL.md` — a skill wrapping `make check` with a when-to-use description and per-check (frontmatter/coverage/links/version-refs/traceability) guidance. Built **first**, so the unit's worked example documents working tools, not props; `new-unit` is the actual scaffolder for U13–U16.
+**Why:** areas 17/18 + R14.AC1 call for authentic dogfooded command/skill examples, but `.claude/` previously held only `settings.json`. Decided with the user (chose "build real ones" over a reference-only pointer): genuine authoring tools satisfy R14 honestly and pay forward into the remaining Autonomy units. A third *learner-consumable* skill was considered and **rejected as overboard** — area 18 is already covered by the learner *building* a skill in the lab, and a pre-made one to invoke adds maintenance surface with no AC backing.
+
+**P5-U12-lab ✅** — prose-self-check lab (no `start/`/`solution/` refs, like U8/U10): the learner builds one command (`/scaffold-route <name>` — scaffold a FastAPI route+schema+test stub) **and** one skill (`api-test-triage` — run pytest + triage failures) in `taskflow-api`'s own `.claude/`, graded by an objective checklist with the repo's `new-unit`/`unit-check` as the reference patterns. Covers area 17 (command) + area 18 (skill).
+**Why:** building a command/skill is create-from-scratch in the learner's own `.claude/`; a diff-against-`solution/` branch fits poorly (R7.AC3/AC7). The checklist tests *form-fit* (command vs. skill chosen for the right reason — trigger + structure) and that each replaces a routine actually repeated. The **worked example carries the teaching weight** (a line-by-line walk of the two real artifacts) so the lab adapts a just-read pattern rather than starting cold.
+
+**P5-U12-vd ✅** — U12 consumes only the *verified* keys `custom-commands` + `skills` (both `unverified: false` @ `2.1.158`, matching the installed CLI) plus `_verified_version`. **No new L1 debt** — contrary to the tasks-index "version keys to verify" note, these were already verified.
+**Why:** both keys were verified from `claude --help` on 2.1.158; their `notes` flag the on-disk paths as filesystem conventions, which the unit surfaces explicitly (Concept §4 + Version-currency note) rather than hardcoding. The command/skill *distinction and authoring method* is version-independent.
+
 ## Open loops & deferrals 🔓 (canonical ledger)
 
 **This is the single source of truth for what is deliberately unfinished.** Every deferral made
@@ -316,8 +325,8 @@ Status per lab (✅ = refs + verifier created, verified end-to-end fails-clean/p
 - **u07** ✅ (legacy D1 fix) · **u09** ✅ (legacy refactor, behavior-equivalence verifier) — legacy labs;
   both registered in `SEEDED.md` §2 as legacy entries (no *new* primary branch defect)
 - **u02 / u03** — read-only, no `start/`/`solution/` refs (U2 prose answer key; U3 objective `verify.sh` + SEEDED row)
-- **u08 / u10** — prose-self-check labs, no refs (decisions P5-U8-lab, P5-U10-lab)
-- **u12–u16** — pending (those that mutate)
+- **u08 / u10 / u12** — prose-self-check labs, no refs (decisions P5-U8-lab, P5-U10-lab, P5-U12-lab)
+- **u13–u16** — pending (those that mutate)
 
 **Decided, not open (do not re-litigate):** tools are no-extension kebab-case (deviation from design
 §7 `.sh`, decision P3-tools); `permission-modes` value per verified CLI (P2-vd); awareness home-unit

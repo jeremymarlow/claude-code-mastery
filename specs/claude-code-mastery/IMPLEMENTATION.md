@@ -29,12 +29,16 @@ over memory for specifics; memory is a pointer, the spec is the source of truth.
 
 ## 3. Current state
 
+> **Update obligation:** this table is the **first thing a fresh session reads** — refresh it at
+> every phase boundary (and the matching `tasks.md` status header). A stale §3 silently misleads
+> the next session. Open loops live in the canonical ledger: `decisions.md` → "Open loops & deferrals 🔓".
+
 | Phase | File | Status |
 |---|---|---|
 | 1. Requirements | `requirements.md` | ✅ **APPROVED** (2026-05-29) — reviewed turn-by-turn, internally consistent, gap-free IDs |
-| 2. Design | `design.md` | ✅ **Authored** (2026-05-29) — Q1/Q2 resolved; §0–§11 complete (capability map, catalog, workflows, coverage matrix, version arch, unit model + capstone, labs, tooling, repo, dogfooding, traceability) |
-| 3. Tasks | `tasks.md` | 🟨 **Planned** (2026-05-29) — detailed per-phase task files `tasks/P1–P6*.md` authored & traced; P1 ✅; build execution P2→P6 not started |
-| — | `decisions.md` | ✅ Rationale captured (incl. Design-session Q1/Q2 resolutions) |
+| 2. Design | `design.md` | ✅ **APPROVED & merged to `main`** (2026-05-29; merge commit) — §0–§11 complete; design gate passed |
+| 3. Tasks | `tasks.md` | 🟦 **IN PROGRESS** (2026-05-30) — per-phase files `tasks/P1–P6*.md` authored & traced. **P1 ✅ P2 ✅ P3 ✅** (scaffolding + machine-readable `meta/*`; enforcement suite green); **P4–P6 remaining** (codebases, units, capstone). On branch `spec/tasks-phase`. |
+| — | `decisions.md` | ✅ Rationale + per-phase decisions captured; hosts the open-loops ledger |
 
 ## 4. Q1/Q2 — ✅ RESOLVED with the user (2026-05-29)
 
@@ -80,6 +84,14 @@ Implementation is complete when **all** hold:
 9. The version-data file, version-record, and drift-detection check exist and pass (R12).
 10. Dogfooding artifacts exist and are accurately referenced; the build case study + transparency note exist (R14).
 11. The "when you're stuck" recovery resources and the learner progress checklist exist (R9.AC4–AC5).
+
+**Mechanical gate (added P3):** `make check-strict` green is the single automated signal that the
+front-matter, coverage, version-reference, and traceability obligations (items 1–4 above) are *all*
+met — it turns the build-time `PENDING` markers (not-yet-authored labs / rubric / requirement refs)
+into hard failures. `make check` (non-strict) is the day-to-day authoring guard and stays green
+throughout the build; **`make check-strict` is expected to fail until P6 completes** and must pass
+for v1 done. (Items 5–7, 10 — codebases, capstone artifacts, case study — are verified by their own
+P4/P6 checks and review, not by the static suite.)
 
 ## 7. Maintenance (when the CLI changes later)
 

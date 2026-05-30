@@ -26,6 +26,9 @@ own `verified_version` + `verified_date` + `provenance`.
 
 ## Outstanding to verify on next refresh
 
+> Canonical open-loop is **L1** in `specs/claude-code-mastery/decisions.md` → "Open loops &
+> deferrals 🔓". This list is the local detail for that loop.
+
 These keys are currently `unverified: true` in `meta/version-data.yaml` and should be confirmed
 when an interactive session or official docs are available:
 

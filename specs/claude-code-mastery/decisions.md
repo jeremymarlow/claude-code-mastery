@@ -169,8 +169,23 @@ the pre-commit hook all verified working.
 | P3-hook ✅ | **Claude Code in-session hook deferred to U14.** Local enforcement now = git pre-commit + CI (R13.AC6 satisfied). The in-session hook is U14's authentic deliverable (R14.AC2) and authoring it requires verifying the hooks settings schema against the CLI (R12.AC3) — which belongs in its home unit, not seeded from memory here. | Honors the project's own "no version-specific config from memory" rule; the user's machine had no existing hooks config to verify the schema against. |
 | P3-tools ✅ | **Tools are no-extension kebab-case executables** (`tools/check-coverage`, `tools/verify-lab`, …) per `meta/conventions.md`, a minor deviation from design §7's `.sh` suffix (user-delegated, adjustable). Lab tools are bash; checks are Python (`.venv`: pyyaml, jsonschema). | Consistency with the conventions already committed in P2; references in README/stuck.md/templates stay valid. |
 
-## Open decisions — 🔓 remaining (deferred to implementation, not blocking)
+## Open loops & deferrals 🔓 (canonical ledger)
 
-- Per-feature awareness/core tier edge cases (coverage matrix rows 10, 27–29) — home units now assigned in P2 (see P2-cov above); revisit depth if a unit needs more.
-- Concrete seeded-defect list for `taskflow-cli` + per-lab defects — authored in P4 (`codebases/SEEDED.md`).
-- Final capstone brief wording (≥3 briefs) — refined in P6 from the §6.5 menu.
+**This is the single source of truth for what is deliberately unfinished.** Every deferral made
+anywhere in the build is listed here; other locations (e.g. `meta/version-record.md`, `tasks/*.md`)
+may restate an item for local context but point back here. **Maintenance rule:** when you defer
+something, add a row; when you resolve it, strike it through with the commit/phase that closed it.
+Nothing is "remembered" outside this table.
+
+| # | Open loop | Resolve in | Trigger / what unblocks it | Also tracked in |
+|---|---|---|---|---|
+| L1 | **7 version-data keys are `unverified: true`** (`search-refs`, `context-cmds`, `checkpoint-rewind`, `test-run`, `ci`, `managed-settings`, `output-styles`) | when each key's **home unit** is authored (P5) and/or next refresh | authoring the unit that uses the key ⇒ verify via in-REPL `/help`/docs, flip `unverified`→false (R12.AC3) | `meta/version-record.md` → "Outstanding to verify" |
+| L2 | **Claude Code in-session hook** not yet wired (only git pre-commit + CI exist) | **P5 / U14** (hooks unit) | U14 authoring; requires CLI-verified hooks `settings.json` schema (R12.AC3); that hook *is* U14's dogfooding example (R14.AC2) | `tasks/P3-tooling.md` §3.7; decision P3-hook |
+| L3 | **`make check-strict` must pass for v1 done** — currently fails on PENDINGs (labs, rubric, R8 reference) by design | **P6** (and incrementally P5) | every can-do gets ≥1 lab + ≥1 rubric dimension; R8 referenced by capstone artifacts | `IMPLEMENTATION.md` §6 mechanical gate; decision P3-green |
+| L4 | **Seeded-defect inventory** for `taskflow-cli` + per-lab defects not yet written | **P4** | building the codebases ⇒ author `codebases/SEEDED.md` (design §7) | `tasks/P4-codebases.md` |
+| L5 | **Final capstone brief wording (≥3 briefs)** not finalized | **P6** | refine from the design §6.5 menu | `tasks/P6-finalize.md` |
+| L6 | **Awareness-tier depth** for coverage rows 10, 27–29 may need more than a mention | P5 (each home unit) | home units now assigned (decision P2-cov); revisit only if a unit needs more depth | coverage-matrix `tier_note`s |
+
+**Decided, not open (do not re-litigate):** tools are no-extension kebab-case (deviation from design
+§7 `.sh`, decision P3-tools); `permission-modes` value per verified CLI (P2-vd); awareness home-unit
+assignments (P2-cov). These are settled calls recorded above in the per-phase sections.

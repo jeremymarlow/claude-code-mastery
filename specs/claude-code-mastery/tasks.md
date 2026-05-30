@@ -4,7 +4,8 @@
 **Phase:** Tasks / Implementation (Phase 3 of 3)
 **Status:** 🟦 **IN PROGRESS** (2026-05-30) — Design authored & approved; the detailed per-phase
 task files (`tasks/P1–P6*.md`) are written and trace design → requirement. P1 (Design) ✅,
-P2 (Scaffolding) ✅, and P3 (Tooling) ✅ complete; **P4→P6 not yet started**.
+P2 (Scaffolding) ✅, and P3 (Tooling) ✅ complete; **P4→P6 not yet started**. Open loops &
+deferrals are tracked in `decisions.md` → "Open loops & deferrals 🔓" (the canonical ledger).
 
 > **Chunking for context management.** The full build exceeds one context window. This file is an
 > **index**; detailed tasks live in per-section files under `tasks/` so a session loads only the slice

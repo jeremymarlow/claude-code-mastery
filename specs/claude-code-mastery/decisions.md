@@ -98,12 +98,42 @@ When maintaining (CLI changes), check whether a decision's premise still holds.
   coverage matrix with room for depth on high-leverage features. *Still open:* the concrete use-case
   catalog and the concrete capability map.
 
-## Open decisions — 🔓 still deferred to the implementation session (with user input)
+## Design session (2026-05-29) — Q1/Q2 resolved with user
 
-Intentionally NOT decided. Resolve *with the user* before writing the dependent Design content. Do not guess.
+| # | Decision | Rationale | Notes |
+|---|---|---|---|
+| Q1 ✅ | **Domain: task/project tracker.** Primary `taskflow-api` (FastAPI + SQLModel/SQLite, JWT auth, REST CRUD, pytest, ~2–4k LOC). Legacy `taskflow-cli` (argparse, god-module, globals, dead code, no tests; seeded bugs/smells). | Most common web-app patterns ⇒ maximally transferable labs; rich natural seams for refactor/debug/onboarding (R3); the two repos share a domain so the legacy repo reads as a believable predecessor. Satisfies R7.AC2 criteria. | Concrete file layout + seeded-bug inventory ⇒ design §7 / P4. |
+| Q2-method ✅ | **Production approach: draft-then-review.** Claude drafts the full use-case catalog + capability map + coverage matrix; user approves/edits before the rest of Design is filled. | User stays the approver (honors phase gates) without per-step latency. | Catalog/map content itself is the deliverable under review — drafted in design §1/§2, not pre-decided here. |
+| Q2-content ✅ | **Catalog + capability map APPROVED** (user, 2026-05-29). 16 units, can-do statements C1–C17 + cross-cutting CV. Written into design §1/§2/§4. | Selected by frequency×leverage then coverage (R2.AC2); all 9 R3 workflows mapped. | See design.md §1/§2. |
+| Q2-size ✅ | **Unit count is content-driven, NOT pinned.** The earlier "Standard ~12 units" is **relaxed** by the user → **16 units**, est. ~15–25 hrs (units get tighter, not the course longer). | User: "don't assume a fix limit of 12 … allow the number of units to match the content." | Supersedes the session-1 provisional "~12". |
+| D-sec ✅ | **Security unit pulled forward to U3** (from the originally-proposed U8). | User directive; establishes guardrails before the heavier Daily-Driver/Force-Multiplier work. Woven verification still runs from U1 (R10.AC7). | design §2, U3. |
+| D-onb ✅ | **Light/deep onboarding split kept** (Claude's judgement, user-delegated): U2 light exploration on primary repo (First Wins); U9 deep onboarding+refactor on legacy repo (Force Multiplier). | Legacy substrate's authentic complexity is used where it matters; mapping-for-refactor is a distinct higher-leverage capability. Reconciles R3.AC5/AC6. | design §2. |
+| VR ✅ | **Verified CLI version: 2.1.158** (`claude --version`, 2026-05-29). | Supersedes the "2.1.157" signal per F3 (latest-targeting, not pinned). Anchors `meta/version-record.md`. | Re-verify per-fact at authoring time (R12.AC3). |
 
-- **Q1 (remainder)** — the **domain** of the Python primary & legacy codebases (criteria fixed in R7.AC2).
-- **Q2 (remainder)** — the **concrete use-case catalog** (R2.AC2) and the **concrete capability map /
-  can-do statements & stage assignments** (R1), fitting the ~12-unit budget.
-- Provisional workflow→stage tags in R3.AC1 — **confirm** against the final capability map.
-- Feature **tier assignments** (core vs awareness) in the coverage matrix (R4.AC4).
+## Design authored (2026-05-29) — §3–§10 + capstone
+
+Workflow stage tags **confirmed** (design §3 — provisional R3.AC1 tags held, no changes). Version
+architecture (§5: `version-data.yaml` schema, `{{vd:key}}` reference token, callout convention,
+`version-record` @ 2.1.158), unit model + lintable front-matter schema + tier-adaptive templates +
+dependency graph (§6), **capstone** brief-menu/exemplar/self-rubric (§6.5), lab & codebase
+architecture (§7: `taskflow-api`/`taskflow-cli` layout, `start/`+`solution/` branch convention,
+verify/reset tooling, SEEDED.md), tooling/enforcement suite (§8), repo structure **adopted** (§9,
+user-delegated), and dogfooding inventory (§10) all authored. Traceability table (§11) fully
+populated — every R1–R15 ✅.
+
+## Design APPROVED (2026-05-29)
+
+User reviewed design §0–§11 (focused review of dependency graph, codebase scope, `{{vd:key}}`
+mechanism, coverage tiering, capstone briefs, tooling stack) and approved **as-is** ("all fine").
+The six discretionary calls surfaced for review were all accepted: strict numeric default path with
+U3-before-Daily-Driver and U7-before-U9 prereqs; `taskflow-api` ~2–4k LOC + `taskflow-cli` ~800-line
+god-module (defects on lab branches, `main` green); custom `{{vd:key}}` token; extended thinking +
+IDE + output-styles + enterprise settings at awareness tier; three-brief capstone menu; Python
+`tools/` checks wired as Claude Code hooks + git pre-commit + **GitHub Actions** CI. → **Phase 2
+gate passed; Phase 3 (Tasks) authoring unblocked.**
+
+## Open decisions — 🔓 remaining (deferred to implementation, not blocking)
+
+- Per-feature awareness/core tier edge cases (coverage matrix rows 10, 27–29) — seeded in §4; revisit if a unit needs more depth.
+- Concrete seeded-defect list for `taskflow-cli` + per-lab defects — authored in P4 (`codebases/SEEDED.md`).
+- Final capstone brief wording (≥3 briefs) — refined in P6 from the §6.5 menu.

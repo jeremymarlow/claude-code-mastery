@@ -25,7 +25,7 @@ def create_project(
 
 @router.get("", response_model=Page[ProjectRead])
 def list_projects(
-    include_archived: bool = True,
+    include_archived: bool = False,
     page: Pagination = Depends(pagination_params),
     current_user: User = Depends(get_current_user),
     session: Session = Depends(get_session),

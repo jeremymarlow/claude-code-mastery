@@ -65,9 +65,9 @@ def delete_project(session: Session, owner: User, project_id: int) -> None:
 
 
 def archive_project(session: Session, owner: User, project_id: int) -> Project:
-    project = session.get(Project, project_id)
-    if project is None:
-        raise NotFoundError(f"Project {project_id} not found")
+    # Ownership-scoped like every other mutation: get_project 404s on a non-owner, so a user can
+    # only archive their own projects (closes the IDOR).
+    project = get_project(session, owner, project_id)
     project.archived = True
     session.add(project)
     session.commit()

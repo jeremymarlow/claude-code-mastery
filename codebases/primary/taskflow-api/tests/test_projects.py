@@ -79,3 +79,23 @@ def test_archived_project_shown_when_requested(client):
     client.post(f"/projects/{pid}/archive", headers=h)
     ids = {p["id"] for p in client.get("/projects?include_archived=true", headers=h).json()["items"]}
     assert pid in ids
+
+
+def test_archived_project_excluded_from_default_list(client):
+    # The review finding: archived projects must be hidden by default (include_archived=false).
+    h = _owner(client)
+    pid = client.post("/projects", json={"name": "Hide me by default"}, headers=h).json()["id"]
+    client.post(f"/projects/{pid}/archive", headers=h)
+    ids = {p["id"] for p in client.get("/projects", headers=h).json()["items"]}
+    assert pid not in ids
+
+
+def test_cannot_archive_another_users_project(client):
+    # The security finding (IDOR): archiving must be ownership-scoped, hidden as 404.
+    owner_h = _owner(client)
+    pid = client.post("/projects", json={"name": "Not yours"}, headers=owner_h).json()["id"]
+
+    intruder_h = auth_header(register_and_login(client, email="intruder2@taskflow.test"))
+    assert client.post(f"/projects/{pid}/archive", headers=intruder_h).status_code == 404
+    # …and the project is untouched.
+    assert client.get(f"/projects/{pid}", headers=owner_h).json()["archived"] is False

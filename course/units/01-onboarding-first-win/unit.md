@@ -1,0 +1,169 @@
+---
+id: U1
+title: "Get set up and land your first verified win"
+stage: first-wins
+depth_tier: core
+use_case: "Get set up and make a first verified win against taskflow-api"
+can_do: [C1, C2]
+workflows: []
+coverage_areas: [1, 27]
+prerequisites: []
+reading_time_min: 8
+lab_time_min: 15
+---
+
+# Get set up and land your first verified win
+
+## Learning objectives
+
+By the end of this unit you can:
+
+- **Install, authenticate, and confirm a working Claude Code setup with a single repeatable
+  command** (the `doctor` preflight) — advances `C1`.
+- **Explain the agentic loop in one breath and drive a single, verified one-line change into a
+  real codebase** — advances `C2`.
+
+## Fast path (TL;DR)
+
+> Run [`tools/doctor`](../../../tools/doctor). When it is green, open an interactive session in
+> `codebases/primary/taskflow-api/`, ask Claude to add a `service` field to the `/health`
+> response, **read the one-line diff before accepting it**, then run
+> `tools/verify-lab u01-lab1`. Green check = first win. That is the whole unit.
+
+## Skip-check
+
+**Skip this unit if you can already:** install, authenticate, and confirm a working Claude Code
+setup with a repeatable check; and explain what the agentic loop is while landing a single,
+*verified* one-line change against a real codebase (verified by you reading the diff and a check
+passing — not by trusting that Claude said it was done).
+
+## Concept
+
+You are an experienced engineer; this unit does not teach the terminal or Git. It teaches the two
+things that are genuinely new when you add Claude Code to your workflow: **how the tool operates**
+and **why verification is now your job, explicitly.**
+
+**The agentic loop.** Claude Code is not autocomplete. It runs a loop: it **observes** (reads
+files, runs commands, inspects output), **acts** (proposes an edit, runs a command), and then the
+**result feeds back in** — and it repeats until the goal is met or it hands back to you. Two
+consequences follow, and the rest of the course builds on them:
+
+- It is **tool-using and stateful.** It can read your repo and run commands, so what it does
+  depends on what it can see and what you let it do (permissions — that is `U3`).
+- It is **non-deterministic.** Ask twice, get two differently-worded answers, sometimes two
+  different approaches. So you never verify *wording*; you verify *behavior and the diff.*
+
+**Verification is the through-line (CV).** The single habit that separates an elite operator from
+someone who got burned by AI is this: **green tests are necessary, not sufficient — read the
+diff.** A passing suite tells you nothing broke that was already tested; it does not tell you the
+change is the one you wanted, or that it didn't quietly touch something else. Every lab in this
+course ends with an explicit verification step. This unit's is the smallest possible version of
+it, on purpose: one line, one diff, one check.
+
+**The REPL.** {{vd:cli-basics}} You will live in the interactive session for daily work; the
+non-interactive (`-p`) form is what `doctor` uses under the hood and what `U16` automates.
+
+**Your baseline configuration (established here, taught later).** This unit drops a known-good
+starter [`CLAUDE.md`](../../../codebases/primary/taskflow-api/CLAUDE.md) and a minimal
+`.claude/settings.json` into the practice codebase so every later lab starts from the same place.
+We are only *establishing* the baseline now — what project memory and `{{vd:settings}}` /
+`{{vd:memory}}` actually do, and how to shape them, is the job of `U4` (Memory & context). Don't
+edit them yet.
+
+**Awareness — IDE integration.** Claude Code also runs inside your editor: {{vd:ide}} The course
+labs are written for the terminal so they're portable, but the IDE path is fully supported; reach
+for it if that's where you live. (We don't drill it.)
+
+**Version currency.** This content was verified against Claude Code `{{vd:_verified_version}}`. If
+your installed version differs, `doctor` will say so and point you at
+[`meta/version-record.md`](../../../meta/version-record.md), where any version-specific
+differences are documented.
+
+## Worked example
+
+The preflight is itself an **authentic dogfooding artifact** (R14): [`tools/doctor`](../../../tools/doctor)
+is the very script this course's maintainers run, and it is also a worked example of *scripting
+Claude Code* — its auth check drives the CLI headlessly and inspects the result, the same pattern
+`U16` generalizes. It reports pass/fail for four things, in order:
+
+1. **install** — `claude` is on your `PATH`.
+2. **version** — `claude --version` parses, and is compared to the recorded verified version.
+3. **auth + first command** — it runs one real non-interactive command and checks it round-trips,
+   which proves authentication actually works (not just that a token exists).
+4. **tooling deps** — the course's own check suite can run.
+
+Run it:
+
+```bash
+tools/doctor              # all checks (step 3 makes one real call)
+tools/doctor --no-probe   # skip the network round-trip (offline / CI)
+tools/doctor --manual     # also print the manual checklist fallback
+```
+
+If any check can't run, the same script prints a **manual checklist** so you are never blocked by
+the tool meant to unblock you.
+
+## Lab
+
+**Goal:** land your first verified change — have Claude add a `service` field to the `/health`
+endpoint of `taskflow-api`, so it returns `{"status": "ok", "service": "taskflow-api"}` — and
+prove it, by reading the diff and running the check.
+
+**Starting state:** `start/u01-lab1` (run `tools/reset-lab u01-lab1` to restore it). It is the
+clean, green primary codebase plus your baseline config — no bug is planted; the "win" is the
+addition.
+
+**Steps:**
+
+1. Run `tools/doctor`. Do not start the lab until it is green (or you've walked the manual
+   checklist). An auth wall mid-task is the most common way a first session stalls.
+2. Start an interactive session from inside the codebase:
+   `cd codebases/primary/taskflow-api && claude`.
+3. Orient first (this is the loop's "observe"): ask Claude *"What does the `/health` endpoint
+   return today, and which file defines it?"* Confirm its answer against the file yourself.
+4. Make the change: ask Claude to *"add a `service` field set to `taskflow-api` to the `/health`
+   response, as a one-line change."*
+5. **Read the diff before you accept it** (see *Verify* below). Then accept and commit it.
+
+**Self-check (objective):** run `tools/verify-lab u01-lab1`. It passes only if the full pytest
+suite is still green **and** `GET /health` now returns `"service": "taskflow-api"` alongside
+`"status": "ok"`.
+
+**Reference solution:** branch `solution/u01-lab1` — attempt the lab unaided first, then diff your
+result against it.
+
+**Verify (CV):** before accepting, read the proposed diff and confirm three things with your own
+eyes: (a) it touches **only** the `/health` return line, (b) it *adds* the `service` field without
+dropping the existing `"status": "ok"`, and (c) nothing else in the file moved. Then run the
+self-check. This 30-second habit — not the passing check — is the actual skill this unit teaches.
+
+> **Safety note.** This change is deliberately tiny and fully reversible (`git restore` /
+> `git checkout` undoes it). Reviewing the diff *before* accepting is the safe-by-default path you
+> will use for every change from here on, including the large ones where it matters far more.
+
+## Common pitfalls
+
+- **Accepting the edit without reading the diff.** The entire point of a deliberately trivial
+  first task is to build the verify-the-diff reflex while the stakes are zero. Don't skip it here;
+  you'll regret skipping it on a 200-line change later.
+- **Skipping `doctor` and hitting an auth wall mid-lab.** Run the preflight first; a failed auth
+  three steps into a task is disorienting and easy to misread as "Claude broke."
+- **Expecting deterministic output.** Claude may phrase the change or its explanation differently
+  than this page or than your last run. That's normal — verify the *resulting behavior and diff*,
+  never the wording.
+- **Treating the baseline config as homework.** The shipped `CLAUDE.md` / `settings.json` are
+  established for you on purpose. Resist tuning them now; `U4` is where that pays off.
+
+## Going deeper
+
+- **Next:** U2 (Explore a codebase) puts Claude to work understanding code you've never seen; U3
+  (Operate safely) makes the permission/blast-radius model explicit; U4 (Memory & context)
+  explains the baseline config you just established.
+- [`tools/doctor`](../../../tools/doctor) — read the script; it's short, and it's your model for
+  the headless pattern in U16.
+- [`meta/version-record.md`](../../../meta/version-record.md) — where version drift is recorded if
+  your CLI differs from the verified version.
+- Stuck? [`course/stuck.md`](../../stuck.md) and the
+  [progress checklist](../../progress-checklist.md).
+</content>
+</invoke>

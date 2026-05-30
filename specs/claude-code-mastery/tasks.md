@@ -52,7 +52,7 @@ loops & deferrals are tracked in `decisions.md` → "Open loops & deferrals 🔓
       _SEEDED.md inventory + offline `fixtures/mock_api.py` (R7.AC7) done; per-lab primary defects populate in P5._
 
 ### P5 — Units (one slice per unit — author independently)  → [`tasks/P5-units.md`](./tasks/P5-units.md)  (per-unit working files: `tasks/P5-units/NN-slug.md`)
-- [ ] Onboarding unit (First Wins; doctor + first-success + baseline config; R11)
+- [x] **U1** Onboarding unit (First Wins; doctor + first-success + baseline config; R11) — `unit.md` authored; lab `u01-lab1` (first-win `/health` change) + `verify.sh`; baseline `CLAUDE.md`/`.claude/settings.json` shipped to `primary`; `make check` green (C1/C2 now lab-traced). _Pending git refs: `start/u01-lab1` tag + `solution/u01-lab1` branch (created at commit)._
 - [ ] Dedicated security unit (R10.AC1) + woven safety in every workflow lab (R10.AC7)
 - [ ] One unit per use case (from design §6), each: tier-appropriate template (R6), valid front
       matter (R6.AC3), labs + reference solutions + reset (R7), pitfalls (R6.AC6), going-deeper

@@ -186,6 +186,17 @@ conventions. `make check` stays green.
 | P4-bugs ✅ | **Three independent, reproducible legacy bugs**, each baked into `legacy` `main` (not a branch): **D1** naive date/overdue (string-compare of mismatched formats), **D2** off-by-one `--limit` slice, **D3** swallowed save exception. Inventoried in `SEEDED.md` with locations + expected fixes. Primary defects stay branch-only (P5). | The legacy repo *is* meant to be buggy (U7 debug / U9 refactor); keeping the three independent and documented makes them teachable and prevents silent scatter (design §7). |
 | P4-fixtures ✅ | **Offline pattern = `codebases/fixtures/mock_api.py`**, a stdlib-only deterministic HTTP mock; external-dependent labs (esp. U15 MCP) point at it instead of a real service (R7.AC7). | No network/credentials on any required lab path; deterministic responses let `verify.sh` assert. The U15 lab builds on this in P5. |
 
+## P5 — Units executed (2026-05-30, in progress)
+
+Authoring units one slice at a time (IMPLEMENTATION.md §5). **U1 `01-onboarding-first-win`** is the
+first: `unit.md` (core template, C1/C2), lab `u01-lab1`, baseline config, `make check` green.
+
+| # | Decision | Rationale |
+|---|---|---|
+| P5-U1-lab ✅ | **U1's lab is an *addition*, not a planted bug** — the learner has Claude add a one-line `"service": "taskflow-api"` field to `/health`. Objective check `course/labs/u01-lab1/verify.sh` runs the full pytest suite (no-regression gate) **and** asserts the new `/health` behavior via FastAPI `TestClient`; tested to fail on the clean tree and pass once applied. | A first win should be a real (if tiny) change against the real codebase, not a contrived hello-world (R11.AC3). Verifying live behavior + green suite (not grepping source) teaches the CV "read the diff / behavior, not wording" habit at zero stakes. |
+| P5-U1-baseline ✅ | **Shipped the R11.AC4 baseline into `codebases/primary/taskflow-api/`**: a starter `CLAUDE.md` (what the app is, run/test, the services→exceptions→main convention) and a minimal `.claude/settings.json` whose `permissions.allow` mirrors the **CLI-verified** schema shape (no settings keys authored from memory). The unit only *establishes* these and explicitly defers teaching them to U4. | R11.AC4 (establish-not-teach) + avoids front-loading config. These files are part of the clean lab state, so they belong on `main`/the `start/u01-lab1` tag, not a learner step. Mirroring the verified shape (not memory) honors R12.AC3. |
+| P5-U1-links ✅ | **Forward references to not-yet-authored units (U2–U4) are plain text, not Markdown links.** Only resolvable targets (`tools/doctor`, `course/stuck.md`, the baseline `CLAUDE.md`, `meta/version-record.md`) are linked. | `check-links` requires every internal relative link to resolve; linking U2's `unit.md` before it exists would break `make check`. Prose references keep the pedagogy without the broken link. |
+
 ## Open loops & deferrals 🔓 (canonical ledger)
 
 **This is the single source of truth for what is deliberately unfinished.** Every deferral made
@@ -200,7 +211,7 @@ Nothing is "remembered" outside this table.
 | L2 | **Claude Code in-session hook** not yet wired (only git pre-commit + CI exist) | **P5 / U14** (hooks unit) | U14 authoring; requires CLI-verified hooks `settings.json` schema (R12.AC3); that hook *is* U14's dogfooding example (R14.AC2) | `tasks/P3-tooling.md` §3.7; decision P3-hook |
 | L3 | **`make check-strict` must pass for v1 done** — currently fails on PENDINGs (labs, rubric, R8 reference) by design | **P6** (and incrementally P5) | every can-do gets ≥1 lab + ≥1 rubric dimension; R8 referenced by capstone artifacts | `IMPLEMENTATION.md` §6 mechanical gate; decision P3-green |
 | ~~L4~~ | ~~**Seeded-defect inventory** for `taskflow-cli` + per-lab defects not yet written~~ **✅ CLOSED (P4, 2026-05-30)** — `codebases/SEEDED.md` authored: legacy bugs D1–D3 fully specified; **primary per-lab defects now tracked there as a P5-populated table** (added on each `start/uNN-labM` branch as labs are written — see L7). | ~~P4~~ closed | — | `tasks/P4-codebases.md` → Outcome; decisions P4-bugs |
-| L7 | **Primary per-lab defects + lab tags/branches** (`start/uNN-labM` / `solution/uNN-labM`) not yet created | **P5** (per unit) | authoring each unit's lab ⇒ create its `start/...` tag + register its row in `SEEDED.md` §2 + add `course/labs/<id>/verify.sh` | `codebases/SEEDED.md` §2; `tasks/P5-units.md` |
+| L7 | **Primary per-lab defects + lab tags/branches** (`start/uNN-labM` / `solution/uNN-labM`) not yet created | **P5** (per unit) | authoring each unit's lab ⇒ create its `start/...` tag + register its row in `SEEDED.md` §2 + add `course/labs/<id>/verify.sh`. **Progress: `u01-lab1`** verifier + `SEEDED.md` §2 row authored & tested (fails clean, passes with the change); the `start/u01-lab1` tag + `solution/u01-lab1` branch are still to be created (at the commit that lands U1). | `codebases/SEEDED.md` §2; `tasks/P5-units.md` |
 | L5 | **Final capstone brief wording (≥3 briefs)** not finalized | **P6** | refine from the design §6.5 menu | `tasks/P6-finalize.md` |
 | L6 | **Awareness-tier depth** for coverage rows 10, 27–29 may need more than a mention | P5 (each home unit) | home units now assigned (decision P2-cov); revisit only if a unit needs more depth | coverage-matrix `tier_note`s |
 

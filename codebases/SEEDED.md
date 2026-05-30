@@ -54,6 +54,7 @@ is written; until then the lab is unwritten, not missing.
 
 | Lab (planned) | Unit | Substrate | Nature of the planted state | Status |
 |---------------|------|-----------|------------------------------|--------|
+| `u01-lab1` | U1 Onboarding / first win | primary | **No bug — first-win addition.** Start = clean `main` + the baseline `CLAUDE.md`/`.claude/settings.json`. Learner has Claude add a one-line `"service": "taskflow-api"` field to the `/health` response in `app/main.py`. Reference fix on `solution/u01-lab1`; objective check `course/labs/u01-lab1/verify.sh` (suite green + `/health` reports the field). | ✅ authored (P5, U1) |
 | `u05-lab1` | U5 Ship a feature | primary | Start from a missing endpoint/field; learner *adds* a feature (no bug to fix — the "defect" is an absence). | P5 |
 | `u06-lab1` | U6 TDD | primary | Start from a failing/not-yet-implemented spec; learner drives it green test-first. | P5 |
 | `u07-lab1` | U7 Debug | **legacy** | Uses D1–D3 above directly; no branch defect needed. | this file §1 |

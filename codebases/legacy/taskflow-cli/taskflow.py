@@ -146,30 +146,26 @@ def parse_due_input(s):
 
 
 def is_overdue(t):
-    # SEEDED BUG D1 (naive date handling): this compares the stored due date (ISO,
-    # "YYYY-MM-DD") against *today formatted a different way* ("MM-DD-YYYY"), as plain
-    # strings. The lexicographic compare is meaningless across the two formats, so overdue
-    # tasks are essentially never flagged. See codebases/SEEDED.md.
+    # Compare dates AS DATES, not as strings in mismatched formats. A task is overdue when it
+    # has a due date strictly before today and isn't done. (D1 fix; the duplicated checks in
+    # fmt_due / print_task_full now route through this single helper.)
     due = t.get("due")
     if not due:
         return False
     if t.get("status") == "done":
         return False
-    today = datetime.datetime.now().strftime("%m-%d-%Y")
-    return due < today
+    try:
+        return datetime.date.fromisoformat(due) < datetime.date.today()
+    except ValueError:
+        return False  # unparseable due date: don't crash, just don't flag it
 
 
 def fmt_due(t):
     due = t.get("due")
     if not due:
         return ""
-    # duplicated overdue check, inline, with the SAME bug as is_overdue but spelled differently
-    try:
-        today = datetime.datetime.now().strftime("%m-%d-%Y")
-        if due < today and t.get("status") != "done":
-            return due + " (OVERDUE)"
-    except Exception:
-        pass
+    if is_overdue(t):
+        return due + " (OVERDUE)"
     return due
 
 
@@ -211,13 +207,7 @@ def print_task_full(t):
     print("assignee:  %s" % (t.get("assignee") or "-"))
     due = t.get("due")
     if due:
-        # third copy of the overdue logic, third slightly different spelling
-        flag = ""
-        try:
-            if t.get("status") != "done" and due < datetime.datetime.now().strftime("%m-%d-%Y"):
-                flag = "  <-- overdue"
-        except Exception:
-            pass
+        flag = "  <-- overdue" if is_overdue(t) else ""
         print("due:       %s%s" % (due, flag))
     else:
         print("due:       -")

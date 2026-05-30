@@ -56,6 +56,7 @@ loops & deferrals are tracked in `decisions.md` → "Open loops & deferrals 🔓
 - [ ] Dedicated security unit (R10.AC1) + woven safety in every workflow lab (R10.AC7)
 - [ ] One unit per use case (from design §6), each: tier-appropriate template (R6), valid front
       matter (R6.AC3), labs + reference solutions + reset (R7), pitfalls (R6.AC6), going-deeper
+      - [x] **U2** `02-explore-a-codebase` (C3, W8-light) — `unit.md`; **read-only** exploration lab w/ file+symbol answer key (no tag/branch/verifier — R7.AC3 prose self-check); C3 lab-traced. `search-refs` vd key left unverified (headless; L1).
 - [ ] Per unit: verify version-specific details vs installed CLI; record provenance (R12.AC3–AC4)
 - [ ] Per unit: reference authentic dogfooding artifacts where they exist (R14.AC2)
 

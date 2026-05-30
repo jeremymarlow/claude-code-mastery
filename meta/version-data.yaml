@@ -1,0 +1,243 @@
+# Version-data file — the SINGLE source of truth for every version-specific detail (commands,
+# flags, paths, settings keys, feature availability). Prose references these by key as
+# {{vd:key}} and never restates the value (R12.AC2/AC8). Generated twin: version-data.json.
+#
+# HARD RULE (R12.AC3): no value here is authored from model memory. Each was verified against the
+# installed CLI (`claude --help`, subcommand --help) on the recorded date, OR is marked
+# `unverified: true` with a note on how to verify it (e.g. in-REPL `/help`, official docs). The
+# build's check-version-refs (R13.AC4) ensures every {{vd:key}} in prose resolves to a key here.
+#
+# Entry schema:
+#   kind: command | flag | path | setting | feature | availability
+#   value: the version-specific detail prose would otherwise hardcode
+#   provenance: how it was checked (R12.AC4)
+#   verified_version / verified_date: the CLI + date it was confirmed against
+#   unverified: true => rendered with an explicit "unverified" marker (R12.AC3)
+
+schema_version: 1
+_verified_version: "2.1.158"     # referenced as {{vd:_verified_version}} in callouts
+_verified_date: "2026-05-29"
+
+keys:
+
+  cli-basics:
+    kind: feature
+    value: "`claude` starts an interactive session by default; `-p`/`--print` runs non-interactively (useful for pipes)."
+    provenance: "claude --help (usage line; -p/--print)"
+    verified_version: "2.1.158"
+    verified_date: "2026-05-29"
+    unverified: false
+
+  search-refs:
+    kind: feature
+    value: "In-REPL: ask codebase questions in natural language; reference files/dirs with @-mentions (e.g. `@app/main.py`)."
+    provenance: "in-REPL feature — not surfaced by `claude --help`"
+    verified_version: "2.1.158"
+    verified_date: "2026-05-29"
+    unverified: true
+    notes: "Verify the exact @-reference behavior interactively via `/help`; not confirmable from CLI --help."
+
+  permission-modes:
+    kind: flag
+    value: "acceptEdits, auto, bypassPermissions, default, dontAsk, plan (`--permission-mode <mode>`)"
+    provenance: "claude --help (--permission-mode choices)"
+    verified_version: "2.1.158"
+    verified_date: "2026-05-29"
+    unverified: false
+    notes: "Verified set is broader than the design's illustrative example — confirms the value of verifying vs memory."
+
+  secrets:
+    kind: feature
+    value: "API-key auth via the ANTHROPIC_API_KEY env var (or apiKeyHelper); keep secrets out of prompts, CLAUDE.md, and committed files."
+    provenance: "claude --help (--bare: 'Anthropic auth is strictly ANTHROPIC_API_KEY or apiKeyHelper')"
+    verified_version: "2.1.158"
+    verified_date: "2026-05-29"
+    unverified: false
+    notes: "Hygiene guidance is principle-level; the ANTHROPIC_API_KEY/apiKeyHelper mechanism is the verified anchor."
+
+  untrusted-content:
+    kind: feature
+    value: "A workspace-trust dialog gates untrusted directories (skipped in non-interactive `-p` mode — only run -p in trusted dirs)."
+    provenance: "claude --help (-p/--print trust-dialog note)"
+    verified_version: "2.1.158"
+    verified_date: "2026-05-29"
+    unverified: false
+    notes: "Prompt-injection defense is principle-level; the trust dialog is the verified control surface."
+
+  checkpoint-rewind:
+    kind: feature
+    value: "In-REPL checkpoint/rewind to undo recent changes; `--no-session-persistence` disables saving sessions."
+    provenance: "claude --help confirms --no-session-persistence; the checkpoint/rewind UI is in-REPL"
+    verified_version: "2.1.158"
+    verified_date: "2026-05-29"
+    unverified: true
+    notes: "Confirm the exact rewind command/keybinding via in-REPL `/help`; not in CLI --help."
+
+  memory:
+    kind: feature
+    value: "Project memory via CLAUDE.md, auto-discovered at startup (auto-memory)."
+    provenance: "claude --help (--bare lists 'auto-memory' and 'CLAUDE.md auto-discovery')"
+    verified_version: "2.1.158"
+    verified_date: "2026-05-29"
+    unverified: false
+
+  context-cmds:
+    kind: command
+    value: "In-REPL slash commands: /context, /compact, /clear (inspect and manage the context window)."
+    provenance: "in-REPL slash commands — not surfaced by `claude --help`"
+    verified_version: "2.1.158"
+    verified_date: "2026-05-29"
+    unverified: true
+    notes: "Verify exact command names/behavior via in-REPL `/help`."
+
+  plan-mode:
+    kind: feature
+    value: "Plan mode (`--permission-mode plan`): Claude plans without writing changes until you approve."
+    provenance: "claude --help (--permission-mode includes 'plan')"
+    verified_version: "2.1.158"
+    verified_date: "2026-05-29"
+    unverified: false
+
+  thinking:
+    kind: flag
+    value: "Effort levels low, medium, high, xhigh, max (`--effort <level>`)."
+    provenance: "claude --help (--effort choices)"
+    verified_version: "2.1.158"
+    verified_date: "2026-05-29"
+    unverified: false
+
+  test-run:
+    kind: feature
+    value: "Tests run through the Bash tool (e.g. `pytest`); no dedicated CLI flag — Claude invokes the project's existing test runner."
+    provenance: "no dedicated CLI surface in `claude --help`; mechanism is tool-use"
+    verified_version: "2.1.158"
+    verified_date: "2026-05-29"
+    unverified: true
+    notes: "Conceptual; verify the project's runner (taskflow-api uses pytest)."
+
+  git-pr:
+    kind: flag
+    value: "`--from-pr [value]` resumes a session linked to a PR by number/URL; PR creation uses the `gh` CLI via the Bash tool."
+    provenance: "claude --help (--from-pr); gh is an external tool"
+    verified_version: "2.1.158"
+    verified_date: "2026-05-29"
+    unverified: false
+
+  review-cmds:
+    kind: command
+    value: "`claude ultrareview` runs a cloud multi-agent review of the branch/PR; /code-review and /security-review are in-REPL skills."
+    provenance: "claude --help (ultrareview command). The /code-review and /security-review slash commands are in-REPL"
+    verified_version: "2.1.158"
+    verified_date: "2026-05-29"
+    unverified: false
+    notes: "ultrareview verified from --help. Confirm /code-review and /security-review names via in-REPL `/help` (those parts unverified)."
+
+  custom-commands:
+    kind: feature
+    value: "Custom slash commands are user-defined skills, invoked as /name; `--disable-slash-commands` turns all skills off."
+    provenance: "claude --help (--disable-slash-commands: 'Disable all skills')"
+    verified_version: "2.1.158"
+    verified_date: "2026-05-29"
+    unverified: false
+    notes: "The on-disk location (e.g. .claude/commands/) is a filesystem convention — verify the exact path via docs before hardcoding."
+
+  skills:
+    kind: feature
+    value: "Skills resolve via /skill-name; reusable packaged capabilities."
+    provenance: "claude --help (--bare: 'Skills still resolve via /skill-name')"
+    verified_version: "2.1.158"
+    verified_date: "2026-05-29"
+    unverified: false
+
+  subagents:
+    kind: command
+    value: "`--agent <agent>` / `--agents <json>` set session agents; the `agents` subcommand manages background agents."
+    provenance: "claude --help (--agent, --agents, `agents` command)"
+    verified_version: "2.1.158"
+    verified_date: "2026-05-29"
+    unverified: false
+
+  hooks:
+    kind: feature
+    value: "Hooks run on lifecycle events (configured in settings); `--include-hook-events` streams them; `--bare` skips hooks."
+    provenance: "claude --help (--include-hook-events; --bare 'skip hooks')"
+    verified_version: "2.1.158"
+    verified_date: "2026-05-29"
+    unverified: false
+    notes: "The exact hook event names belong in settings docs — verify each event name before hardcoding it in a unit."
+
+  mcp:
+    kind: command
+    value: "`claude mcp` configures/manages MCP servers; `--mcp-config <files>` loads them per-session; `--strict-mcp-config` ignores others."
+    provenance: "claude --help (mcp command; --mcp-config; --strict-mcp-config)"
+    verified_version: "2.1.158"
+    verified_date: "2026-05-29"
+    unverified: false
+
+  plugins:
+    kind: command
+    value: "`claude plugin|plugins` manages plugins; `--plugin-dir <path>` / `--plugin-url <url>` load a plugin for one session."
+    provenance: "claude --help (plugin command; --plugin-dir; --plugin-url)"
+    verified_version: "2.1.158"
+    verified_date: "2026-05-29"
+    unverified: false
+
+  headless:
+    kind: flag
+    value: "`-p`/`--print` runs headlessly; `--output-format text|json|stream-json` shapes the output."
+    provenance: "claude --help (-p/--print; --output-format choices)"
+    verified_version: "2.1.158"
+    verified_date: "2026-05-29"
+    unverified: false
+
+  ci:
+    kind: feature
+    value: "CI runs use headless `-p` with `--output-format json` (and optionally `--max-budget-usd`); a GitHub Action wraps this."
+    provenance: "claude --help confirms -p, --output-format, --max-budget-usd; the GitHub Action is an external integration"
+    verified_version: "2.1.158"
+    verified_date: "2026-05-29"
+    unverified: true
+    notes: "CLI mechanism verified; verify the GitHub Action name/setup against official docs before hardcoding."
+
+  worktrees:
+    kind: flag
+    value: "`-w`/`--worktree [name]` creates a git worktree for the session; `--tmux` opens it in a tmux session."
+    provenance: "claude --help (-w/--worktree; --tmux)"
+    verified_version: "2.1.158"
+    verified_date: "2026-05-29"
+    unverified: false
+
+  settings:
+    kind: setting
+    value: "`--settings <file-or-json>` loads settings; `--setting-sources user,project,local` selects which sources load."
+    provenance: "claude --help (--settings; --setting-sources)"
+    verified_version: "2.1.158"
+    verified_date: "2026-05-29"
+    unverified: false
+    notes: "The default settings.json file locations are a filesystem convention — verify exact paths via docs before hardcoding."
+
+  ide:
+    kind: flag
+    value: "`--ide` auto-connects to an IDE on startup when exactly one valid IDE is available."
+    provenance: "claude --help (--ide)"
+    verified_version: "2.1.158"
+    verified_date: "2026-05-29"
+    unverified: false
+
+  output-styles:
+    kind: feature
+    value: "Output styles / response customization (configured in settings)."
+    provenance: "not surfaced by `claude --help`"
+    verified_version: "2.1.158"
+    verified_date: "2026-05-29"
+    unverified: true
+    notes: "Awareness-tier; verify the current output-styles mechanism via in-REPL `/help` or official docs before authoring."
+
+  managed-settings:
+    kind: setting
+    value: "Enterprise/managed settings are an additional setting source layered above user/project/local."
+    provenance: "claude --help (--setting-sources lists user, project, local); the managed/enterprise policy path is not shown"
+    verified_version: "2.1.158"
+    verified_date: "2026-05-29"
+    unverified: true
+    notes: "Conceptual only (assumption A4). Verify the managed-settings file path/precedence via official enterprise docs before hardcoding."

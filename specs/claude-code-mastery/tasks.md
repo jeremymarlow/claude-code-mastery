@@ -2,9 +2,9 @@
 
 **Spec:** `claude-code-mastery`
 **Phase:** Tasks / Implementation (Phase 3 of 3)
-**Status:** 🟨 **PLANNED** (2026-05-29) — Design authored & approved; the detailed per-phase task
-files (`tasks/P1–P6*.md`) are written and trace design → requirement. **Execution (P2→P6) not yet
-started** — that's the build itself. P1 (Design) ✅ complete.
+**Status:** 🟦 **IN PROGRESS** (2026-05-30) — Design authored & approved; the detailed per-phase
+task files (`tasks/P1–P6*.md`) are written and trace design → requirement. P1 (Design) ✅ and
+P2 (Scaffolding) ✅ complete; **P3→P6 not yet started**.
 
 > **Chunking for context management.** The full build exceeds one context window. This file is an
 > **index**; detailed tasks live in per-section files under `tasks/` so a session loads only the slice
@@ -32,11 +32,11 @@ started** — that's the build itself. P1 (Design) ✅ complete.
 - [x] Lab/solution architecture (§7) · Tooling plan (§8) · Repo structure (§9) · Dogfooding (§10)
 - [x] Traceability table populated (§11) — every R1–R15 ✅
 
-### P2 — Scaffolding & cross-cutting artifacts  → [`tasks/P2-scaffold.md`](./tasks/P2-scaffold.md)
-- [ ] Repo skeleton + naming conventions (R13.AC1) · `CLAUDE.md` (R14.AC1)
-- [ ] `meta/` artifacts seeded: capability-map, use-case-catalog, coverage-matrix, version-data,
+### P2 — Scaffolding & cross-cutting artifacts  → [`tasks/P2-scaffold.md`](./tasks/P2-scaffold.md)  ✅ COMPLETE (2026-05-30)
+- [x] Repo skeleton + naming conventions (R13.AC1) · `CLAUDE.md` (R14.AC1)
+- [x] `meta/` artifacts seeded: capability-map, use-case-catalog, coverage-matrix, version-data,
       version-record, glossary, conventions, front-matter schema (R13.AC2, machine-readable)
-- [ ] `course/progress-checklist.md` generated from capability-map (R9.AC5) · `course/stuck.md` (R9.AC4)
+- [x] `course/progress-checklist.md` generated from capability-map (R9.AC5) · `course/stuck.md` (R9.AC4)
 
 ### P3 — Tooling & enforcement (build early so it guards the content)  → [`tasks/P3-tooling.md`](./tasks/P3-tooling.md)
 - [ ] `doctor` preflight + manual fallback (R11.AC2)

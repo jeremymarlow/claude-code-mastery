@@ -1,0 +1,100 @@
+# Capability map — the full set of can-do statements (the territory the course covers).
+# Source of truth: design.md §1. Generated twin: capability-map.json (do not hand-edit that).
+#
+# Each statement is outcome-phrased, observable, and describes the WORK — never ranks the
+# learner (R1.AC1/AC3). Every statement maps to exactly one stage and one home unit (R1.AC4),
+# and will trace to >=1 lab AND >=1 capstone-rubric dimension (R1.AC5), enforced by
+# tools/check-coverage + tools/check-traceability.
+#
+# Stages (orientation only, not a ranking): first-wins -> daily-driver ->
+# force-multiplier -> autonomy-scale.
+
+schema_version: 1
+verified_against_design: "design.md §1 (2026-05-29)"
+
+stages:
+  - id: first-wins
+    title: First Wins
+  - id: daily-driver
+    title: Daily Driver
+  - id: force-multiplier
+    title: Force Multiplier
+  - id: autonomy-scale
+    title: Autonomy & Scale
+
+capabilities:
+  - id: C1
+    statement: "install, authenticate, and confirm a working Claude Code setup with a repeatable check"
+    stage: first-wins
+    home_unit: U1
+  - id: C2
+    statement: "explain the agentic loop and make a single, verified change to a real codebase"
+    stage: first-wins
+    home_unit: U1
+  - id: C3
+    statement: "use Claude to explore and explain an unfamiliar codebase and locate where to make a change"
+    stage: first-wins
+    home_unit: U2
+  - id: C4
+    statement: "operate Claude safely — choose permission modes, protect secrets, recognize prompt injection, limit blast radius"
+    stage: first-wins
+    home_unit: U3
+  - id: C5
+    statement: "steer Claude with project memory (CLAUDE.md) and deliberate context selection"
+    stage: first-wins
+    home_unit: U4
+  - id: C6
+    statement: "implement a feature end-to-end via explore->plan->code->commit and verify the result myself"
+    stage: daily-driver
+    home_unit: U5
+  - id: C7
+    statement: "drive a change test-first (confirm a failing test, implement to green)"
+    stage: daily-driver
+    home_unit: U6
+  - id: C8
+    statement: "diagnose and fix an unfamiliar failure, confirming root cause rather than guessing"
+    stage: daily-driver
+    home_unit: U7
+  - id: C9
+    statement: "turn a body of work into clean commits and a reviewable PR with an accurate description"
+    stage: daily-driver
+    home_unit: U8
+  - id: C10
+    statement: "onboard to and execute a large multi-file refactor on a legacy codebase, keeping it green"
+    stage: force-multiplier
+    home_unit: U9
+  - id: C11
+    statement: "run a spec-driven workflow (requirements->design->tasks) against a real spec"
+    stage: force-multiplier
+    home_unit: U10
+  - id: C12
+    statement: "review a change for correctness and security with Claude"
+    stage: force-multiplier
+    home_unit: U11
+  - id: C13
+    statement: "package repeatable work as custom commands & skills"
+    stage: autonomy-scale
+    home_unit: U12
+  - id: C14
+    statement: "delegate focused / parallel sub-tasks to subagents"
+    stage: autonomy-scale
+    home_unit: U13
+  - id: C15
+    statement: "automate guardrails and standards with hooks"
+    stage: autonomy-scale
+    home_unit: U14
+  - id: C16
+    statement: "connect Claude to external tools/data via MCP and vet third-party extensions before installing"
+    stage: autonomy-scale
+    home_unit: U15
+  - id: C17
+    statement: "run Claude headlessly / in CI and coordinate parallel agents via git worktrees"
+    stage: autonomy-scale
+    home_unit: U16
+  - id: CV
+    statement: "verify Claude's output rigorously — read the diff, check the approach, spot-check edges — not merely trust green tests"
+    stage: cross-cutting
+    home_unit: "every-lab"
+    cross_cutting: true
+    consolidated_in: [U3, U11]   # R10.AC6: safety + review units consolidate verification
+    notes: "Advanced by every unit; every workflow lab must include >=1 explicit verification step (R10.AC7)."

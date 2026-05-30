@@ -1,0 +1,95 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://claude-code-mastery/meta/unit-frontmatter.schema.json",
+  "title": "Unit front matter",
+  "description": "Lintable schema for the YAML front matter of every course unit (course/units/NN-slug/unit.md). Source of truth: design.md §6. Enforced by tools/check-frontmatter (R6.AC3, R13.AC4).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "title",
+    "stage",
+    "depth_tier",
+    "use_case",
+    "can_do",
+    "workflows",
+    "coverage_areas",
+    "prerequisites",
+    "reading_time_min",
+    "lab_time_min"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^U[0-9]+$",
+      "description": "Unique unit ID, matches the use-case catalog (e.g. U5)."
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1
+    },
+    "stage": {
+      "type": "string",
+      "enum": ["first-wins", "daily-driver", "force-multiplier", "autonomy-scale"],
+      "description": "Exactly one stage (R1.AC4)."
+    },
+    "depth_tier": {
+      "type": "string",
+      "enum": ["core", "awareness"],
+      "description": "Drives which template applies (R4.AC4 / R6.AC1/AC2)."
+    },
+    "use_case": {
+      "type": "string",
+      "minLength": 1,
+      "description": "The job-to-be-done from the use-case catalog (R2.AC3)."
+    },
+    "can_do": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "pattern": "^(C[0-9]+|CV)$"
+      },
+      "description": "Capability-map IDs this unit advances (R1.AC4); CV permitted."
+    },
+    "workflows": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "pattern": "^W[0-9]+$"
+      },
+      "description": "Workflow IDs exercised (R3); [] for non-workflow units."
+    },
+    "coverage_areas": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "integer",
+        "minimum": 1
+      },
+      "description": "Coverage-matrix area #s this unit touches (R4)."
+    },
+    "prerequisites": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "pattern": "^U[0-9]+$"
+      },
+      "description": "Prerequisite unit IDs — the authoritative ordering constraint (R6.AC5 / R9.AC2)."
+    },
+    "reading_time_min": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Estimated reading time in minutes (R5.AC6)."
+    },
+    "lab_time_min": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Estimated lab time in minutes (R5.AC6); 0 only allowed for awareness-tier units with no lab."
+    }
+  }
+}

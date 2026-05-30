@@ -1,0 +1,173 @@
+# Feature-coverage matrix — the CANONICAL source of truth for the set of Claude Code capability
+# areas the course tracks (R4.AC1). Prose does NOT re-list features; this file is authoritative.
+# Source of truth: design.md §4.
+#
+# Tiering by frequency x leverage (R4.AC4):
+#   core      -> covered by >=1 hands-on lab
+#   awareness -> named/shown once with pointers (>=1 worked example or mention)
+# No capability area is silently excluded (R4.AC5); intentional awareness/conceptual choices are
+# recorded in `tier_note`. version_data_key links the area to its quarantined version-specific
+# detail in meta/version-data.yaml (null where the area carries no version-specific value yet).
+#
+# Verified against CLI 2.1.158; per-fact provenance lives in version-data (R12.AC3/AC4).
+# The R13.AC4 check (tools/check-coverage) cross-validates `covered_by` against the units.
+
+schema_version: 1
+verified_against_design: "design.md §4 (2026-05-29)"
+verified_cli_version: "2.1.158"
+
+areas:
+  - id: 1
+    area: "REPL / prompting / slash-command basics"
+    tier: core
+    covered_by: ["U1:lab"]
+    version_data_key: "cli-basics"
+  - id: 2
+    area: "Codebase Q&A, search, @-mentions"
+    tier: core
+    covered_by: ["U2:lab"]
+    version_data_key: "search-refs"
+  - id: 3
+    area: "Permissions & permission modes (incl. bypass hazards)"
+    tier: core
+    covered_by: ["U3:lab"]
+    version_data_key: "permission-modes"
+  - id: 4
+    area: "Secret-handling hygiene"
+    tier: core
+    covered_by: ["U3"]
+    version_data_key: "secrets"
+  - id: 5
+    area: "Prompt-injection awareness & defense"
+    tier: core
+    covered_by: ["U3:lab"]
+    version_data_key: "untrusted-content"
+    tier_note: "Safety-fenced hands-on lab (R10.AC3)."
+  - id: 6
+    area: "Blast-radius: checkpoints/rewind, sandboxing, dry-runs"
+    tier: core
+    covered_by: ["U3:intro", "U16"]
+    version_data_key: "checkpoint-rewind"
+  - id: 7
+    area: "CLAUDE.md / memory"
+    tier: core
+    covered_by: ["U4:lab"]
+    version_data_key: "memory"
+  - id: 8
+    area: "Context management (/context, /compact, /clear)"
+    tier: core
+    covered_by: ["U4"]
+    version_data_key: "context-cmds"
+  - id: 9
+    area: "Plan mode"
+    tier: core
+    covered_by: ["U5:lab"]
+    version_data_key: "plan-mode"
+  - id: 10
+    area: "Extended thinking"
+    tier: awareness
+    covered_by: ["U5:mention"]
+    version_data_key: "thinking"
+    tier_note: "Awareness — lower frequency for the target persona; mention + pointer (R4.AC5)."
+  - id: 11
+    area: "TDD support / running tests"
+    tier: core
+    covered_by: ["U6:lab"]
+    version_data_key: "test-run"
+  - id: 12
+    area: "Debugging workflow"
+    tier: core
+    covered_by: ["U7:lab"]
+    version_data_key: null
+  - id: 13
+    area: "Git / PR / gh integration"
+    tier: core
+    covered_by: ["U8:lab"]
+    version_data_key: "git-pr"
+  - id: 14
+    area: "Multi-file refactoring"
+    tier: core
+    covered_by: ["U9:lab"]
+    version_data_key: null
+  - id: 15
+    area: "Spec-driven workflow"
+    tier: core
+    covered_by: ["U10:lab"]
+    version_data_key: null
+    tier_note: "Lab uses this very spec."
+  - id: 16
+    area: "Code review (/code-review) & security review (/security-review)"
+    tier: core
+    covered_by: ["U11:lab"]
+    version_data_key: "review-cmds"
+  - id: 17
+    area: "Custom slash commands"
+    tier: core
+    covered_by: ["U12:lab"]
+    version_data_key: "custom-commands"
+  - id: 18
+    area: "Skills"
+    tier: core
+    covered_by: ["U12:lab"]
+    version_data_key: "skills"
+  - id: 19
+    area: "Subagents"
+    tier: core
+    covered_by: ["U13:lab"]
+    version_data_key: "subagents"
+  - id: 20
+    area: "Hooks"
+    tier: core
+    covered_by: ["U14:lab"]
+    version_data_key: "hooks"
+    tier_note: "Lab is the course's own enforcement suite (R14)."
+  - id: 21
+    area: "MCP servers"
+    tier: core
+    covered_by: ["U15:lab"]
+    version_data_key: "mcp"
+  - id: 22
+    area: "Third-party / plugin / marketplace vetting"
+    tier: core
+    covered_by: ["U15"]
+    version_data_key: "plugins"
+    tier_note: "Trust-delegation decision (R10.AC5)."
+  - id: 23
+    area: "Headless / print mode (-p)"
+    tier: core
+    covered_by: ["U16:lab"]
+    version_data_key: "headless"
+  - id: 24
+    area: "CI integration (e.g. GitHub Actions)"
+    tier: core
+    covered_by: ["U16:lab"]
+    version_data_key: "ci"
+  - id: 25
+    area: "Parallel agents / git worktrees"
+    tier: core
+    covered_by: ["U16:lab"]
+    version_data_key: "worktrees"
+  - id: 26
+    area: "Settings / config (settings.json)"
+    tier: core
+    covered_by: ["U4"]
+    version_data_key: "settings"
+    tier_note: "Baseline established U1 (R11.AC4); taught in its home unit U4."
+  - id: 27
+    area: "IDE integrations"
+    tier: awareness
+    covered_by: ["U1:mention"]
+    version_data_key: "ide"
+    tier_note: "Awareness — mention + pointer; home unit U1 onboarding (R4.AC5)."
+  - id: 28
+    area: "Output styles / response customization"
+    tier: awareness
+    covered_by: ["U4:mention"]
+    version_data_key: "output-styles"
+    tier_note: "Awareness — mention + pointer; near memory/context teaching (R4.AC5)."
+  - id: 29
+    area: "Enterprise / managed settings"
+    tier: awareness
+    covered_by: ["U3:mention"]
+    version_data_key: "managed-settings"
+    tier_note: "Conceptual only — learner may lack the environment (assumption A4, R4.AC5)."

@@ -1,2 +1,9 @@
-pecs/spec-creation-*
+# Spec scratch files
+specs/**/spec-creation-*
 
+# Python
+.venv/
+venv/
+__pycache__/
+*.pyc
+.pytest_cache/

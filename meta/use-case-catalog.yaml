@@ -1,0 +1,191 @@
+# Use-case catalog — the prioritized jobs-to-be-done, one per unit (U1-U16).
+# Source of truth: design.md §2. [R2.AC2/AC4]
+#
+# Prioritization rationale (R2.AC2): ordered primarily by FREQUENCY x LEVERAGE (the daily
+# loops a developer hits first and most often lead; rarer/higher-ceiling jobs follow), then
+# adjusted for CAPABILITY-MAP COVERAGE so the catalog collectively exercises every can-do
+# statement (C1-C17 + CV) and every coverage-matrix area (meta/coverage-matrix.yaml).
+# All entries are grounded in real, documented engineering practice (R2.AC4) — none invented.
+#
+# Depth tier: every unit is `core` (each carries >=1 hands-on lab); awareness-tier coverage is
+# applied at the FEATURE level inside the coverage matrix (R4.AC4 / R5.AC4), not by demoting units.
+
+schema_version: 1
+verified_against_design: "design.md §2 (2026-05-29)"
+
+prioritization:
+  primary_axis: "frequency x leverage"
+  secondary_axis: "capability-map coverage (every C-id and every coverage area exercised)"
+  grounding_rule: "every use case cites a real, documented engineering practice (R2.AC4)"
+  size: "16 units, content-driven (the original ~12 was relaxed); est. ~15-25 hrs"
+  notes: >
+    Security pulled forward to U3 (guardrails before heavier work). The onboarding workflow
+    (W8) is split: light exploration (U2, primary repo) vs deep onboarding-for-refactor
+    (U9, legacy repo), so the legacy substrate's authentic complexity is used where it matters.
+
+use_cases:
+  - unit: U1
+    stage: first-wins
+    job: "Get set up and make a first verified win against taskflow-api"
+    success: "doctor passes; one verified one-line change committed"
+    workflows: []
+    features: ["agentic loop", "verification intro", "REPL", "prompting"]
+    grounding: "Anthropic first-run / onboarding guidance"
+    advances: [C1, C2]
+    depth_tier: core
+
+  - unit: U2
+    stage: first-wins
+    job: "Understand a codebase I've never seen"
+    success: "learner can explain the app's architecture and locate a change site, unaided"
+    workflows: [W8]   # light onboarding
+    features: ["codebase Q&A", "search", "@-references"]
+    grounding: "'explore before you change' practice"
+    advances: [C3]
+    depth_tier: core
+
+  - unit: U3
+    stage: first-wins
+    job: "Operate Claude without leaking secrets or causing damage (security unit, R10)"
+    success: "learner observes a prompt-injection attempt in a sandbox and applies a defense; chooses an appropriate permission mode"
+    workflows: []
+    features: ["permissions/modes", "secret hygiene", "prompt-injection lab", "blast-radius", "checkpoints"]
+    grounding: "threat-modeling, least-privilege"
+    advances: [C4, CV]
+    depth_tier: core
+    security_unit: true   # R10.AC1
+
+  - unit: U4
+    stage: first-wins
+    job: "Make Claude reliably follow my project's conventions"
+    success: "a CLAUDE.md + context choices measurably change Claude's behavior on a task"
+    workflows: []
+    features: ["context engineering", "CLAUDE.md memory", "/context", "settings.json baseline"]
+    grounding: "context-management best practice"
+    advances: [C5]
+    depth_tier: core
+    notes: "Home of config/memory teaching (R11.AC4); baseline established in U1."
+
+  - unit: U5
+    stage: daily-driver
+    job: "Ship a new feature in taskflow-api"
+    success: "feature implemented & verified end-to-end via a plan"
+    workflows: [W1]
+    features: ["explore->plan->code->commit", "plan mode"]
+    grounding: "Anthropic's flagship coding loop"
+    advances: [C6]
+    depth_tier: core
+
+  - unit: U6
+    stage: daily-driver
+    job: "Add behavior safely, test-first"
+    success: "a failing test is written/confirmed, then driven to green"
+    workflows: [W2]
+    features: ["TDD", "running tests"]
+    grounding: "classic TDD, AI-adapted"
+    advances: [C7]
+    depth_tier: core
+
+  - unit: U7
+    stage: daily-driver
+    job: "A test/endpoint is broken — find and fix it"
+    success: "root cause confirmed (not guessed); fix verified"
+    workflows: [W3]
+    features: ["debugging an unfamiliar failure"]
+    grounding: "scientific debugging"
+    advances: [C8]
+    depth_tier: core
+
+  - unit: U8
+    stage: daily-driver
+    job: "Turn my work into a clean, reviewable PR"
+    success: "clean commits + accurate PR description; review-ready"
+    workflows: [W4]
+    features: ["Git/PR workflow", "gh"]
+    grounding: "trunk-based / PR-review practice"
+    advances: [C9]
+    depth_tier: core
+
+  - unit: U9
+    stage: force-multiplier
+    job: "Onboard to the messy taskflow-cli and refactor it safely"
+    success: "architecture mapped; multi-file refactor lands with suite green"
+    workflows: [W5, W8]   # multi-file refactor + deep onboarding
+    features: ["onboarding (deep)", "multi-file refactoring"]
+    grounding: "legacy-rescue / strangler-fig practice"
+    advances: [C10]
+    depth_tier: core
+
+  - unit: U10
+    stage: force-multiplier
+    job: "Build a feature spec-first"
+    success: "reqs->design->tasks produced and used to drive the change"
+    workflows: [W7]
+    features: ["spec-driven dev"]
+    grounding: "spec-/intent-driven development; this very spec is the worked example (R3.AC2)"
+    advances: [C11]
+    depth_tier: core
+
+  - unit: U11
+    stage: force-multiplier
+    job: "Review a change for correctness and security"
+    success: "a review surfaces real correctness + security issues; verification beyond green tests"
+    workflows: [W6]
+    features: ["code & security review", "/code-review", "/security-review"]
+    grounding: "code-review & threat-review practice"
+    advances: [C12, CV]
+    depth_tier: core
+
+  - unit: U12
+    stage: autonomy-scale
+    job: "Eliminate repetitive prompting"
+    success: "a reusable custom command and a skill replace a hand-typed routine"
+    workflows: []
+    features: ["custom slash commands", "skills"]
+    grounding: "dogfooded authoring artifacts (R14)"
+    advances: [C13]
+    depth_tier: core
+
+  - unit: U13
+    stage: autonomy-scale
+    job: "Delegate focused / parallel sub-tasks"
+    success: "a subagent performs a scoped task and returns a usable result"
+    workflows: []
+    features: ["subagents"]
+    grounding: "agent-delegation practice"
+    advances: [C14]
+    depth_tier: core
+
+  - unit: U14
+    stage: autonomy-scale
+    job: "Enforce my standards automatically"
+    success: "a hook blocks/normalizes an action without manual effort"
+    workflows: []
+    features: ["hooks"]
+    grounding: "policy-as-code / pre-commit practice; the course's own enforcement suite is the example (R13/R14)"
+    advances: [C15]
+    depth_tier: core
+
+  - unit: U15
+    stage: autonomy-scale
+    job: "Give Claude access to my tools & data — safely"
+    success: "an MCP server is connected and a third-party one is vetted before install"
+    workflows: []
+    features: ["MCP servers", "extension vetting"]
+    grounding: "MCP integration; supply-chain trust (R10.AC5)"
+    advances: [C16]
+    depth_tier: core
+
+  - unit: U16
+    stage: autonomy-scale
+    job: "Run Claude unattended and in parallel"
+    success: "a headless run executes in CI; >=2 agents work isolated worktrees"
+    workflows: [W9]
+    features: ["headless -p", "CI", "parallel agents via worktrees"]
+    grounding: "git-worktree parallelism; CI automation"
+    advances: [C17]
+    depth_tier: core
+
+# Workflow reconciliation (R3.AC5/AC6): all nine named R3 workflows (W1-W9) map to >=1
+# exercising use case above (none free-floating). W8 (onboarding) is intentionally two-tiered
+# (light U2 / deep U9). See meta/workflows.md.

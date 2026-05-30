@@ -132,8 +132,27 @@ IDE + output-styles + enterprise settings at awareness tier; three-brief capston
 `tools/` checks wired as Claude Code hooks + git pre-commit + **GitHub Actions** CI. → **Phase 2
 gate passed; Phase 3 (Tasks) authoring unblocked.**
 
+## P2 — Scaffolding executed (2026-05-30)
+
+Repo skeleton + all machine-readable `meta/*` artifacts materialized from the approved design
+(§1–§6, §9): `capability-map.{yaml,json}` (C1–C17+CV), `use-case-catalog.yaml` (U1–U16),
+`workflows.md` (W1–W9 + generalized patterns), `coverage-matrix.yaml` (29 areas),
+`version-data.{yaml,json}` + `version-record.md`, `unit-frontmatter.schema.json`, the two unit
+templates, `conventions.md`, `glossary.md`; plus `CLAUDE.md`, `course/progress-checklist.md`
+(generated from the capability map), `course/stuck.md`, and the learner-facing `README.md`. A P2
+cross-reference check (capability-map ↔ catalog ↔ coverage, workflow completeness) passes — green.
+
+Decisions/notes made during P2 (non-obvious calls):
+
+| # | Decision | Rationale |
+|---|---|---|
+| P2-vd ✅ | **`permission-modes` value corrected by verification.** Installed CLI **2.1.158** `--permission-mode` choices are `acceptEdits, auto, bypassPermissions, default, dontAsk, plan` — broader than the design's illustrative example. The verified set is authoritative. | Vindicates the R12.AC3 hard rule (never author version facts from memory). |
+| P2-vd2 ✅ | **19/26 version-data keys verified from `claude --help`; 7 marked `unverified: true`** (`search-refs`, `context-cmds`, `checkpoint-rewind`, `test-run`, `ci`, `managed-settings`, `output-styles`). | Those are in-REPL slash commands / external integrations / doc-only paths not surfaced by `--help`. Per R12.AC3, marking unverified beats fabricating. Tracked in `version-record.md` "Outstanding to verify". |
+| P2-cov ✅ | **Awareness-area home units assigned** (design §4 left rows 27/28 "home unit TBD §6"): IDE→U1 (onboarding), output-styles→U4 (near memory/context customization), managed-settings→U3 mention (security/settings context); extended-thinking→U5 mention. | Resolves the deferred edge cases so coverage cross-validation is clean; depth can still grow later. |
+| P2-env ✅ | **Project virtualenv at `.venv`** (pyyaml, jsonschema) for YAML→JSON generation and the forthcoming P3 Python `tools/` suite; added to `.gitignore` along with Python artifacts. Also fixed a pre-existing `.gitignore` typo (`pecs/`→`specs/`). | Reproducible generation; the tooling stack is Python (design §8). |
+
 ## Open decisions — 🔓 remaining (deferred to implementation, not blocking)
 
-- Per-feature awareness/core tier edge cases (coverage matrix rows 10, 27–29) — seeded in §4; revisit if a unit needs more depth.
+- Per-feature awareness/core tier edge cases (coverage matrix rows 10, 27–29) — home units now assigned in P2 (see P2-cov above); revisit depth if a unit needs more.
 - Concrete seeded-defect list for `taskflow-cli` + per-lab defects — authored in P4 (`codebases/SEEDED.md`).
 - Final capstone brief wording (≥3 briefs) — refined in P6 from the §6.5 menu.

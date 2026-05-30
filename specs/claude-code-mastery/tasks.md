@@ -2,8 +2,9 @@
 
 **Spec:** `claude-code-mastery`
 **Phase:** Tasks / Implementation (Phase 3 of 3)
-**Status:** 🟨 **SKELETON (chunked index)** — the phase structure and chunking are defined;
-per-task detail is filled once `design.md` is authored (so each task traces design → requirement).
+**Status:** 🟨 **PLANNED** (2026-05-29) — Design authored & approved; the detailed per-phase task
+files (`tasks/P1–P6*.md`) are written and trace design → requirement. **Execution (P2→P6) not yet
+started** — that's the build itself. P1 (Design) ✅ complete.
 
 > **Chunking for context management.** The full build exceeds one context window. This file is an
 > **index**; detailed tasks live in per-section files under `tasks/` so a session loads only the slice
@@ -21,33 +22,33 @@ per-task detail is filled once `design.md` is authored (so each task traces desi
 ## Phase index
 
 ### P0 — Preconditions
-- [ ] Q1 (codebase stack/domain) resolved with user → `decisions.md`
-- [ ] Q2 (use-case catalog, capability map, course size) resolved with user → `decisions.md`
-- [ ] Confirm repo structure (design §9) with user
+- [x] Q1 (codebase stack/domain) resolved with user → `decisions.md` (task/project-tracker; `taskflow-api` + `taskflow-cli`)
+- [x] Q2 (use-case catalog, capability map, course size) resolved with user → `decisions.md` (16 units, C1–C17+CV)
+- [x] Repo structure (design §9) — adopted (user-delegated; adjustable)
 
-### P1 — Design  → `tasks/P1-design.md`  [fills design.md §1–§11]
-- [ ] Capability map (§1) · Use-case catalog (§2) · Workflows (§3) · Coverage matrix (§4)
-- [ ] Version-resilience architecture (§5) · Unit model + schema + unit map (§6)
-- [ ] Lab/solution architecture (§7) · Tooling plan (§8) · Repo structure (§9) · Dogfooding (§10)
-- [ ] Traceability table populated (§11)
+### P1 — Design  → [`tasks/P1-design.md`](./tasks/P1-design.md)  ✅ COMPLETE  [filled design.md §1–§11]
+- [x] Capability map (§1) · Use-case catalog (§2) · Workflows (§3) · Coverage matrix (§4)
+- [x] Version-resilience architecture (§5) · Unit model + schema + unit map (§6) · Capstone (§6.5)
+- [x] Lab/solution architecture (§7) · Tooling plan (§8) · Repo structure (§9) · Dogfooding (§10)
+- [x] Traceability table populated (§11) — every R1–R15 ✅
 
-### P2 — Scaffolding & cross-cutting artifacts  → `tasks/P2-scaffold.md`
+### P2 — Scaffolding & cross-cutting artifacts  → [`tasks/P2-scaffold.md`](./tasks/P2-scaffold.md)
 - [ ] Repo skeleton + naming conventions (R13.AC1) · `CLAUDE.md` (R14.AC1)
 - [ ] `meta/` artifacts seeded: capability-map, use-case-catalog, coverage-matrix, version-data,
       version-record, glossary, conventions, front-matter schema (R13.AC2, machine-readable)
 - [ ] `course/progress-checklist.md` generated from capability-map (R9.AC5) · `course/stuck.md` (R9.AC4)
 
-### P3 — Tooling & enforcement (build early so it guards the content)  → `tasks/P3-tooling.md`
+### P3 — Tooling & enforcement (build early so it guards the content)  → [`tasks/P3-tooling.md`](./tasks/P3-tooling.md)
 - [ ] `doctor` preflight + manual fallback (R11.AC2)
 - [ ] Required checks: front-matter validation, coverage/map cross-validation, link check,
       version-data reference integrity (R13.AC4)
 - [ ] Traceability checks (R13.AC5) · Drift detection (R12.AC6) · Local hooks + CI wiring (R13.AC6)
 
-### P4 — Sample codebases  → `tasks/P4-codebases.md`
+### P4 — Sample codebases  → [`tasks/P4-codebases.md`](./tasks/P4-codebases.md)
 - [ ] Primary codebase: build, tests, seeded bugs/smells (R7.AC1–AC2)
 - [ ] Legacy codebase: deliberately messy, for onboarding/refactor/debug (R7.AC1)
 
-### P5 — Units (one slice per unit — author independently)  → `tasks/P5-units/<nn-slug>.md`
+### P5 — Units (one slice per unit — author independently)  → [`tasks/P5-units.md`](./tasks/P5-units.md)  (per-unit working files: `tasks/P5-units/NN-slug.md`)
 - [ ] Onboarding unit (First Wins; doctor + first-success + baseline config; R11)
 - [ ] Dedicated security unit (R10.AC1) + woven safety in every workflow lab (R10.AC7)
 - [ ] One unit per use case (from design §6), each: tier-appropriate template (R6), valid front
@@ -55,7 +56,7 @@ per-task detail is filled once `design.md` is authored (so each task traces desi
 - [ ] Per unit: verify version-specific details vs installed CLI; record provenance (R12.AC3–AC4)
 - [ ] Per unit: reference authentic dogfooding artifacts where they exist (R14.AC2)
 
-### P6 — Capstone, case study & finalization  → `tasks/P6-finalize.md`
+### P6 — Capstone, case study & finalization  → [`tasks/P6-finalize.md`](./tasks/P6-finalize.md)
 - [ ] Capstone brief menu + worked exemplar (R8.AC2) · self-applicable rubric covering all can-do
       statements (R8.AC3) · structured verification-reflection prompts (R8.AC6) · optional AI-self-grade (R8.AC5)
 - [ ] Optional mid-course checkpoint (R8.AC7)

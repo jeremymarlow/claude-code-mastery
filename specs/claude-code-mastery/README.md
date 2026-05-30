@@ -22,8 +22,8 @@ spec doubles as a worked teaching example (requirements R3.AC2 / R12.AC1 / R14).
 | Phase | File | Status |
 |---|---|---|
 | 1. Requirements | `requirements.md` | ✅ **APPROVED** (2026-05-29) — reviewed turn-by-turn, internally consistent, gap-free IDs |
-| 2. Design | `design.md` | 🟨 **Skeleton — unblocked** — sectioned, ready to fill; gated only on Q1/Q2 |
-| 3. Tasks / Impl | `tasks.md` | 🟨 **Skeleton** — chunked index; fills once Design lands |
+| 2. Design | `design.md` | ✅ **Authored** (2026-05-29) — §0–§11 complete; map/catalog/matrix approved; ready for review |
+| 3. Tasks / Impl | `tasks.md` | 🟨 **Planned** — per-phase task files (`tasks/P1–P6*.md`) authored; P1 ✅; build (P2→P6) not started |
 
 **Why gates?** Each phase is reviewed before the next begins — design built on wrong requirements,
 and tasks built on wrong design, are the waste this workflow eliminates. Requirement IDs are stable
@@ -39,6 +39,7 @@ across files for traceability.
 - **Assessment:** capstone only; rubric grades the *work* against can-do statements; units instructional, labs are practice.
 - **Audience:** self-paced solo only (no facilitator/cohort materials).
 
-## Provisional inputs from session 1 (confirm in implementation session)
-- **Q1 (partial):** primary & legacy codebase stack → **Python** (e.g. FastAPI/CLI + pytest). Domain TBD.
-- **Q2 (partial):** course size → **Standard (~12 units, ~15–25 hrs)**. The concrete use-case catalog and capability map (can-do statements + stage assignments) remain to be authored with the user.
+## Resolved in Design session (2026-05-29) — full record in [`decisions.md`](./decisions.md)
+- **Q1 ✅ Domain:** task/project tracker — primary `taskflow-api` (FastAPI + SQLModel + pytest), legacy `taskflow-cli` (messy, untested).
+- **Q2 ✅ Catalog & map:** approved — **16 units** (count content-driven, the "~12" was relaxed), can-do statements C1–C17 + cross-cutting CV. Security unit **pulled forward to U3**; light/deep onboarding split kept (U2/U9). See `design.md` §1/§2/§4.
+- **CLI verified:** 2.1.158.

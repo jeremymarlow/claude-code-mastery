@@ -32,19 +32,22 @@ over memory for specifics; memory is a pointer, the spec is the source of truth.
 | Phase | File | Status |
 |---|---|---|
 | 1. Requirements | `requirements.md` | ✅ **APPROVED** (2026-05-29) — reviewed turn-by-turn, internally consistent, gap-free IDs |
-| 2. Design | `design.md` | 🟨 **Skeleton — unblocked** — sectioned outline ready to fill; gated only on Q1/Q2 |
-| 3. Tasks | `tasks.md` | 🟨 **Skeleton** — chunked index ready to fill once Design lands |
-| — | `decisions.md` | ✅ Rationale captured |
+| 2. Design | `design.md` | ✅ **Authored** (2026-05-29) — Q1/Q2 resolved; §0–§11 complete (capability map, catalog, workflows, coverage matrix, version arch, unit model + capstone, labs, tooling, repo, dogfooding, traceability) |
+| 3. Tasks | `tasks.md` | 🟨 **Planned** (2026-05-29) — detailed per-phase task files `tasks/P1–P6*.md` authored & traced; P1 ✅; build execution P2→P6 not started |
+| — | `decisions.md` | ✅ Rationale captured (incl. Design-session Q1/Q2 resolutions) |
 
-## 4. Resolve these WITH THE USER before writing Design content
+## 4. Q1/Q2 — ✅ RESOLVED with the user (2026-05-29)
 
-These are deliberately undecided (see `decisions.md` → "Open decisions"). **Do not guess them.**
+Both blocking inputs are now decided (full record in `decisions.md` → "Design session"):
 
-- **Q1** — Sample-codebase **domain** (stack already chosen: **Python**, both repos — see `decisions.md`).
-- **Q2** — The concrete use-case catalog (R2.AC2) and the concrete capability map (can-do statements +
-  stage assignments, R1). Course **size already chosen: ~12 units / ~15–25 hrs** — fit the catalog to it.
+- **Q1 ✅** — domain = **task/project tracker**; primary `taskflow-api` (FastAPI + SQLModel + pytest),
+  legacy `taskflow-cli` (messy, untested). Concrete layout/seeded-bug inventory → design §7 / P4.
+- **Q2 ✅** — capability map (C1–C17 + CV) and 16-unit use-case catalog **approved** (design §1/§2/§4).
+  Unit count is **content-driven** (the "~12" was relaxed); security pulled forward to U3.
 
-Once resolved, record them in `decisions.md` (move from 🔓 to ✅) and proceed.
+**Remaining open** (don't guess; see `decisions.md` → Open decisions): repo structure (§9),
+per-feature awareness/core edge cases, capstone brief menu (R8). Next Design work: §3 (workflows),
+§5 (version architecture), §6 (unit model/schema/templates), §7 (labs/codebases), §8–§10.
 
 ## 5. Context-management protocol (important — this is a large build)
 

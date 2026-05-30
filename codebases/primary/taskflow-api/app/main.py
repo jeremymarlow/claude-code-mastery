@@ -50,7 +50,7 @@ def create_app() -> FastAPI:
 
     @app.get("/health", tags=["meta"])
     def health() -> dict[str, str]:
-        return {"status": "ok"}
+        return {"status": "ok", "service": "taskflow-api"}
 
     app.include_router(auth.router)
     app.include_router(users.router)

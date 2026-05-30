@@ -36,7 +36,7 @@ By the end of this unit you can:
 > A **skill** is a packaged capability in `.claude/skills/<name>/SKILL.md` with a `name` + a
 > `description` that lets Claude pull it in when it fits ({{vd:skills}}). Rule of thumb: a prompt *you*
 > trigger on demand → command; a structured capability worth naming and reusing across tasks → skill.
-> This repo ships both as worked examples — `/new-unit` (command) and `prime-context` (skill). The lab has
+> This repo ships both as worked examples — `/close-unit` (command) and `prime-context` (skill). The lab has
 > you build one of each against `taskflow-api`; the self-check is a checklist on the two artifacts.
 
 ## Skip-check
@@ -54,7 +54,7 @@ packages are the subject of this unit — custom **commands** and **skills**. Bo
 prompting; they differ in how they're triggered and how much structure they carry.
 
 **1 — A custom slash command is a saved prompt.** It's a markdown file under `.claude/commands/`; the
-filename is the command, so `new-unit.md` becomes `/new-unit`. Invoking it expands the file's contents
+filename is the command, so `close-unit.md` becomes `/close-unit`. Invoking it expands the file's contents
 into the conversation exactly as if you'd typed them — including any arguments you pass (`$1`, `$2`,
 `$ARGUMENTS`). That's the whole model: a *prompt template you trigger deliberately*. Reach for a command
 when you catch yourself re-typing the same paragraph — a scaffolder, a "draft release notes from the
@@ -87,7 +87,7 @@ shared with everyone who clones it) or `~/.claude/` (personal — your habits ac
 is the same source distinction you met for `settings.json` in [U4](../04-memory-and-context/unit.md):
 put a command/skill the *team* should have in the project; keep your personal shortcuts in `~/.claude/`.
 A team scaffolder committed to `.claude/commands/` means every contributor scaffolds the same way — that
-is exactly why *this* repo commits `new-unit` and `prime-context`.
+is exactly why *this* repo commits `close-unit` and `prime-context`.
 
 **Version currency.** Verified against Claude Code `{{vd:_verified_version}}`. The on-disk locations
 (`.claude/commands/`, `.claude/skills/<name>/SKILL.md`) are filesystem **conventions** — confirm the
@@ -111,13 +111,14 @@ then report a tight "where we are / what's next." It's a *capability* ("orient o
 and described so it can fire on a situation — which is what makes it a skill rather than a one-off
 prompt.
 
-**The command — [`.claude/commands/new-unit.md`](../../../.claude/commands/new-unit.md).** Its front
-matter is a `description` and an `argument-hint: <NN> <slug>`. The body is a prompt that uses those
-arguments (`$1`, `$2`) and instructs Claude to scaffold `course/units/$1-$2/unit.md` from the template,
-pulling every front-matter value from the single-source meta files rather than inventing them. You run
-it deliberately — `/new-unit 13 13-subagents` when you start the next unit — and it expands into that
-instruction. It's a *prompt you trigger*, with arguments, so it's a command, not a skill. (We used it to
-scaffold the units after this one — authentic dogfooding, R14.)
+**The command — [`.claude/commands/close-unit.md`](../../../.claude/commands/close-unit.md).** Its front
+matter is a `description` and an `argument-hint: <NN>`. The body is a prompt that uses that argument
+(`$1`) and walks Claude through the chore of *closing out a finished unit*: update `IMPLEMENTATION.md`
+§3, check the `tasks.md` box and its detail bullet, add the `decisions.md` rationale + refresh the
+open-loops ledger, verify version currency, and run `make check`. You run it deliberately —
+`/close-unit 13` the moment U13's prose is done — and it expands into that checklist. It's a *prompt you
+trigger*, with an argument, so it's a command, not a skill. (It's the real state-sync routine used to
+land every unit in this course — authentic dogfooding, R14.)
 
 Side by side: the skill is named and self-describing so Claude can pull it in; the command is a saved
 prompt you fire on demand with arguments. Same intent — never type the routine again — different
@@ -131,7 +132,7 @@ it by its primary trigger: a fixed prompt you fire → command; a capability tie
 
 > **This lab has no automated verifier.** Whether a command or skill is *good* is a judgment call, and
 > the artifacts you produce live in your own `.claude/` (R7.AC3/AC7). So the self-check is an objective
-> checklist you apply to what you built, with this repo's `new-unit` / `prime-context` as the reference
+> checklist you apply to what you built, with this repo's `close-unit` / `prime-context` as the reference
 > patterns to compare against.
 
 **Goal:** take two routines you'd otherwise hand-type while working in `taskflow-api` and package each
@@ -178,7 +179,7 @@ artifacts under that project's `.claude/` so they're scoped to it (nothing here 
       `claude --help` rather than baked in.
 
 **Reference:** there's no `solution/` branch — the artifacts are *yours*. The repo's
-[`new-unit`](../../../.claude/commands/new-unit.md) and
+[`close-unit`](../../../.claude/commands/close-unit.md) and
 [`prime-context`](../../../.claude/skills/prime-context/SKILL.md) are the reference patterns; compare your two
 against them and the checklist above.
 

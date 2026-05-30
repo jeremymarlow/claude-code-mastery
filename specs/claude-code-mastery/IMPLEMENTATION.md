@@ -1,0 +1,87 @@
+# Start Here — Implementation Guide
+
+**Spec:** `claude-code-mastery`
+**Audience:** a Claude Code session (and its human) picking up this spec to build or maintain
+the course. **You likely have no memory of how this spec was written** — this document and
+[`decisions.md`](./decisions.md) are how that context is restored.
+
+---
+
+## 1. What this project is (in one paragraph)
+
+A self-paced, solo, hands-on **course** that takes a seasoned developer who is new to
+AI-assisted coding to elite Claude Code practitioner. It is **outcome-driven** (organized around
+real use cases, not a feature tour), **tiered** for fast-learning senior engineers, and
+**version-resilient** (targets the latest CLI; built to be refreshed as the tool changes — using
+this spec). Assessment is a single capstone. See [`requirements.md`](./requirements.md) §1.
+
+## 2. Read order (do this first, every fresh session)
+
+1. **This file** — orientation + how to work within context limits.
+2. [`decisions.md`](./decisions.md) — *why* the spec is the way it is; the rejected alternatives.
+   Read before "improving" any requirement.
+3. [`requirements.md`](./requirements.md) — the authoritative WHAT (R1–R15, EARS). Stable IDs.
+4. [`design.md`](./design.md) — the HOW (architecture, schemas, artifact inventory, traceability).
+5. [`tasks.md`](./tasks.md) — the ordered, chunked build plan.
+
+The persistent project memory (auto-loaded each session) also points here. Trust the **files**
+over memory for specifics; memory is a pointer, the spec is the source of truth.
+
+## 3. Current state
+
+| Phase | File | Status |
+|---|---|---|
+| 1. Requirements | `requirements.md` | ✅ **APPROVED** (2026-05-29) — reviewed turn-by-turn, internally consistent, gap-free IDs |
+| 2. Design | `design.md` | 🟨 **Skeleton — unblocked** — sectioned outline ready to fill; gated only on Q1/Q2 |
+| 3. Tasks | `tasks.md` | 🟨 **Skeleton** — chunked index ready to fill once Design lands |
+| — | `decisions.md` | ✅ Rationale captured |
+
+## 4. Resolve these WITH THE USER before writing Design content
+
+These are deliberately undecided (see `decisions.md` → "Open decisions"). **Do not guess them.**
+
+- **Q1** — Sample-codebase **domain** (stack already chosen: **Python**, both repos — see `decisions.md`).
+- **Q2** — The concrete use-case catalog (R2.AC2) and the concrete capability map (can-do statements +
+  stage assignments, R1). Course **size already chosen: ~12 units / ~15–25 hrs** — fit the catalog to it.
+
+Once resolved, record them in `decisions.md` (move from 🔓 to ✅) and proceed.
+
+## 5. Context-management protocol (important — this is a large build)
+
+The full course will exceed any single context window. Work in **bounded slices**:
+
+- **Don't load everything.** For a given task, load: `requirements.md` (or just the relevant Rs),
+  the relevant `design.md` section, and the one `tasks/<section>.md` you're executing. Skip the rest.
+- **One unit at a time.** Authoring is per-unit. Each unit is self-contained (R6.AC5), so you can
+  build unit N loading only its task file, its front-matter schema, and the cross-cutting artifacts
+  it references — not the other units.
+- **Cross-cutting facts live in single files** (`meta/…`), referenced by key, never duplicated
+  (R13.AC2, R12.AC2). Read the one you need; don't inline its contents elsewhere.
+- **Update state as you go.** Check off tasks in `tasks.md`/`tasks/*`, bump `meta/version-record.md`,
+  and append to `decisions.md` when you make a non-obvious call. The next session reads these, not your memory.
+- **Verify version-specific details against the installed CLI** (`--help`, `/help`, docs) — never from
+  model memory (R12.AC3, hard rule). Record provenance (R12.AC4).
+
+## 6. Definition of Done for the build (v1)
+
+Implementation is complete when **all** hold:
+
+1. Every requirement R1–R15 is satisfied and referenced by ≥1 artifact (traceability check passes, R13.AC5).
+2. Every can-do statement traces to ≥1 lab **and** ≥1 capstone-rubric dimension (R1.AC5, R13.AC5).
+3. Every capability area in the coverage matrix is covered at its assigned tier (R4.AC2; high-leverage ⇒ lab).
+4. Every unit conforms to the tier-appropriate template with valid machine-readable front matter (R6, R13.AC4).
+5. Every lab has objective self-check criteria, an inspectable reference solution, and a reset path (R7).
+6. The capstone, its brief menu, exemplar, and self-applicable rubric exist (R8).
+7. The two sample codebases exist and pass their own test suites (R7.AC1–AC2).
+8. The required enforcement suite + traceability checks run green locally and in CI (R13.AC4–AC6).
+9. The version-data file, version-record, and drift-detection check exist and pass (R12).
+10. Dogfooding artifacts exist and are accurately referenced; the build case study + transparency note exist (R14).
+11. The "when you're stuck" recovery resources and the learner progress checklist exist (R9.AC4–AC5).
+
+## 7. Maintenance (when the CLI changes later)
+
+Follow the R12.AC7 refresh process: run the drift-detection check → re-verify the flagged
+version-specific details against the installed CLI → update **only** `meta/version-data.*` and any
+truly affected locations → bump `meta/version-record.md` → re-run the enforcement suite. Because
+version-specifics are quarantined (R12.AC2/AC8), a version bump should touch a bounded set of files,
+not the prose.

@@ -45,6 +45,7 @@ def list_tasks(
     assignee_id: Optional[int] = Query(default=None),
     due_before: Optional[date] = Query(default=None),
     due_after: Optional[date] = Query(default=None),
+    overdue: Optional[bool] = Query(default=None),
     sort: str = Query(default="created_at"),
     order: str = Query(default="desc", pattern="^(asc|desc)$"),
     page: Pagination = Depends(pagination_params),
@@ -57,6 +58,7 @@ def list_tasks(
         assignee_id=assignee_id,
         due_before=due_before,
         due_after=due_after,
+        overdue=overdue,
         sort=sort if sort in _SORT_CHOICES else "created_at",
         descending=(order == "desc"),
     )

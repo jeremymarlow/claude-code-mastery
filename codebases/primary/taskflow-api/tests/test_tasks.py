@@ -124,6 +124,35 @@ def test_cannot_read_task_in_foreign_project(client):
     assert client.get(f"/tasks/{tid}", headers=other_h).status_code == 404
 
 
+def test_filter_overdue_tasks(client):
+    h, pid = _setup_project(client)
+    today = date.today()
+    yesterday = str(today - timedelta(days=1))
+
+    def _task(title, status, due_date):
+        body = {"title": title, "status": status}
+        if due_date is not None:
+            body["due_date"] = due_date
+        return client.post(f"/projects/{pid}/tasks", json=body, headers=h).json()["id"]
+
+    overdue = {
+        _task("past-todo", "todo", yesterday),
+        _task("past-inprog", "in_progress", yesterday),
+    }
+    _task("past-done", "done", yesterday)          # done is never overdue
+    _task("due-today", "todo", str(today))         # today is not yet overdue (strictly before)
+    _task("future", "todo", str(today + timedelta(days=3)))
+    _task("no-due-date", "todo", None)             # no due date is never overdue
+
+    resp = client.get("/tasks?overdue=true", headers=h).json()
+    assert {t["id"] for t in resp["items"]} == overdue
+    assert {t["status"] for t in resp["items"]} == {"todo", "in_progress"}
+
+    # Absent / false must not filter — all six tasks come back.
+    assert client.get("/tasks", headers=h).json()["total"] == 6
+    assert client.get("/tasks?overdue=false", headers=h).json()["total"] == 6
+
+
 def test_deleting_project_cascades_to_tasks(client):
     h, pid = _setup_project(client)
     client.post(f"/projects/{pid}/tasks", json={"title": "t"}, headers=h)

@@ -32,6 +32,7 @@ class TaskFilters:
     assignee_id: Optional[int] = None
     due_before: Optional[date] = None
     due_after: Optional[date] = None
+    overdue: Optional[bool] = None
     sort: str = "created_at"
     descending: bool = True
 
@@ -85,6 +86,16 @@ def list_tasks(
         base = base.where(Task.due_date <= filters.due_before)
     if filters.due_after is not None:
         base = base.where(Task.due_date >= filters.due_after)
+    if filters.overdue:
+        # Overdue = past its due date and not finished. due_date strictly before today (a task due
+        # today is not yet overdue); a done task is never overdue; a task with no due_date never is
+        # (NULL comparisons drop those rows, but we say so explicitly).
+        today = date.today()
+        base = base.where(
+            Task.due_date.is_not(None),
+            Task.due_date < today,
+            Task.status != TaskStatus.done,
+        )
 
     total = session.exec(select(func.count()).select_from(base.subquery())).one()
 

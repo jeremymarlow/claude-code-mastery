@@ -36,7 +36,7 @@ By the end of this unit you can:
 > A **skill** is a packaged capability in `.claude/skills/<name>/SKILL.md` with a `name` + a
 > `description` that lets Claude pull it in when it fits ({{vd:skills}}). Rule of thumb: a prompt *you*
 > trigger on demand → command; a structured capability worth naming and reusing across tasks → skill.
-> This repo ships both as worked examples — `/new-unit` (command) and `unit-check` (skill). The lab has
+> This repo ships both as worked examples — `/new-unit` (command) and `prime-context` (skill). The lab has
 > you build one of each against `taskflow-api`; the self-check is a checklist on the two artifacts.
 
 ## Skip-check
@@ -87,7 +87,7 @@ shared with everyone who clones it) or `~/.claude/` (personal — your habits ac
 is the same source distinction you met for `settings.json` in [U4](../04-memory-and-context/unit.md):
 put a command/skill the *team* should have in the project; keep your personal shortcuts in `~/.claude/`.
 A team scaffolder committed to `.claude/commands/` means every contributor scaffolds the same way — that
-is exactly why *this* repo commits `new-unit` and `unit-check`.
+is exactly why *this* repo commits `new-unit` and `prime-context`.
 
 **Version currency.** Verified against Claude Code `{{vd:_verified_version}}`. The on-disk locations
 (`.claude/commands/`, `.claude/skills/<name>/SKILL.md`) are filesystem **conventions** — confirm the
@@ -100,15 +100,16 @@ detail; the version-specific surfaces are {{vd:custom-commands}} and {{vd:skills
 This repository carries one of each, and they are the real tools used to build the course — read them
 as your templates (`cat` them as you follow along).
 
-**The skill — [`.claude/skills/unit-check/SKILL.md`](../../../.claude/skills/unit-check/SKILL.md).**
-Its front matter is two lines that do all the work: `name: unit-check`, and a `description` that says
-*when* to use it — "after authoring or editing a unit, to confirm front matter, coverage, links,
-version-refs, and traceability are green." That description is the trigger: it's specific about the
-situation, so Claude can recognize the moment ("I just edited a unit") and reach for the skill. The body
-is the structured part a bare prompt wouldn't carry well — run `make check`, branch on green vs. red,
-and a labelled list of what each of the five checks guards. It's a *capability* ("check a unit's
-health"), named and described, not a one-off prompt — which is exactly why it's a skill and not a
-command.
+**The skill — [`.claude/skills/prime-context/SKILL.md`](../../../.claude/skills/prime-context/SKILL.md).**
+Its front matter is two lines that do the work: `name: prime-context`, and a `description` that names
+*when* to use it — "at the start of a fresh session, before any other work, whenever you start or
+resume a session on this repo." That description is the trigger, and a sharp one: a fresh session is a
+crisp, recognizable situation, so Claude can reach for the skill the moment a session opens rather than
+waiting to be told. The body is the structured part a bare prompt wouldn't carry well — read the spec
+in its canonical order (IMPLEMENTATION §3 live status, then the open-loops ledger), check git state,
+then report a tight "where we are / what's next." It's a *capability* ("orient on this project"), named
+and described so it can fire on a situation — which is what makes it a skill rather than a one-off
+prompt.
 
 **The command — [`.claude/commands/new-unit.md`](../../../.claude/commands/new-unit.md).** Its front
 matter is a `description` and an `argument-hint: <NN> <slug>`. The body is a prompt that uses those
@@ -120,13 +121,17 @@ scaffold the units after this one — authentic dogfooding, R14.)
 
 Side by side: the skill is named and self-describing so Claude can pull it in; the command is a saved
 prompt you fire on demand with arguments. Same intent — never type the routine again — different
-trigger.
+trigger. Note that `prime-context` sits closer to the line than a mid-task skill would: *you* usually
+type it at session start, which is command-shaped. It earns "skill" because its whole reason to exist is
+a recognizable **situation** (a session opening) that a description can name — and naming a situation so
+Claude can act on it is exactly what a skill is for. When a routine could honestly be either, classify
+it by its primary trigger: a fixed prompt you fire → command; a capability tied to a situation → skill.
 
 ## Lab
 
 > **This lab has no automated verifier.** Whether a command or skill is *good* is a judgment call, and
 > the artifacts you produce live in your own `.claude/` (R7.AC3/AC7). So the self-check is an objective
-> checklist you apply to what you built, with this repo's `new-unit` / `unit-check` as the reference
+> checklist you apply to what you built, with this repo's `new-unit` / `prime-context` as the reference
 > patterns to compare against.
 
 **Goal:** take two routines you'd otherwise hand-type while working in `taskflow-api` and package each
@@ -174,7 +179,7 @@ artifacts under that project's `.claude/` so they're scoped to it (nothing here 
 
 **Reference:** there's no `solution/` branch — the artifacts are *yours*. The repo's
 [`new-unit`](../../../.claude/commands/new-unit.md) and
-[`unit-check`](../../../.claude/skills/unit-check/SKILL.md) are the reference patterns; compare your two
+[`prime-context`](../../../.claude/skills/prime-context/SKILL.md) are the reference patterns; compare your two
 against them and the checklist above.
 
 ## Common pitfalls
@@ -201,8 +206,8 @@ against them and the checklist above.
 
 - **Next:** the rest of the Autonomy stage extends "package the work." U13 (subagents) delegates a
   scoped task to a **subagent**; U14 (hooks) automates enforcement with **hooks** — and this repo's own
-  check suite (the one `unit-check` wraps) is U14's worked example; U16 (automate & scale) runs these
-  packaged routines headlessly and in parallel.
+  `make check` suite is U14's worked example; U16 (automate & scale) runs these packaged routines
+  headlessly and in parallel.
 - **Scope & sources** — project vs. personal `.claude/` is the same distinction as settings sources in
   [U4](../04-memory-and-context/unit.md).
 - The invocation, argument, and resolution surfaces — {{vd:custom-commands}} and {{vd:skills}};

@@ -36,6 +36,7 @@ when an interactive session or official docs are available:
   `/compact`/`/clear`, checkpoint/rewind) confirmable via `/help`.
 - `review-cmds` — `ultrareview` is CLI-verified; confirm the `/code-review` and `/security-review`
   slash-command names in-REPL.
-- `test-run` — conceptual (tests run via the Bash tool).
+- `test-run` — conceptual (tests run via the Bash tool); consumed by U6 (home unit, area 11), kept
+  `unverified` under the L1 hold (project runner is `pytest`, confirmed for `taskflow-api`).
 - `ci`, `managed-settings`, `output-styles` — external integration / enterprise / settings detail to
   confirm against official docs before any value is hardcoded.

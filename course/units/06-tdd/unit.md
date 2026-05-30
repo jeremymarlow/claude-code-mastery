@@ -1,0 +1,199 @@
+---
+id: U6
+title: "Drive a new behavior test-first (red → green)"
+stage: daily-driver
+depth_tier: core
+use_case: "Add behavior safely, test-first"
+can_do: [C7]
+workflows: [W2]
+coverage_areas: [11]
+prerequisites: [U5]
+reading_time_min: 9
+lab_time_min: 30
+---
+
+# Drive a new behavior test-first (red → green)
+
+## Learning objectives
+
+By the end of this unit you can:
+
+- **Drive a new behavior test-first through the red → green loop** — specify it as a failing test,
+  confirm it fails, then implement just enough to pass — advances `C7`.
+- **Confirm the test fails for the *right* reason** — distinguish a real assertion failure (the
+  behavior is genuinely missing) from a typo/import/collection error that fails for the wrong one.
+- **Read the implementation, not just the green bar** — a test can be satisfied the wrong way
+  (a hard-coded return, a too-broad query); the `CV` reflex applied to test-driven work.
+- **Recognize when TDD earns its keep** — behavior you can pin as a test, or regression-prone /
+  edge-case-heavy work — versus when it's overhead.
+
+## Fast path (TL;DR)
+
+> Test-driven development with Claude is [W2](../../../meta/workflows.md#w2--test-driven-development):
+> **write the test first, watch it go red, then make it green.** Have Claude write a test that pins the
+> behavior you want, run it, and **confirm it fails for the right reason** (the behavior is missing —
+> not a typo or a bad import). Then implement just enough to pass, and **read the implementation** to
+> be sure the test wasn't satisfied the wrong way (a hard-coded value, a query that's too broad). The
+> lab has you add an **`overdue` task filter** this way, and `tools/verify-lab u06-lab1` proves it.
+
+## Skip-check
+
+**Skip this unit if you can already:** take a new, edge-case-bearing behavior and drive it with
+Claude test-first — get a test that pins the behavior, **run it and confirm it fails for the right
+reason** before any implementation exists, then implement to green and read the diff to confirm the
+test wasn't passed by a hard-coded shortcut — rather than writing the code first and bolting a test on
+after (or trusting a green bar you never watched go red).
+
+## Concept
+
+You can already ship a feature through explore → plan → code → commit (U5). TDD is that loop with the
+order inverted at the core: **the test comes before the code.** That inversion is the whole point. A
+test written *after* the implementation tends to assert whatever the code already does — it locks in
+behavior rather than specifying it. A test written *first* is a specification you can run, and watching
+it fail proves the test can actually detect the absence of the behavior. With an AI doing the typing,
+that proof matters more, not less: it's the cheapest guard against a confident implementation that's
+subtly wrong.
+
+**The workflow — W2.** The generalized pattern lives once in
+[`meta/workflows.md`](../../../meta/workflows.md#w2--test-driven-development); read it there. The short
+version: **write a failing test → confirm red (for the right reason) → implement to green → refactor
+with the test as a net.** The rest of this section is what's specific to *applying* it with Claude.
+
+**1 — Write the test first, from the spec — not from the code.** Hand Claude the behavior as a
+specification (for the lab: *"a task is overdue when its due date is strictly before today and it isn't
+done"*) and have it write the test before touching the implementation. Include the edge cases in the
+test, because the edges are where the behavior is actually defined: a task due *today* is not overdue;
+a `done` task is never overdue however old; a task with no due date is never overdue. A test that
+covers only the happy path under-specifies the feature and a naive implementation will sail through it.
+
+**2 — Run it and confirm it fails for the *right* reason (the red that counts).** This is the step
+beginners skip and the one the unit is named for. Run the test ({{vd:test-run}}) and **read the
+failure**. You want an *assertion* failure — "expected 2 overdue tasks, got 5" — which proves the test
+exercises the missing behavior. What you must not accept is a failure from a typo, a bad import, a
+fixture that didn't load, or a test that errors during collection: those are red for the *wrong* reason,
+and a test that's broken in that way can flip to green without the behavior ever being correct. If
+Claude jumps straight to implementing, stop it: *"run the test first and show me it fails, and why."*
+
+**3 — Implement just enough to go green.** Now let Claude write the implementation against the test.
+Resist scope creep — implement the behavior the test specifies, not a speculative generalization. In
+this repo that means the logic lands in the **service layer**, per the baseline
+[`CLAUDE.md`](../../../codebases/primary/taskflow-api/CLAUDE.md) (the convention you internalized in
+U4/U5), with the route just wiring it up. Then run the suite and watch it go green.
+
+**4 — A green bar is necessary, not sufficient — read the implementation (CV).** Here is TDD's own
+failure mode: **a test can be satisfied the wrong way.** A hard-coded `return []`, a query that filters
+on `due_date <= today` (off by one — it sweeps in tasks due *today*), an implementation that forgets
+`status != done` and reports finished work as overdue — each can pass an under-written test. So the
+verification gate isn't "the bar is green," it's "the bar is green **and** I read how it got there."
+Read the implementation diff the way U5 taught you to read any diff: does it compute the behavior, or
+does it pattern-match the test? If a one-line change to the test would expose a cheat, add that line.
+
+> **When *not* to reach for TDD.** TDD pays off when the behavior is specifiable as a test and the work
+> is edge-case-heavy or regression-prone (exactly the lab's `overdue` rule, and most bug fixes — see
+> U7). It's overhead for genuinely exploratory work where you don't yet know the shape of the answer,
+> or for one-off throwaway scripts. It's a tool you reach for deliberately, not a law.
+
+**Version currency.** This unit was verified against Claude Code `{{vd:_verified_version}}`; tests run
+through the Bash tool against the project's own runner ({{vd:test-run}}) rather than any Claude-specific
+flag — confirm your project's runner (`taskflow-api` uses `pytest`) and see
+[`meta/version-record.md`](../../../meta/version-record.md) if your version differs.
+
+## Worked example
+
+This course is itself built test-first where the behavior is mechanical. The enforcement suite under
+`tools/` (`check-frontmatter`, `check-links`, `check-version-refs`, `check-traceability`) is exactly
+the kind of thing TDD fits: each check has a *specifiable* contract (e.g. "a `vd:<key>` reference in a
+unit that resolves to no entry in `version-data.yaml` must fail the build"). The way to add such a
+check is to first write
+the failing case — a fixture with a dangling reference, asserted to make the check exit non-zero — watch
+it fail because the check doesn't catch it yet, then implement the check until that case (and the
+existing green ones) pass. The red proves the check can actually catch the thing it's meant to catch;
+without it you'd have a check that exits 0 on everything and a false sense of safety. That is the same
+loop the lab asks you to run, on this repo's own tooling.
+
+## Lab
+
+**Goal:** add a new behavior to `taskflow-api` **test-first** — write the failing test, confirm it's
+red for the right reason, implement to green, and prove it with the suite and the lab verifier.
+
+**The behavior (your spec):** add an **`overdue` filter** to the task list.
+
+- **Surface:** `GET /tasks?overdue=true`, authenticated like the rest of the API.
+- **A task is *overdue*** when it has a `due_date`, that date is **strictly before today**, **and** its
+  `status` is not `done`.
+- **`overdue=true`** returns only overdue tasks (still scoped to the caller's owned projects, and still
+  composing with the other filters — `project_id`, `status`, paging).
+- **Edge cases that define the behavior:** a task due **today** is *not* overdue; a **`done`** task is
+  *never* overdue no matter how old; a task with **no `due_date`** is *never* overdue.
+- **Absent (or `overdue=false`):** behaves exactly as today — no overdue filtering (this is the
+  regression you must not break).
+
+**Starting state:** `start/u06-lab1` (run `tools/reset-lab u06-lab1` to restore it) — the clean, green
+primary codebase with no overdue filter yet.
+
+**Steps:**
+
+1. `tools/reset-lab u06-lab1`, then start a session inside the codebase:
+   `cd codebases/primary/taskflow-api && claude`.
+2. **Test first.** Have Claude write a test for the spec above *before* any implementation — covering
+   the happy path **and** the three edge cases (due-today excluded, `done` excluded, no-due-date
+   excluded). Tests live in `tests/` (`tests/test_tasks.py` / `tests/test_services.py`); the existing
+   ones and `tests/factory.py` show the house style.
+3. **Confirm red — for the right reason.** Run the new test (`pytest -k overdue` is enough) and **read
+   the failure**. Require an *assertion* failure that shows the behavior is missing (e.g. the filter is
+   ignored, so every task comes back) — not an import/typo/collection error. If it's red for the wrong
+   reason, fix the test until the red is real, *then* proceed.
+4. **Green.** Have Claude implement the behavior — in the **service layer**, route just wiring it up —
+   until the new test and the **whole** suite pass.
+5. **Read the implementation (verify).** Read the diff: does it *compute* "overdue" (strictly-before,
+   `done` excluded), or did it cheat (a `<=` that includes today, a forgotten status check, a hard-coded
+   shortcut)? Then commit, with a message that states the behavior.
+
+**Self-check (objective):** run `tools/verify-lab u06-lab1`. It passes only if the full pytest suite is
+green **and** `GET /tasks?overdue=true` matches the contract above — overdue tasks returned, `done` and
+due-today and no-due-date tasks excluded, and the unfiltered list unchanged.
+
+**Reference solution:** branch `solution/u06-lab1` — attempt the lab unaided first, then diff your
+result against it. (It adds an `overdue` flag to `TaskFilters`, computes the predicate in the
+`list_tasks` service against `date.today()`, threads one `overdue` query param through the route, and
+adds tests pinning the edge cases. Yours may differ in shape and still pass — the verifier checks the
+behavior, not your structure.)
+
+**Verify (CV):** this lab's verification is the red-then-green itself, plus the read:
+- **The red (step 3):** a failing test that fails for the *right* reason is what proves the test can
+  detect the missing behavior. A test you never watched fail is a test you can't trust.
+- **The implementation (step 5):** a green bar plus a diff you read — confirming the behavior is
+  *computed*, not faked — is what "verified" means here. The verifier's edge cases exist precisely to
+  catch a test that was satisfied the wrong way.
+
+## Common pitfalls
+
+- **Writing the test after the code.** If Claude implements first and tests after, you've lost the
+  whole benefit — the test now describes what the code does, not what you wanted, and you never proved
+  it can fail. Insist on the test first.
+- **Accepting a red that's red for the wrong reason.** A test that fails because of a typo or a missing
+  import is not a passing-grade red — it can go green without the behavior being correct. Read *why* it
+  failed before you let anyone implement.
+- **Under-specifying the edges.** A test that checks only "an old task is overdue" is passed by a naive
+  `due_date <= today` that wrongly includes today's tasks and finished ones. The edges (`done`,
+  due-today, no-due-date) *are* the spec — pin them.
+- **Trusting the green bar without reading the implementation.** TDD's own trap: a hard-coded or
+  too-broad implementation can pass a weak test. Green is necessary, not sufficient — read the diff.
+- **Letting logic land in the router.** Same convention as U5: the overdue predicate is domain logic
+  and belongs in the service. A route that computes it "works" but violates the baseline `CLAUDE.md`.
+- **Over-implementing past the test.** Adding speculative behavior the spec didn't ask for (a whole
+  date-range DSL for one boolean filter) is scope creep the red→green discipline is meant to prevent.
+
+## Going deeper
+
+- **Next:** U7 (debugging) reuses this loop in reverse — capture the bug as a failing test first, then
+  fix to green — and U8 (Git/PR) turns the verified change into reviewable history. The red→green
+  reflex is load-bearing for both.
+- [`meta/workflows.md`](../../../meta/workflows.md#w2--test-driven-development) — the generalized W2
+  pattern (and how it connects to W1 from U5 and W3 in U7).
+- Running tests is tool-use, not a Claude flag — {{vd:test-run}}; version-specifics live in
+  [`meta/version-record.md`](../../../meta/version-record.md).
+- The plan-and-diff discipline from [U5](../05-ship-a-feature/unit.md) and the diff-reading reflex from
+  [U1](../01-onboarding-first-win/unit.md) are the habits TDD builds on.
+- Stuck? [`course/stuck.md`](../../stuck.md) and the
+  [progress checklist](../../progress-checklist.md).

@@ -251,7 +251,7 @@ _Format: **decision-id** — the decision; **Why:** the rationale._
 **Why:** `git-pr` was verified from `claude --help` in P2 (`--from-pr`); `git`/`gh` themselves are external tools driven through Bash, not version-specific Claude surface.
 
 **P5-U9-lab ✅** — U9's refactor lab is on the LEGACY substrate (like U7), starting from the messy monolith as-is. `start/u09-lab1` tag = the ~700-line single-file `taskflow.py` (already on `main` by design — SEEDED §1); `solution/u09-lab1` branch = a behavior-preserving split into a `taskflow_app/` package (constants/storage/domain/lookups/formatting/commands/cli behind a 16-line `taskflow.py` entry), de-duplicating the two lookups, the id helpers, and the **three** overdue copies into one each, dropping the dead code — **and leaving the seeded D1/D2/D3 bugs intact** (a refactor preserves behavior; fixing them is a separate change). Solution also ships stdlib `unittest` characterization tests (the safety net the unit teaches). Objective `verify.sh` is a **behavior-equivalence** check: it materializes the original from the tag, runs a 35-command battery against both it and the learner's tree, and asserts identical transcripts (ISO timestamps redacted) — plus a structural gate that the monolith was actually split (≥2 substantive modules, `taskflow.py` < 70% of baseline lines, entry preserved). Verified end-to-end: **fails on the untouched monolith ("not split"), fails if D1 is "fixed"** (behavior diverges — tested), passes on the solution.
-**Why:** W5's whole risk is silent behavior change, so the verifier's job is the regression guard, not a bug-repro — it passes on both `start` and `solution` *behaviorally* (identical), with the structural gate distinguishing a real refactor from a no-op. Comparing against the *original* (not a hardcoded golden) makes it self-maintaining and gives the scope-creep guardrail real teeth: a "helpful" bug-fix turns the transcript red, which is exactly the W5 lesson. Legacy lab ⇒ **not** added to `SEEDED.md` §2 (no primary branch defect; the targets are the §1 smells). Mirrors the U7 legacy-lab pattern (refs for tooling uniformity).
+**Why:** W5's whole risk is silent behavior change, so the verifier's job is the regression guard, not a bug-repro — it passes on both `start` and `solution` *behaviorally* (identical), with the structural gate distinguishing a real refactor from a no-op. Comparing against the *original* (not a hardcoded golden) makes it self-maintaining and gives the scope-creep guardrail real teeth: a "helpful" bug-fix turns the transcript red, which is exactly the W5 lesson. Registered in `SEEDED.md` §2 as a legacy lab (the refactor targets the §1 smells and introduces **no new** primary branch defect). Mirrors the U7 legacy-lab pattern (refs for tooling uniformity).
 
 **P5-U9-vd ✅** — U9 consumes NO version-specific keys. Onboarding + refactoring are method + tool-use already in hand (reading code, running the program/tests via the Bash tool, plan mode from U5). **No new L1 debt.**
 **Why:** Both W5 and W8 are version-independent methods; nothing in the unit depends on a Claude flag or in-REPL surface that would need a `{{vd:*}}` reference.
@@ -301,7 +301,8 @@ _Tracked in:_ `tasks/P4-codebases.md`; decision P4-bugs.
 **L5 — final capstone brief wording (≥3 briefs) not finalized.**
 _Resolve in:_ P6 — refine from the design §6.5 menu. _Also tracked in:_ `tasks/P6-finalize.md`.
 
-**L6 — awareness-tier depth** for coverage rows 10, 27–29 may need more than a mention.
+**L6 — awareness-tier depth** for coverage rows 27–29 may need more than a mention (row 10 / extended
+thinking was handled as a U5 mention+pointer — P5-U5-vd — so it's no longer a concern).
 _Resolve in:_ P5 (each home unit); home units assigned (P2-cov) — revisit only if a unit needs more depth.
 _Also tracked in:_ coverage-matrix `tier_note`s.
 
@@ -312,8 +313,8 @@ _Resolve in:_ P5, per unit — each mutating lab gets its `start/` tag + a `SEED
 Status per lab (✅ = refs + verifier created, verified end-to-end fails-clean/passes-on-solution):
 - **u01** ✅ (feature addition) · **u05** ✅ · **u06** ✅ (test-first overdue filter) · **u11** ✅
   (review lab: planted IDOR + wrong default + a false positive)
-- **u07** ✅ (legacy D1 fix) · **u09** ✅ (legacy refactor, behavior-equivalence verifier) — legacy labs,
-  so no `SEEDED.md` §2 row (decisions P5-U7-lab, P5-U9-lab)
+- **u07** ✅ (legacy D1 fix) · **u09** ✅ (legacy refactor, behavior-equivalence verifier) — legacy labs;
+  both registered in `SEEDED.md` §2 as legacy entries (no *new* primary branch defect)
 - **u02 / u03** — read-only, no `start/`/`solution/` refs (U2 prose answer key; U3 objective `verify.sh` + SEEDED row)
 - **u08 / u10** — prose-self-check labs, no refs (decisions P5-U8-lab, P5-U10-lab)
 - **u12–u16** — pending (those that mutate)

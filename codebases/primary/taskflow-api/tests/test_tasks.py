@@ -130,3 +130,32 @@ def test_deleting_project_cascades_to_tasks(client):
     assert client.get("/tasks", headers=h).json()["total"] == 1
     client.delete(f"/projects/{pid}", headers=h)
     assert client.get("/tasks", headers=h).json()["total"] == 0
+
+
+def test_project_stats_counts_tasks_by_status(client):
+    h, pid = _setup_project(client)
+    for _ in range(2):
+        client.post(f"/projects/{pid}/tasks", json={"title": "t", "status": "todo"}, headers=h)
+    client.post(f"/projects/{pid}/tasks", json={"title": "p", "status": "in_progress"}, headers=h)
+    for _ in range(2):
+        client.post(f"/projects/{pid}/tasks", json={"title": "d", "status": "done"}, headers=h)
+
+    resp = client.get(f"/projects/{pid}/stats", headers=h)
+    assert resp.status_code == 200
+    body = resp.json()
+    assert body["project_id"] == pid
+    assert body["total"] == 5
+    assert body["by_status"] == {"todo": 2, "in_progress": 1, "done": 2}
+
+
+def test_project_stats_zero_fills_every_status(client):
+    h, pid = _setup_project(client)
+    body = client.get(f"/projects/{pid}/stats", headers=h).json()
+    assert body["total"] == 0
+    assert body["by_status"] == {"todo": 0, "in_progress": 0, "done": 0}
+
+
+def test_project_stats_on_foreign_project_is_404(client):
+    h, pid = _setup_project(client)
+    other_h = auth_header(register_and_login(client, email="nosy@taskflow.test"))
+    assert client.get(f"/projects/{pid}/stats", headers=other_h).status_code == 404

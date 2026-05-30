@@ -43,3 +43,11 @@ class ProjectRead(ProjectBase):
     id: int
     owner_id: int
     created_at: datetime
+
+
+class ProjectStats(SQLModel):
+    """Aggregate task counts for one project: a total plus a per-status breakdown."""
+
+    project_id: int
+    total: int
+    by_status: dict[str, int]

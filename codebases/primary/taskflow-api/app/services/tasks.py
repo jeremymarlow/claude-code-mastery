@@ -68,6 +68,27 @@ def get_task(session: Session, owner: User, task_id: int) -> Task:
     return task
 
 
+def project_task_stats(session: Session, owner: User, project_id: int) -> dict[str, int]:
+    """Count an owned project's tasks by status.
+
+    Returns every :class:`TaskStatus` as a key, zero-filled, so callers get a stable shape even
+    for statuses with no tasks. ``get_project`` enforces ownership (a foreign/missing project
+    raises ``NotFoundError`` → 404) before any counting happens.
+    """
+    get_project(session, owner, project_id)
+
+    counts = {status.value: 0 for status in TaskStatus}
+    rows = session.exec(
+        select(Task.status, func.count())
+        .where(Task.project_id == project_id)
+        .group_by(Task.status)
+    ).all()
+    for status, count in rows:
+        key = status.value if isinstance(status, TaskStatus) else status
+        counts[key] = count
+    return counts
+
+
 def list_tasks(
     session: Session, owner: User, filters: TaskFilters, *, limit: int, offset: int
 ) -> tuple[list[Task], int]:

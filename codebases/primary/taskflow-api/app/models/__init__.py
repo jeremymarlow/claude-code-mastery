@@ -6,7 +6,13 @@ modules must be imported before ``SQLModel.metadata.create_all`` runs.
 """
 
 from app.models.user import User, UserCreate, UserRead, UserUpdate
-from app.models.project import Project, ProjectCreate, ProjectRead, ProjectUpdate
+from app.models.project import (
+    Project,
+    ProjectCreate,
+    ProjectRead,
+    ProjectStats,
+    ProjectUpdate,
+)
 from app.models.task import (
     Task,
     TaskCreate,
@@ -24,6 +30,7 @@ __all__ = [
     "Project",
     "ProjectCreate",
     "ProjectRead",
+    "ProjectStats",
     "ProjectUpdate",
     "Task",
     "TaskCreate",

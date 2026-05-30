@@ -15,7 +15,7 @@ from sqlmodel import Session
 from app.api.deps import Pagination, get_current_user, pagination_params
 from app.api.schemas import Page
 from app.db.session import get_session
-from app.models import Task, TaskCreate, TaskRead, TaskStatus, TaskUpdate, User
+from app.models import ProjectStats, Task, TaskCreate, TaskRead, TaskStatus, TaskUpdate, User
 from app.services import tasks as task_service
 from app.services.tasks import TaskFilters
 
@@ -36,6 +36,16 @@ def create_task(
     session: Session = Depends(get_session),
 ) -> Task:
     return task_service.create_task(session, current_user, data, project_id)
+
+
+@router.get("/projects/{project_id}/stats", response_model=ProjectStats, tags=["projects"])
+def project_stats(
+    project_id: int,
+    current_user: User = Depends(get_current_user),
+    session: Session = Depends(get_session),
+) -> ProjectStats:
+    counts = task_service.project_task_stats(session, current_user, project_id)
+    return ProjectStats(project_id=project_id, total=sum(counts.values()), by_status=counts)
 
 
 @router.get("/tasks", response_model=Page[TaskRead])

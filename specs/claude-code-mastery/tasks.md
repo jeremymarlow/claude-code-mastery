@@ -57,6 +57,7 @@ loops & deferrals are tracked in `decisions.md` → "Open loops & deferrals 🔓
 - [ ] One unit per use case (from design §6), each: tier-appropriate template (R6), valid front
       matter (R6.AC3), labs + reference solutions + reset (R7), pitfalls (R6.AC6), going-deeper
       - [x] **U2** `02-explore-a-codebase` (C3, W8-light) — `unit.md`; **read-only** exploration lab w/ file+symbol answer key (no tag/branch/verifier — R7.AC3 prose self-check); C3 lab-traced. `search-refs` vd key left unverified (headless; L1).
+      - [x] **U4** `04-memory-and-context` (C5) — home of memory/context/config teaching (R11.AC4). `unit.md` covers project `CLAUDE.md` (area 7), context as a managed resource (area 8), `settings.json`/sources (area 26), output-styles awareness (area 28). **A/B memory lab** `u04-lab1`: edit one `CLAUDE.md` line → behavior changes, confirmed via context inspector (CV); read-mostly (reverts with `git restore`, no tag/branch/verifier — R7.AC3). Dogfoods this repo's own `CLAUDE.md` (R14.AC1). C5 lab-traced; areas 7,8,26,28 traced; `make check` green. Consumes unverified `context-cmds`/`output-styles` (L1).
 - [ ] Per unit: verify version-specific details vs installed CLI; record provenance (R12.AC3–AC4)
 - [ ] Per unit: reference authentic dogfooding artifacts where they exist (R14.AC2)
 

@@ -7,3 +7,6 @@ venv/
 __pycache__/
 *.pyc
 .pytest_cache/
+
+# Editors
+.vscode/

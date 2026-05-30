@@ -1,0 +1,207 @@
+---
+id: U11
+title: "Review a change for correctness and security — and triage the findings"
+stage: force-multiplier
+depth_tier: core
+use_case: "Review a change for correctness and security"
+can_do: [C12, CV]
+workflows: [W6]
+coverage_areas: [16]
+prerequisites: [U3, U5]
+reading_time_min: 11
+lab_time_min: 35
+---
+
+# Review a change for correctness and security — and triage the findings
+
+## Learning objectives
+
+By the end of this unit you can:
+
+- **Run a structured review over a diff for both correctness *and* security** — using
+  `/code-review` and `/security-review` as a first pass, not the last word — advances `C12`.
+- **Triage findings instead of trusting them** — confirm a real bug is real (reproduce it), and
+  dismiss a confident false positive with a reason — advances `C12` and consolidates `CV`.
+- **Catch the security issues an AI is prone to introduce** — broken object-level authorization
+  (IDOR), missing ownership checks, injection, leaked secrets — by reviewing against the codebase's
+  established pattern, not in the abstract.
+- **Treat "green tests" as necessary, not sufficient** — a passing suite says nothing about the
+  vulnerability it never tested; verification means the diff, the review, *and* a test you wrote to
+  pin the finding (`CV` consolidated).
+
+## Fast path (TL;DR)
+
+> Before a significant or security-sensitive change merges, run a structured review
+> ([W6](../../../meta/workflows.md#w6--code--security-review)) over the diff — correctness **and**
+> security. Claude gives you two first-pass tools, {{vd:review-cmds}} — but the workflow's own rule
+> is **the review is a lead, not a verdict**: it both *misses* real issues and *raises* false
+> positives, so you cross-check every finding against the code. The lab hands you a feature branch
+> that adds project archiving to `taskflow-api` and has you review it: it contains a real **security
+> hole** (an archive endpoint that skips the ownership check — any user can archive anyone's
+> project), a real **correctness bug** (archived projects shown by default), and at least one
+> **plausible-looking finding that's actually fine** (you should dismiss it). `tools/verify-lab
+> u11-lab1` proves you fixed the real ones without breaking the suite.
+
+## Skip-check
+
+**Skip this unit if you can already:** take a diff and run a disciplined correctness-and-security
+review — drive `/code-review` and `/security-review`, then **triage**: reproduce and confirm the real
+findings (including an authorization hole an automated pass might word vaguely), dismiss false
+positives with a reason, and verify the result with a test you wrote — rather than pasting the review
+output into a PR as if the tool's say-so settled it.
+
+## Concept
+
+You can now build the right thing (U10), ship it (U5), and operate safely (U3). U11 is the gate
+*before merge*: a deliberate review of a change for the two things that hurt most in production —
+**incorrect behavior** and **security holes** — and it's the unit where the verification reflex
+running under every lab (`CV`) gets named and consolidated. The core idea: **an AI review is a
+powerful first pass and a terrible final authority.** It surfaces things you'd miss *and* asserts
+things that aren't true, so your job is to *triage*, not to trust.
+
+**The workflow — W6.** The generalized pattern lives once in
+[`meta/workflows.md`](../../../meta/workflows.md#w6--code--security-review); read it there. The short
+version: **run a structured correctness+security review over the diff, treat findings as leads,
+triage them, and fix or justify each.** The rest is what's specific to doing it with Claude.
+
+**1 — Use the review tools as a first pass.** {{vd:review-cmds}} Run them over the change to get a
+structured list of candidate issues — correctness from `/code-review`, security from
+`/security-review`. This is genuinely valuable: a second set of eyes that never gets bored reading a
+diff. But it is the *start* of the review, not the end.
+
+**2 — Security review is about what the code *lets* happen, not what it does.** The bugs that matter
+most aren't crashes — they're things that work *too well for the wrong person*. The one an AI is most
+likely to introduce is **broken object-level authorization**: a new endpoint that operates on a record
+by id without checking the caller *owns* it. `taskflow-api` has a load-bearing pattern — every
+project mutation goes through `get_project`, which 404s on someone else's project (U5's `CLAUDE.md`).
+A new feature that fetches a project with a bare `session.get(...)` and skips that check is an IDOR:
+*authenticated* is not *authorized*. You catch this by reviewing the diff **against the established
+pattern** — "every other mutation checks ownership; why doesn't this one?" — which is exactly the kind
+of judgment the automated pass states weakly or misses.
+
+**3 — Triage: confirm the real, dismiss the false (CV).** This is the step the unit turns on. For each
+finding, decide with evidence:
+
+- **A real finding you confirm** — reproduce it. The fastest way to prove an authorization hole is a
+  test: as user B, call the endpoint on user A's object; if you get `200` instead of `404`, the hole
+  is real, and now you have a regression test for the fix.
+- **A false positive you dismiss** — automated review loves to flag `Project.archived == False` in a
+  query as "comparison to False should be `is False`" (the E712 lint). In SQLAlchemy/SQLModel that
+  `==` is how you build the SQL expression; `is False` would break it. Dismiss it — *with the reason*,
+  not just a shrug. Knowing which findings to ignore is as much the skill as knowing which to act on.
+
+Trusting the review blindly gets you both failures at once: you "fix" a false positive (and break the
+query) while merging the IDOR the review buried in vague wording.
+
+**4 — Green tests are necessary, not sufficient.** The existing suite passes on the vulnerable code —
+of course it does; nobody wrote a test that tries to archive someone else's project. That's the whole
+lesson of `CV`: a green suite only proves the things you already tested still work. Real verification
+of a security-sensitive change is the diff review **plus** the review tools **plus** a test you write
+from the finding. Any one alone leaves a hole.
+
+> **The review is a lead, not a verdict.** Both `/code-review` and `/security-review` miss real issues
+> and raise false ones. Cross-check every finding against the code — confirm the real ones with a
+> repro, dismiss the false ones with a reason. An unread review pasted into a PR is the same anti-pattern
+> as an unread AI diff: authority you didn't earn.
+
+**Version currency.** This unit was verified against Claude Code `{{vd:_verified_version}}`; the review
+commands are the version-specific surface ({{vd:review-cmds}}) — confirm the exact names with `/help`
+and see [`meta/version-record.md`](../../../meta/version-record.md) if your version differs. The review
+*method* (triage findings, confirm with a test) is version-independent.
+
+## Worked example
+
+This course is reviewed before things land, and the enforcement suite is part of how. When a unit's
+diff is prepared, the dogfooded checks (`make check`) act as an automated first-pass reviewer — they
+flag unresolved `{{vd:…}}` keys, broken links, coverage gaps. And they behave exactly like the unit
+warns: while authoring U6 the version-reference check **raised a false positive** (a `vd:` token
+written as a prose illustration looked like a real-but-broken reference — see
+[U7](../07-debug-a-failure/unit.md)'s worked example), and a human had to triage it: *is the check
+right, or is the content?* The check was wrong about that line; the fix was to reword the prose, not
+to "satisfy" the check by mangling a real reference. That is the W6 reflex in miniature — an automated
+reviewer is a lead you confirm, and sometimes the right call is to overrule it with a reason.
+
+## Lab
+
+**Goal:** review a real feature branch for `taskflow-api` for correctness **and** security, **triage**
+the findings (confirm the real, dismiss the false), then fix the real issues and prove it.
+
+**The change under review:** a branch that adds **project archiving** — a `POST /projects/{id}/archive`
+endpoint and an `?include_archived=` filter on the project list (intended contract: archived projects
+are **excluded by default**, included only when `include_archived=true`). It ships with passing tests.
+It also ships with planted defects — your job is to find them.
+
+**Starting state:** `start/u11-lab1` (run `tools/reset-lab u11-lab1` to restore it) — `taskflow-api`
+with the archive feature applied and its (incomplete) tests green.
+
+**Steps:**
+
+1. `tools/reset-lab u11-lab1`, then start a session in the API:
+   `cd codebases/primary/taskflow-api && claude`. Confirm the baseline: `pytest` is green (yes — that's
+   the point).
+2. **Review the diff** (`git diff main...HEAD`). Run `/code-review` and `/security-review` over the
+   change, and read it yourself against the codebase's ownership pattern (`get_project`). Collect every
+   candidate finding from all three sources.
+3. **Triage each finding (CV).** For the security finding, **prove it with a test**: register two users,
+   have user B `POST /projects/{A's id}/archive`, and assert the response — `404` is correct, `200` is
+   the hole. For the correctness finding, check the default-list behavior against the contract above. For
+   anything that looks like a finding but isn't (e.g. a SQLAlchemy `== False` lint), **dismiss it with a
+   reason.**
+4. **Fix the real issues, justify the dismissals.** Route archiving through the ownership check; make the
+   list exclude archived by default. Leave the false positive alone. Keep the suite green and add the
+   tests your triage produced.
+
+**Self-check (objective):** run `tools/verify-lab u11-lab1`. It passes only if, against your working
+tree: archiving someone else's project returns **404** (the IDOR is closed) and leaves it un-archived;
+the owner *can* archive their own project; the project list **excludes archived projects by default**
+and includes them with `include_archived=true`; and `pytest` is green. (It **fails on the starting
+state** — cross-user archive returns 200 and the default list shows archived — so a passing run means
+you actually closed the holes.)
+
+**What a thorough review finds (answer key — read *after* your own pass):**
+
+- **Security — broken object-level authorization (IDOR).** `archive_project` fetches the project with a
+  bare `session.get(Project, id)` and never checks `owner_id`, so any authenticated user can archive any
+  project. Every *other* project mutation goes through `get_project` (which 404s on non-owners); this one
+  bypasses it. **Real — fix it** by routing through the ownership check.
+- **Correctness — wrong default.** The list endpoint defaults `include_archived` to **true**, so archived
+  projects appear by default, contradicting the contract. **Real — fix it** (default to excluding).
+- **False positive — `Project.archived == False` in the query.** An automated pass may flag this as an
+  E712 "comparison to False" smell. In SQLAlchemy that comparison builds the SQL filter; `is False` would
+  break it. **Dismiss it** — with that reason.
+
+**Reference solution:** branch `solution/u11-lab1` — review and triage unaided first, then diff against
+it. (It moves archiving behind `get_project`, flips the list default to exclude archived, keeps the
+`== False` query as-is, and adds the cross-user-403/404 and default-exclusion tests. Yours may differ in
+shape and still pass — the verifier checks behavior, not structure.)
+
+**Verify (CV):** the gate is the test you wrote from the security finding plus the green suite — not the
+review tool's say-so. The change is reviewed when the real findings are fixed *and pinned by a test*, the
+false positive is dismissed with a reason, and nothing regressed.
+
+## Common pitfalls
+
+- **Pasting the review in as the verdict.** `/code-review` / `/security-review` output is a list of
+  *leads*. Merging on it unread is the unread-AI-diff anti-pattern wearing a reviewer's badge.
+- **"Tests pass, so it's secure."** The suite never tried to archive someone else's project. Green proves
+  the old behavior survived, not that the new behavior is safe. Write the missing test.
+- **Fixing the false positive.** "Comparison to False" looks like a finding; changing it to `is False`
+  breaks the query. Dismissing-with-a-reason is a review skill, not a cop-out.
+- **Reviewing in the abstract.** Security findings hide in *deviations from the local pattern*. Review the
+  diff against how the codebase already does it ("everything else checks ownership — why not this?"),
+  not against generic advice.
+- **Confirming a finding by re-asking the AI.** "Are you sure?" isn't confirmation — the model will often
+  fold or double down regardless. Confirm with a repro/test, dismiss with a reason from the code.
+
+## Going deeper
+
+- **Next:** the Autonomy & Scale stage (U12 commands/skills onward) automates the workflows you now run by
+  hand — and a review gate like this one is what you'd wire into the headless CI of U16 (automate & scale).
+- [`meta/workflows.md`](../../../meta/workflows.md#w6--code--security-review) — the generalized W6 pattern.
+- This is [U3](../03-operate-safely/unit.md)'s "define verification as more than green tests" turned into a
+  workflow, and the same diff-reading reflex from [U5](../05-ship-a-feature/unit.md) and
+  [U8](../08-git-and-pr/unit.md)'s self-review — now pointed at *someone else's* change before merge.
+- The review commands — {{vd:review-cmds}}; version-specifics in
+  [`meta/version-record.md`](../../../meta/version-record.md).
+- Stuck? [`course/stuck.md`](../../stuck.md) and the
+  [progress checklist](../../progress-checklist.md).

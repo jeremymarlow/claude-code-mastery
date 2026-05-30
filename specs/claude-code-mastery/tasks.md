@@ -4,8 +4,8 @@
 **Phase:** Tasks / Implementation (Phase 3 of 3)
 **Status:** 🟦 **IN PROGRESS** (2026-05-30) — Design authored & approved; the detailed per-phase
 task files (`tasks/P1–P6*.md`) are written and trace design → requirement. P1 (Design) ✅,
-P2 (Scaffolding) ✅, and P3 (Tooling) ✅ complete; **P4→P6 not yet started**. Open loops &
-deferrals are tracked in `decisions.md` → "Open loops & deferrals 🔓" (the canonical ledger).
+P2 (Scaffolding) ✅, P3 (Tooling) ✅, and P4 (Codebases) ✅ complete; **P5→P6 remaining**. Open
+loops & deferrals are tracked in `decisions.md` → "Open loops & deferrals 🔓" (the canonical ledger).
 
 > **Chunking for context management.** The full build exceeds one context window. This file is an
 > **index**; detailed tasks live in per-section files under `tasks/` so a session loads only the slice
@@ -46,9 +46,10 @@ deferrals are tracked in `decisions.md` → "Open loops & deferrals 🔓" (the c
 - [x] Traceability checks (R13.AC5) · Drift detection (R12.AC6) · git pre-commit + CI wiring (R13.AC6)
       _(Claude Code in-session hook deferred to U14 — see `tasks/P3-tooling.md` §3.7)_
 
-### P4 — Sample codebases  → [`tasks/P4-codebases.md`](./tasks/P4-codebases.md)
-- [ ] Primary codebase: build, tests, seeded bugs/smells (R7.AC1–AC2)
-- [ ] Legacy codebase: deliberately messy, for onboarding/refactor/debug (R7.AC1)
+### P4 — Sample codebases  → [`tasks/P4-codebases.md`](./tasks/P4-codebases.md)  ✅ COMPLETE (2026-05-30)
+- [x] Primary codebase: build, tests (36 pytest green on `main`), substrate for branch-introduced defects (R7.AC1–AC2)
+- [x] Legacy codebase: deliberately messy 709-line god-module + 3 seeded bugs, for onboarding/refactor/debug (R7.AC1)
+      _SEEDED.md inventory + offline `fixtures/mock_api.py` (R7.AC7) done; per-lab primary defects populate in P5._
 
 ### P5 — Units (one slice per unit — author independently)  → [`tasks/P5-units.md`](./tasks/P5-units.md)  (per-unit working files: `tasks/P5-units/NN-slug.md`)
 - [ ] Onboarding unit (First Wins; doctor + first-success + baseline config; R11)

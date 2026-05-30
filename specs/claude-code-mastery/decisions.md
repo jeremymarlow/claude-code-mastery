@@ -169,6 +169,23 @@ the pre-commit hook all verified working.
 | P3-hook ✅ | **Claude Code in-session hook deferred to U14.** Local enforcement now = git pre-commit + CI (R13.AC6 satisfied). The in-session hook is U14's authentic deliverable (R14.AC2) and authoring it requires verifying the hooks settings schema against the CLI (R12.AC3) — which belongs in its home unit, not seeded from memory here. | Honors the project's own "no version-specific config from memory" rule; the user's machine had no existing hooks config to verify the schema against. |
 | P3-tools ✅ | **Tools are no-extension kebab-case executables** (`tools/check-coverage`, `tools/verify-lab`, …) per `meta/conventions.md`, a minor deviation from design §7's `.sh` suffix (user-delegated, adjustable). Lab tools are bash; checks are Python (`.venv`: pyyaml, jsonschema). | Consistency with the conventions already committed in P2; references in README/stuck.md/templates stay valid. |
 
+## P4 — Sample codebases executed (2026-05-30)
+
+Built both lab substrates (design §7). **Primary `taskflow-api`** — FastAPI + SQLModel/SQLite, JWT,
+layered `app/{api,models,services,core,db}`, User/Project/Task **+ Comment**; ownership-scoped CRUD +
+filtering/sorting/pagination; **36 pytest green on `main`** (in-memory `StaticPool` + dependency
+override, never touches a real DB). **Legacy `taskflow-cli`** — 709-line argparse god-module, JSON
+storage, globals/duplication/dead code, **no tests**, 3 reproduced seeded bugs. Plus
+`codebases/SEEDED.md`, `codebases/fixtures/mock_api.py` (offline mock), and expanded lab-substrate
+conventions. `make check` stays green.
+
+| # | Decision | Rationale |
+|---|---|---|
+| P4-loc ✅ | **Primary lands at ~1.65k LOC, below design §7's "~2–4k" band — and that's accepted, not a miss.** The band was a soft descriptor; the binding bar is "non-trivial, tractable, realistic structure" (R7.AC1/AC2), which a layered auth+3-entity+comments app with 36 tests meets. Padding to hit an LOC number was rejected as anti-value (it'd add maintenance cost to a *teaching* substrate). | Faithfulness to intent over a literal number; honest record so a later reviewer doesn't read it as an oversight. Extra surface can be grown per-lab in P5 if a unit needs it. |
+| P4-comment ✅ | **Added a 4th entity (`Comment`, nested under Task) beyond the §7 User/Project/Task spec.** A second nested resource enriches the lab surface (feature-add, refactor, N+1/review labs) and pushed LOC toward target legitimately. | More believable substrate for P5 labs without inventing throwaway code; kept `main` green. |
+| P4-bugs ✅ | **Three independent, reproducible legacy bugs**, each baked into `legacy` `main` (not a branch): **D1** naive date/overdue (string-compare of mismatched formats), **D2** off-by-one `--limit` slice, **D3** swallowed save exception. Inventoried in `SEEDED.md` with locations + expected fixes. Primary defects stay branch-only (P5). | The legacy repo *is* meant to be buggy (U7 debug / U9 refactor); keeping the three independent and documented makes them teachable and prevents silent scatter (design §7). |
+| P4-fixtures ✅ | **Offline pattern = `codebases/fixtures/mock_api.py`**, a stdlib-only deterministic HTTP mock; external-dependent labs (esp. U15 MCP) point at it instead of a real service (R7.AC7). | No network/credentials on any required lab path; deterministic responses let `verify.sh` assert. The U15 lab builds on this in P5. |
+
 ## Open loops & deferrals 🔓 (canonical ledger)
 
 **This is the single source of truth for what is deliberately unfinished.** Every deferral made
@@ -182,10 +199,13 @@ Nothing is "remembered" outside this table.
 | L1 | **7 version-data keys are `unverified: true`** (`search-refs`, `context-cmds`, `checkpoint-rewind`, `test-run`, `ci`, `managed-settings`, `output-styles`) | when each key's **home unit** is authored (P5) and/or next refresh | authoring the unit that uses the key ⇒ verify via in-REPL `/help`/docs, flip `unverified`→false (R12.AC3) | `meta/version-record.md` → "Outstanding to verify" |
 | L2 | **Claude Code in-session hook** not yet wired (only git pre-commit + CI exist) | **P5 / U14** (hooks unit) | U14 authoring; requires CLI-verified hooks `settings.json` schema (R12.AC3); that hook *is* U14's dogfooding example (R14.AC2) | `tasks/P3-tooling.md` §3.7; decision P3-hook |
 | L3 | **`make check-strict` must pass for v1 done** — currently fails on PENDINGs (labs, rubric, R8 reference) by design | **P6** (and incrementally P5) | every can-do gets ≥1 lab + ≥1 rubric dimension; R8 referenced by capstone artifacts | `IMPLEMENTATION.md` §6 mechanical gate; decision P3-green |
-| L4 | **Seeded-defect inventory** for `taskflow-cli` + per-lab defects not yet written | **P4** | building the codebases ⇒ author `codebases/SEEDED.md` (design §7) | `tasks/P4-codebases.md` |
+| ~~L4~~ | ~~**Seeded-defect inventory** for `taskflow-cli` + per-lab defects not yet written~~ **✅ CLOSED (P4, 2026-05-30)** — `codebases/SEEDED.md` authored: legacy bugs D1–D3 fully specified; **primary per-lab defects now tracked there as a P5-populated table** (added on each `start/uNN-labM` branch as labs are written — see L7). | ~~P4~~ closed | — | `tasks/P4-codebases.md` → Outcome; decisions P4-bugs |
+| L7 | **Primary per-lab defects + lab tags/branches** (`start/uNN-labM` / `solution/uNN-labM`) not yet created | **P5** (per unit) | authoring each unit's lab ⇒ create its `start/...` tag + register its row in `SEEDED.md` §2 + add `course/labs/<id>/verify.sh` | `codebases/SEEDED.md` §2; `tasks/P5-units.md` |
 | L5 | **Final capstone brief wording (≥3 briefs)** not finalized | **P6** | refine from the design §6.5 menu | `tasks/P6-finalize.md` |
 | L6 | **Awareness-tier depth** for coverage rows 10, 27–29 may need more than a mention | P5 (each home unit) | home units now assigned (decision P2-cov); revisit only if a unit needs more depth | coverage-matrix `tier_note`s |
 
 **Decided, not open (do not re-litigate):** tools are no-extension kebab-case (deviation from design
 §7 `.sh`, decision P3-tools); `permission-modes` value per verified CLI (P2-vd); awareness home-unit
-assignments (P2-cov). These are settled calls recorded above in the per-phase sections.
+assignments (P2-cov); primary substrate at ~1.65k LOC is accepted below the §7 "~2–4k" band (P4-loc);
+`Comment` added as a 4th entity (P4-comment); the three legacy bugs D1–D3 stay baked into `legacy`
+`main` — do **not** "fix" them (P4-bugs). These are settled calls recorded above in the per-phase sections.

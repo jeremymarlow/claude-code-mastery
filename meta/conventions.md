@@ -17,6 +17,7 @@ See `design.md` §9 for the canonical tree. Top level:
 | `codebases/primary/` | `taskflow-api` lab substrate. |
 | `codebases/legacy/` | `taskflow-cli` lab substrate. |
 | `codebases/SEEDED.md` | Maintainer-facing seeded-defect inventory. |
+| `codebases/fixtures/` | Offline mocks/fixtures so labs needing an "external" service run standalone (R7.AC7). |
 | `meta/` | Single-source machine-readable artifacts (this file lives here). |
 | `meta/templates/` | Unit templates (`unit-core.md`, `unit-awareness.md`). |
 | `tools/` | `doctor`, checks, drift detection, `verify-lab`/`reset-lab`. |
@@ -41,6 +42,29 @@ See `design.md` §9 for the canonical tree. Top level:
 | Lab starting state | git **tag** `start/uNN-labM` | `start/u05-lab1` |
 | Lab reference solution | git **branch** `solution/uNN-labM` | `solution/u05-lab1` |
 | Version-data key | kebab-case, referenced in prose as `{{vd:key}}` | `{{vd:permission-modes}}` |
+
+## Lab substrate
+
+How labs attach to the two codebases (`design.md` §7; full rationale in `decisions.md`). The naming
+rows for `start/uNN-labM` (tag) and `solution/uNN-labM` (branch) are above; this is how they're used.
+
+- **Starting state = a tag, solution = a branch.** A lab begins at the clean, tagged commit
+  `start/uNN-labM`; the worked answer lives on the branch `solution/uNN-labM`, kept separate so the
+  learner attempts it unaided first. **[R7.AC4]**
+- **`main` stays green.** Per-lab defects on `primary/taskflow-api` are introduced **only** on the
+  lab's `start/...` tag, never on `main` — `main`'s pytest suite passes. **[R7.AC1/AC2]**
+- **Legacy is the exception.** `legacy/taskflow-cli` carries real bugs on `main` by design (it is the
+  debug/refactor substrate). Every such bug is registered in `codebases/SEEDED.md`.
+- **Every planted defect is inventoried** in `codebases/SEEDED.md` (maintainer-facing answer key;
+  never linked from a learner-facing page).
+- **Verification & reset:** `tools/verify-lab <id>` runs the lab's objective self-check
+  (`course/labs/<id>/verify.sh`, when automatable); `tools/reset-lab <id>` restores the working tree
+  under `codebases/` to `start/<id>`. **[R7.AC5/AC6]**
+- **Offline by default:** a lab that would otherwise need an external service or credential ships a
+  local mock under `codebases/fixtures/` (or its own lab dir) and points at it — no network, no real
+  secrets, ever. **[R7.AC7]**
+- **BYO variants** (a lab run against the learner's own repo) are marked **non-verifiable** and are
+  never the required path. **[R7.AC8]**
 
 ## Version-specific values
 

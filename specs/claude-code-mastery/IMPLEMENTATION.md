@@ -37,7 +37,7 @@ over memory for specifics; memory is a pointer, the spec is the source of truth.
 |---|---|---|
 | 1. Requirements | `requirements.md` | ✅ **APPROVED** (2026-05-29) — reviewed turn-by-turn, internally consistent, gap-free IDs |
 | 2. Design | `design.md` | ✅ **APPROVED & merged to `main`** (2026-05-29; merge commit) — §0–§11 complete; design gate passed |
-| 3. Tasks | `tasks.md` | 🟦 **IN PROGRESS** (2026-05-30) — per-phase files `tasks/P1–P6*.md` authored & traced. **P1 ✅ P2 ✅ P3 ✅** (scaffolding + machine-readable `meta/*`; enforcement suite green); **P4–P6 remaining** (codebases, units, capstone). On branch `spec/tasks-phase`. |
+| 3. Tasks | `tasks.md` | 🟦 **IN PROGRESS** (2026-05-30) — per-phase files `tasks/P1–P6*.md` authored & traced. **P1 ✅ P2 ✅ P3 ✅ P4 ✅** (P4: both lab codebases built — `taskflow-api` 36 pytest green on `main`; `taskflow-cli` messy + 3 seeded bugs; `SEEDED.md` + offline `fixtures/mock_api.py`); **P5–P6 remaining** (units, capstone). On branch `spec/tasks-phase`. |
 | — | `decisions.md` | ✅ Rationale + per-phase decisions captured; hosts the open-loops ledger |
 
 ## 4. Q1/Q2 — ✅ RESOLVED with the user (2026-05-29)

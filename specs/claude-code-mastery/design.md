@@ -496,9 +496,9 @@ introspection is isolated from the **pure/offline** render and never duplicated:
 | Mode | Action | Needs CLI? |
 |---|---|---|
 | `--generate` | Introspect `claude --help` recursively ∪ supplement → write `meta/cli-reference.json` | yes |
-| `--render` | Read the json → write `course/reference/cli-reference.md` | no |
+| `--render` | Read the json **+ `meta/version-changelog.md`** → write `course/reference/cli-reference.md` | no |
 | `--all` | `--generate` then `--render` (the drift/refresh entrypoint, R16.AC5) | yes |
-| `--check` *(default)* | Offline: re-render from committed json + diff vs committed md; validate json vs schema + provenance present. The `make check` gate. | no |
+| `--check` *(default)* | Offline: re-render from committed json + changelog + diff vs committed md; validate json vs schema + provenance present. The `make check` gate. | no |
 | `--check --cli` | Also re-introspect + diff the json (machine freshness); refresh/strict path only | yes |
 
 The costly `claude --help` sweep runs **only** in `--generate`/`--all`; every gate path (`--check`) reads
@@ -516,9 +516,11 @@ The fully-merged union other tooling reads as the single source of CLI-surface t
     "name": "claude", "path": [], "usage": "...", "description": "...",
     "source": "cli-help", "provenance": "claude --help",
     "flags": [ { "names": ["-p","--print"], "arg": null, "description": "...",
-                 "choices": null, "default": null, "source": "cli-help", "provenance": "claude --help" } ],
+                 "choices": null, "default": null, "source": "cli-help", "provenance": "claude --help",
+                 "added_in": null } ],
     "commands": [ { "name": "mcp", "path": ["mcp"], "usage": "...", "description": "...",
-                    "source": "cli-help", "provenance": "claude mcp --help", "flags": [ ], "commands": [ ] } ]
+                    "source": "cli-help", "provenance": "claude mcp --help", "added_in": null,
+                    "flags": [ ], "commands": [ ] } ]
   },
   "supplement_sections": [
     { "title": "In-REPL slash commands", "provenance": "<doc URL> (retrieved 2026-05-31)",
@@ -533,6 +535,18 @@ generated-date** — the date lives in `version-record.md` (its existing home, �
 supplement ⇒ byte-identical output. Emission: `json.dumps(indent=2, ensure_ascii=False, sort_keys=True)`;
 **lists preserve CLI/file order** (deterministic per version); single trailing newline. Validated against
 a committed `meta/cli-reference.schema.json` (JSON Schema, lintable like `unit-frontmatter.schema.json`).
+
+**Inline "new since the last version" marking (`added_in`; decision P8-added-in):** each command and
+flag carries an optional `added_in: <version>` — the CLI version at which it first appeared — so a new
+option is flagged **inline in its own table row** (§12.5), not only in the top "What's new" digest. The
+generator computes it by **diffing the freshly-introspected tree against the previously-committed
+`cli-reference.json`** (matching commands by `path`, flags by `path` + `names`): an entry absent from the
+prior reference, when `cli_version` has bumped, is stamped `added_in: <new cli_version>`; existing
+markers are **carried forward** unchanged. This is **verified by construction** — it reflects a real
+introspected-surface delta, not memory (R12.AC3) — and stays byte-stable (regenerating at the same
+version diffs against the now-current committed json ⇒ no new entries, markers preserved ⇒ identical
+bytes, R16.AC6). `added_in` is **omitted when null** (so adding the field doesn't perturb the current
+artifact); on the first generation (no prior reference) nothing is marked.
 
 ### 12.3 Authored supplement — `meta/cli-reference-supplement.yaml` (R16.AC3/AC4)
 
@@ -552,14 +566,31 @@ Reuses (and lifts into `tools/_common.py`) the `Commands:`-section parser alread
    `usage` even when a sub-section doesn't parse).
 3. Union the supplement; write the json. The `--check --cli` freshness diff is the **canary** when a new
    CLI version changes the help shape.
+4. **Delta-mark (`added_in`):** before writing, diff the new tree against the previously-committed
+   `cli-reference.json` and stamp `added_in` on commands/flags that newly appeared at a bumped
+   `cli_version`, carrying existing markers forward (§12.2). Pure data step over the two committed
+   artifacts — no extra CLI calls.
 
-### 12.5 Human render — `course/reference/cli-reference.md` (R16.AC2)
+### 12.5 Human render — `course/reference/cli-reference.md` (R16.AC2 + R17 learner surface)
 
-Pure function of the json. CommonMark (R15): a "⚙️ Generated — do not edit; regenerate via
-`tools/render-cli-reference --all`" banner carrying `cli_version` in **text**; a TOC; nested command
-sections (heading depth = command depth) with **flag tables**; then supplement sections with doc-URL
-provenance inline (introspected vs doc-sourced visible in text, R16.AC3). Valid anchors (passes
-`check-links`).
+Rendered from committed machine sources — `meta/cli-reference.json` (the exhaustive option reference,
+R16) **and** `meta/version-changelog.md` (the version-change digest, R17); the page is never
+hand-edited. CommonMark (R15): a "⚙️ Generated — do not edit; regenerate via `tools/render-cli-reference
+--all`" banner carrying `cli_version` in **text**; a **"What's new" section** near the top surfacing the
+latest changelog entry + a link to the full digest (the R17 learner-facing surface — decision
+P8-r17-surface); a TOC; nested command sections (heading depth = command depth) with **flag tables**;
+then supplement sections with doc-URL provenance inline (introspected vs doc-sourced visible in text,
+R16.AC3). Valid anchors (passes `check-links`). Commands/flags carrying `added_in` (§12.2) are flagged
+**inline** with a text marker (e.g. `🆕 new in 2.1.x`, plus a word so meaning isn't emoji-only, R15) in
+their heading / table row — so a new option is visible at its point of use, complementing the top
+"What's new" digest.
+
+**On R16.AC2 ("rendered from the machine source alone"):** the *option reference* (commands / flags /
+arguments / supplement) is still a pure function of the json; the "What's new" section is the **R17**
+digest's rendered view, co-located on the same page per the learner-visibility decision. The two
+requirements stay distinct — each keeps its own ACs and check (R16's freshness gate; R17's
+`check-version-changelog`) — only their learner-facing *views* share one page, and both inputs are
+committed machine truth, so the page remains generated, never hand-authored.
 
 ### 12.6 Version-change digest — `meta/version-changelog.md` (R17)
 
@@ -576,9 +607,19 @@ new/removed/renamed commands or flags, changed defaults, deprecations — cross-
 - **2.3.0** — new `claude foo` command; `--bar` default changed. _Course impact:_ {{vd:permission-modes}}, cli-reference regen.
 ```
 
+The first recorded version takes a **baseline** entry (no prior to diff against):
+`## 2.1.158 (baseline — <date>, from <changelog URL>)`.
+
 Sourcing uses WebFetch of the official notes at refresh time (R12.AC3 provenance). **Enforced** by
 `tools/check-version-changelog` (R17.AC5): the top `version-record.md` version has a matching digest
-entry — a version bump without its synopsis fails the suite.
+entry — a version bump without its synopsis fails the suite. Because the check keys off the **recorded**
+verified version, the digest must always carry a matching entry for it (the baseline above, until the
+first real bump).
+
+**Learner-facing surface (decision P8-r17-surface):** beyond the maintainer digest, the render lifts the
+digest's latest entry into the **"What's new" section** atop `course/reference/cli-reference.md` (§12.5)
+so learners see version changes alongside the reference. The digest file stays the single source — the
+page reads it, never duplicates it.
 
 ### 12.7 Drift & refresh integration (R16.AC5, R17.AC1)
 

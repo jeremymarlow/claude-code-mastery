@@ -534,6 +534,61 @@ approval before tasks._
 _Next:_ on design-gate approval → write `tasks/P8-cli-reference.md` (ordered build slices). Branch
 `feat/cli-reference`.
 
+**P8-execution (2026-05-31, in progress)** — 8.1 (help parser in `_common.py`), 8.2 (machine artifact
+`meta/cli-reference.json` @ CLI **2.1.159**), 8.3 (learner page `course/reference/cli-reference.md`), and
+8.4 (the `--check`/`--check --cli` gates, wired into `make check`/`check-strict`/`make drift`/CI) are
+built and committed/pushed on `feat/cli-reference`. The installed CLI drifted **2.1.158 → 2.1.159**
+mid-build; the artifact was generated against the **real** installed CLI (R12.AC3), so it carries
+`cli_version: 2.1.159` while `version-record.md` still records 2.1.158 (see P8-no-bump).
+
+_Format: **decision-id** — the decision; **Why:** the rationale._
+
+**P8-r17-surface ✅ (decided with user, 2026-05-31, AskUserQuestion)** — R17's "what's new" digest is
+surfaced **learner-facing**: the render lifts the latest `version-changelog.md` entry into a **"What's
+new" section** atop `course/reference/cli-reference.md` (not a maintainer-only artifact + pointer). The
+render now reads **two** committed machine sources (the json + the changelog). Reconciliation, recorded
+so it isn't re-litigated: **R16.AC2** ("rendered from the machine source alone") still governs the
+*option reference* (a pure function of the json); the "What's new" section is **R17's** rendered view
+**co-located** on the same page. The requirements stay **distinct** — each keeps its own ACs + check
+(R16 freshness gate; R17 `check-version-changelog`) — so the **P8-requirements-r17** "standalone, not
+bolted onto R16" decision holds at the *requirement* level; only the learner-facing *views* share a
+page. Design amended: §12.1 (mode table), §12.5 (two-source render + the R16.AC2 note), §12.6 (the
+learner surface). **Why:** the user reviewed the rendered reference and wanted version history visible
+to learners, not buried in `meta/`; co-locating the views satisfies that without merging the
+requirements or hand-editing the page (both inputs stay committed machine truth).
+
+**P8-no-bump ✅ (decided with user, 2026-05-31)** — Do **not** bump `version-record.md` to 2.1.159 now;
+keep the recorded verified version at **2.1.158**, leaving `cli-reference.json` @ 2.1.159 as a deliberate
+**drift-ahead** state to be reconciled in a later, intentional refresh. Consequence for R17: the
+`check-version-changelog` check keys off the **recorded** version (2.1.158), so `version-changelog.md`
+carries a **2.1.158 baseline** entry (satisfies R17.AC5) **plus** a real **2.1.158 → 2.1.159** entry
+(drift-ahead) sourced from the official changelog (`github.com/anthropics/claude-code/blob/main/CHANGELOG.md`)
+— 2.1.159 = "internal infrastructure improvements (no user-facing changes)," _course impact: none_.
+**Why:** 2.1.159 has no user-facing changes (drift check: command list unchanged), so a bump is
+low-value churn now; recording the digest entry still captures the history and lets the learner "What's
+new" section show real (if empty) content, honestly framed as ahead of the verified anchor.
+
+**P8-8.5-sequence ✅ (decided with user, 2026-05-31)** — Keep the planned order: 8.4 (gates) shipped
+before 8.5 (digest); the learner "What's new" surface lands **in 8.5** (it depends on the digest
+existing). 8.3's page committed as the option reference without it — a valid intermediate.
+**Why:** no benefit to reordering; the page can only show "what's new" once the digest exists.
+
+**P8-added-in ✅ (requested by user, 2026-05-31)** — Flag new options **inline** in the reference's own
+command/flag tables, not only in the top "What's new" digest. Mechanism: an optional `added_in:
+<version>` field on each command/flag in `cli-reference.json`, **computed by the generator** by diffing
+the fresh introspection against the **previously-committed** json (commands by `path`, flags by `path` +
+`names`); new-at-a-bumped-version entries are stamped, existing markers carried forward; **omitted when
+null**. The render shows a text marker (`🆕 new in 2.1.x` + a word, R15) on those rows. Lives under
+**R16** (the generated reference), complementing R17's narrative "What's new" section. Design amended:
+§12.2 (field + byte-stability), §12.4 (delta step), §12.5 (inline marker). **Why:** the user wants a new
+flag/command visible *at its point of use*, not just summarized at the top. Sourcing it from a real
+introspected-surface delta (vs the prior committed artifact) keeps it **verified by construction**
+(R12.AC3) and **byte-stable** (R16.AC6: regenerating at the same version diffs against the current
+committed json ⇒ no change). **Note:** this reopens the 8.2 generator + 8.3 render + the schema (all
+built/committed) for an additive enhancement; folded into the 8.5 slice. First effect is the **next**
+real bump — the current json (@2.1.159, generated with no prior baseline) carries no markers, and 2.1.159
+added nothing.
+
 ## Open loops & deferrals 🔓 (canonical ledger)
 
 **This is the single source of truth for what is deliberately unfinished.** Every deferral made

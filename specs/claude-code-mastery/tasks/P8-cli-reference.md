@@ -78,13 +78,26 @@ Until 8.7, R16/R17 are invisible to the current hardcoded `R1–R15` check (harm
       re-render → **passes**; offline (no `claude` on PATH) → `--check` still gates the page and
       `--check --cli` PENDs gracefully (exit 0). `make check` + `make drift` green.
 
-### 8.5 Changelog digest + check  [R17; §12.6]
-- [ ] `meta/version-changelog.md` — seed a **baseline** entry `## 2.1.158 (baseline, <date> from <changelog
-      URL>)` (no prior tracked version to diff from); document the cumulative-on-refresh entry format
-      (per-version bullets + a `_Course impact:_` line cross-referencing affected `{{vd:key}}` + the
-      reference regen).
-- [ ] `tools/check-version-changelog` — assert the top `version-record.md` version has a matching digest
-      entry (a bump without its synopsis fails the suite); wire into `make check`.
+### 8.5 Changelog digest + check + learner "What's new" + inline `added_in` markers  [R17, R16; §12.5/§12.6]
+- [ ] `meta/version-changelog.md` — a **2.1.158 baseline** entry `## 2.1.158 (baseline — <date>, from
+      <changelog URL>)` (satisfies R17.AC5, which keys off the *recorded* version — still 2.1.158, per
+      P8-no-bump) **plus** a real `## 2.1.158 → 2.1.159` entry from the official changelog
+      (`github.com/anthropics/claude-code/blob/main/CHANGELOG.md`): 2.1.159 = "internal infrastructure
+      improvements (no user-facing changes)," `_Course impact:_ none`. Document the cumulative-on-refresh
+      format (per-version bullets + `_Course impact:_` cross-ref to `{{vd:key}}` + reference regen). No
+      content from memory (R12.AC3).
+- [ ] `tools/check-version-changelog` — assert the top `version-record.md` version (2.1.158) has a
+      matching digest entry; wire into `make check` / `check-strict`.
+- [ ] **Learner "What's new" surface (P8-r17-surface):** extend `render-cli-reference --render` to add a
+      **"What's new" section** atop `course/reference/cli-reference.md` from `version-changelog.md`
+      (latest entry inline + a link to the full digest). Keep the render deterministic (8.4 gate);
+      re-render + confirm `check-links`.
+- [ ] **Inline new-option markers (`added_in`, P8-added-in):** add optional `added_in` to the schema
+      (command + flag); extend `--generate` to delta-mark vs the previously-committed json (match
+      commands by `path`, flags by `path`+`names`; carry-forward; **omit when null**; byte-stable);
+      extend `--render` to show a text marker (`🆕 new in 2.1.x` + a word, R15) on flagged rows. Verify
+      byte-stability (regenerate @2.1.159 ⇒ unchanged, no markers) and that a synthetic prior-json diff
+      produces a marker.
 - [ ] Add the two standing refresh steps to `meta/version-record.md` (R12.AC7): **(a)**
       `render-cli-reference --all`, **(b)** add the cumulative `version-changelog.md` entry.
 

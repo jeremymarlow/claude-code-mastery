@@ -6,9 +6,11 @@
 P4 (Codebases) ✅, P5 (Units) ✅, **P6 (Finalization) ✅**. `make check-strict` green — the v1
 Definition-of-Done mechanical gate (L3) passes. **P7 (Quality pass) ✅ COMPLETE (2026-05-31)** —
 post-v1 learner-experience remediation; no new requirements; all 16 units committed-rendered + de-coded,
-capstone/stuck swept, convention docs updated (L8 closed; T2 dir-rename deferred). Remaining
-non-release-blocking (**L1** in-REPL version-key refresh; push + CI). Open loops & deferrals are tracked in `decisions.md`
-→ "Open loops & deferrals 🔓" (the canonical ledger).
+capstone/stuck swept, convention docs updated (L8 closed; T2 dir-rename deferred). **P8 (CLI reference +
+changelog digest) ✅ COMPLETE (2026-05-31)** — two new requirements (R16/R17) built spec-first on
+`feat/cli-reference`; `make check` green. Remaining non-release-blocking (**L1** in-REPL version-key
+refresh; **L9** version-record drift-ahead at 2.1.158 vs artifact 2.1.159; P8 merge to `main`). Open
+loops & deferrals are tracked in `decisions.md` → "Open loops & deferrals 🔓" (the canonical ledger).
 
 > **Chunking for context management.** The full build exceeds one context window. This file is an
 > **index**; detailed tasks live in per-section files under `tasks/` so a session loads only the slice
@@ -137,3 +139,17 @@ prose + a version-token rendering gap. **No new requirements** (traces to R5/R6/
 - [x] Cross-cutting prose sweep (capstone, stuck); reading-time recompute (L2, U12 8→10/U13 8→12/U14 8→11) [R5.AC6]
 - [x] Convention docs for the `unit.src.md` split (maintainer-guide, templates, `close-unit`); final green + clean commits
 - [x] Close-out: **L8 struck**; `IMPLEMENTATION.md` §3 + this index marked complete. (T2 dir-rename deferred — non-blocking.)
+
+### P8 — Version-resilience enhancements: CLI reference + changelog digest ✅ **COMPLETE (2026-05-31)**  → [`tasks/P8-cli-reference.md`](./tasks/P8-cli-reference.md)
+Post-v1, non-release-blocking. **Two new requirements** (R16 exhaustive generated CLI reference; R17
+per-version changelog digest) approved + designed (§12) + built spec-first on `feat/cli-reference`. See
+`decisions.md` → "P8 …".
+- [x] 8.1 help-introspection parser → `tools/_common.py` [R16]
+- [x] 8.2 generator + machine artifact `meta/cli-reference.json` (byte-stable, schema'd, provenance) [R16.AC1/AC3/AC4/AC6]
+- [x] 8.3 human render → `course/reference/cli-reference.md` [R16.AC2]
+- [x] 8.4 `--check`/`--all` gates wired into `make check`/`check-strict`/`make drift`/CI [R16.AC6]
+- [x] 8.5 changelog digest `meta/version-changelog.md` + `check-version-changelog` + learner "What's new" + inline `added_in` [R17, R16]
+- [x] 8.6 dogfood pointers (U4→`cli-reference.json`; U10→spec-driven build) [R16.AC7, R14.AC2]
+- [x] 8.7 resilience: `check-traceability` discovers requirements dynamically from `requirements.md` [R13.AC5]
+- [x] 8.8 maintainer-guide "Adding a post-v1 enhancement" playbook [R13.AC3]
+- [x] 8.9 close-out (state sync; `make check` green; merge to `main` gated on user go-ahead)

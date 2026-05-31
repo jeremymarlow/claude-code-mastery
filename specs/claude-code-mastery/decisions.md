@@ -589,6 +589,18 @@ built/committed) for an additive enhancement; folded into the 8.5 slice. First e
 real bump — the current json (@2.1.159, generated with no prior baseline) carries no markers, and 2.1.159
 added nothing.
 
+**P8-complete ✅ (2026-05-31)** — All 9 slices (8.1–8.9) built and committed on `feat/cli-reference`;
+`make check` green. Beyond 8.1–8.4 (above): **8.5** changelog digest + `check-version-changelog` +
+learner "What's new" + inline `added_in`; **8.6** dogfood pointers (U4 → `cli-reference.json` as the
+machine sibling of `version-data.yaml`; U10 → the reference built spec-driven); **8.7** generalized
+`check-traceability` to **discover the requirement set dynamically** from `requirements.md`'s `### Rn`
+headings (broadened the ref-finder regex to `\bR\d+\b` too) so R16/R17 — and any future requirement —
+are enforced with zero tool edits (R13.AC5; can-do set stays the closed C1–C17+CV); **8.8** maintainer-
+guide "Adding a post-v1 enhancement" playbook (R13.AC3). **Why:** completes the post-v1 version-
+resilience work spec-first, dogfooding the very additive pattern 8.8 documents. **Outstanding:** merge
+to `main` (awaiting user go-ahead — CLAUDE.md ask-before-push); the drift-ahead is ledger **L9**; the
+`cli-commands.snapshot ⊂ cli-reference.json` fold is ledger **L10** (both non-blocking).
+
 ## Open loops & deferrals 🔓 (canonical ledger)
 
 **This is the single source of truth for what is deliberately unfinished.** Every deferral made
@@ -659,6 +671,22 @@ U13 8→12, U14 8→11). **Kept:** rubric `[Cn]`/`[CV]` tags, U10 teaching R-IDs
 Committed in slices on `spec/quality-pass-phase`; `make check` green. _Tracked in:_
 `tasks/P7-quality-pass.md`; decisions P7-render/P7-garble/P7-index/P7-prose/P7-rollout.
 **Sole remaining (non-blocking) follow-up: T2** — optional unit-dir rename, deferred (P7-frontmatter/P7-T2).
+
+**L9 (P8, 2026-05-31) — version-record drift-ahead.** `meta/cli-reference.json` is generated @ CLI
+**2.1.159** while `meta/version-record.md` records the verified version as **2.1.158** — a deliberate,
+documented gap (decision P8-no-bump: 2.1.159 is "internal infrastructure, no user-facing changes," so a
+full re-verification bump is low-value churn now). `check-version-changelog` keys off the **recorded**
+version, so `make check` stays green; `version-changelog.md` carries both the 2.1.158 baseline and a real
+2.1.158 → 2.1.159 entry. _Resolve in:_ the next intentional refresh (re-verify the flagged keys against
+the installed CLI, bump `version-record.md`, regenerate via `render-cli-reference --all`). _Also tracked
+in:_ `meta/version-record.md`; decisions P8-no-bump, P8-execution.
+
+**L10 (P8, 2026-05-31) — `cli-commands.snapshot` ⊂ `cli-reference.json`.** The older
+`meta/cli-commands.snapshot` (names-only command list, consumed by `check-version-drift`) is now a strict
+subset of the richer `cli-reference.json` (full command tree + flags + provenance). Kept separate for now
+so `check-version-drift`'s lightweight command-list diff is unchanged. _Resolve in:_ a later cleanup —
+fold the drift check onto `cli-reference.json` and retire the snapshot, or keep the snapshot as the cheap
+fast-path and document the relationship. Non-blocking. _Also tracked in:_ `tasks/P8-cli-reference.md` §8.9.
 
 **Decided, not open (do not re-litigate):** tools are no-extension kebab-case (deviation from design
 §7 `.sh`, decision P3-tools); `permission-modes` value per verified CLI (P2-vd); awareness home-unit

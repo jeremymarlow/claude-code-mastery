@@ -62,9 +62,9 @@ only follow-up is **T2** (optional unit-dir rename), deferred — non-blocking. 
 historical build sessions into `log/transcripts/{raw,rendered}/` behind a human-reviewed secret-scan
 gate, and removed the lossy `/export` `.txt` logs they replace. See `decisions.md` → **P7-amendment**.
 
-**P8 — Version-resilience enhancements: CLI reference + changelog digest (post-v1, in progress).** Two
-new requirements **APPROVED 2026-05-31**; **design §12 AUTHORED 2026-05-31** (awaiting design-gate
-approval before tasks).
+**P8 — Version-resilience enhancements: CLI reference + changelog digest (post-v1, ✅ COMPLETE 2026-05-31).**
+Two new requirements **APPROVED**, **design §12 APPROVED & committed**, and **all 9 task slices (8.1–8.9)
+built** spec-first on `feat/cli-reference`; `make check` green. Not yet merged to `main` (awaiting go-ahead).
 - **R16** — exhaustive, generated, version-resilient CLI reference: one tool (`tools/render-cli-reference`,
   modes `--generate`/`--render`/`--all`/`--check`) recursively introspects `claude --help` →
   `meta/cli-reference.json` (byte-stable machine truth) ∪ a provenance-tracked
@@ -75,12 +75,14 @@ approval before tasks).
   matching digest entry. Proposed artifact `meta/version-changelog.md`.
 
 Both regenerate on version drift (R12.AC6/AC7) and gate in `make check`. Dogfooded by **U10** (built
-spec-driven) + **U4** (single-source version data). **Design directions already decided** (see
-`decisions.md` → P8-design-directions): R16 scope frozen (no new can-do/lab); generated-date in
-`version-record.md`; and — for resilience to *future* enhancements — `check-traceability` will be
-generalized to **discover requirements dynamically from `requirements.md`** (no hardcoded `R#` range), plus
-a maintainer-guide "Adding a post-v1 enhancement" playbook. Branch **`feat/cli-reference`**. See
-`decisions.md` → "P8 — …" and (pending) `tasks/P8-cli-reference.md`.
+spec-driven) + **U4** (single-source version data, points at `cli-reference.json`). Delivered: the
+`tools/render-cli-reference` tool (4 modes), `meta/cli-reference.{json,schema.json}` +
+`cli-reference-supplement.yaml`, `course/reference/cli-reference.md`, `meta/version-changelog.md` +
+`tools/check-version-changelog`; `check-traceability` now **discovers requirements dynamically** from
+`requirements.md` (no hardcoded `R#` range, R13.AC5); maintainer-guide gained the "Adding a post-v1
+enhancement" playbook. **Note:** `cli-reference.json` is generated @ CLI **2.1.159** while
+`version-record.md` records **2.1.158** — a deliberate drift-ahead (decision P8-no-bump; ledger **L9**).
+Branch **`feat/cli-reference`**. See `decisions.md` → "P8 — …" and `tasks/P8-cli-reference.md`.
 
 **v1 build is complete.** Remaining is **not release-blocking**: **L1** is now mostly closed — the
 interactive `/help`+docs pass (2026-05-30) verified 5 of the 7 keys; only `ci` (GitHub Action wrapper)

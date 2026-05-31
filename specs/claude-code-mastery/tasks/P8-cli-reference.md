@@ -138,12 +138,13 @@ Until 8.7, R16/R17 are invisible to the current hardcoded `R1–R15` check (harm
       **R1–R15**" — updated to "every requirement … discovered from the `### Rn` headings" (matches 8.7).
 - [x] `make check` green; all new links resolve.
 
-### 8.9 Close-out  [continuity hygiene]
-- [ ] `make check` green; add the **P8 index row + status header** to `tasks.md`; mark `IMPLEMENTATION.md`
-      §3 (design → tasks → complete); update `decisions.md` P8 entries + the 🔓 ledger (log the
-      **`cli-commands.snapshot` ⊂ `cli-reference.json`** fold as a non-blocking open-loop).
-- [ ] Final commit(s) in slices on `feat/cli-reference`; open PR / merge to `main` — **ask before
-      push/merge** (CLAUDE.md).
+### 8.9 Close-out  [continuity hygiene]  ✅
+- [x] `make check` green; added the **P8 index row + status header** to `tasks.md`; marked
+      `IMPLEMENTATION.md` §3 (P8 ✅ COMPLETE — design → tasks → complete); updated `decisions.md`
+      (**P8-complete** entry) + the 🔓 ledger — **L9** (version-record drift-ahead 2.1.158 vs artifact
+      2.1.159) and **L10** (`cli-commands.snapshot` ⊂ `cli-reference.json` fold) logged as non-blocking.
+- [ ] Final commit (this close-out slice) on `feat/cli-reference`; then open PR / merge to `main` —
+      **ask before push/merge** (CLAUDE.md). ⟵ awaiting go-ahead.
 
 ## Locked decisions (from the design gate — do not re-litigate)
 

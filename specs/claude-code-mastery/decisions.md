@@ -464,7 +464,7 @@ credentials. **Removed** the now-superseded lossy `.txt` `/export` logs. The raw
 machine-parseable record; the `.md` is the readable view (thinking is stored redacted by Claude Code,
 so none renders). Decided with the user; recorded here as a closeout amendment — **does not reopen L8.**
 
-## P8 — Exhaustive CLI reference (post-v1, in progress)
+## P8 — Version-resilience enhancements: CLI reference + changelog digest (post-v1, in progress)
 
 **P8-requirements ✅ (2026-05-31)** — New requirement **R16** approved at the requirements gate: an
 exhaustive, generated, version-resilient CLI reference. Added **additively** (R1–R15 untouched); it
@@ -484,9 +484,47 @@ twin pattern; one `--help` sweep feeds many consumers instead of re-shelling rep
 authoritative truth a *future* check can validate the curated `{{vd:key}}` flags against (drift the
 names-only `cli-commands.snapshot` can't catch). **Dogfood (R16.AC7):** U10 (the spec-driven build is
 the worked example) + U4 (the machine reference as single-source version data).
-_Next:_ design addition (artifact formats, the recursive-introspection + union/provenance algorithm,
-the drift hook, the freshness check, coverage-matrix wiring) → `tasks/P8-cli-reference.md`. Branch
-`feat/cli-reference`.
+**P8-requirements-r17 ✅ (2026-05-31)** — Second requirement **R17** approved: a **CLI version-change
+synopsis (changelog digest)** captured on every refresh. Kept a **standalone requirement** (not bolted
+onto R16, not folded into R12 ACs) per the user's anti-shoehorn principle — it's the *narrative
+changelog* artifact, distinct from R16's *exhaustive option reference* and R12's resilience spine, but
+composes with both (on a version bump: R16 regenerates the reference, R17 records the synopsis, both as
+R12.AC7 refresh steps). Key shape: cumulative across the gap (all versions strictly after the last
+recorded verified version through the new one — the repo may skip releases), official-changelog
+provenance (URL + retrieval date; unreachable ⇒ marked not fabricated), flags content-affecting changes
+(new/removed/renamed commands/flags, defaults, deprecations) against `{{vd:key}}` + the regenerated
+reference, and an **automated check** that the recorded verified version has a matching digest entry
+(the "check" half of the ask). Proposed artifact: `meta/version-changelog.md` (companion to the bare
+`version-record.md` table); final naming a design detail.
+
+**P8-design-directions (decided 2026-05-31, pending the §12 write)** — Resolved with the user at the
+design gate, recorded now so they survive a context reset:
+- **R16 scope is frozen** — no new can-do, no new lab, no new coverage area. R16/R17 are infra +
+  dogfooding; `check-coverage` and traceability *part B* (can-do→lab+rubric) stay untouched. Future
+  enhancements get their **own** requirement + phase, never bolted onto R16.
+- **One tool, modes** (`tools/render-cli-reference`: `--generate` | `--render` | `--all` | `--check`),
+  with the **expensive recursive `claude --help` introspection running only in `--generate`/`--all`**;
+  `--render`/`--check` are pure/offline functions of the committed json, so the costly sweep is never
+  duplicated and `make check` stays cheap/offline.
+- **Generated-date lives in `version-record.md`, not in the json** → the machine artifact is byte-stable
+  (same CLI + supplement ⇒ identical bytes), which is what makes the regenerate-and-diff freshness check
+  meaningful (R16.AC6).
+- **Resilience over hardcoding (R13):** instead of bumping `check-traceability`'s hardcoded `R1–R15`
+  regex to R16/R17, **generalize it to discover the requirement set dynamically from `requirements.md`**
+  (`### Rn` headings — the single source). Then R18, R19… need zero tool edits. Audit other checks for
+  hardcoded `R#` ranges. The **can-do set stays the closed `C1–C17+CV`** (closed by R1 design; only the
+  *requirement* enumeration grows, so only it goes dynamic). Framed as an R13.AC5 robustness improvement
+  *triggered by* R16/R17, **not** part of R16's feature scope.
+- **Maintainer-guide playbook approved:** add an "Adding a post-v1 enhancement" subsection
+  (`course/maintainer-guide.md`, R13.AC3) codifying the additive pattern (new requirement → new
+  `tasks/P{N}` file → `decisions.md` entry + 🔓 ledger → *generalized*, not hardcoded, enforcement),
+  including the R17 synopsis step. Built in P8 (when its machinery lands, so references stay accurate per
+  R14.AC6) — not written ahead of the design.
+
+_Next:_ write the design addition (**§12**, covering **R16 + R17**: artifact formats/schemas, the
+recursive-introspection + union/provenance algorithm, the changelog-digest artifact + its check, the
+drift/refresh hook, the dynamic-traceability generalization, the maintainer-guide playbook, dogfood
+wiring) → then `tasks/P8-cli-reference.md`. Branch `feat/cli-reference`.
 
 ## Open loops & deferrals 🔓 (canonical ledger)
 

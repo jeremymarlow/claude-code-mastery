@@ -254,6 +254,17 @@ An elite practitioner can, without hand-holding: select and execute the right wo
 - R16.AC6 — Generation and rendering SHALL be **deterministic and offline-safe for CI**: given the same installed CLI and supplement, output SHALL be byte-stable, and the rendered artifact's freshness SHALL be verifiable by a regenerate-and-diff check in the enforcement suite (R13.AC4).
 - R16.AC7 — THE COURSE SHALL **dogfood** this feature as a worked example (R14.AC1/AC2): the spec-driven build of the reference SHALL be referenced from **U10** (spec-driven development) and the artifact itself from **U4** (memory & context / single-source version data) as living examples; references SHALL stay accurate (R14.AC6, enforced by R13.AC4).
 
+### R17 — CLI version-change synopsis on refresh (changelog digest)
+**User story:** As the course maintainer, when I bump the course to a newer Claude Code CLI, I want a recorded synopsis of what changed — drawn from the official online release notes and spanning every version between the last one the repo tracked and the new one — so the maintenance trail shows what moved and any course content affected by those changes is surfaced for review. *(Added post-v1, 2026-05-31; extends the R12 refresh process; composes with R16.)*
+
+**Acceptance criteria**
+- R17.AC1 — WHEN the course is refreshed to a new CLI version (R12.AC7), THE COURSE SHALL consult the **official online Claude Code release notes/changelog** and record a **synopsis of the changes** as a committed, maintainer-facing artifact in `meta/` (a running per-version digest).
+- R17.AC2 — The synopsis SHALL be **cumulative across the gap**: covering **all versions strictly after the last recorded verified version up to and including the new one** (the repo may skip intermediate releases between refreshes) — not only the newest point release.
+- R17.AC3 — Each entry SHALL carry **verification provenance** (R12.AC4): the changelog/release-notes URL and retrieval date. No change SHALL be summarized from model memory (R12.AC3); an unreachable source SHALL be **marked, not fabricated**.
+- R17.AC4 — The synopsis SHALL **flag changes that may affect course content** — new/removed/renamed commands or flags, changed defaults, deprecations — cross-referenced to the affected `{{vd:key}}` values and the regenerated CLI reference (R16), bounding the refresh review surface (R12.AC8).
+- R17.AC5 — THE COURSE SHALL provide an **automated check** that the recorded verified version (R12.AC5) has a **matching synopsis entry**, so a version bump lacking its digest is surfaced by the enforcement suite (R13.AC4) rather than left to memory (R12.AC6 philosophy).
+- R17.AC6 — The documented refresh process (R12.AC7) and the post-v1 enhancement playbook (R13.AC3) SHALL include this synopsis step, making it a standing part of every version bump.
+
 ---
 
 ## 5. Assumptions & dependencies
@@ -275,4 +286,4 @@ An elite practitioner can, without hand-holding: select and execute the right wo
 - Q4 — *Resolved:* macOS/Linux/WSL for v1; native Windows out-of-scope for v1 (R15.AC3).
 
 ## 8. Traceability
-Each requirement ID (`R1`–`R16`) will be referenced by the corresponding component(s) in `design.md` and by tasks in `tasks.md`. No requirement may be dropped without an explicit, recorded decision.
+Each requirement ID (`R1`–`R17`) will be referenced by the corresponding component(s) in `design.md` and by tasks in `tasks.md`. No requirement may be dropped without an explicit, recorded decision.

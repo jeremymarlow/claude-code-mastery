@@ -62,14 +62,24 @@ only follow-up is **T2** (optional unit-dir rename), deferred — non-blocking. 
 historical build sessions into `log/transcripts/{raw,rendered}/` behind a human-reviewed secret-scan
 gate, and removed the lossy `/export` `.txt` logs they replace. See `decisions.md` → **P7-amendment**.
 
-**P8 — Exhaustive CLI reference (post-v1, in progress).** New requirement **R16** (exhaustive,
-generated, version-resilient CLI reference) **APPROVED 2026-05-31** at the requirements gate; **design
-is next**. Two-artifact design: a generator recursively introspects `claude --help` → `meta/cli-reference.json`
-(authoritative machine truth) ∪ a provenance-tracked `meta/cli-reference-supplement.yaml`; a render step
-emits learner-facing `course/reference/cli-reference.md` from the machine source alone. Both regenerated on
-version drift (R12.AC6) and drift-gated in `make check` (R16.AC6). Dogfooded by **U10** (built spec-driven)
-+ **U4** (single-source version data). Branch **`feat/cli-reference`**. See `decisions.md` → "P8 — CLI
-reference" and (pending) `tasks/P8-cli-reference.md`.
+**P8 — Version-resilience enhancements: CLI reference + changelog digest (post-v1, in progress).** Two
+new requirements **APPROVED 2026-05-31** at the requirements gate; **design (§12) is next**.
+- **R16** — exhaustive, generated, version-resilient CLI reference: one tool (`tools/render-cli-reference`,
+  modes `--generate`/`--render`/`--all`/`--check`) recursively introspects `claude --help` →
+  `meta/cli-reference.json` (byte-stable machine truth) ∪ a provenance-tracked
+  `meta/cli-reference-supplement.yaml`; renders learner-facing `course/reference/cli-reference.md` from the
+  machine source alone. Expensive introspection runs only in `--generate`/`--all`; `--check` is offline.
+- **R17** — CLI version-change synopsis (changelog digest) captured on every refresh, cumulative across
+  the version gap, official-changelog provenance, with an automated check that the recorded version has a
+  matching digest entry. Proposed artifact `meta/version-changelog.md`.
+
+Both regenerate on version drift (R12.AC6/AC7) and gate in `make check`. Dogfooded by **U10** (built
+spec-driven) + **U4** (single-source version data). **Design directions already decided** (see
+`decisions.md` → P8-design-directions): R16 scope frozen (no new can-do/lab); generated-date in
+`version-record.md`; and — for resilience to *future* enhancements — `check-traceability` will be
+generalized to **discover requirements dynamically from `requirements.md`** (no hardcoded `R#` range), plus
+a maintainer-guide "Adding a post-v1 enhancement" playbook. Branch **`feat/cli-reference`**. See
+`decisions.md` → "P8 — …" and (pending) `tasks/P8-cli-reference.md`.
 
 **v1 build is complete.** Remaining is **not release-blocking**: **L1** is now mostly closed — the
 interactive `/help`+docs pass (2026-05-30) verified 5 of the 7 keys; only `ci` (GitHub Action wrapper)

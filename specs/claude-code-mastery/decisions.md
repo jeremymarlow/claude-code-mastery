@@ -445,6 +445,25 @@ U10's *teaching* R-IDs, and case-study's descriptive `R1–R15`. **L8 struck.** 
 stays an optional, non-blocking follow-up (decision P7-frontmatter/P7-T2; reaffirmed with the user at
 close-out). `make check` green.
 
+**P7-amendment ✅ (post-close, 2026-05-31) — session-transcript corpus.** After P7 closed, added a
+transcript-capture workflow (repo infrastructure, not course content) so build sessions are archived
+*completely* rather than via the lossy `/export` (which silently drops most user turns on long
+sessions). Three pieces, committed as a `feat` (then the back-fill on this branch): `tools/render-transcript`
+(session `.jsonl` → readable Markdown), `tools/scan-secrets` (a human-reviewed credential gate —
+high-confidence key patterns + heuristic assignment/word shapes, surfaced as `file:line` + context),
+and the `capture-session` skill (resolves the session via `$CLAUDE_CODE_SESSION_ID` — robust to
+concurrent sessions — copies the raw `.jsonl` into `log/transcripts/raw/` + renders the `.md` into
+`log/transcripts/rendered/`, runs the gate pausing on every hit, then commits; it is **non-destructive**
+— only ever adds/refreshes the current session's own pair, never prunes the corpus, and refuses to
+overwrite a different session's file on a name collision, so capturing from another machine can't
+clobber it). **Back-filled the 14 substantial historical sessions** into `log/transcripts/{raw,rendered}/`
+with self-describing date+content names, each behind the gate: **0 high-confidence hits**; the 37
+heuristic flags were all taskflow-api auth *code* (`create_access_token`/`hash_password`) and the
+documented dev placeholder `secret_key` (overridable via `TASKFLOW_SECRET_KEY`) — no real
+credentials. **Removed** the now-superseded lossy `.txt` `/export` logs. The raw `.jsonl` is the complete,
+machine-parseable record; the `.md` is the readable view (thinking is stored redacted by Claude Code,
+so none renders). Decided with the user; recorded here as a closeout amendment — **does not reopen L8.**
+
 ## Open loops & deferrals 🔓 (canonical ledger)
 
 **This is the single source of truth for what is deliberately unfinished.** Every deferral made

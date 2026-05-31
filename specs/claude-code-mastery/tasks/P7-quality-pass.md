@@ -94,6 +94,15 @@ Per-unit procedure (render-and-read, not a mechanical `git mv`):
 - [x] `make check` green; reading times recomputed; clean commits on `spec/quality-pass-phase`; **L8
       struck** in `decisions.md`; `tasks.md` P7 + `IMPLEMENTATION.md` §3 marked complete. T2 deferred.
 
+### 7.10 Closeout amendment — session-transcript corpus ✅ (post-close, 2026-05-31)
+- [x] Added transcript-capture tooling (`tools/render-transcript`, `tools/scan-secrets`, the
+      `capture-session` skill — non-destructive, robust to multi-machine/concurrent sessions) and
+      **back-filled the 14 substantial historical sessions** into `log/transcripts/{raw,rendered}/`
+      (self-describing date+content names), each behind the secret-scan gate (0 high-confidence hits;
+      all flags were taskflow-api auth code + the documented dev `secret_key` placeholder). **Removed**
+      the lossy `/export` `.txt` logs (superseded). Full rationale: `decisions.md` → **P7-amendment**.
+      Does not reopen L8.
+
 ## Per-unit grid
 
 Legend: ✅ done · 🔗 link-anchors+advances auto-de-coded (script) · ⬜ prose codes + migration pending.

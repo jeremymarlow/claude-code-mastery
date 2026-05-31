@@ -57,6 +57,11 @@ Committed in slices on branch **`spec/quality-pass-phase`** (not yet merged/push
 only follow-up is **T2** (optional unit-dir rename), deferred — non-blocking. See `decisions.md` →
 "P7 — Quality pass" and `tasks/P7-quality-pass.md`.
 
+**Closeout amendment (2026-05-31):** added a session-transcript capture workflow
+(`tools/render-transcript`, `tools/scan-secrets`, the `capture-session` skill) and back-filled the 14
+historical build sessions into `log/transcripts/{raw,rendered}/` behind a human-reviewed secret-scan
+gate, and removed the lossy `/export` `.txt` logs they replace. See `decisions.md` → **P7-amendment**.
+
 **v1 build is complete.** Remaining is **not release-blocking**: **L1** is now mostly closed — the
 interactive `/help`+docs pass (2026-05-30) verified 5 of the 7 keys; only `ci` (GitHub Action wrapper)
 and `managed-settings` (enterprise) stay `unverified`, each blocked by access this environment lacks

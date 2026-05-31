@@ -62,6 +62,15 @@ only follow-up is **T2** (optional unit-dir rename), deferred — non-blocking. 
 historical build sessions into `log/transcripts/{raw,rendered}/` behind a human-reviewed secret-scan
 gate, and removed the lossy `/export` `.txt` logs they replace. See `decisions.md` → **P7-amendment**.
 
+**P8 — Exhaustive CLI reference (post-v1, in progress).** New requirement **R16** (exhaustive,
+generated, version-resilient CLI reference) **APPROVED 2026-05-31** at the requirements gate; **design
+is next**. Two-artifact design: a generator recursively introspects `claude --help` → `meta/cli-reference.json`
+(authoritative machine truth) ∪ a provenance-tracked `meta/cli-reference-supplement.yaml`; a render step
+emits learner-facing `course/reference/cli-reference.md` from the machine source alone. Both regenerated on
+version drift (R12.AC6) and drift-gated in `make check` (R16.AC6). Dogfooded by **U10** (built spec-driven)
++ **U4** (single-source version data). Branch **`feat/cli-reference`**. See `decisions.md` → "P8 — CLI
+reference" and (pending) `tasks/P8-cli-reference.md`.
+
 **v1 build is complete.** Remaining is **not release-blocking**: **L1** is now mostly closed — the
 interactive `/help`+docs pass (2026-05-30) verified 5 of the 7 keys; only `ci` (GitHub Action wrapper)
 and `managed-settings` (enterprise) stay `unverified`, each blocked by access this environment lacks

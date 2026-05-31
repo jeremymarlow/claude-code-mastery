@@ -464,6 +464,30 @@ credentials. **Removed** the now-superseded lossy `.txt` `/export` logs. The raw
 machine-parseable record; the `.md` is the readable view (thinking is stored redacted by Claude Code,
 so none renders). Decided with the user; recorded here as a closeout amendment — **does not reopen L8.**
 
+## P8 — Exhaustive CLI reference (post-v1, in progress)
+
+**P8-requirements ✅ (2026-05-31)** — New requirement **R16** approved at the requirements gate: an
+exhaustive, generated, version-resilient CLI reference. Added **additively** (R1–R15 untouched); it
+anchors to R12 (version resilience), R13 (enforcement), R14 (dogfooding), R5/R6 (units U4/U10).
+**Architecture decided with the user** — two artifacts in the committed-rendered pattern:
+- **Tool 1** recursively introspects `claude --help` over subcommands into `meta/cli-reference.json` —
+  the *authoritative machine truth* — unioned with a provenance-tracked
+  `meta/cli-reference-supplement.yaml` (doc-only surface, e.g. in-REPL slash commands; provenance =
+  doc URL + retrieval date). Each entry marks its source; nothing authored from memory (R12.AC3).
+- **Tool 2** renders the learner-facing `course/reference/cli-reference.md` **from the machine source
+  alone** (R16.AC2), drift-gated by a regenerate-and-diff freshness check in `make check` (R16.AC6).
+
+On version drift (R12.AC6/AC7) **both** are regenerated from the installed CLI and the human page
+re-rendered — bootstrapped by the drift trigger, not hand-maintained (R16.AC5).
+**Why a machine intermediate** (raised with the user): mirrors the existing `version-data.yaml`→`.json`
+twin pattern; one `--help` sweep feeds many consumers instead of re-shelling repeatedly; and it becomes
+authoritative truth a *future* check can validate the curated `{{vd:key}}` flags against (drift the
+names-only `cli-commands.snapshot` can't catch). **Dogfood (R16.AC7):** U10 (the spec-driven build is
+the worked example) + U4 (the machine reference as single-source version data).
+_Next:_ design addition (artifact formats, the recursive-introspection + union/provenance algorithm,
+the drift hook, the freshness check, coverage-matrix wiring) → `tasks/P8-cli-reference.md`. Branch
+`feat/cli-reference`.
+
 ## Open loops & deferrals 🔓 (canonical ledger)
 
 **This is the single source of truth for what is deliberately unfinished.** Every deferral made

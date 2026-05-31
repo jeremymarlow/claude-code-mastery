@@ -1,0 +1,184 @@
+#!/usr/bin/env python3
+"""render-transcript: turn a Claude Code session `.jsonl` into a human-readable Markdown
+transcript. Pure function of the input file — works for the current session and for back-fill.
+
+Usage:
+  tools/render-transcript <session.jsonl> [--out FILE] [--max-tool-lines N]
+                          [--thinking collapsed|full|omit]
+
+The raw `.jsonl` is the complete, machine-parseable record; this `.md` is the readable view:
+user prompts and assistant prose in full, tool calls summarized, long tool output truncated
+(with a pointer back to the `.jsonl`), and the assistant's internal *thinking* folded away.
+
+Design notes
+- The `.jsonl` schema is Claude Code's internal format and may shift across versions, so this
+  reader is deliberately tolerant: unknown event types and missing fields are skipped, never fatal.
+- System/meta bookkeeping (mode, permission-mode, snapshots, titles, summaries) and subagent
+  sidechains are omitted from the `.md` for readability — all of it remains in the `.jsonl`.
+"""
+import argparse
+import json
+import sys
+
+
+def _text_blocks(content):
+    """Normalize a message `content` (str or list of blocks) into a list of blocks."""
+    if isinstance(content, str):
+        return [{"type": "text", "text": content}]
+    if isinstance(content, list):
+        return content
+    return []
+
+
+def _result_to_text(content):
+    """A tool_result's `content` is a str or a list of {type:text,text:...} blocks."""
+    if isinstance(content, str):
+        return content
+    if isinstance(content, list):
+        out = []
+        for b in content:
+            if isinstance(b, dict) and b.get("type") == "text":
+                out.append(b.get("text", ""))
+            elif isinstance(b, str):
+                out.append(b)
+        return "\n".join(out)
+    return "" if content is None else str(content)
+
+
+def _clip(text, max_chars):
+    """Hard character cap — backstop for content that is one enormous line (a file written in a
+    single Write, a megabyte of tool output on one line) where line-truncation wouldn't bite."""
+    text = text or ""
+    if max_chars <= 0 or len(text) <= max_chars:
+        return text
+    return text[:max_chars] + f"\n… [+{len(text) - max_chars} more chars — full content in the .jsonl]"
+
+
+def _truncate(text, max_lines, max_chars=8000):
+    text = (text or "").rstrip("\n")
+    if max_lines > 0:
+        lines = text.split("\n")
+        if len(lines) > max_lines:
+            text = "\n".join(lines[:max_lines]) + f"\n… [+{len(lines) - max_lines} more lines — full output in the .jsonl]"
+    return _clip(text, max_chars)
+
+
+def _tool_input_summary(name, tool_input, max_lines):
+    """A readable summary of the call. File-mutating tools show path + size rather than dumping the
+    whole payload (the full content lives in the .jsonl); Bash shows its command; others show
+    compact, capped JSON."""
+    if not isinstance(tool_input, dict):
+        return _truncate(str(tool_input), max_lines, 2000)
+    fp = tool_input.get("file_path") or tool_input.get("path") or tool_input.get("notebook_path")
+    if name == "Bash" and "command" in tool_input:
+        return _truncate(tool_input["command"], max_lines, 2000)
+    if name == "Write":
+        c = tool_input.get("content", "") or ""
+        return f"{fp}  (write {len(c)} chars, {c.count(chr(10)) + 1} lines)"
+    if name in ("Edit", "MultiEdit", "NotebookEdit"):
+        old = (tool_input.get("old_string") or "").strip().split("\n")[0]
+        new = (tool_input.get("new_string") or "").strip().split("\n")[0]
+        return f"{fp}\n- old: {_clip(old, 160)}\n- new: {_clip(new, 160)}"
+    if name in ("Read", "Glob", "Grep") and (fp or tool_input.get("pattern")):
+        return fp or tool_input.get("pattern")
+    try:
+        return _truncate(json.dumps(tool_input, indent=2, ensure_ascii=False), max_lines, 2000)
+    except (TypeError, ValueError):
+        return _truncate(str(tool_input), max_lines, 2000)
+
+
+def render(events, max_tool_lines=40, thinking="collapsed"):
+    out = []
+    for ev in events:
+        if not isinstance(ev, dict):
+            continue
+        if ev.get("isSidechain"):  # subagent traffic — omit from the readable view
+            continue
+        msg = ev.get("message")
+        if not isinstance(msg, dict):
+            continue  # mode / permission-mode / snapshot / title / summary — skip in .md
+        role = msg.get("role")
+        blocks = _text_blocks(msg.get("content"))
+
+        if role == "user":
+            # A user turn is either a human prompt (text) or tool_result(s) feeding a prior call.
+            texts = [b.get("text", "") for b in blocks if isinstance(b, dict) and b.get("type") == "text"]
+            results = [b for b in blocks if isinstance(b, dict) and b.get("type") == "tool_result"]
+            human = "\n".join(t for t in texts if t.strip())
+            if human.strip():
+                out.append(f"## 🧑 User\n\n{human.strip()}\n")
+            for r in results:
+                body = _truncate(_result_to_text(r.get("content")), max_tool_lines)
+                if body.strip():
+                    out.append(f"<details><summary>tool result</summary>\n\n```\n{body}\n```\n\n</details>\n")
+        elif role == "assistant":
+            chunks = []
+            for b in blocks:
+                if not isinstance(b, dict):
+                    continue
+                t = b.get("type")
+                if t == "text" and b.get("text", "").strip():
+                    chunks.append(b["text"].rstrip())
+                elif t == "thinking" and thinking != "omit":
+                    think = (b.get("thinking") or "").strip()
+                    if not think:
+                        continue
+                    if thinking == "full":
+                        chunks.append(f"> _thinking_\n>\n" + "\n".join(f"> {ln}" for ln in think.split("\n")))
+                    else:  # collapsed
+                        chunks.append(f"<details><summary>thinking</summary>\n\n{think}\n\n</details>")
+                elif t == "tool_use":
+                    summary = _tool_input_summary(b.get("name", "?"), b.get("input"), max_tool_lines)
+                    chunks.append(f"**→ {b.get('name', '?')}**\n\n```\n{summary}\n```")
+            if chunks:
+                out.append("## 🤖 Assistant\n\n" + "\n\n".join(chunks) + "\n")
+    return "\n".join(out).rstrip() + "\n"
+
+
+def load_events(path):
+    events = []
+    with open(path, encoding="utf-8") as fh:
+        for line in fh:
+            line = line.strip()
+            if not line:
+                continue
+            try:
+                events.append(json.loads(line))
+            except json.JSONDecodeError:
+                continue  # tolerate a partial trailing line on a live session
+    return events
+
+
+def main(argv):
+    ap = argparse.ArgumentParser(description="Render a Claude Code session .jsonl as readable Markdown.")
+    ap.add_argument("jsonl", help="path to the session .jsonl")
+    ap.add_argument("--out", help="output .md path (default: stdout)")
+    ap.add_argument("--max-tool-lines", type=int, default=40, help="truncate tool I/O to N lines (0 = no limit)")
+    ap.add_argument("--thinking", choices=["collapsed", "full", "omit"], default="collapsed")
+    args = ap.parse_args(argv)
+
+    events = load_events(args.jsonl)
+    title = next((e.get("aiTitle") for e in events if isinstance(e, dict) and e.get("aiTitle")), None)
+    sid = next((e.get("sessionId") for e in events if isinstance(e, dict) and e.get("sessionId")), "unknown")
+    header = (
+        f"# Session transcript\n\n"
+        f"- **Session:** `{sid}`\n"
+        + (f"- **Title:** {title}\n" if title else "")
+        + f"- **Source:** rendered from the raw `.jsonl` by `tools/render-transcript` "
+        f"(thinking {args.thinking}; tool output truncated to {args.max_tool_lines} lines). "
+        f"The sibling `.jsonl` is the complete, machine-parseable record.\n\n---\n\n"
+    )
+    body = render(events, max_tool_lines=args.max_tool_lines, thinking=args.thinking)
+    rendered = header + body
+
+    if args.out:
+        with open(args.out, "w", encoding="utf-8") as fh:
+            fh.write(rendered)
+        print(f"render-transcript: wrote {args.out} ({len(events)} events)")
+    else:
+        sys.stdout.write(rendered)
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main(sys.argv[1:]))

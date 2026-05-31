@@ -1,0 +1,60 @@
+#!/usr/bin/env python3
+"""PostToolUse hook: run the course's own enforcement suite after a content edit.
+
+Wired into `.claude/settings.json` as a `PostToolUse` hook on `Write|Edit` (see
+U14). Reads the hook payload on stdin, and **only** when the edited file lives
+under `course/` or `meta/` — the content the suite guards — runs `make check`.
+On failure it returns a `decision: "block"` so the failing output is fed back to
+Claude immediately, in-session, instead of waiting for the git pre-commit gate.
+On success (or for any unrelated edit) it stays silent.
+
+This is the authentic dogfooding artifact U14 references (R14.AC2): the hook a
+learner reads here is the one this repo actually uses. It is deliberately thin —
+the policy lives in the existing `make check` suite (R13), not duplicated here.
+"""
+import json
+import subprocess
+import sys
+from pathlib import Path
+
+REPO = Path(__file__).resolve().parent.parent
+GUARDED = (REPO / "course", REPO / "meta")
+
+
+def main() -> int:
+    try:
+        payload = json.load(sys.stdin)
+    except (json.JSONDecodeError, ValueError):
+        return 0  # not a hook payload we understand — do nothing
+
+    raw = (payload.get("tool_input") or {}).get("file_path")
+    if not raw:
+        return 0
+    edited = Path(raw).resolve()
+
+    # Only react to edits of the authored content the suite actually guards.
+    if not any(edited == d or d in edited.parents for d in GUARDED):
+        return 0
+
+    proc = subprocess.run(
+        ["make", "check"], cwd=REPO, capture_output=True, text=True
+    )
+    if proc.returncode == 0:
+        return 0  # green — stay quiet
+
+    out = (proc.stdout + proc.stderr).strip()
+    json.dump(
+        {
+            "decision": "block",
+            "reason": (
+                f"`make check` failed after editing {edited.name}. Fix this "
+                f"before continuing:\n\n{out}"
+            ),
+        },
+        sys.stdout,
+    )
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

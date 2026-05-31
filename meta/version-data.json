@@ -143,12 +143,12 @@
     },
     "hooks": {
       "kind": "feature",
-      "value": "Hooks run on lifecycle events (configured in settings); `--include-hook-events` streams them; `--bare` skips hooks.",
-      "provenance": "claude --help (--include-hook-events; --bare 'skip hooks')",
+      "value": "Hooks run a command on a lifecycle event, configured in settings.json as `hooks.<Event>: [{matcher, hooks:[{type:\"command\", command}]}]`. Common events: PreToolUse (can block), PostToolUse, Stop, SessionStart, PreCompact. `--include-hook-events` streams them; `--bare` skips hooks.",
+      "provenance": "claude --help (--include-hook-events; --bare 'skip hooks'); settings.json schema (hooks event enum + {matcher, hooks:[...]} structure, via update-config skill, 2026-05-30)",
       "verified_version": "2.1.158",
-      "verified_date": "2026-05-29",
+      "verified_date": "2026-05-30",
       "unverified": false,
-      "notes": "The exact hook event names belong in settings docs \u2014 verify each event name before hardcoding it in a unit."
+      "notes": "Event-name enum verified against the settings.json schema @ 2.1.158 (~30 events). Teach the common ones (PreToolUse/PostToolUse/Stop/SessionStart/PreCompact); defer the full, growing enum to the docs rather than hardcoding it."
     },
     "mcp": {
       "kind": "command",

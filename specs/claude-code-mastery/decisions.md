@@ -287,6 +287,15 @@ _Format: **decision-id** — the decision; **Why:** the rationale._
 **P5-U13-vd ✅** — U13 consumes only the *verified* `subagents` key (`--agent` / `--agents <json>` / `agents` subcommand, `--help`-verified @ 2.1.158) plus `_verified_version`. Added a `notes` to the key flagging the on-disk `.claude/agents/<name>.md` path + front matter as a filesystem **convention** to confirm via docs (the inline `--agents` form is the verified surface). **No new L1 debt.**
 **Why:** the flag/subcommand surface was verified from `claude --help` this session (re-confirmed live: `--agent`, `--agents <json>` with a per-agent `description`, `agents` subcommand for dispatched sessions); the unit surfaces the path-is-a-convention caveat explicitly (Concept §3 + Version-currency note) rather than hardcoding, mirroring the `custom-commands`/`skills` treatment in U12.
 
+**P5-U14-dogfood ✅ (closes L2)** — Wired a **real** in-session hook into this repo's `.claude/settings.json`: a `PostToolUse` hook on `Write|Edit` → `tools/check-on-edit`, a thin (~50-line) Python wrapper that reads the event JSON on stdin, **returns early unless the edited file is under `course/`|`meta/`**, runs `make check`, and on failure prints `{"decision":"block","reason":<failing output>}` so the break is fed back in-session. The same suite now runs at **three layers** — this hook (fastest), `.githooks/pre-commit`, GitHub Actions CI. This is U14's authentic R14.AC2 worked example and **resolves open-loop L2** (the in-session hook that was deferred from P3).
+**Why:** R14 authenticity — the hook a learner reads must be the one the repo actually uses. The wrapper is deliberately thin (it *calls* `make check`, doesn't re-implement any rule, R13) so the policy stays single-sourced. Verified per the update-config skill flow: pipe-tested green→silent / unrelated→no-op / broken-course-file→`decision:block`, and `jq -e` validated the merged `settings.json`. **Watcher caveat:** `.claude/` held only a permissions `settings.json` at session start, so the new `hooks` block may not auto-fire until `/hooks` reload or a restart — it is wired correctly (pipe-test + `jq -e` both pass); this does not gate the unit.
+
+**P5-U14-lab ✅** — `u14-lab1` ships **no `start/`/`solution/` refs** (the artifact is a hook in the learner's own `settings.json`, not a codebase mutation — precedent U12/U13), **but the self-check is objective, not prose**: the learner drives the hook with synthetic event payloads and confirms it fires on matching events and is a no-op on non-matching ones (+ `jq -e` parse). Two task options — react (`PostToolUse`→`pytest` on `app/` edits) or block (`PreToolUse`→deny `git push`). C15 traces via front matter + the `## Lab` heading.
+**Why:** a hook's *behavior* is testable even though it lives in config and "good hook" is partly judgment — pipe-testing is a stronger check than a prose rubric and is exactly how the repo's own hook was verified, so the lab teaches the verification habit (R10.AC7 woven CV: "prove it fires, don't assume the config works"). No mutating branch ⇒ not in `SEEDED.md` §2.
+
+**P5-U14-vd ✅** — U14 consumes the *verified* `hooks` key plus `_verified_version`. This session **verified the event-name enum + the `{matcher, hooks:[{type,command}]}` structure against the settings.json schema** (via the update-config skill) and updated the key's value/provenance/`verified_date`→2026-05-30; kept it principle-level (teach the common events; defer the full ~30-event enum to docs). **No new L1 debt.**
+**Why:** the hooks key was already `unverified:false`, but its old `notes` flagged event names as needing verification — now actually done against the authoritative schema (R12.AC3/AC4), so the unit can name `PreToolUse`/`PostToolUse`/`Stop`/`SessionStart`/`PreCompact` with provenance while still deferring the growing full list.
+
 ## Open loops & deferrals 🔓 (canonical ledger)
 
 **This is the single source of truth for what is deliberately unfinished.** Every deferral made
@@ -305,9 +314,10 @@ _Resolve in:_ when each key's home unit is authored (P5) and/or the next refresh
   (U3); `context-cmds` + `output-styles` (U4); `test-run` (U6 — conceptual: tests run via the Bash tool,
   no Claude flag). One interactive `/help` pass clears them (decisions P5-U2-vd, P5-U3, P5-U4-vd, P5-U6-vd).
 
-**L2 — Claude Code in-session hook not yet wired** (only git pre-commit + CI exist).
-_Resolve in:_ P5 / U14 (hooks unit) — needs the CLI-verified hooks `settings.json` schema (R12.AC3);
-that hook *is* U14's dogfooding example (R14.AC2). _Also tracked in:_ `tasks/P3-tooling.md` §3.7; P3-hook.
+**~~L2~~ — ✅ CLOSED (P5/U14, 2026-05-30).** In-session hook wired: `.claude/settings.json` `PostToolUse`/`Write|Edit`
+→ `tools/check-on-edit` runs `make check` on `course/`|`meta/` edits (`decision:"block"` on failure). Schema
+verified against the settings.json schema (R12.AC3); it is U14's R14.AC2 dogfood (P5-U14-dogfood). Now 3 layers:
+hook + pre-commit + CI. _Tracked in:_ `tasks/P3-tooling.md` §3.7; decisions P3-hook, P5-U14-dogfood.
 
 **L3 — `make check-strict` must pass for v1 done** (currently fails on PENDINGs — labs, rubric, R8 — by design).
 _Resolve in:_ P6 (incrementally through P5) — every can-do gets ≥1 lab + ≥1 rubric dimension; R8 referenced
@@ -336,7 +346,8 @@ Status per lab (✅ = refs + verifier created, verified end-to-end fails-clean/p
   both registered in `SEEDED.md` §2 as legacy entries (no *new* primary branch defect)
 - **u02 / u03** — read-only, no `start/`/`solution/` refs (U2 prose answer key; U3 objective `verify.sh` + SEEDED row)
 - **u08 / u10 / u12 / u13** — prose-self-check labs, no refs (decisions P5-U8-lab, P5-U10-lab, P5-U12-lab, P5-U13-lab)
-- **u14–u16** — pending (those that mutate)
+- **u14** — no `start/`/`solution/` refs (hook in learner's `settings.json`), but self-check is an **objective pipe-test**, not prose (P5-U14-lab)
+- **u15–u16** — pending (those that mutate)
 
 **Decided, not open (do not re-litigate):** tools are no-extension kebab-case (deviation from design
 §7 `.sh`, decision P3-tools); `permission-modes` value per verified CLI (P2-vd); awareness home-unit

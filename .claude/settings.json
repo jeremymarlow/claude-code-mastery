@@ -14,5 +14,19 @@
       "Bash(./tools/check-version-drift:*)",
       "Bash(./tools/render-vd:*)"
     ]
+  },
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "tools/check-on-edit",
+            "statusMessage": "make check (edited course/meta content)"
+          }
+        ]
+      }
+    ]
   }
 }

@@ -19,7 +19,7 @@ lab_time_min: 25
 By the end of this unit you can:
 
 - **Turn a pile of work into clean, logically atomic commits** with messages that explain *why*, and
-  a PR whose description matches the actual diff — advances `C9`.
+  a PR whose description matches the actual diff.
 - **Stage deliberately** — decide what belongs in each commit rather than `git add -A`-ing everything,
   and keep unrelated changes out of a feature's history.
 - **Self-review the PR as if you were the reviewer** before requesting one — reading the full diff and
@@ -29,7 +29,7 @@ By the end of this unit you can:
 
 ## Fast path (TL;DR)
 
-> The Git/PR workflow is [W4](../../../meta/workflows.md#w4--git--pr-workflow): turn work into history
+> The Git/PR workflow is [the Git/PR workflow](../../../meta/workflows.md#w4--git--pr-workflow): turn work into history
 > someone can *review*. **Stage deliberately** (each commit is one logical change), **write messages
 > that explain why** (not "fix stuff"), **open a PR whose description matches the diff**, and
 > **self-review it first** — read the whole diff as the reviewer would. Claude can draft all of this —
@@ -181,7 +181,7 @@ the checklist above is the rubric. Compare your commit series and description ag
 - [`meta/workflows.md`](../../../meta/workflows.md#w4--git--pr-workflow) — the generalized W4 pattern.
 - The `gh` integration and `--from-pr` — {{vd:git-pr}}; version-specifics in
   [`meta/version-record.md`](../../../meta/version-record.md).
-- The verify-before-you-ship reflex traces straight back to [U5](../05-ship-a-feature/unit.md)'s diff
-  review and [U7](../07-debug-a-failure/unit.md)'s "don't claim it's fixed until it's proven."
+- The verify-before-you-ship reflex traces straight back to [Ship a feature](../05-ship-a-feature/unit.md)'s diff
+  review and [Debugging](../07-debug-a-failure/unit.md)'s "don't claim it's fixed until it's proven."
 - Stuck? [`course/stuck.md`](../../stuck.md) and the
   [progress checklist](../../progress-checklist.md).

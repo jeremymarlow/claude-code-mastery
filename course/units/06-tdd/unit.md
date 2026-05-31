@@ -19,7 +19,7 @@ lab_time_min: 30
 By the end of this unit you can:
 
 - **Drive a new behavior test-first through the red → green loop** — specify it as a failing test,
-  confirm it fails, then implement just enough to pass — advances `C7`.
+  confirm it fails, then implement just enough to pass.
 - **Confirm the test fails for the *right* reason** — distinguish a real assertion failure (the
   behavior is genuinely missing) from a typo/import/collection error that fails for the wrong one.
 - **Read the implementation, not just the green bar** — a test can be satisfied the wrong way
@@ -29,7 +29,7 @@ By the end of this unit you can:
 
 ## Fast path (TL;DR)
 
-> Test-driven development with Claude is [W2](../../../meta/workflows.md#w2--test-driven-development):
+> Test-driven development with Claude is [test-driven development](../../../meta/workflows.md#w2--test-driven-development):
 > **write the test first, watch it go red, then make it green.** Have Claude write a test that pins the
 > behavior you want, run it, and **confirm it fails for the right reason** (the behavior is missing —
 > not a typo or a bad import). Then implement just enough to pass, and **read the implementation** to
@@ -193,7 +193,7 @@ behavior, not your structure.)
   pattern (and how it connects to W1 from U5 and W3 in U7).
 - Running tests is tool-use, not a Claude flag — {{vd:test-run}}; version-specifics live in
   [`meta/version-record.md`](../../../meta/version-record.md).
-- The plan-and-diff discipline from [U5](../05-ship-a-feature/unit.md) and the diff-reading reflex from
-  [U1](../01-onboarding-first-win/unit.md) are the habits TDD builds on.
+- The plan-and-diff discipline from [Ship a feature](../05-ship-a-feature/unit.md) and the diff-reading reflex from
+  [your first unit](../01-onboarding-first-win/unit.md) are the habits TDD builds on.
 - Stuck? [`course/stuck.md`](../../stuck.md) and the
   [progress checklist](../../progress-checklist.md).

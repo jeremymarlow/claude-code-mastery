@@ -19,7 +19,7 @@ lab_time_min: 30
 By the end of this unit you can:
 
 - **Debug an unfamiliar failure as a scientist, not a guesser** — reproduce it deterministically,
-  confirm the *root cause* before changing anything, fix it, and prove the fix — advances `C8`.
+  confirm the *root cause* before changing anything, fix it, and prove the fix.
 - **Capture the failure as a repro you can re-run** so "fixed" is objective, not a vibe.
 - **Confirm the root cause rather than pattern-matching the symptom** — and resist the AI's pull
   toward a plausible-looking change that treats a symptom and leaves the cause (and its copies) intact.
@@ -28,7 +28,7 @@ By the end of this unit you can:
 
 ## Fast path (TL;DR)
 
-> Debugging with Claude is [W3](../../../meta/workflows.md#w3--debugging-an-unfamiliar-failure):
+> Debugging with Claude is [the debugging workflow](../../../meta/workflows.md#w3--debugging-an-unfamiliar-failure):
 > **reproduce → capture → confirm root cause → fix → no-regress.** Get a deterministic repro first;
 > have Claude (and you) **find the real cause** before touching code — the #1 failure mode is letting
 > a confident AI patch a symptom. Then fix at the cause, re-run the repro to confirm it's gone, and
@@ -179,7 +179,7 @@ copies fails: confirming the root cause means fixing all of it.
   places — debugging and refactoring are two views of the same code smell.
 - [`meta/workflows.md`](../../../meta/workflows.md#w3--debugging-an-unfamiliar-failure) — the generalized
   W3 pattern, and how it reuses the failing-test reflex from [W2](../06-tdd/unit.md).
-- The capture-as-a-test habit is [U6](../06-tdd/unit.md)'s red→green pointed at a bug; the diff-reading
-  and verification reflexes are [U5](../05-ship-a-feature/unit.md)'s.
+- The capture-as-a-test habit is [TDD](../06-tdd/unit.md)'s red→green pointed at a bug; the diff-reading
+  and verification reflexes are [Ship a feature](../05-ship-a-feature/unit.md)'s.
 - Stuck? [`course/stuck.md`](../../stuck.md) and the
   [progress checklist](../../progress-checklist.md).

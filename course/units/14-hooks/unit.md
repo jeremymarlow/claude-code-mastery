@@ -20,10 +20,10 @@ By the end of this unit you can:
 
 - **Wire a hook that runs automatically on a lifecycle event** — a command the *harness* fires before
   or after a tool call (not something you or Claude choose to invoke), configured in `settings.json`.
-  Advances `C15`.
+ 
 - **Use the two moves a hook makes** — **block** an action that violates a standard (a `PreToolUse`
   hook that denies it) and **react** to one that already happened (a `PostToolUse` hook that formats,
-  tests, or checks, and feeds failures back). Advances `C15`.
+  tests, or checks, and feeds failures back).
 - **Choose a hook over a command/skill/subagent** — reach for a hook when something **must always** or
   **must never** happen, because only a hook is enforced deterministically rather than left to anyone's
   judgment.
@@ -53,8 +53,8 @@ the worked example (it's this repo's real hook) and the pitfalls.
 ## Concept
 
 The Autonomy stage so far has been about *packaging work you choose to run*: a command you fire
-([U12](../12-commands-and-skills/unit.md)), a skill Claude reaches for ([U12](../12-commands-and-skills/unit.md)),
-a subagent you delegate to ([U13](../13-subagents/unit.md)). A **hook** is the opposite kind of thing:
+([Commands & skills](../12-commands-and-skills/unit.md)), a skill Claude reaches for ([Commands & skills](../12-commands-and-skills/unit.md)),
+a subagent you delegate to ([Subagents](../13-subagents/unit.md)). A **hook** is the opposite kind of thing:
 **you don't invoke it — the harness does, automatically, every time a lifecycle event happens.** That
 single property is the whole point.
 
@@ -101,7 +101,7 @@ So the line is:
 - **Command / skill / subagent** → "I (or Claude) *want* to run this." Reusable work, invoked.
 - **Hook** → "this *must always* happen, or *must never* happen." Enforced, not invoked.
 
-That determinism is also the **safety** property ([U3](../03-operate-safely/unit.md)): a standard that
+That determinism is also the **safety** property ([Operate safely](../03-operate-safely/unit.md)): a standard that
 depends on the model remembering will eventually be forgotten; a standard wired as a hook cannot be.
 Hooks are how you turn "we always run the checks / we never touch the generated file" from an intention
 into policy-as-code.
@@ -125,7 +125,7 @@ Read the wrapper — it's deliberately thin. On every `Write`/`Edit` it:
 2. **returns immediately** unless the edited file lives under `course/` or `meta/` — the authored
    content the suite actually guards (no point running checks after an edit to a `tools/` script);
 3. runs `make check` — the course's whole enforcement suite (front-matter, coverage, links,
-   version-refs, traceability — the [U10](../10-spec-driven-dev/unit.md)/[U11](../11-code-and-security-review/unit.md)
+   version-refs, traceability — the [Spec-driven dev](../10-spec-driven-dev/unit.md)/[Code & security review](../11-code-and-security-review/unit.md)
    machinery, R13);
 4. on green, stays **silent**; on failure, prints `{"decision": "block", "reason": "<the failing
    output>"}` so the break is fed straight back into the session.
@@ -147,7 +147,7 @@ changes.
 ## Lab
 
 > **This lab has no `start/`/`solution/` refs** — the artifact you build is a hook in *your own*
-> `settings.json`, not a change to a codebase (precedent: [U12](../12-commands-and-skills/unit.md)/[U13](../13-subagents/unit.md)).
+> `settings.json`, not a change to a codebase (precedent: [Commands & skills](../12-commands-and-skills/unit.md)/[Subagents](../13-subagents/unit.md)).
 > But a hook's behavior **is** objectively checkable: you'll **drive it with a synthetic event
 > payload** and confirm it fires correctly — a stronger self-check than prose, and the same way the
 > repo's own hook was verified.
@@ -166,7 +166,7 @@ event name and structure against the docs / the settings schema rather than memo
    in-session. (Mirrors the worked example, scaled to one project.)
 2. **Block — `PreToolUse` denies a dangerous action.** On the `Bash` tool, **block** a `git push`
    (or `--force` push, or a write outside `app/`) so the action is refused before it runs — the
-   [U3](../03-operate-safely/unit.md) blast-radius guardrail as policy-as-code.
+   [Operate safely](../03-operate-safely/unit.md) blast-radius guardrail as policy-as-code.
 
 **Steps:**
 
@@ -208,7 +208,7 @@ and the checklist.
 ## Common pitfalls
 
 - **Treating a hook like a command.** A hook isn't something you invoke — if the work only needs to run
-  *when you decide*, it's a command or skill ([U12](../12-commands-and-skills/unit.md)). Reach for a
+  *when you decide*, it's a command or skill ([Commands & skills](../12-commands-and-skills/unit.md)). Reach for a
   hook only when it must run **automatically, every time**.
 - **Assuming the config works without driving it.** A `settings.json` entry that parses can still never
   fire (wrong event, wrong matcher, a command that errors on the real payload). **Pipe a synthetic
@@ -233,7 +233,7 @@ and the checklist.
   gate, and [CI](../../../.github/workflows/checks.yml) all run the same `make check`; defense in depth
   is the point.
 - **Hooks as the safety thesis automated** — the deterministic enforcement here is the
-  [U3](../03-operate-safely/unit.md) guardrail/verification discipline turned into policy-as-code.
+  [Operate safely](../03-operate-safely/unit.md) guardrail/verification discipline turned into policy-as-code.
 - The event enum, matcher syntax, and output fields — {{vd:hooks}}; version-specifics in
   [`meta/version-record.md`](../../../meta/version-record.md). Confirm with the settings schema / docs.
 - Stuck? [`course/stuck.md`](../../stuck.md) and the

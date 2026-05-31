@@ -19,15 +19,15 @@ lab_time_min: 25
 By the end of this unit you can:
 
 - **Run Claude headlessly** with `-p`/`--print` and a structured `--output-format`, so it executes a
-  task non-interactively — scriptable, pipeable, and runnable in automation. Advances `C17`.
+  task non-interactively — scriptable, pipeable, and runnable in automation.
 - **Run Claude in CI** — wire a headless invocation (or your enforcement suite) into a pipeline that
-  runs on every push, the way this repo's own checks do. Advances `C17`.
+  runs on every push, the way this repo's own checks do.
 - **Coordinate parallel agents with git worktrees (W9)** — give each independent task its own worktree
   so agents don't collide, run them concurrently, and review each diff separately before integrating.
-  Advances `C17`.
+ 
 - **Keep unattended runs safe** — apply the guardrails that matter when *no one is at the keyboard to
-  approve*: deterministic hooks ([U14](../14-hooks/unit.md)), bounded blast radius and checkpoints
-  ([U3](../03-operate-safely/unit.md)), and per-diff review.
+  approve*: deterministic hooks ([Hooks](../14-hooks/unit.md)), bounded blast radius and checkpoints
+  ([Operate safely](../03-operate-safely/unit.md)), and per-diff review.
 
 ## Fast path (TL;DR)
 
@@ -38,8 +38,8 @@ By the end of this unit you can:
 > the worked example ({{vd:ci}}). **Parallel (W9):** give each independent task its own **git
 > worktree** (`claude --worktree`, or `git worktree add`), run agents concurrently, and **review each
 > diff separately** before merging ({{vd:worktrees}}). The catch: unattended means **no interactive
-> approval**, so the safety net is the hooks of [U14](../14-hooks/unit.md), the blast-radius discipline
-> of [U3](../03-operate-safely/unit.md), and reviewing every diff.
+> approval**, so the safety net is the hooks of [Hooks](../14-hooks/unit.md), the blast-radius discipline
+> of [Operate safely](../03-operate-safely/unit.md), and reviewing every diff.
 
 ## Skip-check
 
@@ -51,9 +51,9 @@ one is there to approve each step.
 
 ## Concept
 
-The Autonomy stage has built up to this: you packaged routines ([U12](../12-commands-and-skills/unit.md)),
-delegated to subagents ([U13](../13-subagents/unit.md)), enforced standards with hooks
-([U14](../14-hooks/unit.md)), and connected external tools ([U15](../15-mcp-and-vetting/unit.md)). This
+The Autonomy stage has built up to this: you packaged routines ([Commands & skills](../12-commands-and-skills/unit.md)),
+delegated to subagents ([Subagents](../13-subagents/unit.md)), enforced standards with hooks
+([Hooks](../14-hooks/unit.md)), and connected external tools ([MCP & vetting](../15-mcp-and-vetting/unit.md)). This
 unit takes the human out of the loop entirely: **Claude running unattended — headless, in CI, and
 several agents at once.**
 
@@ -76,7 +76,7 @@ agent its own checked-out tree (and branch) on the same repo, so they don't coll
 one with `--worktree` ({{vd:worktrees}}); or use plain `git worktree add`. The
 [W9 pattern](../../../meta/workflows.md#w9--running-parallel-agents-git-worktrees) is: isolate each task
 in a worktree → run them concurrently → **review and integrate each agent's diff independently**. The
-independence test is the same as for subagents ([U13](../13-subagents/unit.md)): if task B needs task
+independence test is the same as for subagents ([Subagents](../13-subagents/unit.md)): if task B needs task
 A's output, they aren't parallel.
 
 **4 — These compose.** Headless is the unit; CI is headless on a trigger; parallel worktrees are
@@ -87,13 +87,13 @@ several runs at once. Together they're how a senior engineer scales Claude past 
 are the backstop — you read each diff, you answer each permission prompt, you hit undo. Headless and in
 CI, **none of that is there.** So the guardrails have to be built in *beforehand*:
 
-- **Deterministic hooks** ([U14](../14-hooks/unit.md)) are the enforcement that doesn't need a human —
+- **Deterministic hooks** ([Hooks](../14-hooks/unit.md)) are the enforcement that doesn't need a human —
   a `PreToolUse` block or a `PostToolUse` check fires whether or not anyone's watching.
-- **Bounded blast radius** ([U3](../03-operate-safely/unit.md)) — restricted permissions/tools, a
+- **Bounded blast radius** ([Operate safely](../03-operate-safely/unit.md)) — restricted permissions/tools, a
   spend cap (`--max-budget-usd`), and checkpoints/sandboxing matter *most* when there's no interactive
   approval and no one to notice a runaway. ({{vd:checkpoint-rewind}}.)
 - **Per-diff review** — parallel agents each produce a diff you review **separately** before merging;
-  "all the agents finished" is not "all the work is correct" — the [U13](../13-subagents/unit.md)
+  "all the agents finished" is not "all the work is correct" — the [Subagents](../13-subagents/unit.md)
   verify-the-result rule, multiplied.
 
 Automation amplifies whatever you point it at, including mistakes. The skill isn't typing `-p` — it's
@@ -110,7 +110,7 @@ Tracked in [`meta/version-record.md`](../../../meta/version-record.md).
 **This repo runs its own standards in CI — that workflow is the example (R14).** Open
 [`.github/workflows/checks.yml`](../../../.github/workflows/checks.yml): on every push and PR, a job
 checks out the repo, installs the tooling, and runs `make check` — the same enforcement suite you met
-as a [U14](../14-hooks/unit.md) hook and a [`.githooks/pre-commit`](../../../.githooks/pre-commit) gate.
+as a [Hooks](../14-hooks/unit.md) hook and a [`.githooks/pre-commit`](../../../.githooks/pre-commit) gate.
 That's the **third and outermost layer** of the defense-in-depth from U14: the hook gives in-session
 feedback, the pre-commit gate stops a bad local commit, and **CI is the backstop that runs even if
 someone bypassed both** — unattended, on a fresh machine, with no local config to trust.
@@ -139,7 +139,7 @@ git worktree add ../tf-feature-b -b feature-b
 ## Lab
 
 > **No `start/`/`solution/` refs** — what you produce is a headless run, two worktrees, and a CI
-> observation in *your* environment, not a single codebase diff (precedent: [U14](../14-hooks/unit.md)/[U15](../15-mcp-and-vetting/unit.md)).
+> observation in *your* environment, not a single codebase diff (precedent: [Hooks](../14-hooks/unit.md)/[MCP & vetting](../15-mcp-and-vetting/unit.md)).
 > The self-check is objective on what you can observe: the run's exit/output, `git worktree list`, and
 > the two diffs you reviewed. (`claude -p` is Claude Code itself — the course prerequisite — so this
 > path needs no extra service; R15.)
@@ -159,7 +159,7 @@ discipline front of mind.
    (`git worktree add …`, or `claude --worktree`), and run an agent in each. Confirm `git worktree list`
    shows ≥2 trees ({{vd:worktrees}}).
 3. **Review each diff separately (the required verification step).** Before integrating, review **each**
-   worktree's diff on its own — the [W9](../../../meta/workflows.md#w9--running-parallel-agents-git-worktrees)
+   worktree's diff on its own — the [parallel agents via worktrees](../../../meta/workflows.md#w9--running-parallel-agents-git-worktrees)
    discipline. "Both agents finished" is not "both diffs are correct." Integrate only what passes review;
    tear the worktrees down (`git worktree remove`).
 4. **CI.** Read [`.github/workflows/checks.yml`](../../../.github/workflows/checks.yml). Identify the
@@ -167,8 +167,8 @@ discipline front of mind.
    depth). **Optional stretch:** sketch a job step that runs `claude -p … --output-format json` against
    a PR ({{vd:ci}}).
 5. **Name the safety net.** State, for *your* runs, what keeps them safe with no human in the loop:
-   which hook ([U14](../14-hooks/unit.md)) enforces a standard, what bounds blast radius
-   ([U3](../03-operate-safely/unit.md) — permissions, `--max-budget-usd`, checkpoints), and the per-diff
+   which hook ([Hooks](../14-hooks/unit.md)) enforces a standard, what bounds blast radius
+   ([Operate safely](../03-operate-safely/unit.md) — permissions, `--max-budget-usd`, checkpoints), and the per-diff
    review.
 
 **Self-check (objective — observed, not assumed):** you're done when **all** hold:
@@ -195,12 +195,12 @@ the parallel-worktrees discipline. Compare your run + worktrees + review against
 
 - **Parallelizing dependent tasks.** Worktrees isolate the *tree*, not the *logic* — if task B needs
   task A's change, running them at once just produces a B that has to be redone. Split only genuinely
-  independent work ([U13](../13-subagents/unit.md)).
+  independent work ([Subagents](../13-subagents/unit.md)).
 - **Trusting an unattended run because it finished.** No exit code proves the *diff* is right. Review
   each agent's output; in CI, make the gate fail closed (a real check), not a rubber stamp.
 - **Running headless with interactive-era permissions.** With no one to approve, broad permissions or
   no spend cap turn a small mistake into a large, unwatched one. Bound it: restricted tools, a hook
-  ([U14](../14-hooks/unit.md)), `--max-budget-usd`, checkpoints ([U3](../03-operate-safely/unit.md)).
+  ([Hooks](../14-hooks/unit.md)), `--max-budget-usd`, checkpoints ([Operate safely](../03-operate-safely/unit.md)).
 - **Leaving worktrees lying around.** Orphaned worktrees and branches accumulate and confuse later
   runs. `git worktree remove` when done; integrate or discard each branch deliberately.
 - **Parsing prose output in a script.** If something downstream consumes the result, use
@@ -215,11 +215,11 @@ the parallel-worktrees discipline. Compare your run + worktrees + review against
   **capstone**: an end-to-end project that puts the whole course together (context engineering + at
   least one custom extension + the verification discipline). See the progress checklist for where you
   stand against every can-do.
-- **The three CI/enforcement layers** — in-session hook ([U14](../14-hooks/unit.md)),
+- **The three CI/enforcement layers** — in-session hook ([Hooks](../14-hooks/unit.md)),
   [`.githooks/pre-commit`](../../../.githooks/pre-commit), and
   [CI](../../../.github/workflows/checks.yml) — are the same suite at widening blast radius.
 - **W9** parallel-agents pattern: [`meta/workflows.md`](../../../meta/workflows.md#w9--running-parallel-agents-git-worktrees).
-  Integrating each diff is the [U8](../08-git-and-pr/unit.md) git/PR discipline, per worktree.
+  Integrating each diff is the [Git & PR](../08-git-and-pr/unit.md) git/PR discipline, per worktree.
 - Headless / CI / worktree surfaces — {{vd:headless}}, {{vd:ci}}, {{vd:worktrees}};
   version-specifics in [`meta/version-record.md`](../../../meta/version-record.md). Confirm with
   `claude --help`.

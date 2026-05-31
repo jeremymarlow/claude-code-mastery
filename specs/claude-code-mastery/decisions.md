@@ -497,9 +497,11 @@ Plus **M4 — `{{vd:key}}` tokens rendered raw to learners** (most material; an 
 miss): fixed with the committed-rendered pattern — authored `unit.src.md` → generated+committed
 `unit.md` via new `tools/render-units` (drift gate in `make check`), proven on U1. Full tracker +
 per-unit grid + rollout procedure: [`tasks/P7-quality-pass.md`](./tasks/P7-quality-pass.md) (+ P7
-rationale section above). _Status:_ U1 is the active
-sandbox — voice approved, title fixed, vd-render mechanism built & green; U2–U16 rollout pending U1
-finalization. _Resolve in:_ the editorial roll-out per that file.
+rationale section above). _Status (2026-05-31, WIP checkpoint committed on `spec/quality-pass-phase`):_ gate
+approved; **U1–U4 fully de-coded + migrated**; **U5–U16 have link-anchors + advances-tails
+auto-de-coded by script but are not migrated and prose codes remain**. `make check` green. _Resolve
+in:_ the editorial roll-out — **next session starts at `tasks/P7-quality-pass.md` → "Resume state"**
+(7.6 U5–U16 prose, 7.7 cross-cutting sweep, 7.8 convention docs, 7.9 close-out).
 
 **Decided, not open (do not re-litigate):** tools are no-extension kebab-case (deviation from design
 §7 `.sh`, decision P3-tools); `permission-modes` value per verified CLI (P2-vd); awareness home-unit

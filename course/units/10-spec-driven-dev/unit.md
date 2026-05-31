@@ -19,7 +19,7 @@ lab_time_min: 35
 By the end of this unit you can:
 
 - **Run a spec-driven workflow for a feature whose cost-of-wrong is high** — drive Claude through
-  **requirements → design → tasks** with an explicit approval gate between phases — advances `C11`.
+  **requirements → design → tasks** with an explicit approval gate between phases.
 - **Write requirements that pin behavior, not implementation** — testable acceptance criteria with
   stable IDs, so "done" is objective and every later artifact has something to trace back to.
 - **Hold the phase gates** — review and approve each phase *before* the next begins, rather than
@@ -29,7 +29,7 @@ By the end of this unit you can:
 
 ## Fast path (TL;DR)
 
-> Spec-driven development ([W7](../../../meta/workflows.md#w7--spec-driven-development)) is the
+> Spec-driven development ([spec-driven development](../../../meta/workflows.md#w7--spec-driven-development)) is the
 > heavyweight cousin of U5's explore→plan→code: for a feature where building the *wrong* thing is
 > expensive, you align **before** writing code by producing three reviewed artifacts in order —
 > **requirements** (the WHAT, as testable criteria), **design** (the HOW), **tasks** (the ordered
@@ -155,7 +155,7 @@ of these has an obvious answer — which is exactly when spec-first beats jumpin
 2. **Design (then gate).** From the *approved* requirements, have Claude propose the design — the schema
    change (how dependencies are stored), the validation (cycle/cross-project rules), the service and
    route changes — with **each choice naming the requirement it serves**. Review for traceability and
-   for the service-layer convention from [U5](../05-ship-a-feature/unit.md)'s `CLAUDE.md`. Approve.
+   for the service-layer convention from [Ship a feature](../05-ship-a-feature/unit.md)'s `CLAUDE.md`. Approve.
 3. **Tasks.** Have Claude break the design into an ordered task list, each task pointing at a design
    element. This is your build plan.
 4. **Build against the spec (U5 loop).** Implement following the tasks (explore→plan→code→commit), using
@@ -211,6 +211,6 @@ those three.
   worked example (R3.AC2); start at
   [`IMPLEMENTATION.md`](../../../specs/claude-code-mastery/IMPLEMENTATION.md), as every session here does.
 - The phase-gate discipline is the same one in this repo's [`CLAUDE.md`](../../../CLAUDE.md) working
-  agreements; the build-against-spec step reuses [U5](../05-ship-a-feature/unit.md)'s loop.
+  agreements; the build-against-spec step reuses [Ship a feature](../05-ship-a-feature/unit.md)'s loop.
 - Stuck? [`course/stuck.md`](../../stuck.md) and the
   [progress checklist](../../progress-checklist.md).

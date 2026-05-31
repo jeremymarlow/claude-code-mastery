@@ -4,10 +4,11 @@
 product was verified **mechanically and functionally clean**; findings are confined to learner-facing
 prose ergonomics and one version-token rendering gap. **Polish + gap-closure — not release-blocking.**
 
-**Status:** 🚧 **IN PROGRESS (opened 2026-05-31).** Findings triaged; vd-rendering infra + navigation
-index built and green; U1 migrated + polished as the **pilot**. **Design gate pending** (user approval
-of the pattern + rollout procedure) before propagating to U2–U16. See `decisions.md` → "P7 — Quality
-pass". This phase adds **no new requirements** — every item traces to an existing R-ID.
+**Status:** 🚧 **IN PROGRESS (2026-05-31).** Gate **approved** (pattern + U1 voice). **U1–U4 fully
+done** (migrated to `unit.src.md` + rendered; prose de-coded; garbles fixed). **U5–U16: link anchors
++ `advances \`C#\`` tails already auto-de-coded by script — do NOT redo; but units are NOT migrated
+and prose codes remain.** `make check` green. Work is a WIP checkpoint commit on branch
+`spec/quality-pass-phase`. **NEXT SESSION: start at "## Resume state" below.** No new requirements.
 
 **Inputs:** the in-session 8-lens findings report · existing requirements R5/R6 (unit altitude &
 template), R9.AC2 (navigation), R12.AC2 (version-data single-source/"build step"), R15 (graceful
@@ -64,19 +65,16 @@ degradation) · `meta/version-data.yaml` · the existing generated-artifact patt
 - [x] M1 (drop `R#`), M2 (codes→titles, title-only), L3 (`CV` expanded), light L1; title T1 fixed.
 - [x] Fixed the backticked-`{{vd:settings}}` garble surfaced by rendering.
 
-### 7.5 GATE — design approval before rollout
-- [ ] User approves the committed-rendered pattern + the per-unit rollout procedure (below) and the
-      U1 pilot voice. **Do not start 7.6 until approved.** (Reinstates the phase gate.)
+### 7.5 GATE — design approval before rollout — ✅ APPROVED (2026-05-31)
+- [x] User approved the committed-rendered pattern, the per-unit rollout procedure, and the U1 voice
+      (incl. title-only cross-refs; "your first unit" for U1 back-refs). Rollout unblocked.
 
-### 7.6 Roll out to U2–U16 [R5/R6/R15] — ⏳ PENDING GATE
-Per-unit procedure (M4 sub-finding means this is render-and-read, not a mechanical `git mv`):
-1. `git mv .../unit.md .../unit.src.md`; add the leading SOURCE comment.
-2. Apply M1/M2/L1/L3 (+ L2 where due) to `unit.src.md`; fix any backticked sentence-valued tokens.
-3. `tools/render-units` → **eyeball** the generated `unit.md` for garble/grammar.
-4. `make check` green.
-- [ ] U2 · U3 (fix `{{vd:settings}}` ×2 + eyeball `permission-modes`) · U4 · U5 · U6 · U7 · U8
-- [ ] U9 · U10 (keep the teaching `R1`/`R2.AC3`; strip `R3.AC2`/`R7.AC3`) · U11
-- [ ] U12 (L2 rt→~10) · U13 (L2 rt→~12) · U14 (L2 rt→~11) · U15 · U16
+### 7.6 Roll out to U2–U16 [R5/R6/R15] — 🚧 IN PROGRESS (U1–U4 done; U5–U16 partial)
+Per-unit procedure (render-and-read, not a mechanical `git mv` — see Resume state for the recipe):
+- [x] **U2** ✅ · **U3** ✅ (settings/permission-modes/checkpoint-rewind garbles fixed) · **U4** ✅
+- [ ] U5 · U6 · U7 · U8 — prose codes remain (links+advances auto-done)
+- [ ] U9 · U10 (keep the teaching `R1`/`R2.AC3`/`R1`–`R15`; strip breadcrumb `R3.AC2`/`R7.AC3`) · U11
+- [ ] U12 (L2 rt 8→10) · U13 (L2 rt 8→12) · U14 (L2 rt 8→11) · U15 · U16
 
 ### 7.7 Cross-cutting prose sweep — ⏳ PENDING GATE
 - [ ] `course/capstone/{README,briefs,rubric,case-study}.md`, `course/stuck.md` — same M1/M2 sweep
@@ -92,26 +90,26 @@ Per-unit procedure (M4 sub-finding means this is render-and-read, not a mechanic
 
 ## Per-unit grid
 
-Legend: M1 = has `R#` leak · M2/L3 = all units · L2 = reading-time fix · ✅ = done.
+Legend: ✅ done · 🔗 link-anchors+advances auto-de-coded (script) · ⬜ prose codes + migration pending.
 
-| Unit | M1 (R#) | M2 | L1 | L2 | L3 | render-migrate | done |
-|------|---------|----|----|----|----|----------------|------|
-| U1 onboarding        | R14 ✅ | ✅ | ✅ | ok | ✅ | ✅ | ✅ PILOT |
-| U2 explore           | — | ⬜ | review | ok | ⬜ | ⬜ | ⬜ |
-| U3 operate-safely    | — (but `{{vd:settings}}`×2 garble) | ⬜ | review | ok | ⬜ | ⬜ | ⬜ |
-| U4 memory-context    | R14×2 | ⬜ | review | ok | ⬜ | ⬜ | ⬜ |
-| U5 ship-feature      | — | ⬜ | ok | ok | ⬜ | ⬜ | ⬜ |
-| U6 tdd               | — | ⬜ | review | ok | ⬜ | ⬜ | ⬜ |
-| U7 debug             | — | ⬜ | review | ok | ⬜ | ⬜ | ⬜ |
-| U8 git-pr            | — | ⬜ | review | ok | ⬜ | ⬜ | ⬜ |
-| U9 legacy-refactor   | R7.AC3 | ⬜ | review | ok | ⬜ | ⬜ | ⬜ |
-| U10 spec-driven      | keep R1/R2.AC3; strip R3.AC2/R7.AC3 | ⬜ | review | ok | ⬜ | ⬜ | ⬜ |
-| U11 review           | R7.AC3 | ⬜ | review | ok | ⬜ | ⬜ | ⬜ |
-| U12 commands-skills  | R14,R7.AC3×2 | ⬜ | review | **8→10** | ⬜ | ⬜ | ⬜ |
-| U13 subagents        | R7.AC3×2 | ⬜ | review | **8→12** | ⬜ | ⬜ | ⬜ |
-| U14 hooks            | R14,R13×2 | ⬜ | review | **8→11** | ⬜ | ⬜ | ⬜ |
-| U15 mcp-vetting      | — | ⬜ | review | ok | ⬜ | ⬜ | ⬜ |
-| U16 automate-scale   | R14,R12,R15 | ⬜ | review | ok | ⬜ | ⬜ | ⬜ |
+| Unit | state | notes for the prose pass |
+|------|-------|--------------------------|
+| U1 onboarding        | ✅ | pilot |
+| U2 explore           | ✅ | |
+| U3 operate-safely    | ✅ | settings/permission-modes/checkpoint-rewind garbles fixed |
+| U4 memory-context    | ✅ | home unit for memory/settings — tokens taught here (sentence-position) |
+| U5 ship-feature      | 🔗⬜ | `**The workflow — W1.**`→`**The workflow.**`; CV expand; bare U1/U2/U4/U10 prose refs |
+| U6 tdd               | 🔗⬜ | `**The workflow — W2.**`; CV; U5/U7 prose refs |
+| U7 debug             | 🔗⬜ | `**The workflow — W3.**`; CV; U5/U6/U9 prose; "the W2 reflex" |
+| U8 git-pr            | 🔗⬜ | `**The workflow — W4.**`; CV; U5–U7/U9/U16 prose; R7.AC3/AC7/AC8 breadcrumbs |
+| U9 legacy-refactor   | 🔗⬜ | W8/W5 in prose; CV; U2/U5/U7/U8 prose; R7.AC3 |
+| U10 spec-driven      | 🔗⬜ | **KEEP teaching** `R1`/`R2.AC3`/`R1`–`R15`; strip breadcrumb R3.AC2/R7.AC3; W7; U5/U11 prose; CV |
+| U11 review           | 🔗⬜ | L11 "advances `C12` and consolidates `CV`" (irregular); CV ×3; W6; U3/U5/U6/U10/U12/U16 prose; R7.AC3 |
+| U12 commands-skills  | 🔗⬜ | L9–10 "Advances\n`C13`" (multi-line, not auto-removed); R14/R7.AC3; U13 prose; **L2 rt 8→10** |
+| U13 subagents        | 🔗⬜ | "the U12 line"; R7.AC3; **L2 rt 8→12** |
+| U14 hooks            | 🔗⬜ | "the C15 move"; R14/R13; U15 prose; **L2 rt 8→11** |
+| U15 mcp-vetting      | 🔗⬜ | R10.AC5 ×4; U16 prose; CV |
+| U16 automate-scale   | 🔗⬜ | many `(W9)` in prose; R14/R12.AC7/R15; U14 prose; CV |
 
 ## Locked decisions (do not re-litigate)
 
@@ -122,3 +120,57 @@ Legend: M1 = has `R#` leak · M2/L3 = all units · L2 = reading-time fix · ✅ 
 - **T2 dir rename deferred** — optional; `01-setup-and-first-change` if ever wanted.
 
 Full rationale: `decisions.md` → "P7 — Quality pass".
+
+## Resume state (NEXT SESSION — START HERE)
+
+**Branch:** `spec/quality-pass-phase` (local only, not pushed). **Done & committed:** the P7 spec, the infra
+(`render-units`/`render-index` + Makefile gates), U1 pilot, navigation index, and U2–U4 fully
+migrated/de-coded, plus this WIP checkpoint. `make check` is green.
+
+**Already auto-applied to U5–U16 `unit.md` (do NOT redo):**
+1. Cross-ref **link anchors** de-coded: `[U#](../NN-slug/unit.md)`→`[Title](…)`, `[W#](…workflows.md#…)`→`[name](…)` (88 total).
+2. **`advances \`C#\`` objective tails** removed (em-dash + sentence forms; 18 total).
+These units are **still `unit.md` (un-migrated)** and still contain raw `{{vd:}}` tokens + remaining **prose** codes.
+
+**Remaining per U5–U16 (the editorial pass).** Regenerate the live worklist with:
+```bash
+for n in 05 06 07 08 09 10 11 12 13 14 15 16; do f=$(ls course/units/${n}-*/unit.md); \
+  echo "== $f =="; awk 'NR>13' "$f" | grep -nE '\b[UCRW][0-9]+\b|`CV`|advances|Advances'; done
+```
+Then for each unit: edit prose **in place** (stays green/hook-silent — unit not yet migrated), then
+**migrate** (recipe below), `tools/render-units`, **eyeball the rendered `unit.md`**, `make check`.
+
+**Per-unit migration recipe (Bash — no edit-hook, ends green):**
+```bash
+d=course/units/NN-slug
+git mv $d/unit.md $d/unit.src.md
+tmp=$(mktemp); cat > "$tmp" <<'HDR'
+<!-- SOURCE — authored unit. Edit THIS file; the sibling unit.md is generated by
+     tools/render-units, which resolves the version-data tokens. Run `make render` after editing. -->
+HDR
+cat "$d/unit.src.md" >> "$tmp" && mv "$tmp" "$d/unit.src.md"
+tools/render-units >/dev/null && make check >/dev/null 2>&1 && echo GREEN
+```
+
+**Locked rollout rules (from U1–U4 precedent):**
+- **Cross-ref style = title-only.** U1 back-refs = "your first unit" (its title is long). Short titles:
+  U2 Explore a codebase · U3 Operate safely · U4 Memory & context · U5 Ship a feature · U6 TDD ·
+  U7 Debugging · U8 Git & PR · U9 Refactor legacy · U10 Spec-driven dev · U11 Code & security review ·
+  U12 Commands & skills · U13 Subagents · U14 Hooks · U15 MCP & vetting · U16 Automate & scale.
+- **`**The workflow — W#.**` headers → `**The workflow.**`** (next sentence names+links it).
+- **`CV`:** expand "cross-cutting verification (CV)" on first use per unit, de-backtick `` `CV` ``.
+- **`R#` breadcrumbs:** drop in prose (e.g. "(R7.AC3)", "(R14)", "(R10.AC5)"). **EXCEPTION U10:** keep
+  the *teaching* backticked `R1`/`R2.AC3`/`R1`–`R15`/`R*.AC*`; drop only the breadcrumb cites.
+- **L2 reading times:** U12 8→10, U13 8→12, U14 8→11 (edit `reading_time_min` in `unit.src.md`; then
+  run **`make render`** — not just render-units — so the index `course/units/README.md` regenerates too).
+- **Garble rule (M4):** vd values are full sentences / contain backticks. Use them in **sentence
+  position** ("Label. {{vd:key}} Next sentence…"), never backtick-wrapped and never as a mid-sentence
+  noun. `{{vd:_verified_version}}` (→ `2.1.158`) is the one safe backticked token.
+
+**Still TODO after U5–U16 prose:**
+- **7.7** cross-cutting sweep: `course/capstone/{README,briefs,rubric,case-study}.md`, `course/stuck.md`
+  (keep rubric `[Cn]` tags; maintainer-guide may keep `R#`).
+- **7.8** convention docs: `course/maintainer-guide.md`, `meta/templates/unit-*.md`, `.claude/skills`/
+  `close-unit` — authored file is now `unit.src.md`; `make render` regenerates `unit.md`.
+- **7.9** close-out: final `make check`; strike **L8** in `decisions.md`; mark P7 done in `tasks.md` +
+  `IMPLEMENTATION.md` §3; final commit(s). Ask before any `git push`.

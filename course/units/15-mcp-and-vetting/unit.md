@@ -19,10 +19,10 @@ lab_time_min: 22
 By the end of this unit you can:
 
 - **Connect an MCP server to Claude Code** — a local stdio server (a subprocess) or a remote HTTP one —
-  so Claude can call tools and read data beyond its built-ins. Advances `C16`.
+  so Claude can call tools and read data beyond its built-ins.
 - **Treat connecting as a trust-delegation decision** — recognize that an MCP server, plugin, or
   marketplace item runs code or sees data on your behalf, so installing one grants it trust (the
-  [U13](../13-subagents/unit.md) lesson, now applied to *third-party* code). Advances `C16`.
+  [Subagents](../13-subagents/unit.md) lesson, now applied to *third-party* code).
 - **Vet a third-party extension before installing it** — evaluate source, scope/permissions, transport,
   and secrets against a checklist, and reach an explicit connect / don't-connect decision (R10.AC5).
 - **Use the approval gate, and verify the results** — leave a `.mcp.json` server *pending* until you've
@@ -50,7 +50,7 @@ server returns rather than trusting it because the handshake succeeded.
 
 ## Concept
 
-[U13](../13-subagents/unit.md) ended on a rule: *delegation is trust delegation — verify the result.*
+[Subagents](../13-subagents/unit.md) ended on a rule: *delegation is trust delegation — verify the result.*
 There, the delegate was another Claude. This unit applies the same rule to **external tools and
 third-party code**: connecting an MCP server is delegation to something you may not have written.
 
@@ -82,7 +82,7 @@ a plugin, a marketplace item — each one **runs code or sees data on your behal
   environment.
 
 So "install this handy MCP server" is never free — it's the same blast-radius question from
-[U3](../03-operate-safely/unit.md), aimed at third-party code.
+[Operate safely](../03-operate-safely/unit.md), aimed at third-party code.
 
 **4 — Vet before you connect (the checklist).** Before connecting a third-party extension, work through:
 
@@ -101,12 +101,12 @@ not "looks fine." The version-specific surface for plugins/marketplace vetting i
 
 **5 — The approval gate is where vetting happens.** The `⏸ Pending approval` state for `.mcp.json`
 servers is not a nuisance — it's the **moment to vet**. Approving blind defeats it. This is
-verify-don't-trust ([U3](../03-operate-safely/unit.md)) applied to extensions: the gate makes you stop
+verify-don't-trust ([Operate safely](../03-operate-safely/unit.md)) applied to extensions: the gate makes you stop
 before you delegate.
 
 **6 — Connected ≠ correct.** Even a server you trust returns data Claude then acts on. A healthy
 handshake says the *pipe* works, not that the *answer* is right — so verify the results a tool returns,
-exactly as you verified a subagent's report ([U13](../13-subagents/unit.md)).
+exactly as you verified a subagent's report ([Subagents](../13-subagents/unit.md)).
 
 **Version currency.** Verified against Claude Code {{vd:_verified_version}}. The `claude mcp`
 subcommands and the `.mcp.json` shape were confirmed live (a stdlib stdio server connected `✓
@@ -145,7 +145,7 @@ is the skill.
 ## Lab
 
 > **No `start/`/`solution/` refs** — what you produce is a connection in *your own* config plus a
-> vetting decision, not a codebase change (precedent: [U14](../14-hooks/unit.md)). But the connect half
+> vetting decision, not a codebase change (precedent: [Hooks](../14-hooks/unit.md)). But the connect half
 > is **objectively checkable** (`claude mcp get` health-checks it), and the vetting half is graded by an
 > objective checklist.
 
@@ -207,7 +207,7 @@ connectable server and its config; compare your connect + vetting run against th
 - **Ignoring the transport.** A remote HTTP server sees whatever Claude sends it — a real exfiltration
   surface. "It's just a task tool" still means your data leaves the machine.
 - **Over-scoping a credential.** Handing a third-party server a broad API token "to be safe" is the
-  opposite of safe. Grant the narrowest scope that does the job ([U3](../03-operate-safely/unit.md)).
+  opposite of safe. Grant the narrowest scope that does the job ([Operate safely](../03-operate-safely/unit.md)).
 - **Typosquat / wrong source.** Installing `tasktracker-pr0` instead of the real one is how
   supply-chain attacks land. Confirm the publisher and that it's the genuine package ({{vd:plugins}}).
 - **Authoring the commands from memory.** `claude mcp` subcommands, transports, and the `.mcp.json`
@@ -218,8 +218,8 @@ connectable server and its config; compare your connect + vetting run against th
 - **Next:** U16 (automate & scale) runs Claude **headlessly** and in parallel — where a connected MCP
   server (and the discipline of having vetted it) becomes part of an automated pipeline with no human at
   the approval gate, raising the stakes on getting the trust decision right up front.
-- **Trust delegation** is the through-line: a subagent ([U13](../13-subagents/unit.md)) → third-party
-  code here, all governed by verify-don't-trust ([U3](../03-operate-safely/unit.md)).
+- **Trust delegation** is the through-line: a subagent ([Subagents](../13-subagents/unit.md)) → third-party
+  code here, all governed by verify-don't-trust ([Operate safely](../03-operate-safely/unit.md)).
 - **The shipped server** — [`taskflow_mcp.py`](../../../codebases/fixtures/taskflow_mcp.py) and its
   [`.mcp.json`](../../../codebases/fixtures/taskflow.mcp.json); the fixtures
   [README](../../../codebases/fixtures/README.md) shows how to connect and remove it.

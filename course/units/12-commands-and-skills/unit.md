@@ -23,11 +23,11 @@ By the end of this unit you can:
   `C13`.
 - **Package a structured, reusable capability as a skill** — a named `SKILL.md` whose *description*
   tells Claude when it applies — so the capability is available across tasks, not retyped per session.
-  Advances `C13`.
+ 
 - **Choose correctly between the two** — reach for a command when *you* deliberately trigger a prompt,
   and a skill when a multi-step capability is worth naming and letting Claude recognize.
 - **Scope each one deliberately** — project (`.claude/`, committed, shared) vs. personal (`~/.claude/`),
-  the same source distinction you met for settings in [U4](../04-memory-and-context/unit.md).
+  the same source distinction you met for settings in [Memory & context](../04-memory-and-context/unit.md).
 
 ## Fast path (TL;DR)
 
@@ -84,7 +84,7 @@ description so vague it never fires.
 
 **4 — Scope: project vs. personal.** Both live in `.claude/` (project-scoped — committed to the repo,
 shared with everyone who clones it) or `~/.claude/` (personal — your habits across every project). This
-is the same source distinction you met for `settings.json` in [U4](../04-memory-and-context/unit.md):
+is the same source distinction you met for `settings.json` in [Memory & context](../04-memory-and-context/unit.md):
 put a command/skill the *team* should have in the project; keep your personal shortcuts in `~/.claude/`.
 A team scaffolder committed to `.claude/commands/` means every contributor scaffolds the same way — that
 is exactly why *this* repo commits `close-unit` and `prime-context`.
@@ -201,7 +201,7 @@ against them and the checklist above.
   than trusting recall ({{vd:custom-commands}}, {{vd:skills}}).
 - **Scope confusion.** A personal shortcut committed to project `.claude/` gets pushed onto the whole
   team; a team scaffolder left in `~/.claude/` never reaches them. Decide project vs. personal on
-  purpose ([U4](../04-memory-and-context/unit.md)).
+  purpose ([Memory & context](../04-memory-and-context/unit.md)).
 
 ## Going deeper
 
@@ -210,7 +210,7 @@ against them and the checklist above.
   `make check` suite is U14's worked example; U16 (automate & scale) runs these packaged routines
   headlessly and in parallel.
 - **Scope & sources** — project vs. personal `.claude/` is the same distinction as settings sources in
-  [U4](../04-memory-and-context/unit.md).
+  [Memory & context](../04-memory-and-context/unit.md).
 - The invocation, argument, and resolution surfaces — {{vd:custom-commands}} and {{vd:skills}};
   version-specifics in [`meta/version-record.md`](../../../meta/version-record.md). Confirm with
   `claude --help`.

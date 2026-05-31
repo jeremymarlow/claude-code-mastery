@@ -19,7 +19,7 @@ lab_time_min: 35
 By the end of this unit you can:
 
 - **Run a structured review over a diff for both correctness *and* security** — using
-  `/code-review` and `/security-review` as a first pass, not the last word — advances `C12`.
+  `/code-review` and `/security-review` as a first pass, not the last word.
 - **Triage findings instead of trusting them** — confirm a real bug is real (reproduce it), and
   dismiss a confident false positive with a reason — advances `C12` and consolidates `CV`.
 - **Catch the security issues an AI is prone to introduce** — broken object-level authorization
@@ -32,7 +32,7 @@ By the end of this unit you can:
 ## Fast path (TL;DR)
 
 > Before a significant or security-sensitive change merges, run a structured review
-> ([W6](../../../meta/workflows.md#w6--code--security-review)) over the diff — correctness **and**
+> ([code & security review](../../../meta/workflows.md#w6--code--security-review)) over the diff — correctness **and**
 > security. Claude gives you two first-pass tools, {{vd:review-cmds}} — but the workflow's own rule
 > is **the review is a lead, not a verdict**: it both *misses* real issues and *raises* false
 > positives, so you cross-check every finding against the code. The lab hands you a feature branch
@@ -116,7 +116,7 @@ diff is prepared, the dogfooded checks (`make check`) act as an automated first-
 flag unresolved `{{vd:…}}` keys, broken links, coverage gaps. And they behave exactly like the unit
 warns: while authoring U6 the version-reference check **raised a false positive** (a `vd:` token
 written as a prose illustration looked like a real-but-broken reference — see
-[U7](../07-debug-a-failure/unit.md)'s worked example), and a human had to triage it: *is the check
+[Debugging](../07-debug-a-failure/unit.md)'s worked example), and a human had to triage it: *is the check
 right, or is the content?* The check was wrong about that line; the fix was to reword the prose, not
 to "satisfy" the check by mangling a real reference. That is the W6 reflex in miniature — an automated
 reviewer is a lead you confirm, and sometimes the right call is to overrule it with a reason.
@@ -198,9 +198,9 @@ false positive is dismissed with a reason, and nothing regressed.
 - **Next:** the Autonomy & Scale stage (U12 commands/skills onward) automates the workflows you now run by
   hand — and a review gate like this one is what you'd wire into the headless CI of U16 (automate & scale).
 - [`meta/workflows.md`](../../../meta/workflows.md#w6--code--security-review) — the generalized W6 pattern.
-- This is [U3](../03-operate-safely/unit.md)'s "define verification as more than green tests" turned into a
-  workflow, and the same diff-reading reflex from [U5](../05-ship-a-feature/unit.md) and
-  [U8](../08-git-and-pr/unit.md)'s self-review — now pointed at *someone else's* change before merge.
+- This is [Operate safely](../03-operate-safely/unit.md)'s "define verification as more than green tests" turned into a
+  workflow, and the same diff-reading reflex from [Ship a feature](../05-ship-a-feature/unit.md) and
+  [Git & PR](../08-git-and-pr/unit.md)'s self-review — now pointed at *someone else's* change before merge.
 - The review commands — {{vd:review-cmds}}; version-specifics in
   [`meta/version-record.md`](../../../meta/version-record.md).
 - Stuck? [`course/stuck.md`](../../stuck.md) and the

@@ -19,7 +19,7 @@ lab_time_min: 40
 By the end of this unit you can:
 
 - **Onboard deeply to an unfamiliar, messy codebase** — drive Claude to map its architecture, data
-  flow, and duplication, then *validate that map against the source* before trusting it — advances `C10`.
+  flow, and duplication, then *validate that map against the source* before trusting it.
 - **Establish a green baseline before you refactor** — and when the code has no tests, build a
   **characterization safety net** (tests that pin *current* behavior, bugs included) so "behavior
   preserved" becomes objective rather than hopeful.
@@ -30,9 +30,9 @@ By the end of this unit you can:
 
 ## Fast path (TL;DR)
 
-> This unit combines two workflows: **deep onboarding** ([W8](../../../meta/workflows.md#w8--onboarding-to-an-unfamiliarlarge-codebase),
+> This unit combines two workflows: **deep onboarding** ([deep onboarding](../../../meta/workflows.md#w8--onboarding-to-an-unfamiliarlarge-codebase),
 > the heavy version of U2's light explore) and **multi-file refactoring**
-> ([W5](../../../meta/workflows.md#w5--multi-file-refactoring)). The discipline: **map the code and
+> ([multi-file refactoring](../../../meta/workflows.md#w5--multi-file-refactoring)). The discipline: **map the code and
 > validate the map → establish a green baseline → refactor in increments → keep the suite green before
 > *and* after → diff-review for scope creep.** The twist with legacy code is that there's often **no
 > suite to stay green** — so your first move is to **write characterization tests** that pin today's
@@ -58,7 +58,7 @@ code you've never seen (deep onboarding), then you have to *change its shape wit
 does* (refactoring). An AI is a force multiplier on both — and a liability on both if you let it move
 faster than you can verify.
 
-**Part 1 — deep onboarding (W8, deep).** You met the light version in [U2](../02-explore-a-codebase/unit.md):
+**Part 1 — deep onboarding (W8, deep).** You met the light version in [Explore a codebase](../02-explore-a-codebase/unit.md):
 enough of a map to *locate* a change. Refactoring needs the deep version: enough to change structure
 *safely*. The generalized pattern lives in
 [`meta/workflows.md`](../../../meta/workflows.md#w8--onboarding-to-an-unfamiliarlarge-codebase) — build
@@ -98,7 +98,7 @@ refactor that ends on a red suite isn't a refactor — it's an undiagnosed behav
 
 **4 — Guard against scope creep: a bug-fix is *not* part of a refactor.** This is the discipline the
 unit turns on. While restructuring `taskflow-cli` you will walk straight past the overdue bug from
-[U7](../07-debug-a-failure/unit.md) — the date comparison that's broken in three copies. The instinct
+[Debugging](../07-debug-a-failure/unit.md) — the date comparison that's broken in three copies. The instinct
 ("I'm right here, I'll just fix it") is exactly the scope creep W5 warns about. **Don't.** A refactor
 that also fixes a bug changes behavior, which means your baseline *should* go red — and now you can't
 tell a bug-fix from an accident. De-duplicate the three copies into one (that's the refactor); leave
@@ -225,13 +225,13 @@ happened, not your specific layout.)
   thing up front rather than rescuing the wrong thing later; U11 (code & security review) is how you'd
   review a refactor like this one before it merges.
 - [`meta/workflows.md`](../../../meta/workflows.md#w5--multi-file-refactoring) — generalized W5, and
-  [W8](../../../meta/workflows.md#w8--onboarding-to-an-unfamiliarlarge-codebase) deep onboarding (the
-  heavy version of [U2](../02-explore-a-codebase/unit.md)'s light explore).
-- The characterization-test reflex is [U7](../07-debug-a-failure/unit.md)'s "capture it so 'fixed' is
-  objective" / [U6](../06-tdd/unit.md)'s red-green, scaled from one bug to a whole program — and U7
+  [deep onboarding](../../../meta/workflows.md#w8--onboarding-to-an-unfamiliarlarge-codebase) deep onboarding (the
+  heavy version of [Explore a codebase](../02-explore-a-codebase/unit.md)'s light explore).
+- The characterization-test reflex is [Debugging](../07-debug-a-failure/unit.md)'s "capture it so 'fixed' is
+  objective" / [TDD](../06-tdd/unit.md)'s red-green, scaled from one bug to a whole program — and U7
   literally foreshadowed this lab: the overdue bug hid in three copies *because* of the duplication you
   untangle here.
-- Plan-mode-as-a-gate and diff review come straight from [U5](../05-ship-a-feature/unit.md); clean
-  incremental history is [U8](../08-git-and-pr/unit.md).
+- Plan-mode-as-a-gate and diff review come straight from [Ship a feature](../05-ship-a-feature/unit.md); clean
+  incremental history is [Git & PR](../08-git-and-pr/unit.md).
 - Stuck? [`course/stuck.md`](../../stuck.md) and the
   [progress checklist](../../progress-checklist.md).

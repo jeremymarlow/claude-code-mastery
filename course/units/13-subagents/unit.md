@@ -20,12 +20,12 @@ By the end of this unit you can:
 
 - **Hand a self-contained task to a subagent and use the result it returns** — a separate Claude
   instance, with its own context window, that does the work and reports back a conclusion rather than
-  its whole transcript. Advances `C14`.
+  its whole transcript.
 - **Recognize when delegation pays off** — a context-heavy exploration you don't want polluting your
   main thread, two independent tasks worth running in parallel, or work worth fencing to a restricted
-  toolset. Advances `C14`.
+  toolset.
 - **Scope a task so a subagent can finish it without you** — a crisp, self-contained brief with a
-  defined deliverable, distinct from a routine you reuse in your own context (a skill, [U12](../12-commands-and-skills/unit.md)).
+  defined deliverable, distinct from a routine you reuse in your own context (a skill, [Commands & skills](../12-commands-and-skills/unit.md)).
 - **Verify what comes back** — a subagent returns a conclusion you didn't watch it derive, so you
   check the result against the code instead of trusting that an agent ran.
 
@@ -52,7 +52,7 @@ ran. If that's already habit, skim the pitfalls and move on.
 
 ## Concept
 
-[U12](../12-commands-and-skills/unit.md) packaged a routine so you stop re-typing it. A subagent is the
+[Commands & skills](../12-commands-and-skills/unit.md) packaged a routine so you stop re-typing it. A subagent is the
 next move in the Autonomy stage: instead of *reusing a prompt in your own context*, you **hand a whole
 task to a separate Claude and use what it gives back**.
 
@@ -74,7 +74,7 @@ report.
   rather than one after another — which is wall-clock faster.
 - **Fencing (blast radius).** A subagent can be handed a *narrower* toolset than your session has: a
   read-only explorer that literally cannot edit or run destructive commands. That's the
-  [U3](../03-operate-safely/unit.md) blast-radius discipline applied to delegation — give the helper
+  [Operate safely](../03-operate-safely/unit.md) blast-radius discipline applied to delegation — give the helper
   only the tools its task needs.
 
 **3 — How it works in Claude Code.** The main agent invokes a subagent through its task/agent tool;
@@ -83,14 +83,14 @@ you rarely call it by hand, you *describe a task* and let the main agent dispatc
 `{"reviewer": {"description": "Reviews ..."}}`), or persistently as a file under `.claude/agents/`. An
 agent definition carries a **`description`** — *when* the main agent should reach for it — and usually
 an allowed-tools list and a model. The `description` is the trigger, exactly as it was for a skill in
-[U12](../12-commands-and-skills/unit.md): vague description, never dispatched at the right moment;
+[Commands & skills](../12-commands-and-skills/unit.md): vague description, never dispatched at the right moment;
 sharp description naming the situation, picked up when it fits. Background/dispatched agents are managed
 with the `agents` subcommand. The version-specific surface — the flags, the subcommand, the on-disk
 format — is {{vd:subagents}}.
 
 **4 — Subagent vs. skill (the U12 line).** Both package work; they differ in *where the work runs*:
 
-- A **skill/command** ([U12](../12-commands-and-skills/unit.md)) expands into **your** context — it's a
+- A **skill/command** ([Commands & skills](../12-commands-and-skills/unit.md)) expands into **your** context — it's a
   reusable prompt or capability you run in the session you're in.
 - A **subagent** runs the work in a **separate** context and hands back a result.
 
@@ -104,7 +104,7 @@ tell: if you mostly care about the *answer* and not the steps, delegate; if you 
 That makes verification non-optional: a returned diff gets **read** before it's kept; a returned claim
 ("ownership is checked in all five mutation routes") gets **spot-checked** against the code. "An agent
 ran and reported success" is not verification — it's the thing you verify. This is the same
-verify-don't-trust habit from [U3](../03-operate-safely/unit.md), and it's the bridge to the trust
+verify-don't-trust habit from [Operate safely](../03-operate-safely/unit.md), and it's the bridge to the trust
 question you'll face again when you delegate to *third-party* code (MCP servers) later in this stage.
 
 **Version currency.** Verified against Claude Code {{vd:_verified_version}}. The inline `--agents`
@@ -140,7 +140,7 @@ Two things make this a *good* delegation, and they map straight onto the concept
 
 - **The toolset is fenced to the task.** `explorer` gets `Read`/`Grep`/`Glob` and nothing that writes.
   Even if the task drifted, it *cannot* change the codebase — blast radius designed to zero
-  ([U3](../03-operate-safely/unit.md)).
+  ([Operate safely](../03-operate-safely/unit.md)).
 - **The brief is self-contained with a defined deliverable.** "file:line of each ownership check + one
   line each" is a crisp finish line. The subagent doesn't need to come back and ask you anything; it
   can run to completion on its own. That's the difference between a task you can delegate and one you
@@ -218,7 +218,7 @@ and the checklist.
 - **Delegating work you need to watch.** If the *reasoning* matters to you — a subtle design call, a
   risky change — running it in a subagent hides exactly what you wanted to see. Delegate when you care
   about the *result*; keep it inline when you need to follow the steps.
-- **A vague agent description.** Same failure as a vague skill ([U12](../12-commands-and-skills/unit.md)):
+- **A vague agent description.** Same failure as a vague skill ([Commands & skills](../12-commands-and-skills/unit.md)):
   "helps explore code" never gets dispatched at the right moment. Name the *situation* the agent is for
   so the main agent can match it.
 - **Trusting the result because an agent ran.** "It came back green / it said it's done" is not
@@ -228,7 +228,7 @@ and the checklist.
   find, then we'll decide") can't be delegated cleanly — the subagent stalls or guesses. Give it a
   finish line it can reach alone.
 - **Over-broad tools / permissions.** Handing a subagent edit or bypass permissions it doesn't need
-  widens blast radius for no reason ([U3](../03-operate-safely/unit.md)). Fence it to the tools its
+  widens blast radius for no reason ([Operate safely](../03-operate-safely/unit.md)). Fence it to the tools its
   task requires — read-only for an explorer.
 - **"Parallelizing" dependent tasks.** Two subagents only run in parallel if neither needs the other's
   output. If task B consumes task A's result, it isn't parallel — it's a sequence.
@@ -242,10 +242,10 @@ and the checklist.
   suite is its worked example; U15 (MCP & vetting) extends today's trust-delegation lesson to
   *third-party* tools you connect and must vet before relying on; U16 (automate & scale) runs delegated
   work headlessly and across parallel worktrees.
-- **Subagent vs. skill/command** — the form distinction is the [U12](../12-commands-and-skills/unit.md)
+- **Subagent vs. skill/command** — the form distinction is the [Commands & skills](../12-commands-and-skills/unit.md)
   line: reuse a prompt in your own context (skill/command) vs. run a task in a separate context and use
   its result (subagent).
-- **Fencing & verifying delegation** builds directly on [U3](../03-operate-safely/unit.md) (blast
+- **Fencing & verifying delegation** builds directly on [Operate safely](../03-operate-safely/unit.md) (blast
   radius, verify-don't-trust).
 - The flags, `agents` subcommand, and on-disk format — {{vd:subagents}}; version-specifics in
   [`meta/version-record.md`](../../../meta/version-record.md). Confirm with `claude --help`.

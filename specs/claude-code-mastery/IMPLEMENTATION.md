@@ -50,9 +50,10 @@ v1 Definition-of-Done mechanical gate (L3) passes.** Current branch: **`main`** 
 **P7 — Quality pass (post-v1, in progress, 2026-05-31).** A systematic 8-lens quality pass found the
 product mechanically/functionally clean; remediation is confined to learner-facing prose + a closed
 version-token rendering gap (new `tools/render-units` committed-rendered pattern + `tools/render-index`
-navigation). **No new requirements** (traces to R5/R6/R9/R12/R15). U1 migrated + polished as the pilot;
-a **design gate** holds before the U2–U16 rollout. See `tasks/P7-quality-pass.md` + `decisions.md` →
-"P7 — Quality pass". Tracked as open loop **L8**.
+navigation). **No new requirements** (traces to R5/R6/R9/R12/R15). Gate approved; **U1–U4 done** (migrated +
+de-coded); **U5–U16 partially auto-de-coded (links + advances tails), prose + migration pending** —
+WIP checkpoint committed on branch `spec/quality-pass-phase`. **Next session: `tasks/P7-quality-pass.md` →
+"Resume state".** See also `decisions.md` → "P7 — Quality pass". Tracked as open loop **L8**.
 
 **v1 build is complete.** Remaining is **not release-blocking**: **L1** is now mostly closed — the
 interactive `/help`+docs pass (2026-05-30) verified 5 of the 7 keys; only `ci` (GitHub Action wrapper)

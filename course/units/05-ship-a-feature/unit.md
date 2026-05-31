@@ -19,16 +19,16 @@ lab_time_min: 25
 By the end of this unit you can:
 
 - **Drive a non-trivial feature through the explore → plan → code → commit loop** — orient Claude in
-  the code, get an explicit plan, implement against it, and land a verified change — advances `C6`.
+  the code, get an explicit plan, implement against it, and land a verified change.
 - **Use plan mode as a review gate** — make Claude design *before* it writes, and reject or redirect a
-  bad plan while it's still free to change — advances `C6`.
+  bad plan while it's still free to change.
 - **Verify at the two points that matter** — review the *plan* before code exists, then read the diff
   and run the tests before you commit — the `CV` reflex applied to a real feature.
 - **Recognize when to reach for extended thinking** (awareness) — and know it's a dial, not a default.
 
 ## Fast path (TL;DR)
 
-> This is Anthropic's flagship coding loop ([W1](../../../meta/workflows.md#w1--explore--plan--code--commit)),
+> This is Anthropic's flagship coding loop ([explore → plan → code → commit](../../../meta/workflows.md#w1--explore--plan--code--commit)),
 > and it's the default for any change bigger than a one-liner. **Explore** (have Claude read the code and
 > restate the task), **plan** (in plan mode, so nothing is written until you approve), **code** (implement
 > the approved plan in small steps), **commit** (read the diff, run `pytest`, then commit). The lab has you
@@ -180,8 +180,8 @@ route. Yours may differ in shape and still pass — the verifier checks the cont
   pattern (and W2–W9 it connects to).
 - Extended thinking / effort levels — {{vd:thinking}} — and where version-specifics are recorded:
   [`meta/version-record.md`](../../../meta/version-record.md).
-- The exploration habit from [U2](../02-explore-a-codebase/unit.md) and the memory/context levers from
-  [U4](../04-memory-and-context/unit.md) are the inputs that make a *good* plan possible.
+- The exploration habit from [Explore a codebase](../02-explore-a-codebase/unit.md) and the memory/context levers from
+  [Memory & context](../04-memory-and-context/unit.md) are the inputs that make a *good* plan possible.
 - Stuck? [`course/stuck.md`](../../stuck.md) and the
   [progress checklist](../../progress-checklist.md).
 </content>

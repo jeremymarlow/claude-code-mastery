@@ -109,13 +109,22 @@ Until 8.7, R16/R17 are invisible to the current hardcoded `R1–R15` check (harm
 - [x] Eyeball both rendered `unit.md`; confirm reading-time unaffected; `make check` green.
       → both render clean, links resolve, `reading_time_min` unchanged (9 / 11); `make check` all green.
 
-### 8.7 Resilience: dynamic requirement discovery  [R13.AC5; §12.8]  ⟵ run after 8.2–8.4, 8.6
-- [ ] `check-traceability` — **discover the requirement set from `requirements.md`** (`### Rn` headings),
-      replacing the hardcoded `R1–R15` regex/range. Keep the **can-do set closed** (`C1–C17+CV`).
-- [ ] Audit the other checks (`check-version-refs`, …) for hardcoded `R#` ranges; same treatment where
-      found.
-- [ ] Verify R16 + R17 are now discovered **and referenced** (the new tools' docstrings + the reference
-      page + the U4/U10 pointers); `make check` green with the generalized check.
+### 8.7 Resilience: dynamic requirement discovery  [R13.AC5; §12.8]  ✅
+- [x] `check-traceability` — **discover the requirement set from `requirements.md`** (the `### Rn — …`
+      headings) instead of the hardcoded `all_reqs = {f"R{i}" for i in range(1, 16)}`. New
+      `REQ_HEADING_RE = ^#{2,3}\s+(R\d+)\b` builds `all_reqs` from the spec; also broadened the
+      reference-finding `REQ_RE` from the R1–R15-capped `\bR(?:1[0-5]|[1-9])\b` to `\bR\d+\b` so
+      references to new requirements (R16/R17/…) are matched. Scan roots (meta/, course/, tools/,
+      .claude/, .github/, README, CLAUDE.md) already broad — unchanged. Can-do set untouched: stays the
+      **closed** `C1–C17+CV` via `CANDO_TAG_RE`.
+- [x] Audited the other checks for hardcoded `R#` ranges: **only `check-traceability` had one**.
+      `check-frontmatter`/`check-coverage` have `range(1, 10)` but those are the **W1–W9 workflow** set
+      (legitimately closed); `check-version-refs` et al. validate `{{vd:key}}` tokens, not requirement
+      IDs. No other change.
+- [x] Verified discovery yields **R1–R17 (17)** and R16 + R17 are now **referenced** (found in `meta/`
+      + the enforcement tools) — they no longer appear in the unreferenced list; only the pre-existing
+      `R8` PEND remains. `make check` green (exit 0); `--strict` still hard-fails only on `R8` (unchanged
+      — no regression).
 
 ### 8.8 Maintainer-guide playbook  [R13.AC3; §12.9]
 - [ ] `course/maintainer-guide.md` — new **"Adding a post-v1 enhancement"** subsection codifying the

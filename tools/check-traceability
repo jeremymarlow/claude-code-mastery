@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 """check-traceability (R13.AC5): the two-way traceability the spec promises.
 
-  A. Every requirement R1–R15 is referenced by >= 1 course artifact (meta/, course/, tools/,
-     .claude/, .github/ — i.e. the built course, not the spec that defines the requirements).
+  A. Every requirement (discovered from the `### Rn` headings in requirements.md — no hardcoded
+     range, R13.AC5) is referenced by >= 1 course artifact (meta/, course/, tools/, .claude/,
+     .github/ — i.e. the built course, not the spec that defines the requirements).
   B. Every can-do (C1–C17 + CV) traces to >= 1 LAB and >= 1 capstone-rubric dimension.
 
 Parts B (and any not-yet-referenced requirement) depend on content authored in P5/P6. This check
@@ -23,8 +24,13 @@ from _common import (  # noqa: E402
     COURSE, META, ROOT, Reporter, iter_text_files, load_yaml, parse_frontmatter, unit_files,
 )
 
-REQ_RE = re.compile(r"\bR(?:1[0-5]|[1-9])\b")
+# Find a reference to any requirement id (Rn) in an artifact — not capped at R15, so a newly
+# added requirement (R16, R17, …) is matched too.
+REQ_RE = re.compile(r"\bR\d+\b")
 CANDO_TAG_RE = re.compile(r"\b(C(?:1[0-7]|[1-9])|CV)\b")
+# The canonical requirement set is the `### Rn — …` headings in requirements.md (the single source
+# of truth) — discovered dynamically (R13.AC5) so adding a requirement needs no edit here.
+REQ_HEADING_RE = re.compile(r"(?m)^#{2,3}\s+(R\d+)\b")
 
 
 def main(argv):
@@ -44,12 +50,13 @@ def main(argv):
                 referenced |= set(REQ_RE.findall(path.read_text(encoding="utf-8")))
             except (UnicodeDecodeError, IsADirectoryError):
                 continue
-    all_reqs = {f"R{i}" for i in range(1, 16)}
+    req_md = (ROOT / "specs" / "claude-code-mastery" / "requirements.md").read_text(encoding="utf-8")
+    all_reqs = set(REQ_HEADING_RE.findall(req_md))
     missing_reqs = sorted(all_reqs - referenced, key=lambda r: int(r[1:]))
     if missing_reqs:
         rep.pending(f"requirements not yet referenced by a course artifact: {missing_reqs}")
     else:
-        rep.ok("every requirement R1–R15 is referenced by a course artifact")
+        rep.ok(f"all {len(all_reqs)} discovered requirements are referenced by a course artifact")
 
     # B. can-do -> lab and can-do -> rubric dimension
     lab_cands = set()

@@ -39,17 +39,21 @@ Until 8.7, R16/R17 are invisible to the current hardcoded `R1–R15` check (harm
 - [x] Refactor `check-version-drift` onto the shared parser (no behaviour change; its command-list diff
       still works — verified "command list unchanged vs snapshot (11 commands)"). `make check` green.
 
-### 8.2 Generator + machine artifact  [R16.AC1/AC3/AC4/AC6; §12.1–12.4]
-- [ ] `meta/cli-reference.schema.json` — JSON Schema for the artifact (root command tree +
-      `supplement_sections`; **`source` + `provenance` required on every entry**).
-- [ ] `meta/cli-reference-supplement.yaml` — authored doc-only surface (in-REPL slash commands, output
-      styles, …), grouped into titled sections, **each entry/section `provenance: <doc URL> (retrieved
-      <date>)`**. Seed from official docs (WebFetch); mark anything not docs-confirmable `unverified`
-      (R12.AC3 — nothing from memory).
-- [ ] `tools/render-cli-reference --generate` — recursive introspection ∪ supplement →
+### 8.2 Generator + machine artifact  [R16.AC1/AC3/AC4/AC6; §12.1–12.4]  ✅
+- [x] `meta/cli-reference.schema.json` — JSON Schema for the artifact (root command tree +
+      `supplement_sections`; **`source` + `provenance` required on every entry** — command, flag,
+      argument, and supplement entry; recursive `command` def via `$ref`).
+- [x] `meta/cli-reference-supplement.yaml` — authored doc-only surface (in-REPL slash commands, output
+      styles), grouped into titled sections, **section `provenance: <doc URL> (retrieved <date>)`**
+      inherited onto entries. Seeded from official docs (WebFetch of `code.claude.com/docs/en/commands`
+      + `/output-styles`, retrieved 2026-05-31); excludes `/vim`/`/pr-comments` (removed before the
+      installed CLI). Nothing from memory (R12.AC3).
+- [x] `tools/render-cli-reference --generate` — recursive introspection ∪ supplement →
       `meta/cli-reference.json`. **Byte-stable** emission (`json.dumps(indent=2, ensure_ascii=False,
       sort_keys=True)`, list order preserved, **no generated-date**); `cli_version` from `claude --version`.
-- [ ] Run it against installed **2.1.158**; commit the first `meta/cli-reference.json`; validate vs schema.
+- [x] Generated against installed **2.1.159** (CLI drifted 2.1.158→2.1.159; generated against the real
+      installed CLI per R12.AC3). 43 commands + 97 supplement entries; **byte-stable** (identical on
+      regenerate); validates vs schema; provenance present on every entry. _Commit pending review._
 
 ### 8.3 Human render  [R16.AC2; §12.5]
 - [ ] `tools/render-cli-reference --render` — `cli-reference.json` → `course/reference/cli-reference.md`:

@@ -1,0 +1,109 @@
+#!/usr/bin/env python3
+"""render-cli-reference: build and render the exhaustive, version-resilient CLI reference (R16).
+
+One tool, explicit modes, so the EXPENSIVE recursive `claude --help` introspection is isolated
+from the pure/offline render and never duplicated (design §12.1):
+
+  --generate   Introspect `claude --help` recursively ∪ the authored supplement ->
+               meta/cli-reference.json (the authoritative machine artifact). Needs the CLI.
+  --render     (P8 8.3) Read the json -> course/reference/cli-reference.md. Offline.
+  --all        (P8 8.3) --generate then --render.
+  --check      (P8 8.4, default) Offline freshness/validity gate for `make check`.
+
+This slice (P8 8.2) implements --generate. The machine artifact is BYTE-STABLE: it carries
+`cli_version` but no generated-date (that lives in meta/version-record.md), and emits with sorted
+keys + preserved list order, so the same CLI + same supplement produce identical bytes — which is
+what makes the later regenerate-and-diff freshness check meaningful (R16.AC6).
+"""
+import json
+import os
+import sys
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from _common import (  # noqa: E402
+    META, Reporter, cli_version, introspect_cli, load_yaml,
+)
+
+REF_JSON = META / "cli-reference.json"
+SUPPLEMENT = META / "cli-reference-supplement.yaml"
+SCHEMA = META / "cli-reference.schema.json"
+
+SCHEMA_VERSION = 1
+
+
+def build_supplement_sections():
+    """Load the authored supplement, stamping `source: supplement` and inheriting each section's
+    provenance onto entries that don't carry their own (R16.AC3/AC4)."""
+    data = load_yaml(SUPPLEMENT) or {}
+    sections = []
+    for sec in data.get("sections", []):
+        prov = sec["provenance"]
+        entries = []
+        for e in sec.get("entries", []):
+            entry = {
+                "name": e["name"],
+                "description": e.get("description", ""),
+                "source": "supplement",
+                "provenance": e.get("provenance", prov),
+            }
+            if e.get("unverified"):
+                entry["unverified"] = True
+            entries.append(entry)
+        section = {"title": sec["title"], "provenance": prov, "entries": entries}
+        if sec.get("note"):
+            section["note"] = sec["note"]
+        sections.append(section)
+    return sections
+
+
+def build_reference():
+    """Assemble the full machine artifact (introspected CLI tree ∪ authored supplement)."""
+    version = cli_version()
+    if not version:
+        raise SystemExit("render-cli-reference: could not read `claude --version`")
+    return {
+        "schema_version": SCHEMA_VERSION,
+        "cli_version": version,
+        "root": introspect_cli(),
+        "supplement_sections": build_supplement_sections(),
+    }
+
+
+def emit(obj):
+    """Byte-stable JSON: sorted keys, preserved list order, no generated-date (R16.AC6)."""
+    return json.dumps(obj, indent=2, ensure_ascii=False, sort_keys=True) + "\n"
+
+
+def validate(obj):
+    """Validate the artifact against the committed JSON Schema (raises on failure)."""
+    import jsonschema  # local import: only --generate/--check need it
+    jsonschema.validate(obj, json.loads(SCHEMA.read_text(encoding="utf-8")))
+
+
+def generate(rep):
+    ref = build_reference()
+    validate(ref)
+    REF_JSON.write_text(emit(ref), encoding="utf-8")
+    n_cmds = _count_commands(ref["root"])
+    n_supp = sum(len(s["entries"]) for s in ref["supplement_sections"])
+    rep.ok(f"generated {REF_JSON.relative_to(META.parent)} @ CLI {ref['cli_version']} "
+           f"({n_cmds} command(s), {n_supp} supplement entr(ies))")
+
+
+def _count_commands(node):
+    return 1 + sum(_count_commands(c) for c in node["commands"])
+
+
+def main(argv):
+    rep = Reporter("render-cli-reference")
+    if "--generate" in argv:
+        generate(rep)
+        return rep.done()
+    sys.stderr.write(
+        "render-cli-reference: only --generate is implemented in this slice "
+        "(--render/--all/--check land in P8 8.3/8.4)\n")
+    return 2
+
+
+if __name__ == "__main__":
+    raise SystemExit(main(sys.argv[1:]))

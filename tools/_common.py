@@ -295,8 +295,9 @@ def _introspect(path, listing_desc, max_depth, timeout, depth):
     node["usage"] = parsed["usage"]
     if parsed["description"]:
         node["description"] = parsed["description"]
-    node["arguments"] = parsed["arguments"]
-    node["flags"] = [dict(f, source="cli-help", provenance=provenance) for f in parsed["flags"]]
+    stamp = {"source": "cli-help", "provenance": provenance}
+    node["arguments"] = [dict(a, **stamp) for a in parsed["arguments"]]
+    node["flags"] = [dict(f, **stamp) for f in parsed["flags"]]
     for cmd in parsed["commands"]:
         if cmd["name"] == "help":
             continue  # the `help` pseudo-command carries no new surface

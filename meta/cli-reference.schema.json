@@ -1,0 +1,115 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://claude-code-mastery/meta/cli-reference.schema.json",
+  "title": "CLI reference (generated)",
+  "description": "Schema for meta/cli-reference.json — the generated, authoritative CLI-surface artifact (R16). Source of truth: design.md §12. Written by `tools/render-cli-reference --generate` (recursive `claude --help` introspection ∪ meta/cli-reference-supplement.yaml); validated and freshness-checked by `tools/render-cli-reference --check` (R16.AC6). Every entry carries source + provenance so nothing is traceable to model memory (R12.AC3).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "cli_version", "root", "supplement_sections"],
+  "properties": {
+    "schema_version": {
+      "type": "integer",
+      "const": 1
+    },
+    "cli_version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$",
+      "description": "Installed `claude --version` at generation time. Carries no generated-date — that lives in meta/version-record.md — so the artifact is byte-stable per CLI version (R16.AC6)."
+    },
+    "root": {
+      "$ref": "#/$defs/command",
+      "description": "The `claude` root command and its recursively-introspected subcommand tree."
+    },
+    "supplement_sections": {
+      "type": "array",
+      "description": "Hand-authored doc-only surface `claude --help` cannot see (in-REPL slash commands, output styles); from meta/cli-reference-supplement.yaml (R16.AC4).",
+      "items": {"$ref": "#/$defs/supplementSection"}
+    }
+  },
+  "$defs": {
+    "command": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "path", "usage", "description", "source", "provenance", "flags", "arguments", "commands"],
+      "properties": {
+        "name": {"type": "string", "minLength": 1},
+        "path": {
+          "type": "array",
+          "items": {"type": "string"},
+          "description": "Command path from the root (e.g. ['mcp','add']); [] for the root."
+        },
+        "usage": {"type": "string"},
+        "description": {"type": "string"},
+        "source": {"type": "string", "const": "cli-help"},
+        "provenance": {
+          "type": "string",
+          "minLength": 1,
+          "description": "The exact command introspected (e.g. 'claude mcp add --help')."
+        },
+        "flags": {"type": "array", "items": {"$ref": "#/$defs/flag"}},
+        "arguments": {"type": "array", "items": {"$ref": "#/$defs/argument"}},
+        "commands": {"type": "array", "items": {"$ref": "#/$defs/command"}}
+      }
+    },
+    "flag": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["names", "arg", "description", "choices", "default", "source", "provenance"],
+      "properties": {
+        "names": {
+          "type": "array",
+          "minItems": 1,
+          "items": {"type": "string"},
+          "description": "All spellings of the flag (e.g. ['-p','--print'])."
+        },
+        "arg": {"type": ["string", "null"], "description": "The value placeholder (e.g. '<level>'), or null for a boolean flag."},
+        "description": {"type": "string"},
+        "choices": {"type": ["array", "null"], "items": {"type": "string"}},
+        "default": {"type": ["string", "null"]},
+        "source": {"type": "string", "const": "cli-help"},
+        "provenance": {"type": "string", "minLength": 1}
+      }
+    },
+    "argument": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "description", "source", "provenance"],
+      "properties": {
+        "name": {"type": "string", "minLength": 1},
+        "description": {"type": "string"},
+        "source": {"type": "string", "const": "cli-help"},
+        "provenance": {"type": "string", "minLength": 1}
+      }
+    },
+    "supplementSection": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["title", "provenance", "entries"],
+      "properties": {
+        "title": {"type": "string", "minLength": 1},
+        "provenance": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Doc URL + retrieval date for the section (R16.AC3); entries inherit it unless they set their own."
+        },
+        "note": {"type": "string", "description": "Optional context for the section (e.g. how the surface is configured)."},
+        "entries": {"type": "array", "items": {"$ref": "#/$defs/supplementEntry"}}
+      }
+    },
+    "supplementEntry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "description", "source", "provenance"],
+      "properties": {
+        "name": {"type": "string", "minLength": 1},
+        "description": {"type": "string"},
+        "source": {"type": "string", "const": "supplement"},
+        "provenance": {"type": "string", "minLength": 1},
+        "unverified": {
+          "type": "boolean",
+          "description": "true => not confirmable from the cited doc; rendered with an explicit marker (R12.AC3)."
+        }
+      }
+    }
+  }
+}

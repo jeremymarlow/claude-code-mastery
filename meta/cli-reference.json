@@ -1,0 +1,3196 @@
+{
+  "cli_version": "2.1.159",
+  "root": {
+    "arguments": [
+      {
+        "description": "Your prompt",
+        "name": "prompt",
+        "provenance": "claude --help",
+        "source": "cli-help"
+      }
+    ],
+    "commands": [
+      {
+        "arguments": [],
+        "commands": [],
+        "description": "Manage background agents",
+        "flags": [
+          {
+            "arg": "<directory>",
+            "choices": null,
+            "default": null,
+            "description": "Additional directory to allow tool access to in dispatched sessions (repeatable)",
+            "names": [
+              "--add-dir"
+            ],
+            "provenance": "claude agents --help",
+            "source": "cli-help"
+          },
+          {
+            "arg": "<agent>",
+            "choices": null,
+            "default": null,
+            "description": "Default agent for sessions dispatched from agent view. Overrides the 'agent' setting.",
+            "names": [
+              "--agent"
+            ],
+            "provenance": "claude agents --help",
+            "source": "cli-help"
+          },
+          {
+            "arg": null,
+            "choices": null,
+            "default": null,
+            "description": "Make bypass-permissions mode available to dispatched sessions without defaulting to it",
+            "names": [
+              "--allow-dangerously-skip-permissions"
+            ],
+            "provenance": "claude agents --help",
+            "source": "cli-help"
+          },
+          {
+            "arg": "<path>",
+            "choices": null,
+            "default": null,
+            "description": "Show only background sessions started under <path>",
+            "names": [
+              "--cwd"
+            ],
+            "provenance": "claude agents --help",
+            "source": "cli-help"
+          },
+          {
+            "arg": null,
+            "choices": null,
+            "default": null,
+            "description": "Alias for --permission-mode bypassPermissions",
+            "names": [
+              "--dangerously-skip-permissions"
+            ],
+            "provenance": "claude agents --help",
+            "source": "cli-help"
+          },
+          {
+            "arg": "<level>",
+            "choices": null,
+            "default": null,
+            "description": "Default effort level for sessions dispatched from agent view",
+            "names": [
+              "--effort"
+            ],
+            "provenance": "claude agents --help",
+            "source": "cli-help"
+          },
+          {
+            "arg": null,
+            "choices": null,
+            "default": null,
+            "description": "Display help for command",
+            "names": [
+              "-h",
+              "--help"
+            ],
+            "provenance": "claude agents --help",
+            "source": "cli-help"
+          },
+          {
+            "arg": null,
+            "choices": null,
+            "default": null,
+            "description": "Print live sessions as a JSON array and exit (for scripting; does not require a TTY)",
+            "names": [
+              "--json"
+            ],
+            "provenance": "claude agents --help",
+            "source": "cli-help"
+          },
+          {
+            "arg": "<config>",
+            "choices": null,
+            "default": null,
+            "description": "MCP server configuration to apply to dispatched sessions (repeatable)",
+            "names": [
+              "--mcp-config"
+            ],
+            "provenance": "claude agents --help",
+            "source": "cli-help"
+          },
+          {
+            "arg": "<model>",
+            "choices": null,
+            "default": null,
+            "description": "Default model for sessions dispatched from agent view",
+            "names": [
+              "--model"
+            ],
+            "provenance": "claude agents --help",
+            "source": "cli-help"
+          },
+          {
+            "arg": "<mode>",
+            "choices": null,
+            "default": null,
+            "description": "Default permission mode for sessions dispatched from agent view",
+            "names": [
+              "--permission-mode"
+            ],
+            "provenance": "claude agents --help",
+            "source": "cli-help"
+          },
+          {
+            "arg": "<path>",
+            "choices": null,
+            "default": null,
+            "description": "Load plugins from specified directory for the agent view and dispatched sessions (repeatable)",
+            "names": [
+              "--plugin-dir"
+            ],
+            "provenance": "claude agents --help",
+            "source": "cli-help"
+          },
+          {
+            "arg": "<sources>",
+            "choices": null,
+            "default": null,
+            "description": "Comma-separated list of setting sources to load (user, project, local).",
+            "names": [
+              "--setting-sources"
+            ],
+            "provenance": "claude agents --help",
+            "source": "cli-help"
+          },
+          {
+            "arg": "<file-or-json>",
+            "choices": null,
+            "default": null,
+            "description": "Settings file or JSON string to apply to the agent view and dispatched sessions",
+            "names": [
+              "--settings"
+            ],
+            "provenance": "claude agents --help",
+            "source": "cli-help"
+          },
+          {
+            "arg": null,
+            "choices": null,
+            "default": null,
+            "description": "Only use MCP servers from --mcp-config in dispatched sessions",
+            "names": [
+              "--strict-mcp-config"
+            ],
+            "provenance": "claude agents --help",
+            "source": "cli-help"
+          }
+        ],
+        "name": "agents",
+        "path": [
+          "agents"
+        ],
+        "provenance": "claude agents --help",
+        "source": "cli-help",
+        "usage": "claude agents [options]"
+      },
+      {
+        "arguments": [],
+        "commands": [
+          {
+            "arguments": [],
+            "commands": [],
+            "description": "Sign in to your Anthropic account",
+            "flags": [
+              {
+                "arg": null,
+                "choices": null,
+                "default": null,
+                "description": "Use Claude subscription (default)",
+                "names": [
+                  "--claudeai"
+                ],
+                "provenance": "claude auth login --help",
+                "source": "cli-help"
+              },
+              {
+                "arg": null,
+                "choices": null,
+                "default": null,
+                "description": "Use Anthropic Console (API usage billing) instead of Claude subscription",
+                "names": [
+                  "--console"
+                ],
+                "provenance": "claude auth login --help",
+                "source": "cli-help"
+              },
+              {
+                "arg": "<email>",
+                "choices": null,
+                "default": null,
+                "description": "Pre-populate email address on the login page",
+                "names": [
+                  "--email"
+                ],
+                "provenance": "claude auth login --help",
+                "source": "cli-help"
+              },
+              {
+                "arg": null,
+                "choices": null,
+                "default": null,
+                "description": "Display help for command",
+                "names": [
+                  "-h",
+                  "--help"
+                ],
+                "provenance": "claude auth login --help",
+                "source": "cli-help"
+              },
+              {
+                "arg": null,
+                "choices": null,
+                "default": null,
+                "description": "Force SSO login flow",
+                "names": [
+                  "--sso"
+                ],
+                "provenance": "claude auth login --help",
+                "source": "cli-help"
+              }
+            ],
+            "name": "login",
+            "path": [
+              "auth",
+              "login"
+            ],
+            "provenance": "claude auth login --help",
+            "source": "cli-help",
+            "usage": "claude auth login [options]"
+          },
+          {
+            "arguments": [],
+            "commands": [],
+            "description": "Log out from your Anthropic account",
+            "flags": [
+              {
+                "arg": null,
+                "choices": null,
+                "default": null,
+                "description": "Display help for command",
+                "names": [
+                  "-h",
+                  "--help"
+                ],
+                "provenance": "claude auth logout --help",
+                "source": "cli-help"
+              }
+            ],
+            "name": "logout",
+            "path": [
+              "auth",
+              "logout"
+            ],
+            "provenance": "claude auth logout --help",
+            "source": "cli-help",
+            "usage": "claude auth logout [options]"
+          },
+          {
+            "arguments": [],
+            "commands": [],
+            "description": "Show authentication status",
+            "flags": [
+              {
+                "arg": null,
+                "choices": null,
+                "default": null,
+                "description": "Display help for command",
+                "names": [
+                  "-h",
+                  "--help"
+                ],
+                "provenance": "claude auth status --help",
+                "source": "cli-help"
+              },
+              {
+                "arg": null,
+                "choices": null,
+                "default": null,
+                "description": "Output as JSON (default)",
+                "names": [
+                  "--json"
+                ],
+                "provenance": "claude auth status --help",
+                "source": "cli-help"
+              },
+              {
+                "arg": null,
+                "choices": null,
+                "default": null,
+                "description": "Output as human-readable text",
+                "names": [
+                  "--text"
+                ],
+                "provenance": "claude auth status --help",
+                "source": "cli-help"
+              }
+            ],
+            "name": "status",
+            "path": [
+              "auth",
+              "status"
+            ],
+            "provenance": "claude auth status --help",
+            "source": "cli-help",
+            "usage": "claude auth status [options]"
+          }
+        ],
+        "description": "Manage authentication",
+        "flags": [
+          {
+            "arg": null,
+            "choices": null,
+            "default": null,
+            "description": "Display help for command",
+            "names": [
+              "-h",
+              "--help"
+            ],
+            "provenance": "claude auth --help",
+            "source": "cli-help"
+          }
+        ],
+        "name": "auth",
+        "path": [
+          "auth"
+        ],
+        "provenance": "claude auth --help",
+        "source": "cli-help",
+        "usage": "claude auth [options] [command]"
+      },
+      {
+        "arguments": [],
+        "commands": [
+          {
+            "arguments": [],
+            "commands": [],
+            "description": "Print the effective auto mode config as JSON: your settings where set, defaults otherwise",
+            "flags": [
+              {
+                "arg": null,
+                "choices": null,
+                "default": null,
+                "description": "Display help for command",
+                "names": [
+                  "-h",
+                  "--help"
+                ],
+                "provenance": "claude auto-mode config --help",
+                "source": "cli-help"
+              }
+            ],
+            "name": "config",
+            "path": [
+              "auto-mode",
+              "config"
+            ],
+            "provenance": "claude auto-mode config --help",
+            "source": "cli-help",
+            "usage": "claude auto-mode config [options]"
+          },
+          {
+            "arguments": [],
+            "commands": [],
+            "description": "Get AI feedback on your custom auto mode rules",
+            "flags": [
+              {
+                "arg": null,
+                "choices": null,
+                "default": null,
+                "description": "Display help for command",
+                "names": [
+                  "-h",
+                  "--help"
+                ],
+                "provenance": "claude auto-mode critique --help",
+                "source": "cli-help"
+              },
+              {
+                "arg": "<model>",
+                "choices": null,
+                "default": null,
+                "description": "Override which model is used",
+                "names": [
+                  "--model"
+                ],
+                "provenance": "claude auto-mode critique --help",
+                "source": "cli-help"
+              }
+            ],
+            "name": "critique",
+            "path": [
+              "auto-mode",
+              "critique"
+            ],
+            "provenance": "claude auto-mode critique --help",
+            "source": "cli-help",
+            "usage": "claude auto-mode critique [options]"
+          },
+          {
+            "arguments": [],
+            "commands": [],
+            "description": "Print the default auto mode environment, allow, soft_deny, and hard_deny rules as JSON",
+            "flags": [
+              {
+                "arg": null,
+                "choices": null,
+                "default": null,
+                "description": "Display help for command",
+                "names": [
+                  "-h",
+                  "--help"
+                ],
+                "provenance": "claude auto-mode defaults --help",
+                "source": "cli-help"
+              }
+            ],
+            "name": "defaults",
+            "path": [
+              "auto-mode",
+              "defaults"
+            ],
+            "provenance": "claude auto-mode defaults --help",
+            "source": "cli-help",
+            "usage": "claude auto-mode defaults [options]"
+          }
+        ],
+        "description": "Inspect auto mode classifier configuration",
+        "flags": [
+          {
+            "arg": null,
+            "choices": null,
+            "default": null,
+            "description": "Display help for command",
+            "names": [
+              "-h",
+              "--help"
+            ],
+            "provenance": "claude auto-mode --help",
+            "source": "cli-help"
+          }
+        ],
+        "name": "auto-mode",
+        "path": [
+          "auto-mode"
+        ],
+        "provenance": "claude auto-mode --help",
+        "source": "cli-help",
+        "usage": "claude auto-mode [options] [command]"
+      },
+      {
+        "arguments": [],
+        "commands": [],
+        "description": "Check the health of your Claude Code auto-updater. Note: The workspace trust dialog is skipped and stdio servers from .mcp.json are spawned for health checks. Only use this command in directories you trust.",
+        "flags": [
+          {
+            "arg": null,
+            "choices": null,
+            "default": null,
+            "description": "Display help for command",
+            "names": [
+              "-h",
+              "--help"
+            ],
+            "provenance": "claude doctor --help",
+            "source": "cli-help"
+          }
+        ],
+        "name": "doctor",
+        "path": [
+          "doctor"
+        ],
+        "provenance": "claude doctor --help",
+        "source": "cli-help",
+        "usage": "claude doctor [options]"
+      },
+      {
+        "arguments": [],
+        "commands": [],
+        "description": "Install Claude Code native build. Use [target] to specify version (stable, latest, or specific version)",
+        "flags": [
+          {
+            "arg": null,
+            "choices": null,
+            "default": null,
+            "description": "Force installation even if already installed",
+            "names": [
+              "--force"
+            ],
+            "provenance": "claude install --help",
+            "source": "cli-help"
+          },
+          {
+            "arg": null,
+            "choices": null,
+            "default": null,
+            "description": "Display help for command",
+            "names": [
+              "-h",
+              "--help"
+            ],
+            "provenance": "claude install --help",
+            "source": "cli-help"
+          }
+        ],
+        "name": "install",
+        "path": [
+          "install"
+        ],
+        "provenance": "claude install --help",
+        "source": "cli-help",
+        "usage": "claude install [options] [target]"
+      },
+      {
+        "arguments": [],
+        "commands": [
+          {
+            "arguments": [],
+            "commands": [],
+            "description": "Add an MCP server to Claude Code. Examples: # Add HTTP server: claude mcp add --transport http sentry https://mcp.sentry.dev/mcp # Add HTTP server with headers: claude mcp add --transport http corridor https://app.corridor.dev/api/mcp --header \"Authorization: Bearer ...\" # Add stdio server with environment variables: claude mcp add my-server -e API_KEY=xxx -- npx my-mcp-server # Add stdio server with subprocess flags: claude mcp add my-server -- my-command --some-flag arg1",
+            "flags": [
+              {
+                "arg": "<port>",
+                "choices": null,
+                "default": null,
+                "description": "Fixed port for OAuth callback (for servers requiring pre-registered redirect URIs)",
+                "names": [
+                  "--callback-port"
+                ],
+                "provenance": "claude mcp add --help",
+                "source": "cli-help"
+              },
+              {
+                "arg": "<clientId>",
+                "choices": null,
+                "default": null,
+                "description": "OAuth client ID for HTTP/SSE servers",
+                "names": [
+                  "--client-id"
+                ],
+                "provenance": "claude mcp add --help",
+                "source": "cli-help"
+              },
+              {
+                "arg": null,
+                "choices": null,
+                "default": null,
+                "description": "Prompt for OAuth client secret (or set MCP_CLIENT_SECRET env var)",
+                "names": [
+                  "--client-secret"
+                ],
+                "provenance": "claude mcp add --help",
+                "source": "cli-help"
+              },
+              {
+                "arg": "<env...>",
+                "choices": null,
+                "default": null,
+                "description": "Set environment variables (e.g. -e KEY=value)",
+                "names": [
+                  "-e",
+                  "--env"
+                ],
+                "provenance": "claude mcp add --help",
+                "source": "cli-help"
+              },
+              {
+                "arg": "<header...>",
+                "choices": null,
+                "default": null,
+                "description": "Set WebSocket headers (e.g. -H \"X-Api-Key: abc123\" -H \"X-Custom: value\")",
+                "names": [
+                  "-H",
+                  "--header"
+                ],
+                "provenance": "claude mcp add --help",
+                "source": "cli-help"
+              },
+              {
+                "arg": null,
+                "choices": null,
+                "default": null,
+                "description": "Display help for command",
+                "names": [
+                  "-h",
+                  "--help"
+                ],
+                "provenance": "claude mcp add --help",
+                "source": "cli-help"
+              },
+              {
+                "arg": "<scope>",
+                "choices": null,
+                "default": "\"local\"",
+                "description": "Configuration scope (local, user, or project)",
+                "names": [
+                  "-s",
+                  "--scope"
+                ],
+                "provenance": "claude mcp add --help",
+                "source": "cli-help"
+              },
+              {
+                "arg": "<transport>",
+                "choices": null,
+                "default": null,
+                "description": "Transport type (stdio, sse, http). Defaults to stdio if not specified.",
+                "names": [
+                  "-t",
+                  "--transport"
+                ],
+                "provenance": "claude mcp add --help",
+                "source": "cli-help"
+              }
+            ],
+            "name": "add",
+            "path": [
+              "mcp",
+              "add"
+            ],
+            "provenance": "claude mcp add --help",
+            "source": "cli-help",
+            "usage": "claude mcp add [options] <name> <commandOrUrl> [args...]"
+          },
+          {
+            "arguments": [],
+            "commands": [],
+            "description": "Import MCP servers from Claude Desktop (Mac and WSL only)",
+            "flags": [
+              {
+                "arg": null,
+                "choices": null,
+                "default": null,
+                "description": "Display help for command",
+                "names": [
+                  "-h",
+                  "--help"
+                ],
+                "provenance": "claude mcp add-from-claude-desktop --help",
+                "source": "cli-help"
+              },
+              {
+                "arg": "<scope>",
+                "choices": null,
+                "default": "\"local\"",
+                "description": "Configuration scope (local, user, or project)",
+                "names": [
+                  "-s",
+                  "--scope"
+                ],
+                "provenance": "claude mcp add-from-claude-desktop --help",
+                "source": "cli-help"
+              }
+            ],
+            "name": "add-from-claude-desktop",
+            "path": [
+              "mcp",
+              "add-from-claude-desktop"
+            ],
+            "provenance": "claude mcp add-from-claude-desktop --help",
+            "source": "cli-help",
+            "usage": "claude mcp add-from-claude-desktop [options]"
+          },
+          {
+            "arguments": [],
+            "commands": [],
+            "description": "Add an MCP server (stdio or SSE) with a JSON string",
+            "flags": [
+              {
+                "arg": null,
+                "choices": null,
+                "default": null,
+                "description": "Prompt for OAuth client secret (or set MCP_CLIENT_SECRET env var)",
+                "names": [
+                  "--client-secret"
+                ],
+                "provenance": "claude mcp add-json --help",
+                "source": "cli-help"
+              },
+              {
+                "arg": null,
+                "choices": null,
+                "default": null,
+                "description": "Display help for command",
+                "names": [
+                  "-h",
+                  "--help"
+                ],
+                "provenance": "claude mcp add-json --help",
+                "source": "cli-help"
+              },
+              {
+                "arg": "<scope>",
+                "choices": null,
+                "default": "\"local\"",
+                "description": "Configuration scope (local, user, or project)",
+                "names": [
+                  "-s",
+                  "--scope"
+                ],
+                "provenance": "claude mcp add-json --help",
+                "source": "cli-help"
+              }
+            ],
+            "name": "add-json",
+            "path": [
+              "mcp",
+              "add-json"
+            ],
+            "provenance": "claude mcp add-json --help",
+            "source": "cli-help",
+            "usage": "claude mcp add-json [options] <name> <json>"
+          },
+          {
+            "arguments": [],
+            "commands": [],
+            "description": "Get details about an MCP server. Unapproved .mcp.json servers are shown as ⏸ Pending approval and not connected to; approved servers are health-checked.",
+            "flags": [
+              {
+                "arg": null,
+                "choices": null,
+                "default": null,
+                "description": "Display help for command",
+                "names": [
+                  "-h",
+                  "--help"
+                ],
+                "provenance": "claude mcp get --help",
+                "source": "cli-help"
+              }
+            ],
+            "name": "get",
+            "path": [
+              "mcp",
+              "get"
+            ],
+            "provenance": "claude mcp get --help",
+            "source": "cli-help",
+            "usage": "claude mcp get [options] <name>"
+          },
+          {
+            "arguments": [],
+            "commands": [],
+            "description": "List configured MCP servers. Unapproved .mcp.json servers are shown as ⏸ Pending approval and not connected to; approved servers are health-checked.",
+            "flags": [
+              {
+                "arg": null,
+                "choices": null,
+                "default": null,
+                "description": "Display help for command",
+                "names": [
+                  "-h",
+                  "--help"
+                ],
+                "provenance": "claude mcp list --help",
+                "source": "cli-help"
+              }
+            ],
+            "name": "list",
+            "path": [
+              "mcp",
+              "list"
+            ],
+            "provenance": "claude mcp list --help",
+            "source": "cli-help",
+            "usage": "claude mcp list [options]"
+          },
+          {
+            "arguments": [],
+            "commands": [],
+            "description": "Remove an MCP server",
+            "flags": [
+              {
+                "arg": null,
+                "choices": null,
+                "default": null,
+                "description": "Display help for command",
+                "names": [
+                  "-h",
+                  "--help"
+                ],
+                "provenance": "claude mcp remove --help",
+                "source": "cli-help"
+              },
+              {
+                "arg": "<scope>",
+                "choices": null,
+                "default": null,
+                "description": "Configuration scope (local, user, or project) - if not specified, removes from whichever scope it exists in",
+                "names": [
+                  "-s",
+                  "--scope"
+                ],
+                "provenance": "claude mcp remove --help",
+                "source": "cli-help"
+              }
+            ],
+            "name": "remove",
+            "path": [
+              "mcp",
+              "remove"
+            ],
+            "provenance": "claude mcp remove --help",
+            "source": "cli-help",
+            "usage": "claude mcp remove [options] <name>"
+          },
+          {
+            "arguments": [],
+            "commands": [],
+            "description": "Reset all approved and rejected project-scoped (.mcp.json) servers within this project",
+            "flags": [
+              {
+                "arg": null,
+                "choices": null,
+                "default": null,
+                "description": "Display help for command",
+                "names": [
+                  "-h",
+                  "--help"
+                ],
+                "provenance": "claude mcp reset-project-choices --help",
+                "source": "cli-help"
+              }
+            ],
+            "name": "reset-project-choices",
+            "path": [
+              "mcp",
+              "reset-project-choices"
+            ],
+            "provenance": "claude mcp reset-project-choices --help",
+            "source": "cli-help",
+            "usage": "claude mcp reset-project-choices [options]"
+          },
+          {
+            "arguments": [],
+            "commands": [],
+            "description": "Start the Claude Code MCP server",
+            "flags": [
+              {
+                "arg": null,
+                "choices": null,
+                "default": null,
+                "description": "Enable debug mode",
+                "names": [
+                  "-d",
+                  "--debug"
+                ],
+                "provenance": "claude mcp serve --help",
+                "source": "cli-help"
+              },
+              {
+                "arg": null,
+                "choices": null,
+                "default": null,
+                "description": "Display help for command",
+                "names": [
+                  "-h",
+                  "--help"
+                ],
+                "provenance": "claude mcp serve --help",
+                "source": "cli-help"
+              },
+              {
+                "arg": null,
+                "choices": null,
+                "default": null,
+                "description": "Override verbose mode setting from config",
+                "names": [
+                  "--verbose"
+                ],
+                "provenance": "claude mcp serve --help",
+                "source": "cli-help"
+              }
+            ],
+            "name": "serve",
+            "path": [
+              "mcp",
+              "serve"
+            ],
+            "provenance": "claude mcp serve --help",
+            "source": "cli-help",
+            "usage": "claude mcp serve [options]"
+          }
+        ],
+        "description": "Configure and manage MCP servers",
+        "flags": [
+          {
+            "arg": null,
+            "choices": null,
+            "default": null,
+            "description": "Display help for command",
+            "names": [
+              "-h",
+              "--help"
+            ],
+            "provenance": "claude mcp --help",
+            "source": "cli-help"
+          }
+        ],
+        "name": "mcp",
+        "path": [
+          "mcp"
+        ],
+        "provenance": "claude mcp --help",
+        "source": "cli-help",
+        "usage": "claude mcp [options] [command]"
+      },
+      {
+        "arguments": [],
+        "commands": [
+          {
+            "arguments": [],
+            "commands": [],
+            "description": "Show a plugin's component inventory and projected token cost",
+            "flags": [
+              {
+                "arg": null,
+                "choices": null,
+                "default": null,
+                "description": "Display help for command",
+                "names": [
+                  "-h",
+                  "--help"
+                ],
+                "provenance": "claude plugin details --help",
+                "source": "cli-help"
+              }
+            ],
+            "name": "details",
+            "path": [
+              "plugin",
+              "details"
+            ],
+            "provenance": "claude plugin details --help",
+            "source": "cli-help",
+            "usage": "claude plugin details [options] <name>"
+          },
+          {
+            "arguments": [],
+            "commands": [],
+            "description": "Disable an enabled plugin",
+            "flags": [
+              {
+                "arg": null,
+                "choices": null,
+                "default": null,
+                "description": "Disable all enabled plugins",
+                "names": [
+                  "-a",
+                  "--all"
+                ],
+                "provenance": "claude plugin disable --help",
+                "source": "cli-help"
+              },
+              {
+                "arg": null,
+                "choices": null,
+                "default": null,
+                "description": "Display help for command",
+                "names": [
+                  "-h",
+                  "--help"
+                ],
+                "provenance": "claude plugin disable --help",
+                "source": "cli-help"
+              },
+              {
+                "arg": "<scope>",
+                "choices": null,
+                "default": "auto-detect",
+                "description": "Installation scope: user, project, local",
+                "names": [
+                  "-s",
+                  "--scope"
+                ],
+                "provenance": "claude plugin disable --help",
+                "source": "cli-help"
+              }
+            ],
+            "name": "disable",
+            "path": [
+              "plugin",
+              "disable"
+            ],
+            "provenance": "claude plugin disable --help",
+            "source": "cli-help",
+            "usage": "claude plugin disable [options] [plugin]"
+          },
+          {
+            "arguments": [],
+            "commands": [],
+            "description": "Enable a disabled plugin",
+            "flags": [
+              {
+                "arg": null,
+                "choices": null,
+                "default": null,
+                "description": "Display help for command",
+                "names": [
+                  "-h",
+                  "--help"
+                ],
+                "provenance": "claude plugin enable --help",
+                "source": "cli-help"
+              },
+              {
+                "arg": "<scope>",
+                "choices": null,
+                "default": "auto-detect",
+                "description": "Installation scope: user, project, local",
+                "names": [
+                  "-s",
+                  "--scope"
+                ],
+                "provenance": "claude plugin enable --help",
+                "source": "cli-help"
+              }
+            ],
+            "name": "enable",
+            "path": [
+              "plugin",
+              "enable"
+            ],
+            "provenance": "claude plugin enable --help",
+            "source": "cli-help",
+            "usage": "claude plugin enable [options] <plugin>"
+          },
+          {
+            "arguments": [],
+            "commands": [],
+            "description": "Scaffold a new plugin at ~/.claude/skills/<name>/ (auto-loads next session as <name>@skills-dir)",
+            "flags": [
+              {
+                "arg": "<name>",
+                "choices": null,
+                "default": "git config user.name",
+                "description": "Author name",
+                "names": [
+                  "--author"
+                ],
+                "provenance": "claude plugin init --help",
+                "source": "cli-help"
+              },
+              {
+                "arg": "<email>",
+                "choices": null,
+                "default": "git config user.email",
+                "description": "Author email",
+                "names": [
+                  "--author-email"
+                ],
+                "provenance": "claude plugin init --help",
+                "source": "cli-help"
+              },
+              {
+                "arg": "<text>",
+                "choices": null,
+                "default": null,
+                "description": "Manifest description",
+                "names": [
+                  "--description"
+                ],
+                "provenance": "claude plugin init --help",
+                "source": "cli-help"
+              },
+              {
+                "arg": null,
+                "choices": null,
+                "default": null,
+                "description": "Overwrite an existing .claude-plugin/ at the target",
+                "names": [
+                  "-f",
+                  "--force"
+                ],
+                "provenance": "claude plugin init --help",
+                "source": "cli-help"
+              },
+              {
+                "arg": null,
+                "choices": null,
+                "default": null,
+                "description": "Display help for command",
+                "names": [
+                  "-h",
+                  "--help"
+                ],
+                "provenance": "claude plugin init --help",
+                "source": "cli-help"
+              },
+              {
+                "arg": "<components...>",
+                "choices": null,
+                "default": null,
+                "description": "Also scaffold: skills, agents, hooks, mcp, lsp, output-style, channel",
+                "names": [
+                  "--with"
+                ],
+                "provenance": "claude plugin init --help",
+                "source": "cli-help"
+              }
+            ],
+            "name": "init",
+            "path": [
+              "plugin",
+              "init"
+            ],
+            "provenance": "claude plugin init --help",
+            "source": "cli-help",
+            "usage": "claude plugin init|new [options] <name>"
+          },
+          {
+            "arguments": [],
+            "commands": [],
+            "description": "Install a plugin from available marketplaces (use plugin@marketplace for specific marketplace)",
+            "flags": [
+              {
+                "arg": "<key=value>",
+                "choices": null,
+                "default": null,
+                "description": "Set a userConfig option declared in the plugin's manifest (repeatable). Values are validated against the schema and stored via the same path as the interactive /plugin configure flow.",
+                "names": [
+                  "--config"
+                ],
+                "provenance": "claude plugin install --help",
+                "source": "cli-help"
+              },
+              {
+                "arg": null,
+                "choices": null,
+                "default": null,
+                "description": "Display help for command",
+                "names": [
+                  "-h",
+                  "--help"
+                ],
+                "provenance": "claude plugin install --help",
+                "source": "cli-help"
+              },
+              {
+                "arg": "<scope>",
+                "choices": null,
+                "default": "\"user\"",
+                "description": "Installation scope: user, project, or local",
+                "names": [
+                  "-s",
+                  "--scope"
+                ],
+                "provenance": "claude plugin install --help",
+                "source": "cli-help"
+              }
+            ],
+            "name": "install",
+            "path": [
+              "plugin",
+              "install"
+            ],
+            "provenance": "claude plugin install --help",
+            "source": "cli-help",
+            "usage": "claude plugin install|i [options] <plugin>"
+          },
+          {
+            "arguments": [],
+            "commands": [],
+            "description": "List installed plugins",
+            "flags": [
+              {
+                "arg": null,
+                "choices": null,
+                "default": null,
+                "description": "Include available plugins from marketplaces (requires --json)",
+                "names": [
+                  "--available"
+                ],
+                "provenance": "claude plugin list --help",
+                "source": "cli-help"
+              },
+              {
+                "arg": null,
+                "choices": null,
+                "default": null,
+                "description": "Display help for command",
+                "names": [
+                  "-h",
+                  "--help"
+                ],
+                "provenance": "claude plugin list --help",
+                "source": "cli-help"
+              },
+              {
+                "arg": null,
+                "choices": null,
+                "default": null,
+                "description": "Output as JSON",
+                "names": [
+                  "--json"
+                ],
+                "provenance": "claude plugin list --help",
+                "source": "cli-help"
+              }
+            ],
+            "name": "list",
+            "path": [
+              "plugin",
+              "list"
+            ],
+            "provenance": "claude plugin list --help",
+            "source": "cli-help",
+            "usage": "claude plugin list [options]"
+          },
+          {
+            "arguments": [],
+            "commands": [
+              {
+                "arguments": [],
+                "commands": [],
+                "description": "Add a marketplace from a URL, path, or GitHub repo",
+                "flags": [
+                  {
+                    "arg": null,
+                    "choices": null,
+                    "default": null,
+                    "description": "Display help for command",
+                    "names": [
+                      "-h",
+                      "--help"
+                    ],
+                    "provenance": "claude plugin marketplace add --help",
+                    "source": "cli-help"
+                  },
+                  {
+                    "arg": "<scope>",
+                    "choices": null,
+                    "default": null,
+                    "description": "Where to declare the marketplace: user (default), project, or local",
+                    "names": [
+                      "--scope"
+                    ],
+                    "provenance": "claude plugin marketplace add --help",
+                    "source": "cli-help"
+                  },
+                  {
+                    "arg": "<paths...>",
+                    "choices": null,
+                    "default": null,
+                    "description": "Limit checkout to specific directories via git sparse-checkout (for monorepos). Example: --sparse .claude-plugin plugins",
+                    "names": [
+                      "--sparse"
+                    ],
+                    "provenance": "claude plugin marketplace add --help",
+                    "source": "cli-help"
+                  }
+                ],
+                "name": "add",
+                "path": [
+                  "plugin",
+                  "marketplace",
+                  "add"
+                ],
+                "provenance": "claude plugin marketplace add --help",
+                "source": "cli-help",
+                "usage": "claude plugin marketplace add [options] <source>"
+              },
+              {
+                "arguments": [],
+                "commands": [],
+                "description": "List all configured marketplaces",
+                "flags": [
+                  {
+                    "arg": null,
+                    "choices": null,
+                    "default": null,
+                    "description": "Display help for command",
+                    "names": [
+                      "-h",
+                      "--help"
+                    ],
+                    "provenance": "claude plugin marketplace list --help",
+                    "source": "cli-help"
+                  },
+                  {
+                    "arg": null,
+                    "choices": null,
+                    "default": null,
+                    "description": "Output as JSON",
+                    "names": [
+                      "--json"
+                    ],
+                    "provenance": "claude plugin marketplace list --help",
+                    "source": "cli-help"
+                  }
+                ],
+                "name": "list",
+                "path": [
+                  "plugin",
+                  "marketplace",
+                  "list"
+                ],
+                "provenance": "claude plugin marketplace list --help",
+                "source": "cli-help",
+                "usage": "claude plugin marketplace list [options]"
+              },
+              {
+                "arguments": [],
+                "commands": [],
+                "description": "Remove a configured marketplace",
+                "flags": [
+                  {
+                    "arg": null,
+                    "choices": null,
+                    "default": null,
+                    "description": "Display help for command",
+                    "names": [
+                      "-h",
+                      "--help"
+                    ],
+                    "provenance": "claude plugin marketplace remove --help",
+                    "source": "cli-help"
+                  },
+                  {
+                    "arg": "<scope>",
+                    "choices": null,
+                    "default": null,
+                    "description": "Remove the marketplace declaration from a specific settings scope: user, project, or local. Omit to remove it from every scope.",
+                    "names": [
+                      "--scope"
+                    ],
+                    "provenance": "claude plugin marketplace remove --help",
+                    "source": "cli-help"
+                  }
+                ],
+                "name": "remove",
+                "path": [
+                  "plugin",
+                  "marketplace",
+                  "remove"
+                ],
+                "provenance": "claude plugin marketplace remove --help",
+                "source": "cli-help",
+                "usage": "claude plugin marketplace remove|rm [options] <name>"
+              },
+              {
+                "arguments": [],
+                "commands": [],
+                "description": "Update marketplace(s) from their source - updates all if no name specified",
+                "flags": [
+                  {
+                    "arg": null,
+                    "choices": null,
+                    "default": null,
+                    "description": "Display help for command",
+                    "names": [
+                      "-h",
+                      "--help"
+                    ],
+                    "provenance": "claude plugin marketplace update --help",
+                    "source": "cli-help"
+                  }
+                ],
+                "name": "update",
+                "path": [
+                  "plugin",
+                  "marketplace",
+                  "update"
+                ],
+                "provenance": "claude plugin marketplace update --help",
+                "source": "cli-help",
+                "usage": "claude plugin marketplace update [options] [name]"
+              }
+            ],
+            "description": "Manage Claude Code marketplaces",
+            "flags": [
+              {
+                "arg": null,
+                "choices": null,
+                "default": null,
+                "description": "Display help for command",
+                "names": [
+                  "-h",
+                  "--help"
+                ],
+                "provenance": "claude plugin marketplace --help",
+                "source": "cli-help"
+              }
+            ],
+            "name": "marketplace",
+            "path": [
+              "plugin",
+              "marketplace"
+            ],
+            "provenance": "claude plugin marketplace --help",
+            "source": "cli-help",
+            "usage": "claude plugin marketplace [options] [command]"
+          },
+          {
+            "arguments": [],
+            "commands": [],
+            "description": "Remove auto-installed dependencies that are no longer needed",
+            "flags": [
+              {
+                "arg": null,
+                "choices": null,
+                "default": null,
+                "description": "List what would be removed without removing",
+                "names": [
+                  "--dry-run"
+                ],
+                "provenance": "claude plugin prune --help",
+                "source": "cli-help"
+              },
+              {
+                "arg": null,
+                "choices": null,
+                "default": null,
+                "description": "Display help for command",
+                "names": [
+                  "-h",
+                  "--help"
+                ],
+                "provenance": "claude plugin prune --help",
+                "source": "cli-help"
+              },
+              {
+                "arg": "<scope>",
+                "choices": null,
+                "default": "\"user\"",
+                "description": "Prune at scope: user, project, or local",
+                "names": [
+                  "-s",
+                  "--scope"
+                ],
+                "provenance": "claude plugin prune --help",
+                "source": "cli-help"
+              },
+              {
+                "arg": null,
+                "choices": null,
+                "default": null,
+                "description": "Skip the confirmation prompt (required when stdin or stdout is not a TTY)",
+                "names": [
+                  "-y",
+                  "--yes"
+                ],
+                "provenance": "claude plugin prune --help",
+                "source": "cli-help"
+              }
+            ],
+            "name": "prune",
+            "path": [
+              "plugin",
+              "prune"
+            ],
+            "provenance": "claude plugin prune --help",
+            "source": "cli-help",
+            "usage": "claude plugin prune|autoremove [options]"
+          },
+          {
+            "arguments": [],
+            "commands": [],
+            "description": "Create a {name}--v{version} git tag for a plugin release, validating that plugin.json and any enclosing marketplace entry agree",
+            "flags": [
+              {
+                "arg": null,
+                "choices": null,
+                "default": null,
+                "description": "Print what would be tagged without creating it",
+                "names": [
+                  "--dry-run"
+                ],
+                "provenance": "claude plugin tag --help",
+                "source": "cli-help"
+              },
+              {
+                "arg": null,
+                "choices": null,
+                "default": null,
+                "description": "Skip the dirty-working-tree and tag-already-exists checks",
+                "names": [
+                  "-f",
+                  "--force"
+                ],
+                "provenance": "claude plugin tag --help",
+                "source": "cli-help"
+              },
+              {
+                "arg": null,
+                "choices": null,
+                "default": null,
+                "description": "Display help for command",
+                "names": [
+                  "-h",
+                  "--help"
+                ],
+                "provenance": "claude plugin tag --help",
+                "source": "cli-help"
+              },
+              {
+                "arg": "<msg>",
+                "choices": null,
+                "default": null,
+                "description": "Tag annotation message (use %s for the version)",
+                "names": [
+                  "-m",
+                  "--message"
+                ],
+                "provenance": "claude plugin tag --help",
+                "source": "cli-help"
+              },
+              {
+                "arg": null,
+                "choices": null,
+                "default": null,
+                "description": "Push the tag to --remote after creating it",
+                "names": [
+                  "--push"
+                ],
+                "provenance": "claude plugin tag --help",
+                "source": "cli-help"
+              },
+              {
+                "arg": "<name>",
+                "choices": null,
+                "default": "\"origin\"",
+                "description": "Remote to push to with --push",
+                "names": [
+                  "--remote"
+                ],
+                "provenance": "claude plugin tag --help",
+                "source": "cli-help"
+              }
+            ],
+            "name": "tag",
+            "path": [
+              "plugin",
+              "tag"
+            ],
+            "provenance": "claude plugin tag --help",
+            "source": "cli-help",
+            "usage": "claude plugin tag [options] [path]"
+          },
+          {
+            "arguments": [],
+            "commands": [],
+            "description": "Uninstall an installed plugin",
+            "flags": [
+              {
+                "arg": null,
+                "choices": null,
+                "default": null,
+                "description": "Display help for command",
+                "names": [
+                  "-h",
+                  "--help"
+                ],
+                "provenance": "claude plugin uninstall --help",
+                "source": "cli-help"
+              },
+              {
+                "arg": null,
+                "choices": null,
+                "default": null,
+                "description": "Preserve the plugin's persistent data directory (~/.claude/plugins/data/{id}/)",
+                "names": [
+                  "--keep-data"
+                ],
+                "provenance": "claude plugin uninstall --help",
+                "source": "cli-help"
+              },
+              {
+                "arg": null,
+                "choices": null,
+                "default": null,
+                "description": "Also remove auto-installed dependencies that are no longer needed (requires -y in non-interactive contexts)",
+                "names": [
+                  "--prune"
+                ],
+                "provenance": "claude plugin uninstall --help",
+                "source": "cli-help"
+              },
+              {
+                "arg": "<scope>",
+                "choices": null,
+                "default": "\"user\"",
+                "description": "Uninstall from scope: user, project, or local",
+                "names": [
+                  "-s",
+                  "--scope"
+                ],
+                "provenance": "claude plugin uninstall --help",
+                "source": "cli-help"
+              },
+              {
+                "arg": null,
+                "choices": null,
+                "default": null,
+                "description": "Skip the --prune confirmation prompt (required when stdin or stdout is not a TTY)",
+                "names": [
+                  "-y",
+                  "--yes"
+                ],
+                "provenance": "claude plugin uninstall --help",
+                "source": "cli-help"
+              }
+            ],
+            "name": "uninstall",
+            "path": [
+              "plugin",
+              "uninstall"
+            ],
+            "provenance": "claude plugin uninstall --help",
+            "source": "cli-help",
+            "usage": "claude plugin uninstall|remove [options] <plugin>"
+          },
+          {
+            "arguments": [],
+            "commands": [],
+            "description": "Update a plugin to the latest version (restart required to apply)",
+            "flags": [
+              {
+                "arg": null,
+                "choices": null,
+                "default": null,
+                "description": "Display help for command",
+                "names": [
+                  "-h",
+                  "--help"
+                ],
+                "provenance": "claude plugin update --help",
+                "source": "cli-help"
+              },
+              {
+                "arg": "<scope>",
+                "choices": null,
+                "default": "user",
+                "description": "Installation scope: user, project, local, managed",
+                "names": [
+                  "-s",
+                  "--scope"
+                ],
+                "provenance": "claude plugin update --help",
+                "source": "cli-help"
+              }
+            ],
+            "name": "update",
+            "path": [
+              "plugin",
+              "update"
+            ],
+            "provenance": "claude plugin update --help",
+            "source": "cli-help",
+            "usage": "claude plugin update [options] <plugin>"
+          },
+          {
+            "arguments": [],
+            "commands": [],
+            "description": "Validate a plugin or marketplace manifest",
+            "flags": [
+              {
+                "arg": null,
+                "choices": null,
+                "default": null,
+                "description": "Display help for command",
+                "names": [
+                  "-h",
+                  "--help"
+                ],
+                "provenance": "claude plugin validate --help",
+                "source": "cli-help"
+              },
+              {
+                "arg": null,
+                "choices": null,
+                "default": null,
+                "description": "Treat warnings as errors (exit 1). Use in CI to fail on unrecognized fields, missing metadata, and other issues that the runtime tolerates.",
+                "names": [
+                  "--strict"
+                ],
+                "provenance": "claude plugin validate --help",
+                "source": "cli-help"
+              }
+            ],
+            "name": "validate",
+            "path": [
+              "plugin",
+              "validate"
+            ],
+            "provenance": "claude plugin validate --help",
+            "source": "cli-help",
+            "usage": "claude plugin validate [options] <path>"
+          }
+        ],
+        "description": "Manage Claude Code plugins",
+        "flags": [
+          {
+            "arg": null,
+            "choices": null,
+            "default": null,
+            "description": "Display help for command",
+            "names": [
+              "-h",
+              "--help"
+            ],
+            "provenance": "claude plugin --help",
+            "source": "cli-help"
+          }
+        ],
+        "name": "plugin",
+        "path": [
+          "plugin"
+        ],
+        "provenance": "claude plugin --help",
+        "source": "cli-help",
+        "usage": "claude plugin|plugins [options] [command]"
+      },
+      {
+        "arguments": [],
+        "commands": [
+          {
+            "arguments": [],
+            "commands": [],
+            "description": "Delete all Claude Code state for a project (transcripts, tasks, file history, config entry)",
+            "flags": [
+              {
+                "arg": null,
+                "choices": null,
+                "default": null,
+                "description": "Purge state for every project (mutually exclusive with [path])",
+                "names": [
+                  "--all"
+                ],
+                "provenance": "claude project purge --help",
+                "source": "cli-help"
+              },
+              {
+                "arg": null,
+                "choices": null,
+                "default": null,
+                "description": "List what would be deleted without deleting anything",
+                "names": [
+                  "--dry-run"
+                ],
+                "provenance": "claude project purge --help",
+                "source": "cli-help"
+              },
+              {
+                "arg": null,
+                "choices": null,
+                "default": null,
+                "description": "Display help for command",
+                "names": [
+                  "-h",
+                  "--help"
+                ],
+                "provenance": "claude project purge --help",
+                "source": "cli-help"
+              },
+              {
+                "arg": null,
+                "choices": null,
+                "default": null,
+                "description": "Prompt for each item before deleting",
+                "names": [
+                  "-i",
+                  "--interactive"
+                ],
+                "provenance": "claude project purge --help",
+                "source": "cli-help"
+              },
+              {
+                "arg": null,
+                "choices": null,
+                "default": null,
+                "description": "Skip confirmation prompt",
+                "names": [
+                  "-y",
+                  "--yes"
+                ],
+                "provenance": "claude project purge --help",
+                "source": "cli-help"
+              }
+            ],
+            "name": "purge",
+            "path": [
+              "project",
+              "purge"
+            ],
+            "provenance": "claude project purge --help",
+            "source": "cli-help",
+            "usage": "claude project purge [options] [path]"
+          }
+        ],
+        "description": "Manage Claude Code project state",
+        "flags": [
+          {
+            "arg": null,
+            "choices": null,
+            "default": null,
+            "description": "Display help for command",
+            "names": [
+              "-h",
+              "--help"
+            ],
+            "provenance": "claude project --help",
+            "source": "cli-help"
+          }
+        ],
+        "name": "project",
+        "path": [
+          "project"
+        ],
+        "provenance": "claude project --help",
+        "source": "cli-help",
+        "usage": "claude project [options] [command]"
+      },
+      {
+        "arguments": [],
+        "commands": [],
+        "description": "Set up a long-lived authentication token (requires Claude subscription)",
+        "flags": [
+          {
+            "arg": null,
+            "choices": null,
+            "default": null,
+            "description": "Display help for command",
+            "names": [
+              "-h",
+              "--help"
+            ],
+            "provenance": "claude setup-token --help",
+            "source": "cli-help"
+          }
+        ],
+        "name": "setup-token",
+        "path": [
+          "setup-token"
+        ],
+        "provenance": "claude setup-token --help",
+        "source": "cli-help",
+        "usage": "claude setup-token [options]"
+      },
+      {
+        "arguments": [],
+        "commands": [],
+        "description": "Run a cloud-hosted multi-agent code review of the current branch (or a PR number / base branch) and print the findings",
+        "flags": [
+          {
+            "arg": null,
+            "choices": null,
+            "default": null,
+            "description": "Display help for command",
+            "names": [
+              "-h",
+              "--help"
+            ],
+            "provenance": "claude ultrareview --help",
+            "source": "cli-help"
+          },
+          {
+            "arg": null,
+            "choices": null,
+            "default": null,
+            "description": "Print the raw bugs.json payload instead of formatted findings",
+            "names": [
+              "--json"
+            ],
+            "provenance": "claude ultrareview --help",
+            "source": "cli-help"
+          },
+          {
+            "arg": "<minutes>",
+            "choices": null,
+            "default": "30",
+            "description": "Maximum minutes to wait for the review to finish",
+            "names": [
+              "--timeout"
+            ],
+            "provenance": "claude ultrareview --help",
+            "source": "cli-help"
+          }
+        ],
+        "name": "ultrareview",
+        "path": [
+          "ultrareview"
+        ],
+        "provenance": "claude ultrareview --help",
+        "source": "cli-help",
+        "usage": "claude ultrareview [options] [target]"
+      },
+      {
+        "arguments": [],
+        "commands": [],
+        "description": "Check for updates and install if available",
+        "flags": [
+          {
+            "arg": null,
+            "choices": null,
+            "default": null,
+            "description": "Display help for command",
+            "names": [
+              "-h",
+              "--help"
+            ],
+            "provenance": "claude update --help",
+            "source": "cli-help"
+          }
+        ],
+        "name": "update",
+        "path": [
+          "update"
+        ],
+        "provenance": "claude update --help",
+        "source": "cli-help",
+        "usage": "claude update|upgrade [options]"
+      }
+    ],
+    "description": "Claude Code - starts an interactive session by default, use -p/--print for non-interactive output",
+    "flags": [
+      {
+        "arg": "<directories...>",
+        "choices": null,
+        "default": null,
+        "description": "Additional directories to allow tool access to",
+        "names": [
+          "--add-dir"
+        ],
+        "provenance": "claude --help",
+        "source": "cli-help"
+      },
+      {
+        "arg": "<agent>",
+        "choices": null,
+        "default": null,
+        "description": "Agent for the current session. Overrides the 'agent' setting.",
+        "names": [
+          "--agent"
+        ],
+        "provenance": "claude --help",
+        "source": "cli-help"
+      },
+      {
+        "arg": "<json>",
+        "choices": null,
+        "default": null,
+        "description": "JSON object defining custom agents (e.g. '{\"reviewer\": {\"description\": \"Reviews code\", \"prompt\": \"You are a code reviewer\"}}')",
+        "names": [
+          "--agents"
+        ],
+        "provenance": "claude --help",
+        "source": "cli-help"
+      },
+      {
+        "arg": null,
+        "choices": null,
+        "default": null,
+        "description": "Enable bypassing all permission checks as an option, without it being enabled by default. Recommended only for sandboxes with no internet access.",
+        "names": [
+          "--allow-dangerously-skip-permissions"
+        ],
+        "provenance": "claude --help",
+        "source": "cli-help"
+      },
+      {
+        "arg": "<tools...>",
+        "choices": null,
+        "default": null,
+        "description": "Comma or space-separated list of tool names to allow (e.g. \"Bash(git *) Edit\")",
+        "names": [
+          "--allowedTools",
+          "--allowed-tools"
+        ],
+        "provenance": "claude --help",
+        "source": "cli-help"
+      },
+      {
+        "arg": "<prompt>",
+        "choices": null,
+        "default": null,
+        "description": "Append a system prompt to the default system prompt",
+        "names": [
+          "--append-system-prompt"
+        ],
+        "provenance": "claude --help",
+        "source": "cli-help"
+      },
+      {
+        "arg": null,
+        "choices": null,
+        "default": null,
+        "description": "Minimal mode: skip hooks, LSP, plugin sync, attribution, auto-memory, background prefetches, keychain reads, and CLAUDE.md auto-discovery. Sets CLAUDE_CODE_SIMPLE=1. Anthropic auth is strictly ANTHROPIC_API_KEY or apiKeyHelper via --settings (OAuth and keychain are never read). 3P providers (Bedrock/Vertex/Foundry) use their own credentials. Skills still resolve via /skill-name. Explicitly provide context via: --system-prompt[-file], --append-system-prompt[-file], --add-dir (CLAUDE.md dirs), --mcp-config, --settings, --agents, --plugin-dir.",
+        "names": [
+          "--bare"
+        ],
+        "provenance": "claude --help",
+        "source": "cli-help"
+      },
+      {
+        "arg": "<betas...>",
+        "choices": null,
+        "default": null,
+        "description": "Beta headers to include in API requests (API key users only)",
+        "names": [
+          "--betas"
+        ],
+        "provenance": "claude --help",
+        "source": "cli-help"
+      },
+      {
+        "arg": null,
+        "choices": null,
+        "default": null,
+        "description": "Enable SendUserMessage tool for agent-to-user communication",
+        "names": [
+          "--brief"
+        ],
+        "provenance": "claude --help",
+        "source": "cli-help"
+      },
+      {
+        "arg": null,
+        "choices": null,
+        "default": null,
+        "description": "Enable Claude in Chrome integration",
+        "names": [
+          "--chrome"
+        ],
+        "provenance": "claude --help",
+        "source": "cli-help"
+      },
+      {
+        "arg": null,
+        "choices": null,
+        "default": null,
+        "description": "Continue the most recent conversation in the current directory",
+        "names": [
+          "-c",
+          "--continue"
+        ],
+        "provenance": "claude --help",
+        "source": "cli-help"
+      },
+      {
+        "arg": null,
+        "choices": null,
+        "default": null,
+        "description": "Bypass all permission checks. Recommended only for sandboxes with no internet access.",
+        "names": [
+          "--dangerously-skip-permissions"
+        ],
+        "provenance": "claude --help",
+        "source": "cli-help"
+      },
+      {
+        "arg": "[filter]",
+        "choices": null,
+        "default": null,
+        "description": "Enable debug mode with optional category filtering (e.g., \"api,hooks\" or \"!1p,!file\")",
+        "names": [
+          "-d",
+          "--debug"
+        ],
+        "provenance": "claude --help",
+        "source": "cli-help"
+      },
+      {
+        "arg": "<path>",
+        "choices": null,
+        "default": null,
+        "description": "Write debug logs to a specific file path (implicitly enables debug mode)",
+        "names": [
+          "--debug-file"
+        ],
+        "provenance": "claude --help",
+        "source": "cli-help"
+      },
+      {
+        "arg": null,
+        "choices": null,
+        "default": null,
+        "description": "Disable all skills",
+        "names": [
+          "--disable-slash-commands"
+        ],
+        "provenance": "claude --help",
+        "source": "cli-help"
+      },
+      {
+        "arg": "<tools...>",
+        "choices": null,
+        "default": null,
+        "description": "Comma or space-separated list of tool names to deny (e.g. \"Bash(git *) Edit\")",
+        "names": [
+          "--disallowedTools",
+          "--disallowed-tools"
+        ],
+        "provenance": "claude --help",
+        "source": "cli-help"
+      },
+      {
+        "arg": "<level>",
+        "choices": null,
+        "default": null,
+        "description": "Effort level for the current session (low, medium, high, xhigh, max)",
+        "names": [
+          "--effort"
+        ],
+        "provenance": "claude --help",
+        "source": "cli-help"
+      },
+      {
+        "arg": null,
+        "choices": null,
+        "default": "false",
+        "description": "Move per-machine sections (cwd, env info, memory paths, git status) from the system prompt into the first user message. Improves cross-user prompt-cache reuse. Only applies with the default system prompt (ignored with --system-prompt).",
+        "names": [
+          "--exclude-dynamic-system-prompt-sections"
+        ],
+        "provenance": "claude --help",
+        "source": "cli-help"
+      },
+      {
+        "arg": "<model>",
+        "choices": null,
+        "default": null,
+        "description": "Enable automatic fallback to specified model when the default model is overloaded or not available (only works with --print)",
+        "names": [
+          "--fallback-model"
+        ],
+        "provenance": "claude --help",
+        "source": "cli-help"
+      },
+      {
+        "arg": "<specs...>",
+        "choices": null,
+        "default": null,
+        "description": "File resources to download at startup. Format: file_id:relative_path (e.g., --file file_abc:doc.txt file_def:img.png)",
+        "names": [
+          "--file"
+        ],
+        "provenance": "claude --help",
+        "source": "cli-help"
+      },
+      {
+        "arg": null,
+        "choices": null,
+        "default": null,
+        "description": "When resuming, create a new session ID instead of reusing the original (use with --resume or --continue)",
+        "names": [
+          "--fork-session"
+        ],
+        "provenance": "claude --help",
+        "source": "cli-help"
+      },
+      {
+        "arg": "[value]",
+        "choices": null,
+        "default": null,
+        "description": "Resume a session linked to a PR by PR number/URL, or open interactive picker with optional search term",
+        "names": [
+          "--from-pr"
+        ],
+        "provenance": "claude --help",
+        "source": "cli-help"
+      },
+      {
+        "arg": null,
+        "choices": null,
+        "default": null,
+        "description": "Display help for command",
+        "names": [
+          "-h",
+          "--help"
+        ],
+        "provenance": "claude --help",
+        "source": "cli-help"
+      },
+      {
+        "arg": null,
+        "choices": null,
+        "default": null,
+        "description": "Automatically connect to IDE on startup if exactly one valid IDE is available",
+        "names": [
+          "--ide"
+        ],
+        "provenance": "claude --help",
+        "source": "cli-help"
+      },
+      {
+        "arg": null,
+        "choices": null,
+        "default": null,
+        "description": "Include all hook lifecycle events in the output stream (only works with --output-format=stream-json)",
+        "names": [
+          "--include-hook-events"
+        ],
+        "provenance": "claude --help",
+        "source": "cli-help"
+      },
+      {
+        "arg": null,
+        "choices": null,
+        "default": null,
+        "description": "Include partial message chunks as they arrive (only works with --print and --output-format=stream-json)",
+        "names": [
+          "--include-partial-messages"
+        ],
+        "provenance": "claude --help",
+        "source": "cli-help"
+      },
+      {
+        "arg": "<format>",
+        "choices": [
+          "text",
+          "stream-json"
+        ],
+        "default": null,
+        "description": "Input format (only works with --print): \"text\" (default), or \"stream-json\" (realtime streaming input)",
+        "names": [
+          "--input-format"
+        ],
+        "provenance": "claude --help",
+        "source": "cli-help"
+      },
+      {
+        "arg": "<schema>",
+        "choices": null,
+        "default": null,
+        "description": "JSON Schema for structured output validation. Example: {\"type\":\"object\",\"properties\":{\"name\":{\"type\":\"string\"}},\"required\":[\"name\"]}",
+        "names": [
+          "--json-schema"
+        ],
+        "provenance": "claude --help",
+        "source": "cli-help"
+      },
+      {
+        "arg": "<amount>",
+        "choices": null,
+        "default": null,
+        "description": "Maximum dollar amount to spend on API calls (only works with --print)",
+        "names": [
+          "--max-budget-usd"
+        ],
+        "provenance": "claude --help",
+        "source": "cli-help"
+      },
+      {
+        "arg": "<configs...>",
+        "choices": null,
+        "default": null,
+        "description": "Load MCP servers from JSON files or strings (space-separated)",
+        "names": [
+          "--mcp-config"
+        ],
+        "provenance": "claude --help",
+        "source": "cli-help"
+      },
+      {
+        "arg": null,
+        "choices": null,
+        "default": null,
+        "description": "[DEPRECATED. Use --debug instead] Enable MCP debug mode (shows MCP server errors)",
+        "names": [
+          "--mcp-debug"
+        ],
+        "provenance": "claude --help",
+        "source": "cli-help"
+      },
+      {
+        "arg": "<model>",
+        "choices": null,
+        "default": null,
+        "description": "Model for the current session. Provide an alias for the latest model (e.g. 'sonnet' or 'opus') or a model's full name (e.g. 'claude-opus-4-8').",
+        "names": [
+          "--model"
+        ],
+        "provenance": "claude --help",
+        "source": "cli-help"
+      },
+      {
+        "arg": "<name>",
+        "choices": null,
+        "default": null,
+        "description": "Set a display name for this session (shown in the prompt box, /resume picker, and terminal title)",
+        "names": [
+          "-n",
+          "--name"
+        ],
+        "provenance": "claude --help",
+        "source": "cli-help"
+      },
+      {
+        "arg": null,
+        "choices": null,
+        "default": null,
+        "description": "Disable Claude in Chrome integration",
+        "names": [
+          "--no-chrome"
+        ],
+        "provenance": "claude --help",
+        "source": "cli-help"
+      },
+      {
+        "arg": null,
+        "choices": null,
+        "default": null,
+        "description": "Disable session persistence - sessions will not be saved to disk and cannot be resumed (only works with --print)",
+        "names": [
+          "--no-session-persistence"
+        ],
+        "provenance": "claude --help",
+        "source": "cli-help"
+      },
+      {
+        "arg": "<format>",
+        "choices": [
+          "text",
+          "json",
+          "stream-json"
+        ],
+        "default": null,
+        "description": "Output format (only works with --print): \"text\" (default), \"json\" (single result), or \"stream-json\" (realtime streaming)",
+        "names": [
+          "--output-format"
+        ],
+        "provenance": "claude --help",
+        "source": "cli-help"
+      },
+      {
+        "arg": "<mode>",
+        "choices": [
+          "acceptEdits",
+          "auto",
+          "bypassPermissions",
+          "default",
+          "dontAsk",
+          "plan"
+        ],
+        "default": null,
+        "description": "Permission mode to use for the session",
+        "names": [
+          "--permission-mode"
+        ],
+        "provenance": "claude --help",
+        "source": "cli-help"
+      },
+      {
+        "arg": "<path>",
+        "choices": null,
+        "default": "[]",
+        "description": "Load a plugin from a directory or .zip for this session only (repeatable: --plugin-dir A --plugin-dir B.zip)",
+        "names": [
+          "--plugin-dir"
+        ],
+        "provenance": "claude --help",
+        "source": "cli-help"
+      },
+      {
+        "arg": "<url>",
+        "choices": null,
+        "default": "[]",
+        "description": "Fetch a plugin .zip from a URL for this session only (repeatable: --plugin-url A --plugin-url B)",
+        "names": [
+          "--plugin-url"
+        ],
+        "provenance": "claude --help",
+        "source": "cli-help"
+      },
+      {
+        "arg": null,
+        "choices": null,
+        "default": null,
+        "description": "Print response and exit (useful for pipes). Note: The workspace trust dialog is skipped when Claude is run in non-interactive mode (via -p, or when stdout is not a TTY, e.g. piped or redirected output). Only use this in directories you trust. Settings files that fail validation are silently ignored in this mode (no error dialog is shown).",
+        "names": [
+          "-p",
+          "--print"
+        ],
+        "provenance": "claude --help",
+        "source": "cli-help"
+      },
+      {
+        "arg": "[value]",
+        "choices": [
+          "true",
+          "false",
+          "1",
+          "0",
+          "yes",
+          "no",
+          "on",
+          "off"
+        ],
+        "default": null,
+        "description": "Enable prompt suggestions. In print/SDK mode, emits a prompt_suggestion message after each turn with a predicted next user prompt",
+        "names": [
+          "--prompt-suggestions"
+        ],
+        "provenance": "claude --help",
+        "source": "cli-help"
+      },
+      {
+        "arg": "[name]",
+        "choices": null,
+        "default": null,
+        "description": "Start an interactive session with Remote Control enabled (optionally named)",
+        "names": [
+          "--remote-control"
+        ],
+        "provenance": "claude --help",
+        "source": "cli-help"
+      },
+      {
+        "arg": "<prefix>",
+        "choices": null,
+        "default": "hostname",
+        "description": "Prefix for auto-generated Remote Control session names",
+        "names": [
+          "--remote-control-session-name-prefix"
+        ],
+        "provenance": "claude --help",
+        "source": "cli-help"
+      },
+      {
+        "arg": null,
+        "choices": null,
+        "default": null,
+        "description": "Re-emit user messages from stdin back on stdout for acknowledgment (only works with --input-format=stream-json and --output-format=stream-json)",
+        "names": [
+          "--replay-user-messages"
+        ],
+        "provenance": "claude --help",
+        "source": "cli-help"
+      },
+      {
+        "arg": "[value]",
+        "choices": null,
+        "default": null,
+        "description": "Resume a conversation by session ID, or open interactive picker with optional search term",
+        "names": [
+          "-r",
+          "--resume"
+        ],
+        "provenance": "claude --help",
+        "source": "cli-help"
+      },
+      {
+        "arg": "<uuid>",
+        "choices": null,
+        "default": null,
+        "description": "Use a specific session ID for the conversation (must be a valid UUID)",
+        "names": [
+          "--session-id"
+        ],
+        "provenance": "claude --help",
+        "source": "cli-help"
+      },
+      {
+        "arg": "<sources>",
+        "choices": null,
+        "default": null,
+        "description": "Comma-separated list of setting sources to load (user, project, local).",
+        "names": [
+          "--setting-sources"
+        ],
+        "provenance": "claude --help",
+        "source": "cli-help"
+      },
+      {
+        "arg": "<file-or-json>",
+        "choices": null,
+        "default": null,
+        "description": "Path to a settings JSON file or a JSON string to load additional settings from",
+        "names": [
+          "--settings"
+        ],
+        "provenance": "claude --help",
+        "source": "cli-help"
+      },
+      {
+        "arg": null,
+        "choices": null,
+        "default": null,
+        "description": "Only use MCP servers from --mcp-config, ignoring all other MCP configurations",
+        "names": [
+          "--strict-mcp-config"
+        ],
+        "provenance": "claude --help",
+        "source": "cli-help"
+      },
+      {
+        "arg": "<prompt>",
+        "choices": null,
+        "default": null,
+        "description": "System prompt to use for the session",
+        "names": [
+          "--system-prompt"
+        ],
+        "provenance": "claude --help",
+        "source": "cli-help"
+      },
+      {
+        "arg": null,
+        "choices": null,
+        "default": null,
+        "description": "Create a tmux session for the worktree (requires --worktree). Uses iTerm2 native panes when available; use --tmux=classic for traditional tmux.",
+        "names": [
+          "--tmux"
+        ],
+        "provenance": "claude --help",
+        "source": "cli-help"
+      },
+      {
+        "arg": "<tools...>",
+        "choices": null,
+        "default": null,
+        "description": "Specify the list of available tools from the built-in set. Use \"\" to disable all tools, \"default\" to use all tools, or specify tool names (e.g. \"Bash,Edit,Read\").",
+        "names": [
+          "--tools"
+        ],
+        "provenance": "claude --help",
+        "source": "cli-help"
+      },
+      {
+        "arg": null,
+        "choices": null,
+        "default": null,
+        "description": "Override verbose mode setting from config",
+        "names": [
+          "--verbose"
+        ],
+        "provenance": "claude --help",
+        "source": "cli-help"
+      },
+      {
+        "arg": null,
+        "choices": null,
+        "default": null,
+        "description": "Output the version number",
+        "names": [
+          "-v",
+          "--version"
+        ],
+        "provenance": "claude --help",
+        "source": "cli-help"
+      },
+      {
+        "arg": "[name]",
+        "choices": null,
+        "default": null,
+        "description": "Create a new git worktree for this session (optionally specify a name)",
+        "names": [
+          "-w",
+          "--worktree"
+        ],
+        "provenance": "claude --help",
+        "source": "cli-help"
+      }
+    ],
+    "name": "claude",
+    "path": [],
+    "provenance": "claude --help",
+    "source": "cli-help",
+    "usage": "claude [options] [command] [prompt]"
+  },
+  "schema_version": 1,
+  "supplement_sections": [
+    {
+      "entries": [
+        {
+          "description": "Add a working directory for file access during the current session.",
+          "name": "/add-dir <path>",
+          "provenance": "https://code.claude.com/docs/en/commands (retrieved 2026-05-31)",
+          "source": "supplement"
+        },
+        {
+          "description": "Manage agent (subagent) configurations.",
+          "name": "/agents",
+          "provenance": "https://code.claude.com/docs/en/commands (retrieved 2026-05-31)",
+          "source": "supplement"
+        },
+        {
+          "description": "Spawn a Claude Code on the web session that watches the current branch's PR and pushes fixes when CI fails or reviewers comment. Requires the gh CLI.",
+          "name": "/autofix-pr [prompt]",
+          "provenance": "https://code.claude.com/docs/en/commands (retrieved 2026-05-31)",
+          "source": "supplement"
+        },
+        {
+          "description": "Detach the current session to run as a background agent and free the terminal. Alias: /bg.",
+          "name": "/background [prompt]",
+          "provenance": "https://code.claude.com/docs/en/commands (retrieved 2026-05-31)",
+          "source": "supplement"
+        },
+        {
+          "description": "(bundled skill) Orchestrate large-scale changes in parallel: decompose into 5–30 units, one background subagent per git worktree. Requires a git repository.",
+          "name": "/batch <instruction>",
+          "provenance": "https://code.claude.com/docs/en/commands (retrieved 2026-05-31)",
+          "source": "supplement"
+        },
+        {
+          "description": "Create a branch of the current conversation at this point, preserving the original. Alias: /fork.",
+          "name": "/branch [name]",
+          "provenance": "https://code.claude.com/docs/en/commands (retrieved 2026-05-31)",
+          "source": "supplement"
+        },
+        {
+          "description": "Ask a quick side question without adding to the conversation.",
+          "name": "/btw <question>",
+          "provenance": "https://code.claude.com/docs/en/commands (retrieved 2026-05-31)",
+          "source": "supplement"
+        },
+        {
+          "description": "Configure Claude in Chrome settings.",
+          "name": "/chrome",
+          "provenance": "https://code.claude.com/docs/en/commands (retrieved 2026-05-31)",
+          "source": "supplement"
+        },
+        {
+          "description": "(bundled skill) Load Claude API reference material for your project's language; migrate API code to a newer model, or onboard a Managed Agent.",
+          "name": "/claude-api [migrate|managed-agents-onboard]",
+          "provenance": "https://code.claude.com/docs/en/commands (retrieved 2026-05-31)",
+          "source": "supplement"
+        },
+        {
+          "description": "Start a new conversation with empty context; the previous one stays in /resume. Aliases: /reset, /new.",
+          "name": "/clear [name]",
+          "provenance": "https://code.claude.com/docs/en/commands (retrieved 2026-05-31)",
+          "source": "supplement"
+        },
+        {
+          "description": "(bundled skill) Review the current diff for bugs and cleanups; --fix applies findings, --comment posts PR comments, ultra runs a cloud review.",
+          "name": "/code-review [low|medium|high|xhigh|max|ultra] [--fix] [--comment] [target]",
+          "provenance": "https://code.claude.com/docs/en/commands (retrieved 2026-05-31)",
+          "source": "supplement"
+        },
+        {
+          "description": "Set the prompt-bar color for the current session.",
+          "name": "/color [color|default]",
+          "provenance": "https://code.claude.com/docs/en/commands (retrieved 2026-05-31)",
+          "source": "supplement"
+        },
+        {
+          "description": "Free up context by summarizing the conversation so far; optional focus instructions.",
+          "name": "/compact [instructions]",
+          "provenance": "https://code.claude.com/docs/en/commands (retrieved 2026-05-31)",
+          "source": "supplement"
+        },
+        {
+          "description": "Open the Settings interface (theme, model, output style, and other preferences). Alias: /settings.",
+          "name": "/config",
+          "provenance": "https://code.claude.com/docs/en/commands (retrieved 2026-05-31)",
+          "source": "supplement"
+        },
+        {
+          "description": "Visualize current context usage as a colored grid with optimization suggestions.",
+          "name": "/context [all]",
+          "provenance": "https://code.claude.com/docs/en/commands (retrieved 2026-05-31)",
+          "source": "supplement"
+        },
+        {
+          "description": "Copy the last assistant response (or the Nth-latest) to the clipboard.",
+          "name": "/copy [N]",
+          "provenance": "https://code.claude.com/docs/en/commands (retrieved 2026-05-31)",
+          "source": "supplement"
+        },
+        {
+          "description": "Alias for /usage.",
+          "name": "/cost",
+          "provenance": "https://code.claude.com/docs/en/commands (retrieved 2026-05-31)",
+          "source": "supplement"
+        },
+        {
+          "description": "(bundled skill) Enable debug logging and troubleshoot by reading the session debug log.",
+          "name": "/debug [description]",
+          "provenance": "https://code.claude.com/docs/en/commands (retrieved 2026-05-31)",
+          "source": "supplement"
+        },
+        {
+          "description": "(bundled workflow) Fan out web searches, fetch and cross-check sources, and synthesize a cited report.",
+          "name": "/deep-research <question>",
+          "provenance": "https://code.claude.com/docs/en/commands (retrieved 2026-05-31)",
+          "source": "supplement"
+        },
+        {
+          "description": "Continue the current session in the Claude Code Desktop app (macOS/Windows, subscription). Alias: /app.",
+          "name": "/desktop",
+          "provenance": "https://code.claude.com/docs/en/commands (retrieved 2026-05-31)",
+          "source": "supplement"
+        },
+        {
+          "description": "Open an interactive diff viewer showing uncommitted changes and per-turn diffs.",
+          "name": "/diff",
+          "provenance": "https://code.claude.com/docs/en/commands (retrieved 2026-05-31)",
+          "source": "supplement"
+        },
+        {
+          "description": "Diagnose and verify your Claude Code installation and settings.",
+          "name": "/doctor",
+          "provenance": "https://code.claude.com/docs/en/commands (retrieved 2026-05-31)",
+          "source": "supplement"
+        },
+        {
+          "description": "Set the model effort level (low/medium/high/xhigh/max/ultracode); auto resets to the model default.",
+          "name": "/effort [level|auto]",
+          "provenance": "https://code.claude.com/docs/en/commands (retrieved 2026-05-31)",
+          "source": "supplement"
+        },
+        {
+          "description": "Exit the CLI (detaches an attached background session). Alias: /quit.",
+          "name": "/exit",
+          "provenance": "https://code.claude.com/docs/en/commands (retrieved 2026-05-31)",
+          "source": "supplement"
+        },
+        {
+          "description": "Export the current conversation as plain text.",
+          "name": "/export [filename]",
+          "provenance": "https://code.claude.com/docs/en/commands (retrieved 2026-05-31)",
+          "source": "supplement"
+        },
+        {
+          "description": "Toggle fast mode on or off.",
+          "name": "/fast [on|off]",
+          "provenance": "https://code.claude.com/docs/en/commands (retrieved 2026-05-31)",
+          "source": "supplement"
+        },
+        {
+          "description": "Submit feedback, report a bug, or share your conversation. Aliases: /bug, /share.",
+          "name": "/feedback [report]",
+          "provenance": "https://code.claude.com/docs/en/commands (retrieved 2026-05-31)",
+          "source": "supplement"
+        },
+        {
+          "description": "(bundled skill) Scan transcripts for common read-only calls and add an allowlist to project settings.",
+          "name": "/fewer-permission-prompts",
+          "provenance": "https://code.claude.com/docs/en/commands (retrieved 2026-05-31)",
+          "source": "supplement"
+        },
+        {
+          "description": "Toggle the focus view (last prompt, tool-call summary, final response). Fullscreen only.",
+          "name": "/focus",
+          "provenance": "https://code.claude.com/docs/en/commands (retrieved 2026-05-31)",
+          "source": "supplement"
+        },
+        {
+          "description": "Set a goal Claude keeps working toward across turns until met; clear removes it.",
+          "name": "/goal [condition|clear]",
+          "provenance": "https://code.claude.com/docs/en/commands (retrieved 2026-05-31)",
+          "source": "supplement"
+        },
+        {
+          "description": "Write a JS heap snapshot and memory breakdown for diagnosing high memory usage.",
+          "name": "/heapdump",
+          "provenance": "https://code.claude.com/docs/en/commands (retrieved 2026-05-31)",
+          "source": "supplement"
+        },
+        {
+          "description": "Show help and available commands.",
+          "name": "/help",
+          "provenance": "https://code.claude.com/docs/en/commands (retrieved 2026-05-31)",
+          "source": "supplement"
+        },
+        {
+          "description": "View hook configurations for tool events.",
+          "name": "/hooks",
+          "provenance": "https://code.claude.com/docs/en/commands (retrieved 2026-05-31)",
+          "source": "supplement"
+        },
+        {
+          "description": "Manage IDE integrations and show status.",
+          "name": "/ide",
+          "provenance": "https://code.claude.com/docs/en/commands (retrieved 2026-05-31)",
+          "source": "supplement"
+        },
+        {
+          "description": "Initialize the project with a CLAUDE.md guide.",
+          "name": "/init",
+          "provenance": "https://code.claude.com/docs/en/commands (retrieved 2026-05-31)",
+          "source": "supplement"
+        },
+        {
+          "description": "Generate a report analyzing your Claude Code sessions.",
+          "name": "/insights",
+          "provenance": "https://code.claude.com/docs/en/commands (retrieved 2026-05-31)",
+          "source": "supplement"
+        },
+        {
+          "description": "Set up the Claude GitHub Actions app for a repository.",
+          "name": "/install-github-app",
+          "provenance": "https://code.claude.com/docs/en/commands (retrieved 2026-05-31)",
+          "source": "supplement"
+        },
+        {
+          "description": "Install the Claude Slack app via the OAuth flow.",
+          "name": "/install-slack-app",
+          "provenance": "https://code.claude.com/docs/en/commands (retrieved 2026-05-31)",
+          "source": "supplement"
+        },
+        {
+          "description": "Open or create your keybindings configuration file.",
+          "name": "/keybindings",
+          "provenance": "https://code.claude.com/docs/en/commands (retrieved 2026-05-31)",
+          "source": "supplement"
+        },
+        {
+          "description": "Sign in to your Anthropic account.",
+          "name": "/login",
+          "provenance": "https://code.claude.com/docs/en/commands (retrieved 2026-05-31)",
+          "source": "supplement"
+        },
+        {
+          "description": "Sign out from your Anthropic account.",
+          "name": "/logout",
+          "provenance": "https://code.claude.com/docs/en/commands (retrieved 2026-05-31)",
+          "source": "supplement"
+        },
+        {
+          "description": "(bundled skill) Run a prompt repeatedly while the session stays open; omit the interval to self-pace. Alias: /proactive.",
+          "name": "/loop [interval] [prompt]",
+          "provenance": "https://code.claude.com/docs/en/commands (retrieved 2026-05-31)",
+          "source": "supplement"
+        },
+        {
+          "description": "Manage MCP server connections and OAuth authentication.",
+          "name": "/mcp",
+          "provenance": "https://code.claude.com/docs/en/commands (retrieved 2026-05-31)",
+          "source": "supplement"
+        },
+        {
+          "description": "Edit CLAUDE.md memory files; enable/disable and view auto-memory entries.",
+          "name": "/memory",
+          "provenance": "https://code.claude.com/docs/en/commands (retrieved 2026-05-31)",
+          "source": "supplement"
+        },
+        {
+          "description": "Show a QR code to download the Claude mobile app. Aliases: /ios, /android.",
+          "name": "/mobile",
+          "provenance": "https://code.claude.com/docs/en/commands (retrieved 2026-05-31)",
+          "source": "supplement"
+        },
+        {
+          "description": "Switch the AI model and save it as the default for new sessions.",
+          "name": "/model [model]",
+          "provenance": "https://code.claude.com/docs/en/commands (retrieved 2026-05-31)",
+          "source": "supplement"
+        },
+        {
+          "description": "Share a free week of Claude Code with friends (only if eligible).",
+          "name": "/passes",
+          "provenance": "https://code.claude.com/docs/en/commands (retrieved 2026-05-31)",
+          "source": "supplement"
+        },
+        {
+          "description": "Manage allow/ask/deny rules for tool permissions. Alias: /allowed-tools.",
+          "name": "/permissions",
+          "provenance": "https://code.claude.com/docs/en/commands (retrieved 2026-05-31)",
+          "source": "supplement"
+        },
+        {
+          "description": "Enter plan mode directly from the prompt.",
+          "name": "/plan [description]",
+          "provenance": "https://code.claude.com/docs/en/commands (retrieved 2026-05-31)",
+          "source": "supplement"
+        },
+        {
+          "description": "Manage Claude Code plugins.",
+          "name": "/plugin",
+          "provenance": "https://code.claude.com/docs/en/commands (retrieved 2026-05-31)",
+          "source": "supplement"
+        },
+        {
+          "description": "Discover Claude Code features through quick interactive lessons.",
+          "name": "/powerup",
+          "provenance": "https://code.claude.com/docs/en/commands (retrieved 2026-05-31)",
+          "source": "supplement"
+        },
+        {
+          "description": "View and update your privacy settings (Pro/Max).",
+          "name": "/privacy-settings",
+          "provenance": "https://code.claude.com/docs/en/commands (retrieved 2026-05-31)",
+          "source": "supplement"
+        },
+        {
+          "description": "Open Claude FM lo-fi radio in your browser.",
+          "name": "/radio",
+          "provenance": "https://code.claude.com/docs/en/commands (retrieved 2026-05-31)",
+          "source": "supplement"
+        },
+        {
+          "description": "Generate a one-line summary of the current session on demand.",
+          "name": "/recap",
+          "provenance": "https://code.claude.com/docs/en/commands (retrieved 2026-05-31)",
+          "source": "supplement"
+        },
+        {
+          "description": "View the changelog in an interactive version picker.",
+          "name": "/release-notes",
+          "provenance": "https://code.claude.com/docs/en/commands (retrieved 2026-05-31)",
+          "source": "supplement"
+        },
+        {
+          "description": "Reload active plugins to apply pending changes without restarting.",
+          "name": "/reload-plugins",
+          "provenance": "https://code.claude.com/docs/en/commands (retrieved 2026-05-31)",
+          "source": "supplement"
+        },
+        {
+          "description": "Re-scan skill and command directories so on-disk changes apply without restarting.",
+          "name": "/reload-skills",
+          "provenance": "https://code.claude.com/docs/en/commands (retrieved 2026-05-31)",
+          "source": "supplement"
+        },
+        {
+          "description": "Make this session available for remote control from claude.ai. Alias: /rc.",
+          "name": "/remote-control",
+          "provenance": "https://code.claude.com/docs/en/commands (retrieved 2026-05-31)",
+          "source": "supplement"
+        },
+        {
+          "description": "Configure the default remote environment for web sessions.",
+          "name": "/remote-env",
+          "provenance": "https://code.claude.com/docs/en/commands (retrieved 2026-05-31)",
+          "source": "supplement"
+        },
+        {
+          "description": "Rename the current session and show the name on the prompt bar.",
+          "name": "/rename [name]",
+          "provenance": "https://code.claude.com/docs/en/commands (retrieved 2026-05-31)",
+          "source": "supplement"
+        },
+        {
+          "description": "Resume a conversation by ID or name, or open the session picker. Alias: /continue.",
+          "name": "/resume [session]",
+          "provenance": "https://code.claude.com/docs/en/commands (retrieved 2026-05-31)",
+          "source": "supplement"
+        },
+        {
+          "description": "Review a pull request locally in your current session.",
+          "name": "/review [PR]",
+          "provenance": "https://code.claude.com/docs/en/commands (retrieved 2026-05-31)",
+          "source": "supplement"
+        },
+        {
+          "description": "Rewind the conversation and/or code to a previous point, or summarize from a message. Aliases: /checkpoint, /undo.",
+          "name": "/rewind",
+          "provenance": "https://code.claude.com/docs/en/commands (retrieved 2026-05-31)",
+          "source": "supplement"
+        },
+        {
+          "description": "(bundled skill) Launch and drive your project's app to see a change working in the running app.",
+          "name": "/run",
+          "provenance": "https://code.claude.com/docs/en/commands (retrieved 2026-05-31)",
+          "source": "supplement"
+        },
+        {
+          "description": "(bundled skill) Write a per-project skill teaching /run and /verify how to launch and drive your app.",
+          "name": "/run-skill-generator",
+          "provenance": "https://code.claude.com/docs/en/commands (retrieved 2026-05-31)",
+          "source": "supplement"
+        },
+        {
+          "description": "Toggle sandbox mode (supported platforms only).",
+          "name": "/sandbox",
+          "provenance": "https://code.claude.com/docs/en/commands (retrieved 2026-05-31)",
+          "source": "supplement"
+        },
+        {
+          "description": "Create, update, list, or run routines on Anthropic-managed cloud infrastructure. Alias: /routines.",
+          "name": "/schedule [description]",
+          "provenance": "https://code.claude.com/docs/en/commands (retrieved 2026-05-31)",
+          "source": "supplement"
+        },
+        {
+          "description": "Adjust mouse-wheel scroll speed interactively (fullscreen only).",
+          "name": "/scroll-speed",
+          "provenance": "https://code.claude.com/docs/en/commands (retrieved 2026-05-31)",
+          "source": "supplement"
+        },
+        {
+          "description": "Analyze pending changes on the current branch for security vulnerabilities.",
+          "name": "/security-review",
+          "provenance": "https://code.claude.com/docs/en/commands (retrieved 2026-05-31)",
+          "source": "supplement"
+        },
+        {
+          "description": "Configure Amazon Bedrock auth, region, and model pins (visible when CLAUDE_CODE_USE_BEDROCK=1).",
+          "name": "/setup-bedrock",
+          "provenance": "https://code.claude.com/docs/en/commands (retrieved 2026-05-31)",
+          "source": "supplement"
+        },
+        {
+          "description": "Configure Google Vertex AI auth, project, region, and model pins (visible when CLAUDE_CODE_USE_VERTEX=1).",
+          "name": "/setup-vertex",
+          "provenance": "https://code.claude.com/docs/en/commands (retrieved 2026-05-31)",
+          "source": "supplement"
+        },
+        {
+          "description": "(bundled skill) Review changed code for cleanup opportunities and apply fixes; does not hunt for bugs (use /code-review for that).",
+          "name": "/simplify [target]",
+          "provenance": "https://code.claude.com/docs/en/commands (retrieved 2026-05-31)",
+          "source": "supplement"
+        },
+        {
+          "description": "List available skills.",
+          "name": "/skills",
+          "provenance": "https://code.claude.com/docs/en/commands (retrieved 2026-05-31)",
+          "source": "supplement"
+        },
+        {
+          "description": "Alias for /usage (opens on the Stats tab).",
+          "name": "/stats",
+          "provenance": "https://code.claude.com/docs/en/commands (retrieved 2026-05-31)",
+          "source": "supplement"
+        },
+        {
+          "description": "Open the Settings interface (Status tab): version, model, account, connectivity.",
+          "name": "/status",
+          "provenance": "https://code.claude.com/docs/en/commands (retrieved 2026-05-31)",
+          "source": "supplement"
+        },
+        {
+          "description": "Configure Claude Code's status line.",
+          "name": "/statusline",
+          "provenance": "https://code.claude.com/docs/en/commands (retrieved 2026-05-31)",
+          "source": "supplement"
+        },
+        {
+          "description": "Order Claude Code stickers.",
+          "name": "/stickers",
+          "provenance": "https://code.claude.com/docs/en/commands (retrieved 2026-05-31)",
+          "source": "supplement"
+        },
+        {
+          "description": "Stop the current background session (only while attached; transcript and worktree are kept).",
+          "name": "/stop",
+          "provenance": "https://code.claude.com/docs/en/commands (retrieved 2026-05-31)",
+          "source": "supplement"
+        },
+        {
+          "description": "List and manage background tasks. Also available as /bashes.",
+          "name": "/tasks",
+          "provenance": "https://code.claude.com/docs/en/commands (retrieved 2026-05-31)",
+          "source": "supplement"
+        },
+        {
+          "description": "Generate a team onboarding guide from your Claude Code usage history.",
+          "name": "/team-onboarding",
+          "provenance": "https://code.claude.com/docs/en/commands (retrieved 2026-05-31)",
+          "source": "supplement"
+        },
+        {
+          "description": "Pull a Claude Code on the web session into this terminal. Also /tp.",
+          "name": "/teleport",
+          "provenance": "https://code.claude.com/docs/en/commands (retrieved 2026-05-31)",
+          "source": "supplement"
+        },
+        {
+          "description": "Configure terminal keybindings for Shift+Enter and other shortcuts.",
+          "name": "/terminal-setup",
+          "provenance": "https://code.claude.com/docs/en/commands (retrieved 2026-05-31)",
+          "source": "supplement"
+        },
+        {
+          "description": "Change the color theme (auto/light/dark, daltonized, ANSI, and custom themes).",
+          "name": "/theme",
+          "provenance": "https://code.claude.com/docs/en/commands (retrieved 2026-05-31)",
+          "source": "supplement"
+        },
+        {
+          "description": "Set the terminal UI renderer and relaunch into it with your conversation intact.",
+          "name": "/tui [default|fullscreen]",
+          "provenance": "https://code.claude.com/docs/en/commands (retrieved 2026-05-31)",
+          "source": "supplement"
+        },
+        {
+          "description": "Draft a plan in an ultraplan session, review it in your browser, then execute remotely or send it back to your terminal.",
+          "name": "/ultraplan <prompt>",
+          "provenance": "https://code.claude.com/docs/en/commands (retrieved 2026-05-31)",
+          "source": "supplement"
+        },
+        {
+          "description": "Run a deep multi-agent cloud code review; the preferred invocation is now /code-review ultra.",
+          "name": "/ultrareview [PR]",
+          "provenance": "https://code.claude.com/docs/en/commands (retrieved 2026-05-31)",
+          "source": "supplement"
+        },
+        {
+          "description": "Open the upgrade page to switch to a higher plan tier.",
+          "name": "/upgrade",
+          "provenance": "https://code.claude.com/docs/en/commands (retrieved 2026-05-31)",
+          "source": "supplement"
+        },
+        {
+          "description": "Show session cost, plan usage limits, and activity stats. Aliases: /cost, /stats.",
+          "name": "/usage",
+          "provenance": "https://code.claude.com/docs/en/commands (retrieved 2026-05-31)",
+          "source": "supplement"
+        },
+        {
+          "description": "Configure usage credits to keep working when you hit a limit (was /extra-usage).",
+          "name": "/usage-credits",
+          "provenance": "https://code.claude.com/docs/en/commands (retrieved 2026-05-31)",
+          "source": "supplement"
+        },
+        {
+          "description": "(bundled skill) Confirm a code change does what it should by building, running, and observing your app.",
+          "name": "/verify",
+          "provenance": "https://code.claude.com/docs/en/commands (retrieved 2026-05-31)",
+          "source": "supplement"
+        },
+        {
+          "description": "Toggle voice dictation, or enable it in a specific mode (requires a Claude.ai account).",
+          "name": "/voice [hold|tap|off]",
+          "provenance": "https://code.claude.com/docs/en/commands (retrieved 2026-05-31)",
+          "source": "supplement"
+        },
+        {
+          "description": "Connect your GitHub account to Claude Code on the web using your local gh credentials.",
+          "name": "/web-setup",
+          "provenance": "https://code.claude.com/docs/en/commands (retrieved 2026-05-31)",
+          "source": "supplement"
+        },
+        {
+          "description": "Open the workflow progress view to watch, pause, resume, or save workflows.",
+          "name": "/workflows",
+          "provenance": "https://code.claude.com/docs/en/commands (retrieved 2026-05-31)",
+          "source": "supplement"
+        }
+      ],
+      "note": "Type `/` in a session to see the commands available to you; availability varies by platform, plan, and environment. MCP servers can expose prompts as `/mcp__<server>__<prompt>` commands, discovered dynamically from connected servers. Entries marked \"(bundled skill)\" / \"(bundled workflow)\" are prompts Claude can also invoke automatically. Excludes `/vim` (removed v2.1.92) and `/pr-comments` (removed v2.1.91), which are absent from the installed CLI.",
+      "provenance": "https://code.claude.com/docs/en/commands (retrieved 2026-05-31)",
+      "title": "In-REPL slash commands"
+    },
+    {
+      "entries": [
+        {
+          "description": "Claude Code's standard system prompt, designed to complete software-engineering tasks efficiently.",
+          "name": "Default",
+          "provenance": "https://code.claude.com/docs/en/output-styles (retrieved 2026-05-31)",
+          "source": "supplement"
+        },
+        {
+          "description": "Executes immediately, makes reasonable assumptions instead of pausing for routine decisions, and prefers action over planning (you still see permission prompts).",
+          "name": "Proactive",
+          "provenance": "https://code.claude.com/docs/en/output-styles (retrieved 2026-05-31)",
+          "source": "supplement"
+        },
+        {
+          "description": "Adds educational \"Insights\" between steps to explain implementation choices and codebase patterns.",
+          "name": "Explanatory",
+          "provenance": "https://code.claude.com/docs/en/output-styles (retrieved 2026-05-31)",
+          "source": "supplement"
+        },
+        {
+          "description": "Collaborative learn-by-doing: shares \"Insights\" and adds TODO(human) markers for you to implement small pieces of code yourself.",
+          "name": "Learning",
+          "provenance": "https://code.claude.com/docs/en/output-styles (retrieved 2026-05-31)",
+          "source": "supplement"
+        }
+      ],
+      "note": "Output styles modify Claude Code's system prompt (role, tone, output format). Select one via `/config` → Output style; the choice persists as the `outputStyle` setting in .claude/settings.local.json, and takes effect after /clear or a new session. The standalone `/output-style` command was deprecated in v2.1.73 and removed in v2.1.91. Custom styles can be authored as Markdown files under ~/.claude/output-styles, .claude/output-styles, or a managed-settings directory.",
+      "provenance": "https://code.claude.com/docs/en/output-styles (retrieved 2026-05-31)",
+      "title": "Output styles"
+    }
+  ]
+}

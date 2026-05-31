@@ -29,8 +29,14 @@ machine/clone that never ran this session, so its `.jsonl` isn't local — **STO
 changes.** Do not guess which file is ours, and do not touch the existing corpus.
 
 ## 2. Name the outputs
-Use the argument `$1` as `<name>` (e.g. `quality-pass-session-3`). If absent, default to
-`<YYYY-MM-DD>-<short-slug>` derived from the session's `aiTitle` (fall back to the id prefix).
+If the argument `$1` is given, use it verbatim as `<name>`. **If absent, derive a self-describing name
+yourself**: `<YYYY-MM-DD_HHMM>-<slug>`, where the date/time comes from the transcript
+(`date -r "$src" +'%Y-%m-%d_%H%M'`) and the **slug summarizes what the session actually *did* across
+its whole arc** — not just the first prompt, and *not* the raw `aiTitle` (often vague, e.g. "Continue
+with next unit"). Skim the session's prompt sequence and the work done, then write a concise
+lowercase-kebab slug in the style of the back-filled logs — e.g. `p4-sample-codebases`,
+`open-loops-audit-and-u6`, `unit-authoring-through-u10`, `u13-subagents-authoring`. Treat `aiTitle`
+as a hint only.
 Targets: `log/transcripts/raw/<name>.jsonl` and `log/transcripts/rendered/<name>.md`. Re-running for the
 **same** session overwrites its own pair (idempotent — captures up to the latest flushed point; the act
 of capturing can't capture its own trailing lines). Step 3 **refuses** to overwrite a file that belongs

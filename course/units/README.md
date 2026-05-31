@@ -4,7 +4,7 @@
 
 # Course units
 
-The 16 units, in the default order. Each is self-contained; skim a unit's **Skip-check** and skip deliberately if you already know it. Track yourself on the [progress checklist](../progress-checklist.md); finish with the [capstone](../capstone/).
+The 16 units, in the default order. Each is self-contained; skim a unit's **Skip-check** and skip deliberately if you already know it. Track yourself on the [progress checklist](../progress-checklist.md); finish with the [capstone](../capstone/). Need a flag or command? See the generated [CLI reference](../reference/cli-reference.md).
 
 ## First Wins
 

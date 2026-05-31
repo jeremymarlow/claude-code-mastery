@@ -49,6 +49,7 @@ spot-check edges.
 | [**`course/units/`**](./course/units/README.md) | **Start here** — the [16-unit index](./course/units/README.md) (table of contents) links each lesson directly. |
 | [`course/capstone/`](./course/capstone/) | The single graded capstone: brief menu, worked exemplar, self-applicable rubric. |
 | [`course/progress-checklist.md`](./course/progress-checklist.md) | Track which can-do statements you've achieved. |
+| [`course/reference/cli-reference.md`](./course/reference/cli-reference.md) | Exhaustive, generated CLI reference (every command, flag, and in-REPL slash command). |
 | [`course/stuck.md`](./course/stuck.md) | When you're stuck: hints, FAQ, using Claude to get unstuck. |
 | [`codebases/`](./codebases/) | `primary/` (`taskflow-api`) and `legacy/` (`taskflow-cli`) lab substrates. |
 | [`meta/`](./meta/) | The course's machine-readable backbone (capability map, catalog, coverage, version data). |

@@ -53,7 +53,8 @@ def build() -> str:
     out.append(
         "The 16 units, in the default order. Each is self-contained; skim a unit's **Skip-check** "
         "and skip deliberately if you already know it. Track yourself on the "
-        "[progress checklist](../progress-checklist.md); finish with the [capstone](../capstone/).\n"
+        "[progress checklist](../progress-checklist.md); finish with the [capstone](../capstone/). "
+        "Need a flag or command? See the generated [CLI reference](../reference/cli-reference.md).\n"
     )
     for stage_key, stage_label in STAGES:
         srows = [r for r in rows if r[1] == stage_key]

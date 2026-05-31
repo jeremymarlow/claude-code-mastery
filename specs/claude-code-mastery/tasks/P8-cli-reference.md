@@ -55,13 +55,16 @@ Until 8.7, R16/R17 are invisible to the current hardcoded `R1–R15` check (harm
       installed CLI per R12.AC3). 43 commands + 97 supplement entries; **byte-stable** (identical on
       regenerate); validates vs schema; provenance present on every entry. _Commit pending review._
 
-### 8.3 Human render  [R16.AC2; §12.5]
-- [ ] `tools/render-cli-reference --render` — `cli-reference.json` → `course/reference/cli-reference.md`:
-      "⚙️ Generated — do not edit; regenerate via `--all`" banner with `cli_version` in **text**; TOC;
-      nested command sections (heading depth = command depth) with **flag tables**; supplement sections
-      with doc-URL provenance inline; valid internal anchors (passes `check-links`).
-- [ ] Generate + commit the first page; **link it** from the top `README.md` and `course/units/README.md`
-      index (R9.AC2 navigation).
+### 8.3 Human render  [R16.AC2; §12.5]  ✅
+- [x] `tools/render-cli-reference --render` — `cli-reference.json` → `course/reference/cli-reference.md`:
+      generated-banner with `cli_version` in **text**; TOC; nested command sections (heading depth =
+      command depth) with **flag tables** (choices/default folded in as structured annotations, pipes
+      escaped); supplement sections with doc-URL provenance as inline links; GitHub-style anchors.
+      `--all` (generate+render) added. Render is **deterministic** (identical on re-render — the basis
+      for 8.4's drift gate). Page passes `check-links`.
+- [x] Generated the first page (732 lines); **linked** from the top `README.md` (structure table) and
+      `course/units/README.md` index (via `render-index`, so it can't drift). `make check` green. _Commit
+      pending review._
 
 ### 8.4 Gates: `--check` / `--all` + suite wiring  [R16.AC6; §12.1, §12.8]
 - [ ] `--all` (generate→render); `--check` *default* (offline: re-render + diff vs committed md,

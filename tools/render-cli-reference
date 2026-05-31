@@ -17,18 +17,27 @@ what makes the later regenerate-and-diff freshness check meaningful (R16.AC6).
 """
 import json
 import os
+import re
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from _common import (  # noqa: E402
-    META, Reporter, cli_version, introspect_cli, load_yaml,
+    COURSE, META, Reporter, cli_version, introspect_cli, load_yaml,
 )
 
 REF_JSON = META / "cli-reference.json"
 SUPPLEMENT = META / "cli-reference-supplement.yaml"
 SCHEMA = META / "cli-reference.schema.json"
+REF_MD = COURSE / "reference" / "cli-reference.md"
 
 SCHEMA_VERSION = 1
+
+MD_HEADER = (
+    "<!-- GENERATED from meta/cli-reference.json by tools/render-cli-reference — do not hand-edit. "
+    "Run `tools/render-cli-reference --all` (or `make render`). -->\n"
+)
+# Up-navigation, like the units' breadcrumb (course/reference/cli-reference.md -> repo root).
+MD_BREADCRUMB = "[Claude Code Mastery](../../README.md) › CLI reference\n"
 
 
 def build_supplement_sections():
@@ -94,15 +103,145 @@ def _count_commands(node):
     return 1 + sum(_count_commands(c) for c in node["commands"])
 
 
+# --- human render (R16.AC2; §12.5) -----------------------------------------------------------
+#
+# Pure function of the json: the page never re-introspects the CLI. CommonMark only (R15).
+
+def _slug(text):
+    """GitHub-style heading anchor: lowercase, drop punctuation/backticks, spaces -> hyphens."""
+    s = re.sub(r"[`*_]", "", text.strip().lower())
+    s = re.sub(r"[^\w\s-]", "", s)
+    return re.sub(r"\s+", "-", s)
+
+
+def _cell(text):
+    """Escape a value for a Markdown table cell (pipes would split the row)."""
+    return text.replace("|", "\\|").strip()
+
+
+def _cmd_label(node):
+    return "claude" if not node["path"] else "claude " + " ".join(node["path"])
+
+
+def _flag_row(f):
+    names = ", ".join(f"`{n}`" for n in f["names"])
+    arg = f"`{f['arg']}`" if f["arg"] else "—"
+    desc = _cell(f["description"])
+    extra = []
+    if f["choices"]:
+        extra.append("choices: " + ", ".join(f"`{c}`" for c in f["choices"]))
+    if f["default"] is not None:
+        extra.append(f"default: `{f['default']}`")
+    if extra:
+        joined = "; ".join(extra)
+        desc = f"{desc} — {joined}" if desc else joined
+    return f"| {names} | {arg} | {desc} |"
+
+
+def _render_command(node, lines):
+    """Nested command section: heading depth = command depth; flag/argument tables."""
+    lines.append("#" * min(2 + len(node["path"]), 6) + f" `{_cmd_label(node)}`")
+    lines.append("")
+    if node["description"]:
+        lines.append(_cell(node["description"]))
+        lines.append("")
+    if node["usage"]:
+        lines.append(f"**Usage:** `{node['usage']}`")
+        lines.append("")
+    if node["arguments"]:
+        lines += ["| Argument | Description |", "| --- | --- |"]
+        for a in node["arguments"]:
+            lines.append(f"| `{_cell(a['name'])}` | {_cell(a['description'])} |")
+        lines.append("")
+    if node["flags"]:
+        lines += ["| Flag | Value | Description |", "| --- | --- | --- |"]
+        lines += [_flag_row(f) for f in node["flags"]]
+        lines.append("")
+    for child in node["commands"]:
+        _render_command(child, lines)
+
+
+def _render_supplement(sec, lines):
+    lines.append(f"## {sec['title']}")
+    lines.append("")
+    url = re.search(r"https?://\S+", sec["provenance"])
+    prov = sec["provenance"]
+    if url:
+        prov = prov.replace(url.group(0), f"[{url.group(0)}]({url.group(0)})")
+    lines.append(f"_Doc-sourced — {prov}_")
+    lines.append("")
+    if sec.get("note"):
+        lines.append(_cell(sec["note"]))
+        lines.append("")
+    lines += ["| Name | Description |", "| --- | --- |"]
+    for e in sec["entries"]:
+        name = _cell(e["name"])
+        name_cell = f"`{name}`" if e["name"].startswith("/") else f"**{name}**"
+        desc = _cell(e["description"])
+        if e.get("unverified"):
+            desc = f"{desc} _(unverified — see provenance)_".strip()
+        lines.append(f"| {name_cell} | {desc} |")
+    lines.append("")
+
+
+def _render_toc(ref, lines):
+    lines += ["## Contents", ""]
+
+    def walk(node):
+        lines.append("  " * len(node["path"]) + f"- [`{_cmd_label(node)}`](#{_slug(_cmd_label(node))})")
+        for child in node["commands"]:
+            walk(child)
+
+    walk(ref["root"])
+    for sec in ref["supplement_sections"]:
+        lines.append(f"- [{sec['title']}](#{_slug(sec['title'])})")
+    lines.append("")
+
+
+def render_page(ref):
+    lines = [
+        "# Claude Code CLI reference",
+        "",
+        "> ⚙️ **Generated** from `meta/cli-reference.json` by `tools/render-cli-reference` — do not "
+        "edit by hand; regenerate with `tools/render-cli-reference --all`.",
+        ">",
+        f"> Reflects Claude Code CLI **{ref['cli_version']}**.",
+        "",
+        "The command tree, flags, and arguments below are introspected directly from `claude --help` "
+        "(recursively over subcommands). The final sections cover doc-only surface `--help` cannot "
+        "see — in-REPL slash commands and output styles — sourced from the official docs, with the "
+        "URL and retrieval date shown.",
+        "",
+    ]
+    _render_toc(ref, lines)
+    _render_command(ref["root"], lines)
+    for sec in ref["supplement_sections"]:
+        _render_supplement(sec, lines)
+    return MD_HEADER + MD_BREADCRUMB + "\n" + "\n".join(lines).rstrip() + "\n"
+
+
+def render(rep):
+    if not REF_JSON.exists():
+        rep.fail(f"{REF_JSON.name} missing — run `--generate` first")
+        return
+    ref = json.loads(REF_JSON.read_text(encoding="utf-8"))
+    REF_MD.parent.mkdir(parents=True, exist_ok=True)
+    REF_MD.write_text(render_page(ref), encoding="utf-8")
+    rep.ok(f"rendered {REF_MD.relative_to(COURSE.parent)} @ CLI {ref['cli_version']}")
+
+
 def main(argv):
     rep = Reporter("render-cli-reference")
-    if "--generate" in argv:
+    if "--generate" in argv or "--all" in argv:
         generate(rep)
-        return rep.done()
-    sys.stderr.write(
-        "render-cli-reference: only --generate is implemented in this slice "
-        "(--render/--all/--check land in P8 8.3/8.4)\n")
-    return 2
+    if "--render" in argv or "--all" in argv:
+        render(rep)
+    if not ({"--generate", "--render", "--all"} & set(argv)):
+        sys.stderr.write(
+            "render-cli-reference: pass --generate, --render, or --all "
+            "(--check lands in P8 8.4)\n")
+        return 2
+    return rep.done()
 
 
 if __name__ == "__main__":

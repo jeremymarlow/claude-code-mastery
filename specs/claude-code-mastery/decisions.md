@@ -521,10 +521,18 @@ design gate, recorded now so they survive a context reset:
   including the R17 synopsis step. Built in P8 (when its machinery lands, so references stay accurate per
   R14.AC6) — not written ahead of the design.
 
-_Next:_ write the design addition (**§12**, covering **R16 + R17**: artifact formats/schemas, the
-recursive-introspection + union/provenance algorithm, the changelog-digest artifact + its check, the
-drift/refresh hook, the dynamic-traceability generalization, the maintainer-guide playbook, dogfood
-wiring) → then `tasks/P8-cli-reference.md`. Branch `feat/cli-reference`.
+**P8-design ✅ (2026-05-31)** — Design **§12** authored (covering **R16 + R17**), plus additive
+amendments to §5 (exhaustive-sibling cross-ref), §8 (two new tool rows + the resilience note), §9 (file
+additions), §10 (two dogfooding rows), §11 (R16/R17 traceability rows). §12 captures: the one-tool/four-mode
+pipeline (expensive introspection isolated to `--generate`/`--all`), the byte-stable `cli-reference.json`
+schema (date in `version-record.md`), the authored supplement, the generator algorithm (reusing the
+drift-check parser via `_common.py`), the human render, the `version-changelog.md` digest + its check, the
+drift/refresh integration, the **dynamic-requirement-discovery** generalization of `check-traceability`
+(R13.AC5), and the dogfooding + maintainer-guide playbook. No design forks left open. _Awaiting design-gate
+approval before tasks._
+
+_Next:_ on design-gate approval → write `tasks/P8-cli-reference.md` (ordered build slices). Branch
+`feat/cli-reference`.
 
 ## Open loops & deferrals 🔓 (canonical ledger)
 

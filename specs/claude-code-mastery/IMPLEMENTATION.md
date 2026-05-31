@@ -63,7 +63,8 @@ historical build sessions into `log/transcripts/{raw,rendered}/` behind a human-
 gate, and removed the lossy `/export` `.txt` logs they replace. See `decisions.md` → **P7-amendment**.
 
 **P8 — Version-resilience enhancements: CLI reference + changelog digest (post-v1, in progress).** Two
-new requirements **APPROVED 2026-05-31** at the requirements gate; **design (§12) is next**.
+new requirements **APPROVED 2026-05-31**; **design §12 AUTHORED 2026-05-31** (awaiting design-gate
+approval before tasks).
 - **R16** — exhaustive, generated, version-resilient CLI reference: one tool (`tools/render-cli-reference`,
   modes `--generate`/`--render`/`--all`/`--check`) recursively introspects `claude --help` →
   `meta/cli-reference.json` (byte-stable machine truth) ∪ a provenance-tracked

@@ -211,6 +211,11 @@ verified against the installed CLI (`--help`/`/help`/docs) or marked `unverified
 **Bounded change surface (R12.AC8):** a CLI version bump touches principally `version-data.yaml`
 (+ regen `.json`) and `version-record.md`; prose is principles-first and need not change.
 
+**Exhaustive sibling (R16/R17 → §12):** the *curated* `version-data` (the subset prose references by
+key) is complemented by a *generated, exhaustive* CLI reference (`meta/cli-reference.json` →
+`course/reference/cli-reference.md`) and a *narrative* per-version **changelog digest**
+(`meta/version-changelog.md`). All three are produced/refreshed by the **same drift trigger**; see §12.
+
 ## 6. Unit model & curriculum map  → produces `meta/unit-frontmatter.schema.json` + the unit list  [R5, R6]  ✅ AUTHORED (2026-05-29)
 
 **Front-matter schema** — `meta/unit-frontmatter.schema.json` (JSON Schema, lintable by the R13.AC4
@@ -355,11 +360,19 @@ reference (R14.AC2), so they must be real and clean.
 | `check-traceability` | Every R-ID referenced by ≥1 artifact; every can-do → ≥1 lab **and** ≥1 rubric dimension | R13.AC5 |
 | `check-version-drift` | Installed `claude --version` vs `version-record`; surface new/removed commands | R12.AC6 |
 | `verify-lab` / `reset-lab` | Per-lab automated check + clean reset (see §7) | R7.AC5/AC6 |
+| `render-cli-reference` | Generate `meta/cli-reference.json` from recursive `claude --help` ∪ supplement; render `course/reference/cli-reference.md`; `--check` verifies render-freshness + schema + provenance **offline** (§12) | R16 |
+| `check-version-changelog` | The recorded verified version has a matching `meta/version-changelog.md` digest entry | R17.AC5 |
 
 **Wiring (R13.AC6):** the same suite runs as **local hooks** (fast authoring feedback — Claude Code
 hooks for in-session feedback + a git `pre-commit` hook) **and** in **CI** (GitHub Actions backstop
 gate). `check-version-drift` additionally runs on a schedule/trigger to prompt refresh (R12.AC7).
 Build order note: **P3 builds these before the content (P5)** so they guard authoring from day one.
+
+**Resilience over hardcoding (R13.AC5, added P8):** `check-traceability` discovers the requirement set
+**dynamically** from `requirements.md` (the `### Rn` headings — the single source of truth), not a
+hardcoded `R#` range, so a new requirement needs **zero** tool edits; other checks are audited for the
+same. The **can-do set stays the closed `C1–C17+CV`** (closed by R1; only the requirement enumeration
+grows). See §12.8.
 
 ## 9. Repository structure & conventions  [R13, R15]  ✅ AUTHORED (2026-05-29)
 
@@ -392,6 +405,11 @@ claude-training/
 └─ .github/workflows/             # CI backstop running the check suite (R13.AC6)
 ```
 
+**P8 additions (§12):** `meta/cli-reference.json` (generated), `meta/cli-reference-supplement.yaml`
+(authored), `meta/cli-reference.schema.json`, `meta/version-changelog.md`;
+`course/reference/cli-reference.md` (generated); `tools/render-cli-reference`,
+`tools/check-version-changelog`.
+
 **Naming conventions (R13.AC1):** units `course/units/NN-slug/` (zero-padded `NN`); meta files
 kebab-case; lab tags/branches `start/uNN-labM` and `solution/uNN-labM`; tools kebab-case;
 version-data keys kebab-case (`{{vd:key}}`). Documented in `meta/conventions.md`.
@@ -420,6 +438,8 @@ Each is referenced by the unit that teaches its feature (R14.AC2), and reference
 | `doctor` script | U1 onboarding | R11.AC2, R14.AC2 |
 | CI workflow (`.github/workflows/`) | U16 automate & scale | R14.AC2 |
 | **Decision log** (`decisions.md`) | maintainers; optional teaching material | R14.AC7 |
+| **CLI reference** (`meta/cli-reference.json` → `course/reference/cli-reference.md`) | U4 (single-source version data); U10 (spec-driven build) | R16, R14.AC2 |
+| **Version changelog digest** (`meta/version-changelog.md`) | U4 / maintainer refresh trail | R17, R14.AC2/AC7 |
 
 - **Build case study (R14.AC4):** "how this course was built and is maintained with Claude Code"
   (spec-driven workflow + R12.AC7 refresh process) → lives in `course/capstone/` and **doubles as the
@@ -449,3 +469,159 @@ it. The R13.AC5 check automates the inverse (every requirement referenced; every
 | R13 ✅ | §8, §9 | check + traceability suite, conventions, maintainer guide |
 | R14 ✅ | §10 | dogfooding inventory, build case study, transparency note |
 | R15 ✅ | §9 | CommonMark/a11y/portability conventions |
+| R16 ✅ | §12, §8 | `render-cli-reference`, `cli-reference.json` + supplement + schema, `course/reference/` page |
+| R17 ✅ | §12, §8 | `version-changelog.md` + `check-version-changelog`, refresh-process step |
+
+## 12. Exhaustive CLI reference & version-change digest  → produces `meta/cli-reference.*`, `course/reference/cli-reference.md`, `meta/version-changelog.md`  [R16, R17]  ✅ AUTHORED (2026-05-31)
+
+Two composing version-resilience enhancements, both fired by the **same drift trigger** as §5. **R16**
+produces an *exhaustive, generated* CLI option reference — the structural complement to §5's *curated*
+`version-data`; **R17** produces a *narrative* per-version changelog digest. **Scoping (R16/R17 are infra
++ dogfooding):** neither adds a new can-do, lab, or coverage area, so §4 / §6.5, `check-coverage`, and
+traceability *part B* (can-do → lab + rubric) are untouched (§12.8). Future enhancements get their **own**
+requirement + phase, never bolted onto R16.
+
+### 12.1 Pipeline & tool modes (R16)
+
+```
+claude --help (recursive over subcommands) ─┐
+                                            ├─►[--generate]─► meta/cli-reference.json ─►[--render]─► course/reference/cli-reference.md
+meta/cli-reference-supplement.yaml ─────────┘                (authoritative, merged,                 (learner-facing,
+        (hand-authored doc-only surface)                      provenance-tagged, byte-stable)          generated)
+```
+
+One tool — `tools/render-cli-reference` — with explicit modes, so the **expensive** recursive
+introspection is isolated from the **pure/offline** render and never duplicated:
+
+| Mode | Action | Needs CLI? |
+|---|---|---|
+| `--generate` | Introspect `claude --help` recursively ∪ supplement → write `meta/cli-reference.json` | yes |
+| `--render` | Read the json → write `course/reference/cli-reference.md` | no |
+| `--all` | `--generate` then `--render` (the drift/refresh entrypoint, R16.AC5) | yes |
+| `--check` *(default)* | Offline: re-render from committed json + diff vs committed md; validate json vs schema + provenance present. The `make check` gate. | no |
+| `--check --cli` | Also re-introspect + diff the json (machine freshness); refresh/strict path only | yes |
+
+The costly `claude --help` sweep runs **only** in `--generate`/`--all`; every gate path (`--check`) reads
+the committed json, so `make check` stays cheap and offline-safe (R16.AC6).
+
+### 12.2 Machine artifact — `meta/cli-reference.json` (generated, committed, authoritative; R16.AC1/AC4)
+
+The fully-merged union other tooling reads as the single source of CLI-surface truth:
+
+```json
+{
+  "schema_version": 1,
+  "cli_version": "2.1.158",
+  "root": {
+    "name": "claude", "path": [], "usage": "...", "description": "...",
+    "source": "cli-help", "provenance": "claude --help",
+    "flags": [ { "names": ["-p","--print"], "arg": null, "description": "...",
+                 "choices": null, "default": null, "source": "cli-help", "provenance": "claude --help" } ],
+    "commands": [ { "name": "mcp", "path": ["mcp"], "usage": "...", "description": "...",
+                    "source": "cli-help", "provenance": "claude mcp --help", "flags": [ ], "commands": [ ] } ]
+  },
+  "supplement_sections": [
+    { "title": "In-REPL slash commands", "provenance": "<doc URL> (retrieved 2026-05-31)",
+      "entries": [ { "name": "/rewind", "description": "...", "source": "supplement",
+                     "provenance": "<doc URL> (retrieved 2026-05-31)" } ] }
+  ]
+}
+```
+
+**Byte-stability (R16.AC6):** the artifact carries `cli_version` (stable per version) but **no
+generated-date** — the date lives in `version-record.md` (its existing home, §5). Same CLI + same
+supplement ⇒ byte-identical output. Emission: `json.dumps(indent=2, ensure_ascii=False, sort_keys=True)`;
+**lists preserve CLI/file order** (deterministic per version); single trailing newline. Validated against
+a committed `meta/cli-reference.schema.json` (JSON Schema, lintable like `unit-frontmatter.schema.json`).
+
+### 12.3 Authored supplement — `meta/cli-reference-supplement.yaml` (R16.AC3/AC4)
+
+The **only** hand-edited file in the pipeline; mirrors `version-data.yaml`'s provenance discipline. Holds
+**doc-only surface** `claude --help` cannot see (in-REPL slash commands, output styles, …), grouped into
+titled sections, each entry tagged with a **doc URL + retrieval date**. The generator marks introspected
+entries `source: cli-help` and supplement entries `source: supplement`; it never invents CLI flags. **No
+entry from model memory (R12.AC3).**
+
+### 12.4 Generator algorithm
+
+Reuses (and lifts into `tools/_common.py`) the `Commands:`-section parser already in `check-version-drift`:
+1. `claude --help` → parse `Usage:`, description, `Options:` (flags), `Commands:` (subcommands). Flag
+   rows: 2-space-indented lines starting `-`; deeper-indented wrapped descriptions folded in.
+2. For each subcommand, `claude <path…> --help`, recursing (e.g. `claude mcp add --help`). Depth-capped;
+   skip the `help` pseudo-command; per-call timeout; tolerant of help-shape drift (records the raw
+   `usage` even when a sub-section doesn't parse).
+3. Union the supplement; write the json. The `--check --cli` freshness diff is the **canary** when a new
+   CLI version changes the help shape.
+
+### 12.5 Human render — `course/reference/cli-reference.md` (R16.AC2)
+
+Pure function of the json. CommonMark (R15): a "⚙️ Generated — do not edit; regenerate via
+`tools/render-cli-reference --all`" banner carrying `cli_version` in **text**; a TOC; nested command
+sections (heading depth = command depth) with **flag tables**; then supplement sections with doc-URL
+provenance inline (introspected vs doc-sourced visible in text, R16.AC3). Valid anchors (passes
+`check-links`).
+
+### 12.6 Version-change digest — `meta/version-changelog.md` (R17)
+
+A running, maintainer-facing digest, companion to the bare `version-record.md` table. Per refresh, a
+**cumulative** entry spanning every version strictly after the last recorded verified version through the
+new one (R17.AC2), each carrying the **changelog/release-notes URL + retrieval date** (R17.AC3); an
+unreachable source is **marked, not fabricated**. Each entry **flags content-affecting changes** —
+new/removed/renamed commands or flags, changed defaults, deprecations — cross-referenced to the affected
+`{{vd:key}}` and the regenerated reference (R17.AC4), bounding the review surface. Entry shape:
+
+```markdown
+## 2.1.158 → 2.3.10  (digest retrieved 2026-09-01 from <changelog URL>)
+- **2.2.0** — <synopsis>. _Course impact:_ none.
+- **2.3.0** — new `claude foo` command; `--bar` default changed. _Course impact:_ {{vd:permission-modes}}, cli-reference regen.
+```
+
+Sourcing uses WebFetch of the official notes at refresh time (R12.AC3 provenance). **Enforced** by
+`tools/check-version-changelog` (R17.AC5): the top `version-record.md` version has a matching digest
+entry — a version bump without its synopsis fails the suite.
+
+### 12.7 Drift & refresh integration (R16.AC5, R17.AC1)
+
+The R12.AC7 refresh process (in `version-record.md`) gains two standing steps: **(a)**
+`tools/render-cli-reference --all` — regenerate the machine reference + re-render the page; **(b)** add
+the cumulative `version-changelog.md` digest entry. Both touch only generated/maintainer artifacts
+(R12.AC8); the reference is **bootstrapped by the drift trigger, not hand-maintained**.
+`meta/cli-commands.snapshot` (names-only drift signal) is now a strict subset of `cli-reference.json`;
+kept as the cheap signal for this phase, with folding-them-together logged as a non-blocking open-loop.
+
+### 12.8 Enforcement & resilience (R13, R16.AC6, R17.AC5)
+
+New gates joined to `make check` / the Claude Code hook / CI (R13.AC4/AC6): `render-cli-reference --check`
+(offline render-freshness + schema + provenance) and `check-version-changelog` (R17.AC5). `--check --cli`
+joins `check-version-drift --strict` on the refresh/scheduled trigger only (offline-safe CI).
+
+**Resilience over hardcoding (the generalization, R13.AC5).** Rather than bump `check-traceability`'s
+hardcoded `R1–R15` regex per new requirement, **generalize it to discover the requirement set dynamically
+from `requirements.md`** (the `### Rn` headings — single source of truth). New requirements (R18, R19, …)
+then need **zero** tool edits. Other checks are audited for hardcoded `R#` ranges and given the same
+treatment. The **can-do set stays the closed `C1–C17+CV`** — closed by R1's design; only the *requirement*
+enumeration grows, so only it goes dynamic. This is an R13 robustness improvement *triggered by* R16/R17,
+**not** part of R16's feature scope.
+
+### 12.9 Dogfooding & enhancement playbook (R14, R13.AC3)
+
+Two **light** titled cross-ref pointers (authored in `unit.src.md`, re-rendered via `render-units`; no
+bare codes, per the P7 prose conventions): **U10** — a callout that this reference was built spec-driven
+(R16/R17 → §12 → `tasks/P8` → implementation), a *process* example; **U4** — a pointer to
+`meta/cli-reference.json` as the exhaustive single-source sibling of `version-data.yaml`, an *artifact*
+example. New §10 inventory rows (above). A new **"Adding a post-v1 enhancement"** subsection in
+`course/maintainer-guide.md` codifies the repeatable pattern — additive requirement → new `tasks/P{N}`
+file → `decisions.md` entry + 🔓 ledger → *generalized*, not hardcoded, enforcement; the §12.6 changelog
+step — so the process is resilient to future enhancements (R13.AC3).
+
+### 12.10 Repo additions (§9)
+
+```
+meta/cli-reference.json              # generated machine truth (R16.AC1)
+meta/cli-reference-supplement.yaml   # authored doc-only surface + provenance (R16.AC4)
+meta/cli-reference.schema.json       # JSON Schema for the machine artifact
+meta/version-changelog.md            # per-version changelog digest (R17)
+course/reference/cli-reference.md    # generated learner-facing page (R16.AC2)
+tools/render-cli-reference           # generate | render | all | check (§12.1)
+tools/check-version-changelog        # digest-entry-exists check (R17.AC5)
+```

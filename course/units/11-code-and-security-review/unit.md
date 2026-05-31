@@ -13,6 +13,8 @@ reading_time_min: 11
 lab_time_min: 35
 ---
 
+[Claude Code Mastery](../../../README.md) › [Course units](../README.md)
+
 # Review a change for correctness and security — and triage the findings
 
 ## Learning objectives

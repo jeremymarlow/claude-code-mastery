@@ -1,5 +1,7 @@
 <!-- GENERATED from each unit's front matter by tools/render-index — do not hand-edit. Run `make render`. -->
 
+[‹ Claude Code Mastery](../../README.md)
+
 # Course units
 
 The 16 units, in the default order. Each is self-contained; skim a unit's **Skip-check** and skip deliberately if you already know it. Track yourself on the [progress checklist](../progress-checklist.md); finish with the [capstone](../capstone/).

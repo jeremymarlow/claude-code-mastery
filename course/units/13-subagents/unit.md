@@ -13,6 +13,8 @@ reading_time_min: 12
 lab_time_min: 20
 ---
 
+[Claude Code Mastery](../../../README.md) › [Course units](../README.md)
+
 # Delegate a scoped task to a subagent
 
 ## Learning objectives

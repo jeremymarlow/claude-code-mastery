@@ -49,7 +49,7 @@ def build() -> str:
         )
     rows.sort(key=lambda r: r[0])
 
-    out = [HEADER, "# Course units\n"]
+    out = [HEADER, "[‹ Claude Code Mastery](../../README.md)\n", "# Course units\n"]
     out.append(
         "The 16 units, in the default order. Each is self-contained; skim a unit's **Skip-check** "
         "and skip deliberately if you already know it. Track yourself on the "

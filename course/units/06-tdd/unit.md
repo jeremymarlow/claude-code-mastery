@@ -13,6 +13,8 @@ reading_time_min: 9
 lab_time_min: 30
 ---
 
+[Claude Code Mastery](../../../README.md) › [Course units](../README.md)
+
 # Drive a new behavior test-first (red → green)
 
 ## Learning objectives

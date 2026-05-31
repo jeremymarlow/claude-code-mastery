@@ -18,12 +18,15 @@ import re
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from _common import ROOT, UNITS, Reporter, load_version_data, render_vd  # noqa: E402
+from _common import ROOT, UNITS, FRONTMATTER_RE, Reporter, load_version_data, render_vd  # noqa: E402
 
 HEADER = (
     "<!-- GENERATED from unit.src.md by tools/render-units — do not hand-edit. "
     "Edit unit.src.md, then run `make render`. -->\n"
 )
+# Up-navigation, injected above each unit's H1 so a learner can climb back to the index and the
+# course root. Paths are relative to course/units/<slug>/unit.md and identical for every unit.
+BREADCRUMB = "[Claude Code Mastery](../../../README.md) › [Course units](../README.md)\n"
 LEADING_COMMENT_RE = re.compile(r"^<!--.*?-->\s*", re.DOTALL)
 
 
@@ -34,10 +37,16 @@ def sources():
 
 
 def render_source(src, vd):
-    """Return (generated_text, unresolved_keys). Strips any leading source comment and prepends
-    the GENERATED header, so editing unit.md directly is always caught as drift."""
+    """Return (generated_text, unresolved_keys). Strips any leading source comment, prepends the
+    GENERATED header, and injects the up-navigation breadcrumb after the front matter (before the
+    H1) — so editing unit.md directly is always caught as drift, and every unit links back to the
+    index and the course root without the author maintaining it by hand."""
     text = LEADING_COMMENT_RE.sub("", src.read_text(encoding="utf-8"), count=1)
     rendered, unresolved = render_vd(text, vd)
+    m = FRONTMATTER_RE.match(rendered)
+    if m:
+        fm, body = rendered[: m.end()], rendered[m.end() :]
+        rendered = f"{fm}\n{BREADCRUMB}{body}"
     return HEADER + rendered, unresolved
 
 

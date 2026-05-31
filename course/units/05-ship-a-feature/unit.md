@@ -13,6 +13,8 @@ reading_time_min: 10
 lab_time_min: 25
 ---
 
+[Claude Code Mastery](../../../README.md) › [Course units](../README.md)
+
 # Ship a feature end-to-end with explore → plan → code → commit
 
 ## Learning objectives

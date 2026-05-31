@@ -13,6 +13,8 @@ reading_time_min: 9
 lab_time_min: 18
 ---
 
+[Claude Code Mastery](../../../README.md) › [Course units](../README.md)
+
 # Steer Claude with project memory and deliberate context
 
 ## Learning objectives

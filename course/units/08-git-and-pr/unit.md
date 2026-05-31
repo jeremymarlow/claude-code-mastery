@@ -13,6 +13,8 @@ reading_time_min: 9
 lab_time_min: 25
 ---
 
+[Claude Code Mastery](../../../README.md) › [Course units](../README.md)
+
 # Turn a body of work into clean commits and a reviewable PR
 
 ## Learning objectives

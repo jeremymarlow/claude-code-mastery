@@ -66,5 +66,10 @@ spot-check edges.
 ## A note on how this was made
 
 Parts of this course were authored with Claude Code, using the spec-driven workflow it teaches (see
-`specs/claude-code-mastery/`). That's intentional dogfooding — and a transparency note you'll also
-find with the capstone exemplar.
+`specs/claude-code-mastery/`). That's intentional dogfooding — the full story, with an honest
+AI-authorship transparency note, is the [build case study](./course/capstone/case-study.md), which
+also serves as the worked exemplar for your capstone.
+
+**Maintaining or extending the course?** See
+[`course/maintainer-guide.md`](./course/maintainer-guide.md) — how to add or update a unit without
+breaking the catalog, coverage matrix, or capability map, and how to refresh when the CLI changes.

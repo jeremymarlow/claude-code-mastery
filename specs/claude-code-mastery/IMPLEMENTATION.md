@@ -38,13 +38,18 @@ over memory for specifics; memory is a pointer, the spec is the source of truth.
 |---|---|
 | 1. Requirements (`requirements.md`) | ✅ **APPROVED** (2026-05-29) — turn-by-turn review; gap-free IDs |
 | 2. Design (`design.md`) | ✅ **APPROVED & merged to `main`** (2026-05-29) — §0–§11; design gate passed |
-| 3. Tasks (`tasks.md`) | 🟦 **IN PROGRESS** (2026-05-30) — see the phase breakdown below |
+| 3. Tasks (`tasks.md`) | ✅ **COMPLETE** (2026-05-30) — all phases P1–P6 executed; `make check-strict` green |
 | Rationale (`decisions.md`) | ✅ Per-phase decisions + the canonical 🔓 open-loops ledger |
 
 **Phase 3 (Tasks) breakdown:** P1 ✅ · P2 ✅ · P3 ✅ · P4 ✅ (both lab codebases built; `SEEDED.md`
 inventory + offline mock) · **P5 ✅ — all 16 units (U1–U16) authored; every can-do C1–C17+CV practiced
-by ≥1 lab (`check-traceability`)** · **P6 ⬜ next** (capstone, case study, finalization). Current
-branch: **`spec/tasks-phase`**.
+by ≥1 lab** · **P6 ✅ — capstone (briefs/exemplar/rubric), build case study + transparency note,
+maintainer guide, README finalized, `tools/render-checklist` added; `make check-strict` green = the
+v1 Definition-of-Done mechanical gate (L3) passes.** Current branch: **`spec/tasks-phase`**.
+
+**v1 build is complete.** Remaining is **not release-blocking**: **L1** (7 in-REPL/external version-data
+keys still `unverified` — a one-time interactive `/help`+docs refresh pass, not authorable headlessly);
+and the commit/push of P6 + a CI run on push. See the 🔓 ledger in `decisions.md`.
 
 **Where the detail lives** (don't restate it here):
 - Per-unit build notes (what each unit/lab is, its refs, its traceability) → [`tasks.md`](./tasks.md) §P5.

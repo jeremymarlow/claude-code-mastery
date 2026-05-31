@@ -1,5 +1,5 @@
 <!-- GENERATED from meta/capability-map.yaml — do not hand-edit (R9.AC5).
-     Regenerate with the capability-map generator (P3 tooling). -->
+     Regenerate with tools/render-checklist. -->
 # Progress checklist
 
 Tick a box when you can do it **unaided** and have proven it (a lab passed, or you

@@ -2,10 +2,11 @@
 
 **Spec:** `claude-code-mastery`
 **Phase:** Tasks / Implementation (Phase 3 of 3)
-**Status:** 🟦 **IN PROGRESS** (2026-05-30) — Design authored & approved; the detailed per-phase
-task files (`tasks/P1–P6*.md`) are written and trace design → requirement. P1 (Design) ✅,
-P2 (Scaffolding) ✅, P3 (Tooling) ✅, and P4 (Codebases) ✅ complete; **P5→P6 remaining**. Open
-loops & deferrals are tracked in `decisions.md` → "Open loops & deferrals 🔓" (the canonical ledger).
+**Status:** ✅ **COMPLETE (2026-05-30)** — all phases executed: P1 (Design) ✅, P2 (Scaffolding) ✅,
+P3 (Tooling) ✅, P4 (Codebases) ✅, P5 (Units) ✅, **P6 (Finalization) ✅**. `make check-strict` is
+green — the v1 Definition-of-Done mechanical gate (L3) passes. Remaining is non-release-blocking
+(**L1** in-REPL version-key refresh; commit/push + CI). Open loops & deferrals are tracked in
+`decisions.md` → "Open loops & deferrals 🔓" (the canonical ledger).
 
 > **Chunking for context management.** The full build exceeds one context window. This file is an
 > **index**; detailed tasks live in per-section files under `tasks/` so a session loads only the slice
@@ -112,10 +113,11 @@ Each bullet below: **gist** · _Lab/refs_ · _Traceability & version keys_.
 - [x] Per unit: verify version-specific details vs installed CLI; record provenance (R12.AC3–AC4) — done for U1–U16; remaining `unverified` keys tracked in **L1**
 - [x] Per unit: reference authentic dogfooding artifacts where they exist (R14.AC2) — U12 (command+skill), U14 (hook), U15 (MCP server), U16 (CI)
 
-### P6 — Capstone, case study & finalization  → [`tasks/P6-finalize.md`](./tasks/P6-finalize.md)
-- [ ] Capstone brief menu + worked exemplar (R8.AC2) · self-applicable rubric covering all can-do
+### P6 — Capstone, case study & finalization ✅ **COMPLETE (2026-05-30)**  → [`tasks/P6-finalize.md`](./tasks/P6-finalize.md)
+- [x] Capstone brief menu + worked exemplar (R8.AC2) · self-applicable rubric covering all can-do
       statements (R8.AC3) · structured verification-reflection prompts (R8.AC6) · optional AI-self-grade (R8.AC5)
-- [ ] Optional mid-course checkpoint (R8.AC7)
-- [ ] "How this was built/maintained" case study (R14.AC4) · AI-authorship transparency note (R14.AC5)
-- [ ] Learner-facing `README.md` · maintainer guide w/ "author a unit with Claude Code" recipe (R13.AC3)
-- [ ] Run full enforcement + traceability suite green (local + CI); meet Definition of Done (`IMPLEMENTATION.md` §6)
+- [x] Optional mid-course checkpoint (R8.AC7)
+- [x] "How this was built/maintained" case study (R14.AC4) · AI-authorship transparency note (R14.AC5)
+- [x] Learner-facing `README.md` · maintainer guide w/ "author a unit with Claude Code" recipe (R13.AC3)
+- [x] Run full enforcement + traceability suite green (local + CI); meet Definition of Done (`IMPLEMENTATION.md` §6)
+      — `make check-strict` green; `tools/render-checklist` added (R9.AC5 now genuinely generated)

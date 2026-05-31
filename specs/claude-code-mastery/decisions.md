@@ -313,6 +313,66 @@ _Format: **decision-id** — the decision; **Why:** the rationale._
 
 **P5 COMPLETE (2026-05-30).** All 16 units authored; `check-traceability` now reports **"every can-do is practiced by >=1 lab"** (C1–C17+CV). `make check` green. Remaining is **P6** (capstone/case-study/finalization) — which also clears L3 (`check-strict`: R8 + rubric-dimension coverage).
 
+## P6 — Finalization executed (2026-05-30) — v1 build complete
+
+Authored the capstone, the dogfooding case study, and the maintainer docs; finalized the learner
+entry points; drove `make check-strict` to green (the v1 Definition-of-Done mechanical gate). The two
+strict PENDINGs that stood at P5-complete — `R8` unreferenced by any course artifact, and all 18
+can-dos lacking a rubric dimension — are both closed.
+
+_Format: **decision-id** — the decision; **Why:** the rationale._
+
+**P6-capstone ✅** — Built `course/capstone/` as four files: `README.md` (capstone overview — the
+sole-graded framing, the four R8.AC1 elements, the deliverable incl. the required
+verification-reflection prompts R8.AC6, the optional critiqued AI-self-grade R8.AC5, and the optional
+ungraded mid-course checkpoint R8.AC7), `briefs.md` (the **three** §6.5 briefs A/B/C — feature
+spec-first on `taskflow-api` + custom command / legacy refactor + subagent + hook / MCP integrate +
+vet — each requiring context-engineering + ≥1 custom extension + a non-trivial workflow + explicit
+verification), `rubric.md` (one `[Cn]`-tagged dimension per can-do C1–C17 + CV, graded *demonstrated /
+partial / not-yet* on the **work product**, self-applicable), and `case-study.md` (the exemplar, see
+P6-casestudy). Brief menu held at the §6.5 three (decided with user via AskUserQuestion, over "+ a 4th"
+or "refine later").
+**Why:** R8 in full. The rubric is the mechanical closer for the can-do PENDING (`check-traceability`
+reads `[Cn]` tags from `rubric.md`); the briefs/rubric/README references close the `R8` PENDING. A
+small menu + a real exemplar removes the blank-page problem (R8.AC2) without over-prescribing.
+
+**P6-casestudy ✅** — `course/capstone/case-study.md` is the authentic build case study (R14.AC4): the
+real spec-driven workflow with held gates, deliberate context engineering, the dogfooded extension
+inventory (design §10 — `prime-context`/`close-unit`/hook/MCP/doctor/CI, each linked to the unit that
+teaches it), the CV through-line, and the R12.AC7 refresh process. It **doubles as the capstone
+exemplar**. Includes the light, honest **AI-authorship transparency note** (R14.AC5, §6).
+**Why:** R14 authenticity — the exemplar is the course's own true build story, not a prop; one artifact
+satisfies both the dogfooding narrative and the "no blank page" need.
+
+**P6-maintainer ✅** — `course/maintainer-guide.md` (R13.AC3): the invariants the checks enforce, the
+**meta-first** add-a-unit order (capability-map/catalog/coverage → unit from template → lab refs →
+version-data quarantine → rubric dimension → `close-unit`), the update path, and the **author-a-unit-
+with-Claude recipe** built on the repo's own `prime-context`/`close-unit`.
+**Why:** the maintenance surface is real (two codebases, a version-resilience mechanism); a contributor
+needs the "how not to break the catalog/matrix/map" guidance the checks can't themselves give.
+
+**P6-checklist ✅** — Built `tools/render-checklist`, which renders `course/progress-checklist.md` from
+`meta/capability-map.yaml`, and wired it into `make check`/`check-strict` (a `checklist` drift gate,
+`--check`) and `make render`. Regenerating reproduced the committed file **byte-for-byte except one
+header line** — the old header falsely claimed a "capability-map generator (P3 tooling)" that never
+existed; the generator now exists and the header names it (`tools/render-checklist`).
+**Why:** R9.AC5 says the checklist is *derived from* the map; shipping a "GENERATED — regenerate with
+the generator" header with no generator was a false claim (R14.AC3 authenticity). Building the real
+tool makes the claim true and gates drift going forward, the same pattern as `render-vd` ↔
+`check-version-refs`.
+
+**P6-readme ✅** — Finalized top-level `README.md` (R1.AC6, R9.AC2): linked the transparency note to
+the now-real `case-study.md` and surfaced the maintainer guide. Entry capabilities, the full can-do set
+(by stage + checklist link), and the default-path-with-deviation were already present from P2.
+**Why:** the learner landing must point at the finished capstone exemplar and the maintainer entry;
+the rest met R1.AC6/R9.AC2 already.
+
+**P6-version ✅** — No version-record bump: installed CLI still **2.1.158**, `check-version-drift`
+green (command list unchanged). The capstone's CLI literals (`claude mcp get`, `✓ Connected`, `-p`)
+match the already-verified surface U15/U16 use — no new from-memory version facts introduced.
+**Why:** R12.AC3/AC5 — re-verify, bump only if changed; nothing changed this session. L1 (in-REPL keys)
+is unaffected and stays open as refresh debt, not a release blocker.
+
 ## Open loops & deferrals 🔓 (canonical ledger)
 
 **This is the single source of truth for what is deliberately unfinished.** Every deferral made
@@ -339,16 +399,17 @@ _Resolve in:_ when each key's home unit is authored (P5) and/or the next refresh
 verified against the settings.json schema (R12.AC3); it is U14's R14.AC2 dogfood (P5-U14-dogfood). Now 3 layers:
 hook + pre-commit + CI. _Tracked in:_ `tasks/P3-tooling.md` §3.7; decisions P3-hook, P5-U14-dogfood.
 
-**L3 — `make check-strict` must pass for v1 done** (currently fails on PENDINGs — labs, rubric, R8 — by design).
-_Resolve in:_ P6 (incrementally through P5) — every can-do gets ≥1 lab + ≥1 rubric dimension; R8 referenced
-by capstone artifacts. _Also tracked in:_ `IMPLEMENTATION.md` §6; decision P3-green.
+**~~L3~~ — ✅ CLOSED (P6, 2026-05-30).** `make check-strict` is **green**: every can-do has ≥1 lab
+(P5) + ≥1 rubric dimension (`course/capstone/rubric.md`), and `R8` is referenced by the capstone
+artifacts. This is the v1 Definition-of-Done mechanical gate. _Tracked in:_ `IMPLEMENTATION.md` §6;
+decisions P3-green, P6-capstone.
 
 **~~L4~~ — ✅ CLOSED (P4, 2026-05-30).** Seeded-defect inventory written: `codebases/SEEDED.md` specifies
 legacy bugs D1–D3, and the per-lab registry (§2) is populated as each lab is authored (see L7).
 _Tracked in:_ `tasks/P4-codebases.md`; decision P4-bugs.
 
-**L5 — final capstone brief wording (≥3 briefs) not finalized.**
-_Resolve in:_ P6 — refine from the design §6.5 menu. _Also tracked in:_ `tasks/P6-finalize.md`.
+**~~L5~~ — ✅ CLOSED (P6, 2026-05-30).** The three §6.5 briefs (A/B/C) are finalized in
+`course/capstone/briefs.md` (decided with user). _Tracked in:_ `tasks/P6-finalize.md`; decision P6-capstone.
 
 **L6 — awareness-tier depth** for coverage rows 27–29 may need more than a mention (row 10 / extended
 thinking was handled as a U5 mention+pointer — P5-U5-vd — so it's no longer a concern).

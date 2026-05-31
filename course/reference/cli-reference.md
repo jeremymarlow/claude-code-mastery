@@ -11,6 +11,7 @@ The command tree, flags, and arguments below are introspected directly from `cla
 
 ## Contents
 
+- [What's new](#whats-new)
 - [`claude`](#claude)
   - [`claude agents`](#claude-agents)
   - [`claude auth`](#claude-auth)
@@ -56,6 +57,17 @@ The command tree, flags, and arguments below are introspected directly from `cla
   - [`claude update`](#claude-update)
 - [In-REPL slash commands](#in-repl-slash-commands)
 - [Output styles](#output-styles)
+
+## What's new
+
+Latest CLI changes — full history in [meta/version-changelog.md](../../meta/version-changelog.md).
+
+**2.1.158 → 2.1.159  (drift-ahead of the recorded 2.1.158; retrieved 2026-05-31 from https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md)**
+
+The installed CLI moved to **2.1.159** while the course stays verified against **2.1.158** (decision
+P8-no-bump — no user-facing change warranted a bump). Recorded here ahead of a formal refresh:
+
+- **2.1.159** — Internal infrastructure improvements (no user-facing changes). _Course impact:_ none — the command/flag surface is unchanged (`check-version-drift`: command list unchanged), so `cli-reference.json` and every version-data value stand.
 
 ## `claude`
 

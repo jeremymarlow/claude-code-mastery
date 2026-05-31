@@ -1,0 +1,55 @@
+#!/usr/bin/env python3
+"""check-version-changelog (R17.AC5): the recorded verified version has a changelog digest entry.
+
+A version bump (meta/version-data.yaml `_verified_version`, mirrored in meta/version-record.md)
+without a matching synopsis in meta/version-changelog.md is surfaced by the enforcement suite here,
+rather than left to memory (R12.AC6 philosophy). The narrative digest is R17; this is its gate.
+"""
+import os
+import sys
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from _common import META, Reporter, load_version_data  # noqa: E402
+
+CHANGELOG = META / "version-changelog.md"
+
+
+def entry_headings():
+    """`## ` entry headings in the digest, ignoring fenced code blocks (the documented example)."""
+    if not CHANGELOG.exists():
+        return None
+    heads, fence = [], False
+    for line in CHANGELOG.read_text(encoding="utf-8").splitlines():
+        if line.lstrip().startswith("```"):
+            fence = not fence
+        elif not fence and line.startswith("## "):
+            heads.append(line[3:].strip())
+    return heads
+
+
+def main(argv):
+    rep = Reporter("check-version-changelog")
+    recorded = load_version_data().get("_verified_version")
+    if not recorded:
+        rep.fail("no _verified_version in meta/version-data.yaml")
+        return rep.done()
+
+    heads = entry_headings()
+    if heads is None:
+        rep.fail(f"{CHANGELOG.name} missing — the R17 digest is required")
+        return rep.done()
+
+    # Match the version-subject of each heading (the part before the metadata parenthetical), so a
+    # version merely *mentioned* in a heading's prose (e.g. "(drift-ahead of the recorded X)") does
+    # not satisfy the check — only an entry that actually documents that version does.
+    subjects = [h.split("(", 1)[0] for h in heads]
+    rep.check(
+        any(recorded in s for s in subjects),
+        f"recorded version {recorded} has a digest entry in {CHANGELOG.name}",
+        f"recorded version {recorded} has no entry in {CHANGELOG.name} — add its synopsis (R17.AC5)",
+    )
+    return rep.done()
+
+
+if __name__ == "__main__":
+    raise SystemExit(main(sys.argv[1:]))

@@ -7,14 +7,14 @@ PY ?= python3
 TOOLS := ./tools
 
 .PHONY: check check-strict frontmatter coverage checklist units index links version-refs \
-        cli-reference traceability drift doctor render snapshot help
+        cli-reference changelog traceability drift doctor render snapshot help
 
 ## Run the required + traceability checks (PENDING items do not fail; see check-strict).
-check: frontmatter coverage checklist units index links version-refs cli-reference traceability
+check: frontmatter coverage checklist units index links version-refs cli-reference changelog traceability
 	@echo "make check: all checks passed"
 
 ## Release gate: same suite, but PENDING (not-yet-authored coverage) becomes FAIL.
-check-strict: frontmatter coverage checklist units index links version-refs cli-reference
+check-strict: frontmatter coverage checklist units index links version-refs cli-reference changelog
 	@$(TOOLS)/check-traceability --strict
 	@echo "make check-strict: all checks passed (strict)"
 
@@ -45,6 +45,10 @@ version-refs:
 ## Offline gate (R16.AC6): cli-reference.json valid vs schema + the page in sync with it.
 cli-reference:
 	@$(PY) $(TOOLS)/render-cli-reference --check
+
+## R17.AC5: the recorded verified version has a matching version-changelog.md entry.
+changelog:
+	@$(PY) $(TOOLS)/check-version-changelog
 
 traceability:
 	@$(PY) $(TOOLS)/check-traceability

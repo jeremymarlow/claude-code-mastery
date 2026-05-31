@@ -78,28 +78,24 @@ Until 8.7, R16/R17 are invisible to the current hardcoded `R1–R15` check (harm
       re-render → **passes**; offline (no `claude` on PATH) → `--check` still gates the page and
       `--check --cli` PENDs gracefully (exit 0). `make check` + `make drift` green.
 
-### 8.5 Changelog digest + check + learner "What's new" + inline `added_in` markers  [R17, R16; §12.5/§12.6]
-- [ ] `meta/version-changelog.md` — a **2.1.158 baseline** entry `## 2.1.158 (baseline — <date>, from
-      <changelog URL>)` (satisfies R17.AC5, which keys off the *recorded* version — still 2.1.158, per
-      P8-no-bump) **plus** a real `## 2.1.158 → 2.1.159` entry from the official changelog
-      (`github.com/anthropics/claude-code/blob/main/CHANGELOG.md`): 2.1.159 = "internal infrastructure
-      improvements (no user-facing changes)," `_Course impact:_ none`. Document the cumulative-on-refresh
-      format (per-version bullets + `_Course impact:_` cross-ref to `{{vd:key}}` + reference regen). No
-      content from memory (R12.AC3).
-- [ ] `tools/check-version-changelog` — assert the top `version-record.md` version (2.1.158) has a
-      matching digest entry; wire into `make check` / `check-strict`.
-- [ ] **Learner "What's new" surface (P8-r17-surface):** extend `render-cli-reference --render` to add a
-      **"What's new" section** atop `course/reference/cli-reference.md` from `version-changelog.md`
-      (latest entry inline + a link to the full digest). Keep the render deterministic (8.4 gate);
-      re-render + confirm `check-links`.
-- [ ] **Inline new-option markers (`added_in`, P8-added-in):** add optional `added_in` to the schema
-      (command + flag); extend `--generate` to delta-mark vs the previously-committed json (match
-      commands by `path`, flags by `path`+`names`; carry-forward; **omit when null**; byte-stable);
-      extend `--render` to show a text marker (`🆕 new in 2.1.x` + a word, R15) on flagged rows. Verify
-      byte-stability (regenerate @2.1.159 ⇒ unchanged, no markers) and that a synthetic prior-json diff
-      produces a marker.
-- [ ] Add the two standing refresh steps to `meta/version-record.md` (R12.AC7): **(a)**
-      `render-cli-reference --all`, **(b)** add the cumulative `version-changelog.md` entry.
+### 8.5 Changelog digest + check + learner "What's new" + inline `added_in` markers  [R17, R16; §12.5/§12.6]  ✅
+- [x] `meta/version-changelog.md` — a **2.1.158 baseline** entry **plus** a real `## 2.1.158 → 2.1.159`
+      entry from the official changelog (`github.com/anthropics/claude-code/blob/main/CHANGELOG.md`,
+      retrieved 2026-05-31): 2.1.159 = "internal infrastructure improvements (no user-facing changes),"
+      `_Course impact:_ none`. Header documents the cumulative-on-refresh format + provenance discipline.
+- [x] `tools/check-version-changelog` (R17.AC5) — asserts the recorded `_verified_version` (2.1.158) has
+      a matching digest entry, matching the heading **version-subject** (before the `(`) so a version
+      merely *mentioned* in prose doesn't satisfy it. Wired into `make check` / `check-strict`
+      (`changelog` target). Verified pass + fail.
+- [x] **Learner "What's new" surface (P8-r17-surface):** `render-cli-reference --render` adds a
+      **"What's new" section** atop the page (latest digest entry, `{{vd:key}}`-resolved + fence-aware,
+      + a link to the full digest) and a TOC entry. Deterministic; passes `check-links`/`check-version-refs`.
+- [x] **Inline new-option markers (`added_in`, P8-added-in):** optional `added_in` in the schema
+      (command + flag); `--generate` delta-marks vs the previously-committed json (carry-forward,
+      omit-when-null, byte-stable); `--render` shows `🆕 _new in <ver>_` inline. Verified: regenerate
+      @2.1.159 ⇒ unchanged/no markers; a synthetic older prior-json ⇒ `--effort` stamped + marker rendered.
+- [x] Added the standing R12.AC7 refresh steps to `meta/version-record.md`: regenerate via
+      `render-cli-reference --all` + record the cumulative `version-changelog.md` entry.
 
 ### 8.6 Dogfood pointers  [R16.AC7, R14.AC2; §12.9]
 - [ ] U4 `unit.src.md` — a light **titled** pointer to `meta/cli-reference.json` as the exhaustive

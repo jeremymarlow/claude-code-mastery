@@ -6,14 +6,17 @@ from the pure/offline render and never duplicated (design §12.1):
 
   --generate   Introspect `claude --help` recursively ∪ the authored supplement ->
                meta/cli-reference.json (the authoritative machine artifact). Needs the CLI.
-  --render     (P8 8.3) Read the json -> course/reference/cli-reference.md. Offline.
-  --all        (P8 8.3) --generate then --render.
-  --check      (P8 8.4, default) Offline freshness/validity gate for `make check`.
+               Also delta-marks new commands/flags vs the prior committed json (`added_in`, §12.4).
+  --render     Read the json + meta/version-changelog.md -> course/reference/cli-reference.md. Offline.
+  --all        --generate then --render (the drift/refresh entrypoint).
+  --check      (default) Offline freshness/validity gate for `make check`; `--check --cli` also
+               re-introspects the CLI and diffs the json (machine freshness).
 
-This slice (P8 8.2) implements --generate. The machine artifact is BYTE-STABLE: it carries
-`cli_version` but no generated-date (that lives in meta/version-record.md), and emits with sorted
-keys + preserved list order, so the same CLI + same supplement produce identical bytes — which is
-what makes the later regenerate-and-diff freshness check meaningful (R16.AC6).
+The machine artifact is BYTE-STABLE: it carries `cli_version` but no generated-date (that lives in
+meta/version-record.md), and emits with sorted keys + preserved list order, so the same CLI + same
+supplement + same prior-json produce identical bytes — which is what makes the regenerate-and-diff
+freshness check meaningful (R16.AC6). The page additionally surfaces the latest version-changelog
+entry as a "What's new" section (R17 learner surface, design §12.5).
 """
 import json
 import os
@@ -23,13 +26,14 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from _common import (  # noqa: E402
-    COURSE, META, Reporter, cli_version, introspect_cli, load_yaml,
+    COURSE, META, Reporter, cli_version, introspect_cli, load_version_data, load_yaml, render_vd,
 )
 
 REF_JSON = META / "cli-reference.json"
 SUPPLEMENT = META / "cli-reference-supplement.yaml"
 SCHEMA = META / "cli-reference.schema.json"
 REF_MD = COURSE / "reference" / "cli-reference.md"
+VERSION_CHANGELOG = META / "version-changelog.md"
 
 SCHEMA_VERSION = 1
 
@@ -71,12 +75,57 @@ def build_reference():
     version = cli_version()
     if not version:
         raise SystemExit("render-cli-reference: could not read `claude --version`")
+    root = introspect_cli()
+    prior = json.loads(REF_JSON.read_text(encoding="utf-8")) if REF_JSON.exists() else None
+    if prior:
+        _mark_added_in(root, prior.get("root"), prior.get("cli_version"), version)
     return {
         "schema_version": SCHEMA_VERSION,
         "cli_version": version,
-        "root": introspect_cli(),
+        "root": root,
         "supplement_sections": build_supplement_sections(),
     }
+
+
+# --- added_in delta (R16; design §12.4 step 4) ----------------------------------------------
+#
+# Mark commands/flags that newly appeared versus the previously-committed reference, so a new
+# option is flagged inline (§12.5). Verified by construction (a real introspected-surface delta,
+# not memory) and byte-stable: regenerating at the same version diffs against the current committed
+# json — so nothing reads as new, and existing markers are carried forward unchanged.
+
+def _index_tree(node, cmds, flags):
+    cmds[tuple(node["path"])] = node
+    for f in node["flags"]:
+        flags[(tuple(node["path"]), tuple(f["names"]))] = f
+    for child in node["commands"]:
+        _index_tree(child, cmds, flags)
+
+
+def _mark_added_in(root, prior_root, prior_version, version):
+    if not prior_root:
+        return  # first generation: no prior surface to diff against
+    bumped = bool(prior_version) and prior_version != version
+    pcmds, pflags = {}, {}
+    _index_tree(prior_root, pcmds, pflags)
+
+    def walk(node):
+        if node["path"]:  # never mark the root command itself
+            prior = pcmds.get(tuple(node["path"]))
+            if prior and prior.get("added_in"):
+                node["added_in"] = prior["added_in"]   # carry forward
+            elif prior is None and bumped:
+                node["added_in"] = version             # newly appeared this bump
+        for f in node["flags"]:
+            prior = pflags.get((tuple(node["path"]), tuple(f["names"])))
+            if prior and prior.get("added_in"):
+                f["added_in"] = prior["added_in"]
+            elif prior is None and bumped:
+                f["added_in"] = version
+        for child in node["commands"]:
+            walk(child)
+
+    walk(root)
 
 
 def emit(obj):
@@ -104,9 +153,10 @@ def _count_commands(node):
     return 1 + sum(_count_commands(c) for c in node["commands"])
 
 
-# --- human render (R16.AC2; §12.5) -----------------------------------------------------------
+# --- human render (R16.AC2 + R17 surface; §12.5) ---------------------------------------------
 #
-# Pure function of the json: the page never re-introspects the CLI. CommonMark only (R15).
+# Pure function of the committed sources (cli-reference.json + version-changelog.md): the page
+# never re-introspects the CLI. CommonMark only (R15).
 
 def _slug(text):
     """GitHub-style heading anchor: lowercase, drop punctuation/backticks, spaces -> hyphens."""
@@ -124,6 +174,13 @@ def _cmd_label(node):
     return "claude" if not node["path"] else "claude " + " ".join(node["path"])
 
 
+MARKER = "🆕"  # always paired with the words "new in <ver>" so meaning isn't emoji-only (R15)
+
+
+def _added_marker(added_in):
+    return f"  {MARKER} _new in {added_in}_" if added_in else ""
+
+
 def _flag_row(f):
     names = ", ".join(f"`{n}`" for n in f["names"])
     arg = f"`{f['arg']}`" if f["arg"] else "—"
@@ -136,12 +193,52 @@ def _flag_row(f):
     if extra:
         joined = "; ".join(extra)
         desc = f"{desc} — {joined}" if desc else joined
+    desc += _added_marker(f.get("added_in"))
     return f"| {names} | {arg} | {desc} |"
+
+
+def _whats_new_section():
+    """The R17 learner surface (§12.5): the latest version-changelog.md entry, {{vd:key}}-resolved,
+    plus a link to the full digest. Empty if the changelog is absent.
+
+    Fence-aware: the digest documents an example entry inside a ``` block, so `## ` headings inside
+    code fences are ignored — only real entry headings count.
+    """
+    if not VERSION_CHANGELOG.exists():
+        return []
+    resolved, _ = render_vd(VERSION_CHANGELOG.read_text(encoding="utf-8"), load_version_data())
+    body = resolved.splitlines()
+    heads, fence = [], False
+    for i, line in enumerate(body):
+        if line.lstrip().startswith("```"):
+            fence = not fence
+        elif not fence and line.startswith("## "):
+            heads.append(i)
+    if not heads:
+        return []
+    start = heads[0]
+    end = heads[1] if len(heads) > 1 else len(body)
+    out = [
+        "## What's new",
+        "",
+        "Latest CLI changes — full history in "
+        "[meta/version-changelog.md](../../meta/version-changelog.md).",
+        "",
+        f"**{body[start][3:].strip()}**",
+        "",
+    ]
+    entry = [l.rstrip() for l in body[start + 1:end]]
+    while entry and not entry[0]:        # drop the blank line(s) right under the heading
+        entry.pop(0)
+    while entry and not entry[-1]:       # and any trailing blanks before the next entry
+        entry.pop()
+    return out + entry
 
 
 def _render_command(node, lines):
     """Nested command section: heading depth = command depth; flag/argument tables."""
-    lines.append("#" * min(2 + len(node["path"]), 6) + f" `{_cmd_label(node)}`")
+    lines.append("#" * min(2 + len(node["path"]), 6)
+                 + f" `{_cmd_label(node)}`" + _added_marker(node.get("added_in")))
     lines.append("")
     if node["description"]:
         lines.append(_cell(node["description"]))
@@ -187,6 +284,8 @@ def _render_supplement(sec, lines):
 
 def _render_toc(ref, lines):
     lines += ["## Contents", ""]
+    if VERSION_CHANGELOG.exists():
+        lines.append("- [What's new](#whats-new)")
 
     def walk(node):
         lines.append("  " * len(node["path"]) + f"- [`{_cmd_label(node)}`](#{_slug(_cmd_label(node))})")
@@ -215,6 +314,9 @@ def render_page(ref):
         "",
     ]
     _render_toc(ref, lines)
+    whats_new = _whats_new_section()
+    if whats_new:
+        lines += whats_new + [""]
     _render_command(ref["root"], lines)
     for sec in ref["supplement_sections"]:
         _render_supplement(sec, lines)

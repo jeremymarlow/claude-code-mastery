@@ -22,8 +22,17 @@ own `verified_version` + `verified_date` + `provenance`.
 3. Update **only** `meta/version-data.yaml` (then regenerate `meta/version-data.json`) plus any
    genuinely affected location. Because version-specifics are quarantined, prose rarely changes
    (R12.AC8).
-4. Add a new row at the top of the table above with the new version, date, and method.
-5. Re-run the enforcement suite (`tools/check-version-refs`, `tools/check-version-drift`, …).
+4. **Regenerate the CLI reference (R16.AC5):** `tools/render-cli-reference --all` — re-introspects the
+   installed CLI into `meta/cli-reference.json` and re-renders `course/reference/cli-reference.md`.
+   Newly-added commands/flags are auto-flagged `added_in` against the prior committed reference.
+5. **Record the change synopsis (R17):** add one cumulative entry at the top of
+   `meta/version-changelog.md` covering every version strictly after the last recorded through the new
+   one — with the official changelog/release-notes URL + retrieval date, flagging content-affecting
+   changes (new/removed/renamed commands or flags, changed defaults, deprecations). This is also
+   surfaced learner-facing as the page's "What's new" section.
+6. Add a new row at the top of the table above with the new version, date, and method.
+7. Re-run the enforcement suite (`tools/check-version-refs`, `tools/check-version-drift`,
+   `tools/render-cli-reference --check`, `tools/check-version-changelog`, …).
 
 ## Outstanding to verify on next refresh
 

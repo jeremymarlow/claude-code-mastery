@@ -48,7 +48,12 @@
         },
         "flags": {"type": "array", "items": {"$ref": "#/$defs/flag"}},
         "arguments": {"type": "array", "items": {"$ref": "#/$defs/argument"}},
-        "commands": {"type": "array", "items": {"$ref": "#/$defs/command"}}
+        "commands": {"type": "array", "items": {"$ref": "#/$defs/command"}},
+        "added_in": {
+          "type": "string",
+          "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$",
+          "description": "CLI version at which this command first appeared (vs the previously-committed reference); omitted when unknown/not-new. Generated, not authored (design §12.2/§12.4)."
+        }
       }
     },
     "flag": {
@@ -67,7 +72,12 @@
         "choices": {"type": ["array", "null"], "items": {"type": "string"}},
         "default": {"type": ["string", "null"]},
         "source": {"type": "string", "const": "cli-help"},
-        "provenance": {"type": "string", "minLength": 1}
+        "provenance": {"type": "string", "minLength": 1},
+        "added_in": {
+          "type": "string",
+          "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$",
+          "description": "CLI version at which this flag first appeared (vs the previously-committed reference); omitted when unknown/not-new."
+        }
       }
     },
     "argument": {

@@ -1,9 +1,9 @@
 # Capstone rubric
 
-This is how you grade your **capstone work product** — not yourself (R8.AC3). It is **self-applicable**:
-a solo learner can score their own capstone against it with no external evaluator (R8.AC4). The
-dimensions below collectively cover **every can-do** in the capability map (C1–C17 + the cross-cutting
-verification habit CV), which is also what
+This is how you grade your **capstone work product** — not yourself. It is **self-applicable**:
+a solo learner can score their own capstone against it with no external evaluator. The
+dimensions below collectively cover **every can-do** in the capability map (including the cross-cutting
+verification habit, CV), which is also what
 [`progress-checklist.md`](../progress-checklist.md) tracks.
 
 ## How to score
@@ -72,11 +72,11 @@ the capstone itself*.
   approach, and spot-checked edges rather than relying on green tests alone — and your required
   verification reflection (see the capstone overview) records one catch, one justified accept, and one
   override. This dimension should be **demonstrated**, not partial: it is the thesis the whole course
-  defends (R10).
+  defends.
 
-## Optional AI-assisted self-grade (then critique it) — R8.AC5
+## Optional AI-assisted self-grade (then critique it)
 
 You may ask Claude to score your capstone against this rubric. If you do, you **must critique the grade
 rather than accept it**: find at least one dimension where Claude was too generous or too harsh, and say
 why, with evidence from your deliverable. Accepting an AI grade unexamined is the exact failure mode
-[CV] exists to prevent — so grading the grader *is* part of the assessment.
+CV exists to prevent — so grading the grader *is* part of the assessment.

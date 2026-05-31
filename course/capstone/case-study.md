@@ -1,13 +1,13 @@
 # Case study: how this course was built and is maintained with Claude Code
 
-This is the **worked exemplar** for your capstone (R8.AC2) — and it is real. This course was itself
+This is the **worked exemplar** for your capstone — and it is real. This course was itself
 built end-to-end with Claude Code, spec-driven, against the same discipline the units teach. Read it
 before you start your capstone so you have a concrete picture of a non-trivial job done well: context
 engineered deliberately, custom extensions built and used, a real workflow followed, and Claude's
 output verified at every step rather than trusted.
 
-It is also the course's standing dogfooding record (R14.AC4): if we teach a feature, we point at the
-real artifact we used, never a prop (R14.AC3).
+It is also the course's standing dogfooding record: if we teach a feature, we point at the
+real artifact we used, never a prop.
 
 ## 1. The job
 
@@ -18,7 +18,7 @@ of work where ad-hoc prompting falls apart and a deliberate process pays for its
 
 ## 2. The workflow: spec-driven, with real gates
 
-We ran the [Kiro-style spec workflow](../units/10-spec-driven-dev/unit.md) the course teaches in U10,
+We ran the [Kiro-style spec workflow](../units/10-spec-driven-dev/unit.md) the course teaches,
 on the course itself. The artifacts are not illustrations — they are the spec we actually built from:
 
 - **Requirements** ([`requirements.md`](../../specs/claude-code-mastery/requirements.md)) — R1–R15 in
@@ -33,33 +33,33 @@ on the course itself. The artifacts are not illustrations — they are the spec 
 The gates were genuine, not ceremony: requirements were locked before design, design before tasks. A
 held gate is the difference between a spec and a wish — when a requirement felt arbitrary later, the
 reasoning was already recorded rather than re-litigated. That "why" lives in
-[`decisions.md`](../../specs/claude-code-mastery/decisions.md), the build's decision log (R14.AC7),
+[`decisions.md`](../../specs/claude-code-mastery/decisions.md), the build's decision log,
 which a fresh session reads to recover context it never had.
 
 **Context was engineered, not dumped.** Each unit was authored in its own slice, loading only the
 relevant requirements, the one design section, and the cross-cutting `meta/` artifacts it referenced —
-never the whole spec. Project memory ([`CLAUDE.md`](../../CLAUDE.md), the U4 example) carries the
+never the whole spec. Project memory ([`CLAUDE.md`](../../CLAUDE.md), the **Memory & context** example) carries the
 working agreements into every session so they did not have to be re-stated.
 
 ## 3. The custom extensions we built and use
 
-These are authentic — each one earns its place by doing a job in the real build loop (R14.AC1/AC2):
+These are authentic — each one earns its place by doing a job in the real build loop:
 
 | Artifact | What it does | Taught in |
 |---|---|---|
-| [`prime-context` skill](../../.claude/skills/prime-context/SKILL.md) | Loads full project context at the start of a fresh session (read order + live status + open loops). | [U12](../units/12-commands-and-skills/unit.md) |
-| [`close-unit` command](../../.claude/commands/close-unit.md) | Runs the post-authoring state-sync chore (update status, check off tasks, log the decision, run the checks). | [U12](../units/12-commands-and-skills/unit.md) |
-| [Enforcement hook](../../.claude/settings.json) + check suite | A `PostToolUse` hook runs `make check` on edits under `course/`/`meta/` and blocks in-session on failure. | [U14](../units/14-hooks/unit.md) |
-| [`tools/check-version-drift`](../../tools/check-version-drift) | Flags when the installed CLI has drifted from the verified record (the refresh trigger). | [U16](../units/16-automate-and-scale/unit.md) |
-| [MCP server + config](../../codebases/fixtures/taskflow_mcp.py) | A real, connectable local stdio MCP server over taskflow data, plus its project config. | [U15](../units/15-mcp-and-vetting/unit.md) |
-| [`tools/doctor`](../../tools/doctor) | Preflight: install, version floor, auth, a first command. | [U1](../units/01-onboarding-first-win/unit.md) |
-| [CI workflow](../../.github/workflows/checks.yml) | Runs the full check suite on every push (the backstop gate). | [U16](../units/16-automate-and-scale/unit.md) |
+| [`prime-context` skill](../../.claude/skills/prime-context/SKILL.md) | Loads full project context at the start of a fresh session (read order + live status + open loops). | [Commands & skills](../units/12-commands-and-skills/unit.md) |
+| [`close-unit` command](../../.claude/commands/close-unit.md) | Runs the post-authoring state-sync chore (update status, check off tasks, log the decision, run the checks). | [Commands & skills](../units/12-commands-and-skills/unit.md) |
+| [Enforcement hook](../../.claude/settings.json) + check suite | A `PostToolUse` hook runs `make check` on edits under `course/`/`meta/` and blocks in-session on failure. | [Hooks](../units/14-hooks/unit.md) |
+| [`tools/check-version-drift`](../../tools/check-version-drift) | Flags when the installed CLI has drifted from the verified record (the refresh trigger). | [Automate & scale](../units/16-automate-and-scale/unit.md) |
+| [MCP server + config](../../codebases/fixtures/taskflow_mcp.py) | A real, connectable local stdio MCP server over taskflow data, plus its project config. | [MCP & vetting](../units/15-mcp-and-vetting/unit.md) |
+| [`tools/doctor`](../../tools/doctor) | Preflight: install, version floor, auth, a first command. | [Onboarding](../units/01-onboarding-first-win/unit.md) |
+| [CI workflow](../../.github/workflows/checks.yml) | Runs the full check suite on every push (the backstop gate). | [Automate & scale](../units/16-automate-and-scale/unit.md) |
 
 `prime-context` and `close-unit` **bookend the real authoring loop**: prime at session start, close
 the unit when its prose is done. That is the same shape your capstone should take — package the work
 you repeat into a command or skill rather than retyping it.
 
-## 4. Verification was the through-line (CV)
+## 4. Verification was the through-line
 
 The thesis the whole course defends — verify, don't trust — is what kept the build honest:
 
@@ -78,7 +78,7 @@ The thesis the whole course defends — verify, don't trust — is what kept the
 
 ## 5. Maintenance: keeping it current as the CLI changes
 
-The course is built to be refreshed, not rewritten, when Claude Code moves (R12.AC7). The process — run
+The course is built to be refreshed, not rewritten, when Claude Code moves. The process — run
 it whenever the CLI updates — is:
 
 1. Run [`tools/check-version-drift`](../../tools/check-version-drift) to compare the installed
@@ -101,7 +101,7 @@ This course — its units, labs, spec, and tooling — was authored collaborativ
 under human direction and review at every gate. That is the point, not a caveat: the course teaches a
 way of working, and it was built that way.
 
-In the spirit of the responsible-output guidance the course itself teaches (R10.AC9): AI-assisted
+In the spirit of the responsible-output guidance the course itself teaches: AI-assisted
 authorship does not lower the bar for correctness or attribution. Everything here was reviewed by a
 human, version-specific claims were verified against the real tool rather than asserted from a model's
 memory, and the reasoning behind non-obvious choices was recorded so it can be checked rather than

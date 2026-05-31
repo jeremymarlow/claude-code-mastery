@@ -1,13 +1,13 @@
 # Capstone
 
-The capstone is the course's **single graded assessment** (R8.AC1) — the one place you prove, end to
+The capstone is the course's **single graded assessment** — the one place you prove, end to
 end, that you can do real work with Claude Code and **verify** it. Units are instructional and labs are
 ungraded practice; this is the only thing you "grade," and you grade the **work product**, not yourself.
 
 ## What it asks of you
 
 Pick one brief from the [brief menu](./briefs.md) and take it from nothing to a verified, finished
-result. Whichever you choose, the deliverable must show all four (R8.AC1):
+result. Whichever you choose, the deliverable must show all four:
 
 - **Context engineering** — deliberate `CLAUDE.md` / context steering.
 - **At least one custom extension** — a command, subagent, skill, hook, or MCP connection you build
@@ -16,7 +16,7 @@ result. Whichever you choose, the deliverable must show all four (R8.AC1):
 - **Explicit verification** — you check Claude's output, not merely the test bar.
 
 You do **not** face a blank page: the [build case study](./case-study.md) — how this course itself was
-built with Claude Code — is your worked **exemplar** (R8.AC2).
+built with Claude Code — is your worked **exemplar**.
 
 ## The deliverable
 
@@ -24,7 +24,7 @@ built with Claude Code — is your worked **exemplar** (R8.AC2).
    what you built and how to run/verify it.
 2. **A brief write-up** — which brief, the workflow you followed, the custom extension you built and
    why, and how you engineered context.
-3. **The required verification reflection** (R8.AC6) — structured by these prompts, each with concrete
+3. **The required verification reflection** — structured by these prompts, each with concrete
    evidence from your work:
    - **One catch** — a place you caught Claude producing something wrong or suboptimal, and what you
      did about it.
@@ -32,23 +32,23 @@ built with Claude Code — is your worked **exemplar** (R8.AC2).
      trusting it (not "the tests passed" alone).
    - **One override** — a place you overrode or redirected Claude, and why your judgment won.
 
-This reflection is not optional polish — it is the core of the cross-cutting [CV] dimension and the
-thesis the whole course defends: verify, don't trust (R10).
+This reflection is not optional polish — it is the core of the cross-cutting verification (CV) dimension and the
+thesis the whole course defends: verify, don't trust.
 
 ## Grading your own capstone
 
-Score the work product against the [rubric](./rubric.md). It is **self-applicable** (R8.AC4): for each
+Score the work product against the [rubric](./rubric.md). It is **self-applicable**: for each
 can-do dimension you mark *demonstrated / partially demonstrated / not yet demonstrated*, with evidence
 you can point to. An honest "not yet" is a pointer back to the unit, not a verdict on you.
 
-**Optional AI-assisted self-grade (R8.AC5).** You may have Claude score your capstone against the
+**Optional AI-assisted self-grade.** You may have Claude score your capstone against the
 rubric — but you must then **critique that grade** rather than accept it (find where it was too
 generous or too harsh, with evidence). Grading the grader is itself part of the assessment.
 
 ## Optional mid-course checkpoint (ungraded)
 
-After the **Daily Driver** stage (through U8), you may take an optional, **ungraded** self-check to
-surface gaps before the capstone (R8.AC7). It does not change the capstone's status as the sole graded
+After the **Daily Driver** stage (through **Git & PR**), you may take an optional, **ungraded** self-check to
+surface gaps before the capstone. It does not change the capstone's status as the sole graded
 assessment.
 
 **The checkpoint:** ship one small feature to

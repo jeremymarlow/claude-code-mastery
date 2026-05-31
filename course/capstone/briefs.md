@@ -1,9 +1,9 @@
 # Capstone briefs
 
 Pick **one** brief. Each is a realistic, non-trivial, end-to-end job — not a fixed project — so you
-have room to make it yours while facing the same kind of work the course prepared you for (R8.AC2).
+have room to make it yours while facing the same kind of work the course prepared you for.
 
-Whichever you choose, your capstone must demonstrate all four of these (R8.AC1):
+Whichever you choose, your capstone must demonstrate all four of these:
 
 1. **Context engineering** — deliberate use of `CLAUDE.md` and context selection to steer Claude.
 2. **At least one custom extension** — a command, subagent, skill, hook, or MCP connection that you
@@ -31,8 +31,8 @@ and tests, and respect the app's ownership/auth rules.
 design decisions (data model, edge cases, error contracts) are the real work.
 
 **Shape.**
-- **Workflow:** spec-driven (W7) to pin down requirements → design → tasks, then explore → plan →
-  code → commit (W1) to build it.
+- **Workflow:** spec-driven to pin down requirements → design → tasks, then explore → plan →
+  code → commit to build it.
 - **Custom extension:** build a **custom command** (or skill) that automates a routine in this
   loop — e.g. scaffolding a route + schema + test stub, or running and triaging the test suite.
 - **Context engineering:** use the project `CLAUDE.md` and targeted context so Claude follows the
@@ -58,8 +58,8 @@ change once the safety net is in place.
 refactoring it safely is exactly the high-stakes "don't silently change behavior" job.
 
 **Shape.**
-- **Workflow:** onboard to the unfamiliar code (W8) to map it, then multi-file refactor (W5),
-  behavior-preserving. If you fix a bug, do it test-first (W3/W2) *after* the refactor.
+- **Workflow:** onboard to the unfamiliar code to map it, then multi-file refactor,
+  behavior-preserving. If you fix a bug, do it test-first *after* the refactor.
 - **Custom extension:** build **two** here if you can — a read-only **subagent** to map the module
   for you, and a **hook** guardrail (e.g. run the tests on edit, or block a risky action) so your
   refactor cannot regress unnoticed.
@@ -89,7 +89,7 @@ by it.
 trust-but-verify matters most — an unvetted extension is a real risk.
 
 **Shape.**
-- **Workflow:** review-and-vet (W6) the extension, then use it; coordinate the run (W9) if you go
+- **Workflow:** review-and-vet the extension, then use it; coordinate the run if you go
   headless or parallel.
 - **Custom extension:** the **MCP connection** itself is the extension (configure it, confirm
   `✓ Connected`); optionally add a command that wraps the task you repeat with it.

@@ -1,7 +1,7 @@
 # When you're stuck
 
 You're working through this course **solo** — so getting unstuck without an instructor is a skill
-in itself. This page is your recovery mechanism (R9.AC4). Work top to bottom; stop as soon as you're
+in itself. This page is your recovery mechanism. Work top to bottom; stop as soon as you're
 moving again.
 
 ## 1. Re-read the lab's self-check
@@ -26,11 +26,11 @@ Hints are deliberately separated from solutions so you can get a nudge without s
 This is the meta-skill the course is teaching — Claude is also your debugger and tutor:
 
 - **Explain the failure:** paste the error and ask Claude to explain it *and* point at the file/line.
-  Then **verify** its explanation against the code (CV) — don't just accept it.
+  Then **verify** its explanation against the code — don't just accept it.
 - **Ask for the approach, not the answer:** "What are the likely causes of this, in order?" keeps you
   in the driver's seat.
-- **Reproduce, then narrow:** ask Claude to help you write a minimal failing test (the W3 debugging
-  pattern) so "fixed" becomes objective.
+- **Reproduce, then narrow:** ask Claude to help you write a minimal failing test (the debugging
+  workflow) so "fixed" becomes objective.
 - **Reset and retry:** if a session has gone sideways, `tools/reset-lab uNN-labM` and start the lab
   clean — a fresh context often beats untangling a confused one.
 
@@ -47,6 +47,6 @@ This is the meta-skill the course is teaching — Claude is also your debugger a
   `tools/check-version-drift`.
 - **"My lab won't reset cleanly."** Commit or stash your work first, then `tools/reset-lab uNN-labM`.
 - **"Do I have to do the labs in order?"** No — follow the prerequisites in each unit's front matter
-  (the authoritative ordering); the numeric path is just the default (R9.AC2).
+  (the authoritative ordering); the numeric path is just the default.
 - **"I'm not sure I've actually learned it."** Track yourself against
   [`progress-checklist.md`](./progress-checklist.md); the capstone rubric is the final proof.

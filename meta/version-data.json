@@ -152,10 +152,10 @@
     },
     "mcp": {
       "kind": "command",
-      "value": "`claude mcp` configures/manages MCP servers; `--mcp-config <files>` loads them per-session; `--strict-mcp-config` ignores others.",
-      "provenance": "claude --help (mcp command; --mcp-config; --strict-mcp-config)",
+      "value": "`claude mcp add <name> -- <cmd>` adds a local stdio server (subprocess); `--transport http <url>` adds a remote one. `claude mcp get`/`list` health-check connections; a project `.mcp.json` server shows as `⏸ Pending approval` until approved. `--mcp-config <files>` loads per-session; `--strict-mcp-config` ignores others.",
+      "provenance": "claude mcp --help (add/add-json/get/list/remove/serve); verified live 2026-05-30 — a stdlib stdio server registered via `mcp add` reported `✓ Connected` via `mcp get`; `.mcp.json` format captured from `mcp add -s project`.",
       "verified_version": "2.1.158",
-      "verified_date": "2026-05-29",
+      "verified_date": "2026-05-30",
       "unverified": false
     },
     "plugins": {

@@ -19,6 +19,25 @@ curl "localhost:8079/weather?city=Berlin"
 Responses are fixed, so a lab's `verify.sh` can assert on them. See the module docstring for the
 full route list.
 
+## `taskflow_mcp.py` + `taskflow.mcp.json`
+
+A zero-dependency stdlib **stdio MCP server** (newline-delimited JSON-RPC 2.0) for U15. It lets a
+learner connect a *real* MCP server with no network, credentials, or extra packages (R7.AC7) — the
+server runs as a local subprocess and exposes read-only `list_tasks` / `task_stats` tools over canned
+taskflow data.
+
+```bash
+# Connect it (verified ✓ Connected against the CLI in meta/version-record.md):
+claude mcp add taskflow-local -- python3 codebases/fixtures/taskflow_mcp.py
+claude mcp get taskflow-local        # health-checks the connection
+claude mcp remove taskflow-local     # clean up
+```
+
+`taskflow.mcp.json` is the equivalent **project-scoped config** (the committed `.mcp.json` form). A
+project `.mcp.json` server shows as `⏸ Pending approval` until you approve it — the built-in trust gate
+U15 uses for the vetting half. The data is a teaching mock; the point is the connection + trust
+mechanics, not the data.
+
 ## Adding a fixture
 
 Keep fixtures **stdlib-only** and **deterministic**. If a fixture belongs to exactly one lab, it may

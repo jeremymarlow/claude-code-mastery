@@ -296,6 +296,15 @@ _Format: **decision-id** — the decision; **Why:** the rationale._
 **P5-U14-vd ✅** — U14 consumes the *verified* `hooks` key plus `_verified_version`. This session **verified the event-name enum + the `{matcher, hooks:[{type,command}]}` structure against the settings.json schema** (via the update-config skill) and updated the key's value/provenance/`verified_date`→2026-05-30; kept it principle-level (teach the common events; defer the full ~30-event enum to docs). **No new L1 debt.**
 **Why:** the hooks key was already `unverified:false`, but its old `notes` flagged event names as needing verification — now actually done against the authoritative schema (R12.AC3/AC4), so the unit can name `PreToolUse`/`PostToolUse`/`Stop`/`SessionStart`/`PreCompact` with provenance while still deferring the growing full list.
 
+**P5-U15-connect ✅ (decided with user)** — The offline "connect an MCP server" step ships a **real, verified local stdio MCP server**: `codebases/fixtures/taskflow_mcp.py` — a zero-dependency, stdlib-only stdio server (newline-delimited JSON-RPC 2.0; handles `initialize`/`tools/list`/`tools/call`/`ping`, echoes the client's `protocolVersion`) exposing read-only `list_tasks`/`task_stats` over canned taskflow data — plus `taskflow.mcp.json` (the project-config form). Chosen over (a) `claude mcp serve` [verified but circular] and (b) conceptual-only [no real artifact], via AskUserQuestion. **Verified against the real CLI (R12.AC3):** `claude mcp add taskflow-local -- python3 …/taskflow_mcp.py` then `claude mcp get` reported **`✓ Connected`**; `.mcp.json` format captured from `mcp add -s project` (not authored from memory). Satisfies design §10 "MCP config + local mock" (R14.AC2). Fixtures README updated; no stray `.mcp.json` left at any project root.
+**Why:** the user prioritized an authentic, *connectable* artifact, and the connection turned out headlessly verifiable (`mcp get` health-checks), so the R12.AC3 protocol-from-memory risk that made me hesitate is retired — the handshake is proven, not asserted. The data is a teaching mock (point is connection + trust, not data), keeping the new maintenance surface tiny and stdlib-only (R7.AC7).
+
+**P5-U15-lab ✅** — `u15-lab1` ships **no `start/`/`solution/` refs** (the artifact is a connection in the learner's config + a vetting decision, not a codebase mutation — precedent U14), but is objectively checkable: Part A connect the local server, confirm `✓ Connected` via `claude mcp get`, **call a tool and verify the result** against the fixture's canned data; Part B **vet a third-party server** against an objective checklist (source/scope/transport/secrets/least-privilege) → explicit connect/don't-connect verdict, using the `⏸ Pending approval` gate. Vetting graded by checklist (decided with user, over checklist+writeup). C16 traces via front matter + `## Lab`; covers areas 21+22.
+**Why:** the connect half is verifiable (`mcp get`) and the vetting half is judgment best graded by an objective checklist (same instrument as U8/U10/U11). The whole unit *is* the woven CV/security step (R10.AC5/AC7): verify the connection, verify the result, vet before trust. No mutating branch ⇒ not in `SEEDED.md` §2.
+
+**P5-U15-vd ✅** — U15 consumes the *verified* `mcp` and `plugins` keys plus `_verified_version`. Updated `mcp` value/provenance/`verified_date`→2026-05-30 to the live-verified `add`/`get`/`list`/`.mcp.json` surface (was the thinner `--mcp-config` description); `plugins` already verified (area 22). **No new L1 debt.**
+**Why:** the `mcp` add/get/serve subcommands and the `.mcp.json` shape were confirmed against `claude mcp --help` *and* exercised live this session (the `✓ Connected` health-check), so the unit names them with real provenance (R12.AC3/AC4) while deferring detail to {{vd:mcp}}/{{vd:plugins}}.
+
 ## Open loops & deferrals 🔓 (canonical ledger)
 
 **This is the single source of truth for what is deliberately unfinished.** Every deferral made
@@ -347,7 +356,8 @@ Status per lab (✅ = refs + verifier created, verified end-to-end fails-clean/p
 - **u02 / u03** — read-only, no `start/`/`solution/` refs (U2 prose answer key; U3 objective `verify.sh` + SEEDED row)
 - **u08 / u10 / u12 / u13** — prose-self-check labs, no refs (decisions P5-U8-lab, P5-U10-lab, P5-U12-lab, P5-U13-lab)
 - **u14** — no `start/`/`solution/` refs (hook in learner's `settings.json`), but self-check is an **objective pipe-test**, not prose (P5-U14-lab)
-- **u15–u16** — pending (those that mutate)
+- **u15** — no `start/`/`solution/` refs (connection in learner's config + vetting decision), but self-check is objective: `claude mcp get` `✓ Connected` + verify tool result + vetting checklist (P5-U15-lab); ships verified `taskflow_mcp.py` + `taskflow.mcp.json` fixtures
+- **u16** — pending (if it mutates)
 
 **Decided, not open (do not re-litigate):** tools are no-extension kebab-case (deviation from design
 §7 `.sh`, decision P3-tools); `permission-modes` value per verified CLI (P2-vd); awareness home-unit

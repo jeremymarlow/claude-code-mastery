@@ -1,9 +1,11 @@
 <!--
-TEMPLATE: core-tier unit. Copy to course/units/NN-slug/unit.md and fill every section.
+TEMPLATE: core-tier unit. Copy to course/units/NN-slug/unit.src.md and fill every section.
 Sections are REQUIRED and must appear IN THIS ORDER (R6.AC1). Front matter must validate
 against meta/unit-frontmatter.schema.json (R6.AC3). Delete these HTML comments when authoring.
 Author in CommonMark; no meaning by color/emoji alone (R15.AC6). Reference version-specific
 values only as {{vd:key}} — never hardcode them (R12.AC2).
+The committed, learner-facing unit.md is GENERATED from unit.src.md by tools/render-units (which
+resolves the {{vd:key}} tokens); run `make render` after editing. Edit unit.src.md, never unit.md.
 -->
 ---
 id: U0

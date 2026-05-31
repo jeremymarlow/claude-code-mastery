@@ -38,6 +38,10 @@ spec-driven — so the repo is itself a worked example of what it teaches.
   them for review first — **especially spec/design edits** (`requirements.md`, `design.md`, and the
   `tasks/*` plans): commit only once the user has reviewed and approved that gate. **Never push** (any
   branch, tag, or `main`) without explicit confirmation.
+  - **Approval is per-change, not standing.** A go-ahead to commit one slice — or a plan whose steps
+    mention committing — does **not** authorize the next commit or push. Don't infer blanket permission
+    from a commit-per-slice rhythm. When a slice's work is done, **stop and present it**, then wait for
+    an explicit "commit" before committing and an explicit "push" before pushing. When unsure, ask.
 - **Author in CommonMark**; no meaning by color/emoji alone (R15).
 
 ## Stack

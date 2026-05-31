@@ -373,6 +373,62 @@ match the already-verified surface U15/U16 use — no new from-memory version fa
 **Why:** R12.AC3/AC5 — re-verify, bump only if changed; nothing changed this session. L1 (in-REPL keys)
 is unaffected and stays open as refresh debt, not a release blocker.
 
+## P7 — Quality pass & learner-experience remediation (2026-05-31, in progress)
+
+A systematic post-v1 quality pass (8 lenses: functional run + content). The product verified
+mechanically/functionally clean; findings confined to learner-facing prose + one version-token
+rendering gap. **No new requirements** — every item traces to an existing R-ID; this is remediation,
+not new scope, so requirements stay frozen and only a **design gate** (before the U2–U16 rollout)
+applies. Task breakdown + findings + per-unit grid: [`tasks/P7-quality-pass.md`](./tasks/P7-quality-pass.md).
+
+_Format: **decision-id** — the decision; **Why:** the rationale._
+
+**P7-render ✅ (mechanism)** — Closed M4 (the most material finding: learners read source `unit.md`,
+which carried 109 raw `{{vd:key}}` tokens — an R15 graceful-degradation miss). Adopted the
+**committed-rendered pattern**: `unit.src.md` is authored (front matter + tokens), `unit.md` is
+generated + committed (leading `GENERATED` comment, resolved prose) by new `tools/render-units`; a
+`--check` drift gate is wired into `make check`/`check-strict`, write-mode into `make render`. Proven
+on U1.
+**Why:** finally realizes R12.AC2's "build step" for the *reader*, not just the author, while keeping
+the single-source + drift guarantees. Mirrors the existing `render-checklist` generated-artifact +
+drift-gate pattern (idiomatic for this repo). Rejected: humanizing the front matter (breaks the
+schema/checks — R6); relocating front matter to file-bottom (our parser + GitHub table both require
+top); a sidecar metadata file (contradicts R6, heavy). All confirmed against the parser + schema.
+
+**P7-garble ✅ (content bug the render exposed)** — Backticked *sentence-valued* tokens
+(`` `{{vd:settings}}` `` / `` `{{vd:memory}}` ``) resolve a whole sentence inside inline-code →
+garbled output, invisible while un-rendered. Fixed in U1 (those tokens were misused as noun-phrases;
+U1 only *establishes* the baseline — the settings/memory mechanism belongs to U4). Rollout must
+**render-and-eyeball** each unit; known sites U3:75/U3:202.
+**Why:** rendering is what surfaced it — vindicates M4's fix doing double duty as a correctness check.
+
+**P7-index ✅** — Closed M5 (navigation). Generated `course/units/README.md` (new `tools/render-index`,
+drift-gated) — a stage-grouped TOC linking each `unit.md` directly with read/lab times; top README
+routes through it.
+**Why:** R9.AC2 (navigable entry); a learner clicks a titled lesson and never browses the
+`unit.md`/`unit.src.md` pair. Built from front matter so it can't drift (L2 fixes flow through).
+
+**P7-prose ✅ (U1 pilot) / ⏳ (rollout)** — Learner-prose ergonomics: strip spec requirement-IDs
+(`R#`, M1 — no learner key; keep the U10 *teaching* use of `R1`/`R2.AC3`), convert bare taxonomy codes
+to **title-only** cross-refs (M2), expand `CV` on first use (L3), light density relief (L1), recompute
+under-declared reading times (L2, U12–U14), and the title fix (T1). Applied to U1; **gated** before
+U2–U16.
+**Why:** R5/R6/R15 — the codes have no learner key (`R#`) or assume an internalized map (`U#`/`C#`),
+and the parenthetical breadcrumbs both confuse and chop the prose. Front matter keeps the codes for
+the machine/traceability layer, so stripping them from prose costs nothing (traceability unaffected).
+
+**P7-frontmatter / P7-T2 ✅ (decided, not open)** — Front matter stays the machine layer (no
+humanizing/relocating). Unit dir rename (T2) **deferred/optional** — slugs are short identifiers, the
+index links titles, and meta is slug-agnostic (`use-case-catalog.yaml` keys on `U1`).
+**Why:** see P7-render; T2 is cosmetic once the index exists.
+
+**P7-process ✅** — This phase was **retro-fitted into the spec methodology**: the freelance
+`quality-pass.md` tracker was folded into the canonical `tasks/P7-quality-pass.md` + this section +
+the `tasks.md` P7 index + `IMPLEMENTATION.md` §3, and a **design gate** reinstated before rollout.
+**Why:** the project is spec-driven (D0.2) and mid-pass we had drifted into building infra + fixes
+without the requirements→design→tasks→gate treatment; this restores it (honors the working agreements
+in `CLAUDE.md` and the phase-gate discipline).
+
 ## Open loops & deferrals 🔓 (canonical ledger)
 
 **This is the single source of truth for what is deliberately unfinished.** Every deferral made
@@ -430,6 +486,20 @@ Status per lab (✅ = refs + verifier created, verified end-to-end fails-clean/p
 - **u15** — no `start/`/`solution/` refs (connection in learner's config + vetting decision), but self-check is objective: `claude mcp get` `✓ Connected` + verify tool result + vetting checklist (P5-U15-lab); ships verified `taskflow_mcp.py` + `taskflow.mcp.json` fixtures
 - **u16** — no `start/`/`solution/` refs (headless run + worktrees + CI reading in learner's env), objective self-check on observables (`-p` output, `git worktree list` ≥2, per-diff review); CI dogfood is the existing `.github/workflows/checks.yml` (P5-U16-lab)
 - **L7 status: all 16 P5 labs now accounted** — mutating labs (u01/u05/u06/u07/u09/u11) have `start/`+`solution/`+`verify.sh`; the rest are documented no-refs (read-only / prose-self-check / objective pipe-test). No P5 lab refs outstanding.
+
+**L8 (in progress, opened 2026-05-30) — learner-prose ergonomics remediation.** Post-v1 quality
+pass (8 lenses) found the product mechanically/functionally clean (strict gate, all lab verifiers,
+substrates, version system, authenticity, accessibility all ✅) with findings confined to
+learner-facing prose: M1 spec requirement-IDs (`R#`) leaking into units; M2 bare taxonomy codes
+(`U#`/`C#`/`W#`/`CV`) used where titles read better; L1 density in some `Concept` passages; L2
+under-declared `reading_time_min` on U12–U14; L3 unexpanded `CV`. **Not release-blocking — polish.**
+Plus **M4 — `{{vd:key}}` tokens rendered raw to learners** (most material; an R15 graceful-degradation
+miss): fixed with the committed-rendered pattern — authored `unit.src.md` → generated+committed
+`unit.md` via new `tools/render-units` (drift gate in `make check`), proven on U1. Full tracker +
+per-unit grid + rollout procedure: [`tasks/P7-quality-pass.md`](./tasks/P7-quality-pass.md) (+ P7
+rationale section above). _Status:_ U1 is the active
+sandbox — voice approved, title fixed, vd-render mechanism built & green; U2–U16 rollout pending U1
+finalization. _Resolve in:_ the editorial roll-out per that file.
 
 **Decided, not open (do not re-litigate):** tools are no-extension kebab-case (deviation from design
 §7 `.sh`, decision P3-tools); `permission-modes` value per verified CLI (P2-vd); awareness home-unit

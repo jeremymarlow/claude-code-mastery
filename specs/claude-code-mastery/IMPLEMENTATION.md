@@ -38,7 +38,7 @@ over memory for specifics; memory is a pointer, the spec is the source of truth.
 |---|---|
 | 1. Requirements (`requirements.md`) | ✅ **APPROVED** (2026-05-29) — turn-by-turn review; gap-free IDs |
 | 2. Design (`design.md`) | ✅ **APPROVED & merged to `main`** (2026-05-29) — §0–§11; design gate passed |
-| 3. Tasks (`tasks.md`) | ✅ **COMPLETE** (2026-05-30) — all phases P1–P6 executed; `make check-strict` green |
+| 3. Tasks (`tasks.md`) | ✅ v1 **COMPLETE** (2026-05-30) — P1–P6 executed; `make check-strict` green. 🚧 **P7 (Quality pass)** in progress (2026-05-31) |
 | Rationale (`decisions.md`) | ✅ Per-phase decisions + the canonical 🔓 open-loops ledger |
 
 **Phase 3 (Tasks) breakdown:** P1 ✅ · P2 ✅ · P3 ✅ · P4 ✅ (both lab codebases built; `SEEDED.md`
@@ -46,6 +46,13 @@ inventory + offline mock) · **P5 ✅ — all 16 units (U1–U16) authored; ever
 by ≥1 lab** · **P6 ✅ — capstone (briefs/exemplar/rubric), build case study + transparency note,
 maintainer guide, README finalized, `tools/render-checklist` added; `make check-strict` green = the
 v1 Definition-of-Done mechanical gate (L3) passes.** Current branch: **`main`** (P6 committed).
+
+**P7 — Quality pass (post-v1, in progress, 2026-05-31).** A systematic 8-lens quality pass found the
+product mechanically/functionally clean; remediation is confined to learner-facing prose + a closed
+version-token rendering gap (new `tools/render-units` committed-rendered pattern + `tools/render-index`
+navigation). **No new requirements** (traces to R5/R6/R9/R12/R15). U1 migrated + polished as the pilot;
+a **design gate** holds before the U2–U16 rollout. See `tasks/P7-quality-pass.md` + `decisions.md` →
+"P7 — Quality pass". Tracked as open loop **L8**.
 
 **v1 build is complete.** Remaining is **not release-blocking**: **L1** is now mostly closed — the
 interactive `/help`+docs pass (2026-05-30) verified 5 of the 7 keys; only `ci` (GitHub Action wrapper)

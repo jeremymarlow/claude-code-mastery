@@ -10,8 +10,13 @@ Do each step, in order:
 
 1. **`specs/claude-code-mastery/IMPLEMENTATION.md` §3** — update the P5 progress marker so U$1 is in the
    done list (and the matching `tasks.md` status header if it tracks a count). Keep §3 terse.
-2. **`specs/claude-code-mastery/tasks.md`** — check the `[ ] **U$1**` box in the P5 per-unit list and
-   confirm its detail bullet (gist · _Lab/refs_ · _Trace & version keys_); add the bullet if missing.
+2. **`specs/claude-code-mastery/tasks.md`** — add or confirm the unit's detail bullet (gist ·
+   _Lab/refs_ · _Trace & version keys_). **Only check the `[ ] **U$1**` box if the unit is *fully*
+   done** — prose authored **and** its lab complete: either the mutating lab's `start/`/`solution/`
+   refs + `verify.sh` exist and pass end-to-end, or it is a no-refs unit (read-only / prose-self-check,
+   like U2/U8/U12) that needs none. If lab artifacts are still pending, **leave the box unchecked**,
+   record the prose as authored, and ensure step 3 keeps that lab open in **L7**. A checked box must
+   never coexist with pending L7 lab refs for the same unit.
 3. **`specs/claude-code-mastery/decisions.md`** — add the `P5-U$1-*` rationale entries (lab choice, any
    built artifacts, vd/L1 status), each with a **Why:** line, and refresh the 🔓 open-loops ledger —
    **L7** (per-lab `start/`/`solution/` refs + verifier status) and **L1** (version debt) for this unit.

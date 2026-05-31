@@ -18,6 +18,7 @@ what makes the later regenerate-and-diff freshness check meaningful (R16.AC6).
 import json
 import os
 import re
+import subprocess
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -230,17 +231,55 @@ def render(rep):
     rep.ok(f"rendered {REF_MD.relative_to(COURSE.parent)} @ CLI {ref['cli_version']}")
 
 
+def check(rep, with_cli=False):
+    """Offline freshness/validity gate for `make check` (R16.AC6).
+
+    Pure functions of the committed artifacts: (1) the json validates against the schema — which
+    requires `source` + `provenance` on every entry (R16.AC3); (2) the committed page matches a
+    fresh render of the json. With `--cli` it ALSO re-introspects the installed CLI and diffs the
+    json (machine freshness) — the refresh/strict-only path, since that step needs the CLI.
+    """
+    if not REF_JSON.exists():
+        rep.fail(f"{REF_JSON.name} missing — run `tools/render-cli-reference --generate`")
+        return
+    committed_json = REF_JSON.read_text(encoding="utf-8")
+    ref = json.loads(committed_json)
+
+    import jsonschema  # local: only --check/--generate need it
+    try:
+        validate(ref)
+        rep.ok("cli-reference.json valid vs schema (source + provenance on every entry)")
+    except jsonschema.ValidationError as exc:
+        rep.fail(f"cli-reference.json invalid vs schema: {exc.message}")
+
+    current_md = REF_MD.read_text(encoding="utf-8") if REF_MD.exists() else None
+    rep.check(current_md == render_page(ref),
+              "cli-reference.md in sync with cli-reference.json",
+              "cli-reference.md out of sync — run `tools/render-cli-reference --render`")
+
+    if with_cli:
+        try:
+            fresh = emit(build_reference())
+        except (FileNotFoundError, subprocess.SubprocessError, SystemExit) as exc:
+            rep.pending(f"--cli machine-freshness skipped — CLI unavailable ({exc})")
+            return
+        rep.check(fresh == committed_json,
+                  "cli-reference.json matches the installed CLI",
+                  "cli-reference.json stale vs installed CLI — run `tools/render-cli-reference --all`")
+
+
 def main(argv):
     rep = Reporter("render-cli-reference")
-    if "--generate" in argv or "--all" in argv:
+    do_generate = "--generate" in argv or "--all" in argv
+    do_render = "--render" in argv or "--all" in argv
+    # --check is the default when no build mode is given (design §12.1).
+    do_check = "--check" in argv or not (do_generate or do_render)
+    if do_generate:
         generate(rep)
-    if "--render" in argv or "--all" in argv:
+    if do_render:
         render(rep)
-    if not ({"--generate", "--render", "--all"} & set(argv)):
-        sys.stderr.write(
-            "render-cli-reference: pass --generate, --render, or --all "
-            "(--check lands in P8 8.4)\n")
-        return 2
+    if do_check:
+        check(rep, with_cli="--cli" in argv)
     return rep.done()
 
 

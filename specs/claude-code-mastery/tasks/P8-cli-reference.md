@@ -66,15 +66,17 @@ Until 8.7, R16/R17 are invisible to the current hardcoded `R1–R15` check (harm
       `course/units/README.md` index (via `render-index`, so it can't drift). `make check` green. _Commit
       pending review._
 
-### 8.4 Gates: `--check` / `--all` + suite wiring  [R16.AC6; §12.1, §12.8]
-- [ ] `--all` (generate→render); `--check` *default* (offline: re-render + diff vs committed md,
-      schema-validate, provenance-present); `--check --cli` (re-introspect + diff the json — machine
-      freshness).
-- [ ] Wire `render-cli-reference --check` into `make check`, the Claude Code edit-hook scope
-      (`check-on-edit`), and CI; wire `--check --cli` into the drift/strict trigger (`check-version-drift
-      --strict` path), **not** every CI run (offline-safe).
-- [ ] Verify: editing the json without re-rendering **fails** `--check`; re-render **passes**; an offline
-      run (no CLI on PATH) still gates the page.
+### 8.4 Gates: `--check` / `--all` + suite wiring  [R16.AC6; §12.1, §12.8]  ✅
+- [x] `--all` (generate→render, added in 8.3); `--check` *default* (offline: schema-validate — which
+      enforces source+provenance on every entry — + re-render and diff vs committed md); `--check --cli`
+      (re-introspect + diff the json — machine freshness, degrades to PENDING when the CLI is absent).
+- [x] Wired `render-cli-reference --check` into `make check` + `make check-strict` (new `cli-reference`
+      target) — which the `check-on-edit` hook and the CI `checks` job both run, so all three layers are
+      covered. Wired `--check --cli` into `make drift` and the CI **scheduled** `version-drift` job
+      (claude-guarded), **not** every CI run (offline-safe). `make render` now also re-renders the page.
+- [x] Verified: tampering the json without re-rendering → `--check` **fails** (page out of sync);
+      re-render → **passes**; offline (no `claude` on PATH) → `--check` still gates the page and
+      `--check --cli` PENDs gracefully (exit 0). `make check` + `make drift` green.
 
 ### 8.5 Changelog digest + check  [R17; §12.6]
 - [ ] `meta/version-changelog.md` — seed a **baseline** entry `## 2.1.158 (baseline, <date> from <changelog

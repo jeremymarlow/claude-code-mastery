@@ -7,14 +7,14 @@ PY ?= python3
 TOOLS := ./tools
 
 .PHONY: check check-strict frontmatter coverage checklist units index links version-refs \
-        traceability drift doctor render snapshot help
+        cli-reference traceability drift doctor render snapshot help
 
 ## Run the required + traceability checks (PENDING items do not fail; see check-strict).
-check: frontmatter coverage checklist units index links version-refs traceability
+check: frontmatter coverage checklist units index links version-refs cli-reference traceability
 	@echo "make check: all checks passed"
 
 ## Release gate: same suite, but PENDING (not-yet-authored coverage) becomes FAIL.
-check-strict: frontmatter coverage checklist units index links version-refs
+check-strict: frontmatter coverage checklist units index links version-refs cli-reference
 	@$(TOOLS)/check-traceability --strict
 	@echo "make check-strict: all checks passed (strict)"
 
@@ -42,12 +42,18 @@ links:
 version-refs:
 	@$(PY) $(TOOLS)/check-version-refs
 
+## Offline gate (R16.AC6): cli-reference.json valid vs schema + the page in sync with it.
+cli-reference:
+	@$(PY) $(TOOLS)/render-cli-reference --check
+
 traceability:
 	@$(PY) $(TOOLS)/check-traceability
 
-## Drift is informational; run on demand or on a schedule (R12.AC7).
+## Drift is informational; run on demand or on a schedule (R12.AC7). Also re-introspects the
+## installed CLI to confirm cli-reference.json is fresh (the --check --cli machine-freshness path).
 drift:
 	@$(PY) $(TOOLS)/check-version-drift
+	@$(PY) $(TOOLS)/render-cli-reference --check --cli
 
 ## Learner preflight (makes one real `claude -p` call unless --no-probe).
 doctor:
@@ -59,6 +65,7 @@ render:
 	@$(PY) $(TOOLS)/render-checklist
 	@$(PY) $(TOOLS)/render-units
 	@$(PY) $(TOOLS)/render-index
+	@$(PY) $(TOOLS)/render-cli-reference --render
 
 ## Refresh the CLI command snapshot used by drift detection.
 snapshot:

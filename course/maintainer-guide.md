@@ -26,8 +26,10 @@ Everything cross-cutting lives **once** and is referenced by key (R13.AC2); dupl
   fails the build, so reference forward targets as plain text until they exist.
 - **Version references** — every version-data token (the `vd:` references) in `course/**` resolves to
   a key in [`version-data.yaml`](../meta/version-data.yaml) (`check-version-refs`).
-- **Traceability** — every requirement R1–R15 is referenced by a course artifact, and every can-do
-  traces to ≥1 lab **and** ≥1 capstone-rubric dimension (`check-traceability`).
+- **Traceability** — every requirement is referenced by a course artifact, and every can-do
+  traces to ≥1 lab **and** ≥1 capstone-rubric dimension (`check-traceability`). The requirement set is
+  **discovered** from the `### Rn` headings in `requirements.md`, so adding one needs no edit to the
+  check (see *Adding a post-v1 enhancement* below).
 
 `make check` is the day-to-day guard; `make check-strict` is the release gate (it turns
 not-yet-authored placeholders into hard failures).
@@ -96,3 +98,38 @@ When Claude Code updates, refresh rather than rewrite (R12.AC7). The full proces
 installed CLI, update only [`version-data.yaml`](../meta/version-data.yaml), bump
 [`version-record.md`](../meta/version-record.md), and re-run the suite. Because version-specifics are
 quarantined, a bump touches a bounded set of files, not the prose.
+
+## Adding a post-v1 enhancement (a new requirement)
+
+A *refresh* (above) keeps the same scope against a newer CLI. Occasionally the course gains a new
+**capability of its own** — a new generated artifact, check, or guarantee. Don't bolt it on ad hoc;
+run it through the same spec-driven, gated path the course teaches and was built with. The exhaustive
+CLI reference (R16) and the version-change digest (R17) were added exactly this way in **P8** — read
+[`../specs/claude-code-mastery/tasks/P8-cli-reference.md`](../specs/claude-code-mastery/tasks/P8-cli-reference.md)
+as the worked example. The additive pattern, each step gated per the root
+[`CLAUDE.md`](../CLAUDE.md) working agreements:
+
+1. **New requirement.** Add a `### Rn — …` heading with testable EARS acceptance criteria to
+   [`requirements.md`](../specs/claude-code-mastery/requirements.md). **Approve it at the requirements
+   gate before designing.** IDs are append-only — never renumber existing requirements; downstream
+   artifacts cite them.
+2. **Design it.** Amend [`design.md`](../specs/claude-code-mastery/design.md) with a section that serves
+   the requirement, each choice tagged with the `[Rn]` it traces to. **Approve at the design gate before
+   writing tasks.**
+3. **Plan it.** Add an ordered `tasks/P{N}-<slug>.md` build plan (don't overload an existing phase
+   file); execute in slices, `make check` green after each.
+4. **Record the why.** Append a [`decisions.md`](../specs/claude-code-mastery/decisions.md) entry,
+   update the **🔓 open-loops ledger** for any deferred work, and refresh
+   [`IMPLEMENTATION.md`](../specs/claude-code-mastery/IMPLEMENTATION.md) §3 at the phase boundary. The
+   next session reads these, not your memory.
+5. **Enforce it — generalized, never hardcoded.** This is the load-bearing rule. `check-traceability`
+   **discovers** the requirement set from the `### Rn` headings, so the new requirement is enforced
+   (it must be referenced by a delivered artifact) with **zero edits to the check**. If the enhancement
+   adds a generated artifact, wire its `--check` into `make check`/`check-strict` (and `make drift` if it
+   depends on the CLI), mirroring [`render-cli-reference`](../tools/render-cli-reference). When you must
+   enumerate something, prefer discovery from the source of truth over a literal range.
+
+What stays **closed**, deliberately: the **can-do set** (`C1–C17 + CV`) is a fixed taxonomy from R1's
+design. An enhancement extends the *requirement* set and the artifacts, not the learner-outcome
+taxonomy — a change that needs a new can-do is a curriculum change (back to the design gate for
+R1/R2), not a post-v1 enhancement.

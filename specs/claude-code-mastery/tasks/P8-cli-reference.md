@@ -126,10 +126,17 @@ Until 8.7, R16/R17 are invisible to the current hardcoded `R1–R15` check (harm
       `R8` PEND remains. `make check` green (exit 0); `--strict` still hard-fails only on `R8` (unchanged
       — no regression).
 
-### 8.8 Maintainer-guide playbook  [R13.AC3; §12.9]
-- [ ] `course/maintainer-guide.md` — new **"Adding a post-v1 enhancement"** subsection codifying the
-      additive pattern: new requirement → new `tasks/P{N}` file → `decisions.md` entry + 🔓 ledger →
-      *generalized* (not hardcoded) enforcement. Fold in the R16 regenerate + R17 changelog refresh steps.
+### 8.8 Maintainer-guide playbook  [R13.AC3; §12.9]  ✅
+- [x] `course/maintainer-guide.md` — new **"Adding a post-v1 enhancement (a new requirement)"** section
+      (after "Refreshing when the CLI changes") codifying the gated additive pattern: requirement
+      (`### Rn`, append-only, gated) → design section (`[Rn]`-traced, gated) → `tasks/P{N}` plan →
+      `decisions.md` + 🔓 ledger + IMPLEMENTATION §3 → **generalized** (discovery-based, not hardcoded)
+      enforcement. Points at the P8 task file as the worked example; states the can-do set stays the
+      **closed** `C1–C17+CV`. R16 regenerate + R17 digest refresh steps live in the guide's existing
+      "Refreshing" section (R12.AC7), cross-referenced not duplicated.
+- [x] Also corrected stale guide prose: the invariants list said traceability checks "every requirement
+      **R1–R15**" — updated to "every requirement … discovered from the `### Rn` headings" (matches 8.7).
+- [x] `make check` green; all new links resolve.
 
 ### 8.9 Close-out  [continuity hygiene]
 - [ ] `make check` green; add the **P8 index row + status header** to `tasks.md`; mark `IMPLEMENTATION.md`

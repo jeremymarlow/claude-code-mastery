@@ -53,7 +53,7 @@ version-token rendering gap (new `tools/render-units` committed-rendered pattern
 navigation). **No new requirements** (traces to R5/R6/R9/R12/R15). **All 16 units** migrated to
 `unit.src.md` + de-coded; capstone files + `stuck.md` swept; convention docs updated for the split; L2
 reading-time bumps (U12/U13/U14) applied; per-unit render-and-eyeball fixed the `{{vd:*}}` garbles.
-Committed in slices on branch **`spec/quality-pass-phase`** (not yet merged/pushed). **L8 struck**; the
+Built in slices on branch **`spec/quality-pass-phase`**, now **merged & pushed to `main`**. **L8 struck**; the
 only follow-up is **T2** (optional unit-dir rename), deferred — non-blocking. See `decisions.md` →
 "P7 — Quality pass" and `tasks/P7-quality-pass.md`.
 

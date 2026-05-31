@@ -1,0 +1,799 @@
+ ▐▛███▜▌   Claude Code v2.1.158
+▝▜█████▛▘  Opus 4.8 · Claude Pro
+  ▘▘ ▝▝    ~/dev/claude-training
+
+
+❯ chat                                                                          
+
+● Hi! I'm here and ready. What would you like to do?
+
+  A few quick options given this repo (the Claude Code Mastery course):
+  - Resume course work — I can run /prime-context to load the spec, live status,
+  and open loops before doing anything.
+  - Answer a question — about Claude Code, the API/SDK, or this project.
+  - Something else — just tell me.
+
+  What's on your mind?
+
+✻ Cogitated for 5s
+
+❯ /prime-context                                                                
+
+● I'll prime context by reading the key files in order.
+
+  Read 2 files, ran 1 shell command (ctrl+o to expand)
+
+● Let me read the rest of decisions.md — the 🔓 open-loops ledger is the
+  critical "what's next" part.
+
+  Read 1 file (ctrl+o to expand)
+
+● Primed. Here's where things stand.
+
+  Where we are
+
+  v1 build is complete. All three spec phases are done (Requirements ✅, Design
+  ✅, Tasks ✅), and the entire P1–P6 task plan is executed:
+  - P5 — all 16 units (U1–U16) authored; every can-do (C1–C17 + CV) practiced by
+  ≥1 lab.
+  - P6 — capstone (briefs A/B/C + exemplar + self-rubric), build case study +
+  transparency note, maintainer guide, finalized README, tools/render-checklist
+  added. make check-strict is green — the v1 Definition-of-Done mechanical gate
+  passes.
+
+  Open loops (🔓 ledger)
+
+  - L1 — the one live item. 7 version-data keys are still unverified: true:
+  search-refs, context-cmds, checkpoint-rewind, test-run, ci, managed-settings,
+  output-styles. All are in-REPL (/help, @-mentions, /rewind, /context) or
+  external (GitHub Action) surfaces that a headless session can't verify. Their
+  home units are all authored — this is purely a verification pass. One 
+  interactive /help + docs pass clears all of L1. Not release-blocking.
+  - L6 / L7 — effectively closed (L6: revisit only if a unit needs more
+  awareness-tier depth; L7: all 16 labs accounted for).
+  - L2, L3, L4, L5 — all struck through (closed in P5/P6).
+
+  Working state
+
+  - Branch: main, working tree clean, up to date with origin/main.
+  - ⚠️ §3 of IMPLEMENTATION.md is slightly stale: it says "Current branch:
+  spec/tasks-phase" and lists "commit/push of P6 + a CI run" as remaining — but
+  P6 is already committed (e86fac2) and merged to main, and the latest commit is
+  session-10's log. The P6 commit/push loop is effectively done; only L1
+  remains. Worth a one-line §3 refresh.
+
+  Next action
+
+  The build is shippable. The realistic next steps, in order of likelihood:
+
+  1. Clear L1 — run an interactive claude session, use /help + the docs to
+  verify those 7 keys, flip unverified→false in meta/version-data.yaml, bump
+  meta/version-record.md. (You'll need to drive this — I can't run interactive
+  /help headlessly. I can prep the exact checklist of what to confirm for each
+  key.)
+  2. Tidy §3 — refresh the stale "current branch / commit P6" lines so the
+  dashboard matches reality.
+  3. Something else entirely.
+
+  Want me to prep the L1 verification checklist, or fix the stale §3 first?
+
+✻ Crunched for 27s
+
+❯ prep the L1 verification checklist                                            
+
+● I'll read the version-data file and version-record so the checklist references
+  exactly what's recorded for each key.
+
+  Read 2 files (ctrl+o to expand)
+
+● Here's the complete L1 verification checklist. All 7 keys are currently
+  unverified: true in meta/version-data.yaml; each entry below gives what to 
+  run, what the current value claims, what to confirm, and the exact edit to
+  make afterward.
+
+  A useful framing: the 7 keys split into two groups by how you verify them.
+
+  ---
+  Group A — In-REPL, confirm via /help (start an interactive claude session in 
+  this repo)
+
+  1. search-refs — home unit U2 (@-mentions / codebase Q&A)
+
+  - Current value: "ask codebase questions in natural language; reference
+  files/dirs with @-mentions (e.g. @app/main.py)."
+  - Confirm: Type /help; check that @-file referencing exists and the syntax is
+  @<path>. Try @app/main.py and confirm it resolves a file reference.
+  - If correct: flip unverified: false; update provenance to "in-REPL /help +
+  live @-mention test"; bump verified_date.
+
+  2. context-cmds — home unit U4 (/context, /compact, /clear)
+
+  - Current value: "In-REPL slash commands: /context, /compact, /clear (inspect
+  and manage the context window)."
+  - Confirm: /help lists all three by these exact names. Confirm /context
+  inspects the window, /compact summarizes, /clear resets.
+  - If correct: flip unverified: false; provenance "in-REPL /help"; bump date.
+
+  3. checkpoint-rewind — home unit U3 (undo recent changes)
+
+  - Current value: "In-REPL checkpoint/rewind to undo recent changes;
+  --no-session-persistence disables saving sessions."
+  - Confirm: /help — find the exact rewind command/keybinding (e.g. /rewind
+  and/or the Esc-Esc shortcut). The --no-session-persistence flag is already
+  CLI-verified; you're only confirming the in-REPL rewind surface.
+  - If correct: update value with the confirmed command/keybinding; flip
+  unverified: false; provenance "in-REPL /help"; bump date.
+
+  ▎ Adjacent freebie (not one of the 7, but listed in version-record.md 
+  ▎ "Outstanding"): while in /help, confirm the /code-review and 
+  ▎ /security-review slash-command names for review-cmds (already unverified: 
+  ▎ false, but its notes flags those names as the unverified soft spot). If 
+  ▎ confirmed, drop that caveat from the note.
+
+  ---
+  Group B — Confirm against official docs (or trivially resolvable)
+
+  4. test-run — home unit U6 ⚡ resolvable now, no interactive step needed
+
+  - Current value: "Tests run through the Bash tool (e.g. pytest); no dedicated
+  CLI flag."
+  - Confirm: This is conceptual — there is no version-specific surface. claude 
+  --help shows no test flag (already true); taskflow-api uses pytest (already
+  confirmed). Nothing in-REPL to check.
+  - Recommendation: flip unverified: false as part of this pass — it was only
+  held under the L1 batch, not for a genuine unknown. Provenance stays "no
+  dedicated CLI surface; mechanism is tool-use."
+
+  5. ci — home unit U16 (GitHub Action wrapper)
+
+  - Current value: "CI runs use headless -p with --output-format json (+
+  optional --max-budget-usd); a GitHub Action wraps this."
+  - Confirm: CLI parts (-p, --output-format, --max-budget-usd) are already
+  --help-verified. Confirm the GitHub Action name/setup against official docs
+  before treating the Action reference as verified.
+  - If correct: flip unverified: false; provenance "CLI flags via claude --help;
+  GitHub Action per "; bump date.
+
+  6. managed-settings — home unit U3 (enterprise settings)
+
+  - Current value: "Enterprise/managed settings are an additional setting source
+  layered above user/project/local."
+  - Confirm: the managed-settings file path + precedence against official
+  enterprise docs (this is assumption A4 — currently conceptual only).
+  - If correct: add the verified path/precedence to value; flip unverified: 
+  false; provenance "official enterprise settings docs"; bump date.
+
+  7. output-styles — home unit U4 (response customization)
+
+  - Current value: "Output styles / response customization (configured in
+  settings)." (awareness-tier, thinnest entry)
+  - Confirm: the current output-styles mechanism via /help or official docs — is
+  it a settings key, a slash command, or a config file?
+  - If correct: sharpen value with the real mechanism; flip unverified: false;
+  provenance accordingly; bump date.
+
+  ---
+  Mechanical close-out (after the keys are confirmed)
+
+  1. Edit meta/version-data.yaml — for each key: unverified: true→false, update
+  verified_date (→ verification date), refine value/provenance/notes to match
+  what you actually saw.
+  2. Regenerate the JSON twin: make render (runs render-vd; produces
+  version-data.json).
+  3. Bump meta/version-record.md — add a new table row (version, date, method =
+  "in-REPL /help + docs pass closing L1"); clear the "Outstanding to verify" 
+  list (or strike the now-closed keys).
+  4. Strike through L1 in specs/claude-code-mastery/decisions.md → ~~L1~~ — ✅ 
+  CLOSED (<date>), per the ledger maintenance rule.
+  5. Refresh IMPLEMENTATION.md §3 — drop L1 from "remaining"; the dashboard then
+  reads as fully done.
+  6. Run the gate: make check then make check-strict — both should stay green.
+
+  ---
+  Two notes:
+  - This pass needs an interactive session for Group A — I can't run /help
+  headlessly, which is exactly why L1 is still open. Group B is docs-based and
+  test-run (#4) can be flipped without any interactive step.
+  - Verify against the installed CLI at the time you run it; if claude --version
+  ≠ 2.1.158, treat it as a full refresh (re-verify, then bump the record)
+  rather than just an L1 close.
+
+  Want me to save this as a working file (e.g.
+  specs/claude-code-mastery/L1-checklist.md) so you can keep it open in the
+  interactive session? I held off to avoid leaving a stray doc, but it's
+  genuinely handy across the session switch.
+
+✻ Crunched for 1m 2s
+
+❯ I can confirm all but 5, 6. I only have gitea so I can't verify the github    
+  action for 5. I also didn't find the managed settings for enterprise because  
+  I don't have an enterprise account. The rewind command is just `/rewind` and  
+  the 3 output styles other than the default are Proactive, Explanatory, and    
+  Learning. You select one by running /config. Built-in output styles           
+  Claude Code’s Default output style is the existing system prompt, designed to 
+  help you complete software engineering tasks efficiently.                     
+  There are three additional built-in output styles:                            
+  Proactive: Claude executes immediately, makes reasonable assumptions instead  
+  of pausing for routine decisions, and prefers action over planning. This is   
+  stronger autonomous-execution guidance than auto mode applies, and it works   
+  without changing your permission mode, so you still see permission prompts    
+  before tools run.                                                             
+  Explanatory: Provides educational “Insights” in between helping you complete  
+  software engineering tasks. Helps you understand implementation choices and   
+  codebase patterns.                                                            
+  Learning: Collaborative, learn-by-doing mode where Claude will not only share 
+  “Insights” while coding, but also ask you to contribute small, strategic      
+  pieces of code yourself. Claude Code will add TODO(human) markers in your     
+  code for you to implement.                                                    
+                                                                                
+  Change your output style                                                      
+  Run /config and select Output style to pick a style from a menu. Your         
+  selection is saved to .claude/settings.local.json at the local project level. 
+  The standalone /output-style command was deprecated in v2.1.73 and removed in 
+  v2.1.91. Use /config or edit the outputStyle setting directly.                
+  To set a style without the menu, edit the outputStyle field directly in a     
+  settings file:                                                                
+  {                                                                             
+    "outputStyle": "Explanatory"                                                
+  }                                                                             
+
+● Confirmed — 5 of 7 close, and 2 (ci, managed-settings) are genuinely
+  unverifiable in your environment (no GitHub Actions, no enterprise account).
+  I'll apply the verified results now and keep those two honestly open.
+
+  Let me make the edits to version-data.yaml.
+
+● Update(meta/version-data.yaml)
+  ⎿  Added 3 lines, removed 4 lines
+      31    search-refs:
+      32      kind: feature
+      33      value: "In-REPL: ask codebase questions in natural language
+          ; reference files/dirs with @-mentions (e.g. `@app/main.py`)."
+      34 -    provenance: "in-REPL feature — not surfaced by `claude --he
+         -lp`"                                                           
+      34 +    provenance: "in-REPL `/help` + live @-mention test"        
+      35      verified_version: "2.1.158"
+      36 -    verified_date: "2026-05-29"                                
+      37 -    unverified: true                                           
+      38 -    notes: "Verify the exact @-reference behavior interactively
+         - via `/help`; not confirmable from CLI --help."                
+      36 +    verified_date: "2026-05-30"                                
+      37 +    unverified: false                                          
+      38  
+      39    permission-modes:
+      40      kind: flag
+
+● Update(meta/version-data.yaml)
+  ⎿  Added 4 lines, removed 5 lines
+      65  
+      66    checkpoint-rewind:
+      67      kind: feature
+      68 -    value: "In-REPL checkpoint/rewind to undo recent changes; `
+         ---no-session-persistence` disables saving sessions."           
+      69 -    provenance: "claude --help confirms --no-session-persistenc
+         -e; the checkpoint/rewind UI is in-REPL"                        
+      68 +    value: "In-REPL `/rewind` checkpoints/restores recent chang
+         +es to undo them; `--no-session-persistence` disables saving ses
+         +sions."                                                        
+      69 +    provenance: "claude --help confirms --no-session-persistenc
+         +e; `/rewind` confirmed via in-REPL `/help`"                    
+      70      verified_version: "2.1.158"
+      71 -    verified_date: "2026-05-29"                                
+      72 -    unverified: true                                           
+      73 -    notes: "Confirm the exact rewind command/keybinding via in-
+         -REPL `/help`; not in CLI --help."                              
+      71 +    verified_date: "2026-05-30"                                
+      72 +    unverified: false                                          
+      73  
+      74    memory:
+      75      kind: feature
+
+● Update(meta/version-data.yaml)
+  ⎿  Added 3 lines, removed 4 lines
+      82    context-cmds:
+      83      kind: command
+      84      value: "In-REPL slash commands: /context, /compact, /clear 
+          (inspect and manage the context window)."
+      85 -    provenance: "in-REPL slash commands — not surfaced by `clau
+         -de --help`"                                                    
+      85 +    provenance: "in-REPL `/help` (command names/behavior confir
+         +med)"                                                          
+      86      verified_version: "2.1.158"
+      87 -    verified_date: "2026-05-29"                                
+      88 -    unverified: true                                           
+      89 -    notes: "Verify exact command names/behavior via in-REPL `/h
+         -elp`."                                                         
+      87 +    verified_date: "2026-05-30"                                
+      88 +    unverified: false                                          
+      89  
+      90    plan-mode:
+      91      kind: feature
+
+● Update(meta/version-data.yaml)
+  ⎿  Added 4 lines, removed 4 lines
+      106    test-run:
+      107      kind: feature
+      108      value: "Tests run through the Bash tool (e.g. `pytest`); n
+           o dedicated CLI flag — Claude invokes the project's existing t
+           est runner."
+      109 -    provenance: "no dedicated CLI surface in `claude --help`; 
+          -mechanism is tool-use"                                        
+      109 +    provenance: "no dedicated CLI surface in `claude --help`; 
+          +mechanism is tool-use (conceptual, version-independent)"      
+      110      verified_version: "2.1.158"
+      111 -    verified_date: "2026-05-29"                               
+      112 -    unverified: true                                          
+      113 -    notes: "Conceptual; verify the project's runner (taskflow-
+          -api uses pytest)."                                            
+      111 +    verified_date: "2026-05-30"                               
+      112 +    unverified: false                                         
+      113 +    notes: "Conceptual; the project's runner is pytest for tas
+          +kflow-api."                                                   
+      114  
+      115    git-pr:
+      116      kind: flag
+
+● Update(meta/version-data.yaml)
+  ⎿  Added 5 lines, removed 5 lines
+      224  
+      225    output-styles:
+      226      kind: feature
+      227 -    value: "Output styles / response customization (configured
+          - in settings)."                                               
+      228 -    provenance: "not surfaced by `claude --help`"             
+      227 +    value: "Output styles customize Claude's response behavior
+          +: the Default (standard SWE system prompt) plus three built-in
+          + styles — Proactive (acts immediately, prefers action over pla
+          +nning), Explanatory (adds educational 'Insights'), and Learnin
+          +g (collaborative; adds TODO(human) markers for you to implemen
+          +t). Select via `/config` -> Output style (saved to `.claude/se
+          +ttings.local.json`), or set the `outputStyle` settings field d
+          +irectly."                                                     
+      228 +    provenance: "official docs (built-in output styles) + user
+          +-confirmed via `/config` @ 2.1.158, 2026-05-30"               
+      229      verified_version: "2.1.158"
+      230 -    verified_date: "2026-05-29"                               
+      231 -    unverified: true                                          
+      232 -    notes: "Awareness-tier; verify the current output-styles m
+          -echanism via in-REPL `/help` or official docs before authoring
+          -."                                                            
+      230 +    verified_date: "2026-05-30"                               
+      231 +    unverified: false                                         
+      232 +    notes: "The standalone `/output-style` command was depreca
+          +ted in v2.1.73 and removed in v2.1.91 — use `/config` or the `
+          +outputStyle` setting."                                        
+      233  
+      234    managed-settings:
+      235      kind: setting
+
+● Now the two that stay open — update their notes to record the verification
+  attempt and the environmental blocker:
+
+● Update(meta/version-data.yaml)
+  ⎿  Added 1 line, removed 1 line
+      195      verified_version: "2.1.158"
+      196      verified_date: "2026-05-29"
+      197      unverified: true
+      198 -    notes: "CLI mechanism verified; verify the GitHub Action n
+          -ame/setup against official docs before hardcoding."           
+      198 +    notes: "CLI mechanism verified (-p/--output-format/--max-b
+          +udget-usd). The GitHub Action wrapper stays unverified: confir
+          +m its name/setup against official docs in an environment with 
+          +GitHub Actions (maintainer's env uses Gitea, no GitHub Action 
+          +available to verify, 2026-05-30)."                            
+      199  
+      200    worktrees:
+      201      kind: flag
+
+● Update(meta/version-data.yaml)
+  ⎿  Added 1 line, removed 1 line
+      238      verified_version: "2.1.158"
+      239      verified_date: "2026-05-29"
+      240      unverified: true
+      241 -    notes: "Conceptual only (assumption A4). Verify the manage
+          -d-settings file path/precedence via official enterprise docs b
+          -efore hardcoding."                                            
+      241 +    notes: "Conceptual only (assumption A4). Stays unverified:
+          + the managed/enterprise settings path/precedence needs an ente
+          +rprise account or official enterprise docs to confirm (not ava
+          +ilable to the maintainer, 2026-05-30)."                       
+
+● Now regenerate the JSON twin and run the checks:
+  Ran 1 shell command (ctrl+o to expand)
+
+● All checks pass and the JSON twin regenerated. Now I'll update the three state
+  files — version-record, the L1 ledger entry, and the §3 dashboard.
+
+● Update(meta/version-record.md)
+  ⎿  Added 1 line
+      10  
+      11  | Verified CLI version | Date | Method | By |
+      12  |---|---|---|---|
+      13 +| 2.1.158 | 2026-05-30 | in-REPL `/help` + docs pass (L1 close)
+         +: 5 of 7 `unverified` keys confirmed — `search-refs`, `context-
+         +cmds`, `checkpoint-rewind` (rewind = `/rewind`), `test-run`, `o
+         +utput-styles`; `ci` + `managed-settings` stay `unverified` (no 
+         +GitHub Actions / enterprise account to verify against) | L1 ver
+         +ification |                                                    
+      14  | 2.1.158 | 2026-05-29 | `claude --version` + `claude --help` (
+          P2 version-data seeding); 19/26 keys confirmed from CLI help, 7
+           marked `unverified` pending in-REPL `/help` / docs | spec buil
+          d (P2) |
+      15  
+      16  ## How to refresh (R12.AC7)
+
+● Update(meta/version-record.md)
+  ⎿  Added 10 lines, removed 10 lines
+      30  > Canonical open-loop is **L1** in `specs/claude-code-mastery/d
+          ecisions.md` → "Open loops &
+      31  > deferrals 🔓". This list is the local detail for that loop.
+      32  
+      33 -These keys are currently `unverified: true` in `meta/version-da
+         -ta.yaml` and should be confirmed                               
+      34 -when an interactive session or official docs are available:    
+      33 +As of the 2026-05-30 L1 pass, 5 of the original 7 are verified 
+         +and flipped to `unverified: false`                             
+      34 +(`search-refs`, `context-cmds`, `checkpoint-rewind`, `test-run`
+         +, `output-styles`). Two remain                                 
+      35 +`unverified: true` in `meta/version-data.yaml`, each blocked by
+         + access this environment lacks:                                
+      36  
+      36 -- `search-refs`, `context-cmds`, `checkpoint-rewind` — in-REPL 
+         -behaviors (`@`-refs, `/context`/                               
+      37 -  `/compact`/`/clear`, checkpoint/rewind) confirmable via `/hel
+         -p`.                                                            
+      38 -- `review-cmds` — `ultrareview` is CLI-verified; confirm the `/
+         -code-review` and `/security-review`                            
+      39 -  slash-command names in-REPL.                                 
+      40 -- `test-run` — conceptual (tests run via the Bash tool); consum
+         -ed by U6 (home unit, area 11), kept                            
+      41 -  `unverified` under the L1 hold (project runner is `pytest`, c
+         -onfirmed for `taskflow-api`).                                  
+      42 -- `ci`, `managed-settings`, `output-styles` — external integrat
+         -ion / enterprise / settings detail to                          
+      43 -  confirm against official docs before any value is hardcoded. 
+      37 +- `ci` — the CLI flags (`-p`, `--output-format`, `--max-budget-
+         +usd`) are verified; the **GitHub Action                        
+      38 +  wrapper** is not (the maintainer's env uses Gitea, with no Gi
+         +tHub Actions to verify against). Confirm                       
+      39 +  the Action name/setup against official docs in an environment
+         + with GitHub Actions.                                          
+      40 +- `managed-settings` — the enterprise/managed-settings **file p
+         +ath + precedence** needs an enterprise                         
+      41 +  account or official enterprise docs (not available to the mai
+         +ntainer).                                                      
+      42 +- `review-cmds` (low priority; already `unverified: false`) — `
+         +ultrareview` is CLI-verified; the                              
+      43 +  `/code-review` and `/security-review` slash-command names rem
+         +ain the soft spot — confirm in-REPL when convenient.           
+
+● Now the L1 ledger entry in decisions.md:
+
+● Update(specs/claude-code-mastery/decisions.md)
+  ⎿  Added 10 lines, removed 11 lines
+      381  something, add an entry; when you resolve it, strike it throug
+           h with the commit/phase that closed it.
+      382  Nothing is "remembered" outside this ledger. (Each entry: **st
+           atus** · _Resolve in_ · _Also tracked in_.)
+      383  
+      384 -**L1 — 7 version-data keys still `unverified: true`** (`search
+          --refs`, `context-cmds`,                                       
+      385 -`checkpoint-rewind`, `test-run`, `ci`, `managed-settings`, `ou
+          -tput-styles`).                                                
+      386 -_Resolve in:_ when each key's home unit is authored (P5) and/o
+          -r the next refresh — verify via in-REPL                       
+      387 -`/help`/docs, then flip `unverified`→false (R12.AC3). _Also tr
+          -acked in:_ `meta/version-record.md` →                         
+      384 +**L1 (mostly closed, 2026-05-30) — 2 version-data keys remain 
+          +`unverified: true`** (`ci`,                                   
+      385 +`managed-settings`). An interactive `/help` + docs pass closed
+          + **5 of the original 7**: `search-refs`,                      
+      386 +`context-cmds`, `checkpoint-rewind` (rewind command confirmed 
+          +as `/rewind`), `test-run` (conceptual,                        
+      387 +version-independent), and `output-styles` (Default + Proactive
+          +/Explanatory/Learning, selected via                           
+      388 +`/config`; standalone `/output-style` deprecated v2.1.73, remo
+          +ved v2.1.91) — all flipped                                    
+      389 +`unverified`→false @ 2026-05-30 (R12.AC3); `version-record.md`
+          + bumped with the pass.                                        
+      390 +_Resolve the remaining two in:_ an environment with the access
+          + the maintainer lacks — `ci` needs a                          
+      391 +GitHub Actions setup to confirm the Action wrapper (this env u
+          +ses Gitea); `managed-settings` needs an                       
+      392 +enterprise account / official enterprise docs. Their CLI/conce
+          +ptual parts are already verified; only the                    
+      393 +external-integration surface is unconfirmed. _Also tracked in:
+          +_ `meta/version-record.md` →                                  
+      394  "Outstanding to verify".
+      389 -- This headless authoring session can't run interactive `/help
+          -`, so keys stay `unverified` **even though                    
+      390 -  every home unit is now authored (P5 complete)**: `search-ref
+          -s` (U2, `@`-mentions); `checkpoint-rewind`                    
+      391 -  + `managed-settings` (U3); `context-cmds` + `output-styles` 
+          -(U4); `test-run` (U6 — conceptual, no Claude                  
+      392 -  flag); `ci` (U16 — external GitHub Action wrapper). The veri
+          -fiable flag-parts were confirmed (e.g. `-p`,                  
+      393 -  `--output-format`, `--max-budget-usd` for `ci`; `permission-
+          -modes` for U3); what remains is in-REPL /                     
+      394 -  external surface. **One interactive `/help` + docs pass clea
+          -rs all of L1** (decisions P5-U2-vd, P5-U3,                    
+      395 -  P5-U4-vd, P5-U6-vd, P5-U16-vd) — the keys' *home units no lo
+          -nger gate this*; it's purely a verification pass.             
+      395  
+      396  **~~L2~~ — ✅ CLOSED (P5/U14, 2026-05-30).** In-session hook w
+           ired: `.claude/settings.json` `PostToolUse`/`Write|Edit`
+      397  → `tools/check-on-edit` runs `make check` on `course/`|`meta/`
+            edits (`decision:"block"` on failure). Schema
+
+● Now the §3 dashboard — update the stale branch line and the L1 status:
+
+● Update(specs/claude-code-mastery/IMPLEMENTATION.md)
+  ⎿  Added 5 lines, removed 4 lines
+      45  inventory + offline mock) · **P5 ✅ — all 16 units (U1–U16) aut
+          hored; every can-do C1–C17+CV practiced
+      46  by ≥1 lab** · **P6 ✅ — capstone (briefs/exemplar/rubric), buil
+          d case study + transparency note,
+      47  maintainer guide, README finalized, `tools/render-checklist` ad
+          ded; `make check-strict` green = the
+      48 -v1 Definition-of-Done mechanical gate (L3) passes.** Current br
+         -anch: **`spec/tasks-phase`**.                                  
+      48 +v1 Definition-of-Done mechanical gate (L3) passes.** Current br
+         +anch: **`main`** (P6 committed).                               
+      49  
+      50 -**v1 build is complete.** Remaining is **not release-blocking**
+         -: **L1** (7 in-REPL/external version-data                      
+      51 -keys still `unverified` — a one-time interactive `/help`+docs r
+         -efresh pass, not authorable headlessly);                       
+      52 -and the commit/push of P6 + a CI run on push. See the 🔓 ledger
+         - in `decisions.md`.                                            
+      50 +**v1 build is complete.** Remaining is **not release-blocking**
+         +: **L1** is now mostly closed — the                            
+      51 +interactive `/help`+docs pass (2026-05-30) verified 5 of the 7 
+         +keys; only `ci` (GitHub Action wrapper)                        
+      52 +and `managed-settings` (enterprise) stay `unverified`, each blo
+         +cked by access this environment lacks                          
+      53 +(Gitea instead of GitHub Actions; no enterprise account). See t
+         +he 🔓 ledger in `decisions.md`.                                
+      54  
+      55  **Where the detail lives** (don't restate it here):
+      56  - Per-unit build notes (what each unit/lab is, its refs, its tr
+          aceability) → [`tasks.md`](./tasks.md) §P5.
+
+● Let me re-run the checks to confirm everything is still green after the doc
+  edits:
+
+  Ran 1 shell command (ctrl+o to expand)
+
+● All checks green. Let me verify the JSON twin actually picked up the changes —
+  it's not showing as modified in git, which is worth confirming:
+
+  Searched for 1 pattern (ctrl+o to expand)
+
+● The JSON twin still shows 7 unverified — make render validated references but
+  didn't regenerate the YAML→JSON. Let me find the right regeneration path:
+
+  Searched for 1 pattern, read 1 file (ctrl+o to expand)
+
+● render-vd resolves prose tokens, not the JSON twin. Let me find what generates
+  version-data.json:
+
+  Searched for 1 pattern (ctrl+o to expand)
+
+● No dedicated generator — let me check which file is actually authoritative
+  (does anything read the .json?):
+
+  Searched for 1 pattern (ctrl+o to expand)
+
+● The .json is an unread convenience twin (all tooling reads the YAML), but its
+  own header advertises it as the generated twin — so a stale copy is a latent
+  inaccuracy. Let me check its shape so I can regenerate it faithfully:
+
+  Read 1 file (ctrl+o to expand)
+
+● 2-space indent, ensure_ascii=True (em-dashes as \u2014), insertion order
+  preserved — that's stock json.dump(..., indent=2). Let me regenerate it from
+  the YAML:
+
+  Ran 1 shell command (ctrl+o to expand)
+
+● JSON now shows 2 unverified, matching the YAML. Final verification — run the
+  full check suite and show the complete changeset:
+
+  Ran 1 shell command (ctrl+o to expand)
+
+● Done. You confirmed the verification results, so I went ahead and applied the
+  full L1 close-out. Here's what changed:
+
+  What got verified & flipped (unverified: true → false)
+
+  Key: search-refs
+  Home unit: U2
+  What was confirmed: @-mention file refs via /help
+  ────────────────────────────────────────
+  Key: context-cmds
+  Home unit: U4
+  What was confirmed: /context, /compact, /clear
+  ────────────────────────────────────────
+  Key: checkpoint-rewind
+  Home unit: U3
+  What was confirmed: rewind command is /rewind (value updated)
+  ────────────────────────────────────────
+  Key: test-run
+  Home unit: U6
+  What was confirmed: conceptual, version-independent (no CLI flag)
+  ────────────────────────────────────────
+  Key: output-styles
+  Home unit: U4
+  What was confirmed: value substantially rewritten — Default +
+    Proactive/Explanatory/Learning, selected via /config (saved to
+    .claude/settings.local.json) or the outputStyle setting; noted /output-style
+
+    deprecated v2.1.73, removed v2.1.91
+
+  What stays open (L1 reduced, not closed)
+
+  - ci — CLI flags verified; the GitHub Action wrapper can't be confirmed in
+  your Gitea environment.
+  - managed-settings — enterprise path/precedence needs an enterprise account.
+
+  Both now carry notes recording the verification attempt and the environmental
+  blocker, so the next session knows these aren't oversights — they need an
+  environment with that access.
+
+  Files touched (all checks green)
+
+  - meta/version-data.yaml — 5 keys flipped + enriched; 2 keys' notes updated
+  - meta/version-data.json — regenerated from the YAML (was a stale twin; now 2
+  unverified, matching)
+  - meta/version-record.md — new verification-pass row + rewritten "Outstanding
+  to verify" (now just ci, managed-settings, + the low-priority review-cmds soft
+  spot)
+  - specs/.../decisions.md — L1 ledger entry updated to "mostly closed (5 of 7)"
+  - specs/.../IMPLEMENTATION.md §3 — L1 status refreshed and the stale
+  spec/tasks-phase branch line corrected to main
+
+  make check passes across all 24 course files.
+
+  Notes
+
+  - One thing I didn't verify against your input: the review-cmds slash-command
+  names (/code-review, /security-review) — it wasn't in the numbered 1–7 list
+  and you didn't mention it. It's already unverified: false; I just left its
+  soft-spot note and flagged it low-priority in the record. If you happened to
+  see those in /help, say so and I'll clear that note too.
+  - The two remaining keys (ci, managed-settings) are genuinely not
+  release-blocking — the course prose defers both to docs already.
+
+  Want me to commit this (working tree is otherwise clean on main)? I'll hold
+  off on any push per your usual preference.
+✻ Worked for 4m 21s
+
+❯ I can confirm both "/code-review" and "/security-review" is in /help.         
+
+● Good — that clears the last soft spot. review-cmds is already unverified: 
+  false; I just need to record that the slash-command names are now confirmed
+  and drop the caveat.
+
+● Update(meta/version-data.yaml)
+  ⎿  Added 2 lines, removed 3 lines
+      123    review-cmds:
+      124      kind: command
+      125      value: "`claude ultrareview` runs a cloud multi-agent revi
+           ew of the branch/PR; /code-review and /security-review are in-
+           REPL skills."
+      126 -    provenance: "claude --help (ultrareview command). The /cod
+          -e-review and /security-review slash commands are in-REPL"     
+      126 +    provenance: "claude --help (ultrareview command); /code-re
+          +view and /security-review confirmed present in in-REPL `/help`
+          + (2026-05-30)"                                                
+      127      verified_version: "2.1.158"
+      128 -    verified_date: "2026-05-29"                               
+      128 +    verified_date: "2026-05-30"                               
+      129      unverified: false
+      130 -    notes: "ultrareview verified from --help. Confirm /code-re
+          -view and /security-review names via in-REPL `/help` (those par
+          -ts unverified)."                                              
+      130  
+      131    custom-commands:
+      132      kind: feature
+
+● Now drop the review-cmds bullet from the version-record "Outstanding" list —
+  only the two access-blocked keys remain:
+
+● Update(meta/version-record.md)
+  ⎿  Removed 2 lines
+      39    the Action name/setup against official docs in an environment
+           with GitHub Actions.
+      40  - `managed-settings` — the enterprise/managed-settings **file p
+          ath + precedence** needs an enterprise
+      41    account or official enterprise docs (not available to the mai
+          ntainer).
+      42 -- `review-cmds` (low priority; already `unverified: false`) — `
+         -ultrareview` is CLI-verified; the                              
+      43 -  `/code-review` and `/security-review` slash-command names rem
+         -ain the soft spot — confirm in-REPL when convenient.           
+
+● Let me add the review-cmds confirmation to the verification-pass row for
+  completeness, then regenerate the JSON twin and re-check:
+
+● Update(meta/version-record.md)
+  ⎿  Added 1 line, removed 1 line
+      10  
+      11  | Verified CLI version | Date | Method | By |
+      12  |---|---|---|---|
+      13 -| 2.1.158 | 2026-05-30 | in-REPL `/help` + docs pass (L1 close)
+         -: 5 of 7 `unverified` keys confirmed — `search-refs`, `context-
+         -cmds`, `checkpoint-rewind` (rewind = `/rewind`), `test-run`, `o
+         -utput-styles`; `ci` + `managed-settings` stay `unverified` (no 
+         -GitHub Actions / enterprise account to verify against) | L1 ver
+         -ification |                                                    
+      13 +| 2.1.158 | 2026-05-30 | in-REPL `/help` + docs pass (L1 close)
+         +: 5 of 7 `unverified` keys confirmed — `search-refs`, `context-
+         +cmds`, `checkpoint-rewind` (rewind = `/rewind`), `test-run`, `o
+         +utput-styles`; `ci` + `managed-settings` stay `unverified` (no 
+         +GitHub Actions / enterprise account to verify against); also co
+         +nfirmed `review-cmds` slash names (`/code-review`, `/security-r
+         +eview`) in-REPL | L1 verification |                            
+      14  | 2.1.158 | 2026-05-29 | `claude --version` + `claude --help` (
+          P2 version-data seeding); 19/26 keys confirmed from CLI help, 7
+           marked `unverified` pending in-REPL `/help` / docs | spec buil
+          d (P2) |
+      15  
+      16  ## How to refresh (R12.AC7)
+
+  Ran 1 shell command (ctrl+o to expand)
+
+● Cleared. review-cmds is now fully verified (provenance updated, caveat
+  dropped) and removed from the outstanding list. All checks green.
+
+  Final state of the version-data verification
+
+  - Verified this session: search-refs, context-cmds, checkpoint-rewind
+  (/rewind), test-run, output-styles, and review-cmds slash names — all carrying
+  real provenance dated 2026-05-30.
+  - Still unverified: true (2 keys, environment-blocked): ci (no GitHub Actions
+  — Gitea) and managed-settings (no enterprise account). Both documented as
+  access-blocked, not oversights.
+
+  L1 is now down to just those two access-gated keys, neither release-blocking.
+  The 5 modified files:
+  - meta/version-data.yaml + regenerated meta/version-data.json
+  - meta/version-record.md (new pass row + trimmed outstanding list)
+  - specs/.../decisions.md (L1 ledger) + specs/.../IMPLEMENTATION.md (§3 +
+  branch fix)
+
+  Want me to commit these? Working tree is otherwise clean on main. Suggested
+  message:
+
+  Close L1 version-data verification (5 of 7 keys + review-cmds)
+
+  Verify against installed CLI 2.1.158 via in-REPL /help + docs:
+  search-refs, context-cmds, checkpoint-rewind (/rewind), test-run,
+  output-styles, review-cmds slash names. ci + managed-settings remain
+  unverified (no GitHub Actions / enterprise account to verify against).
+
+  I'll hold off on any push per your usual preference.
+
+✻ Crunched for 40s
+
+❯ commit this and push                                                          
+
+  Committed a70c951 (ctrl+o to expand)
+
+● Committed (pre-commit hook ran make check — green). Now pushing:
+
+  Pushed to main (ctrl+o to expand)
+
+● Done. Committed and pushed to origin/main:
+
+  - Commit: a70c951 — "Close L1 version-data verification (5 of 7 keys +
+  review-cmds)"
+  - Pushed: 6d5e98f..a70c951 → marlow/claude-training.git (Gitea), main
+  - Pre-commit hook ran make check — all green before the commit landed.
+
+  Net result: L1 is down to the two access-blocked keys (ci, managed-settings);
+  everything else in the version-data file is now verified against the installed
+  CLI with real provenance. The v1 build remains complete and nothing
+  outstanding is release-blocking.
+
+✻ Cooked for 26s

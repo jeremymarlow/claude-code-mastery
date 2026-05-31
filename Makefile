@@ -6,15 +6,15 @@
 PY ?= python3
 TOOLS := ./tools
 
-.PHONY: check check-strict frontmatter coverage checklist links version-refs traceability drift \
-        doctor render snapshot help
+.PHONY: check check-strict frontmatter coverage checklist units index links version-refs \
+        traceability drift doctor render snapshot help
 
 ## Run the required + traceability checks (PENDING items do not fail; see check-strict).
-check: frontmatter coverage checklist links version-refs traceability
+check: frontmatter coverage checklist units index links version-refs traceability
 	@echo "make check: all checks passed"
 
 ## Release gate: same suite, but PENDING (not-yet-authored coverage) becomes FAIL.
-check-strict: frontmatter coverage checklist links version-refs
+check-strict: frontmatter coverage checklist units index links version-refs
 	@$(TOOLS)/check-traceability --strict
 	@echo "make check-strict: all checks passed (strict)"
 
@@ -27,6 +27,14 @@ coverage:
 ## Confirm course/progress-checklist.md is in sync with the capability map (R9.AC5).
 checklist:
 	@$(PY) $(TOOLS)/render-checklist --check
+
+## Confirm each learner-facing unit.md matches render(unit.src.md) — the {{vd:key}} drift gate (R12.AC2).
+units:
+	@$(PY) $(TOOLS)/render-units --check
+
+## Confirm the units index (course/units/README.md) is in sync with unit front matter (R9.AC2 navigation).
+index:
+	@$(PY) $(TOOLS)/render-index --check
 
 links:
 	@$(PY) $(TOOLS)/check-links
@@ -49,6 +57,8 @@ doctor:
 render:
 	@$(PY) $(TOOLS)/render-vd
 	@$(PY) $(TOOLS)/render-checklist
+	@$(PY) $(TOOLS)/render-units
+	@$(PY) $(TOOLS)/render-index
 
 ## Refresh the CLI command snapshot used by drift detection.
 snapshot:

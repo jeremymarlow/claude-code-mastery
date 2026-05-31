@@ -46,7 +46,7 @@ spot-check edges.
 
 | Path | What's there |
 |---|---|
-| [`course/units/`](./course/units/) | 16 units, one per use case (`NN-slug/unit.md`). |
+| [**`course/units/`**](./course/units/README.md) | **Start here** — the [16-unit index](./course/units/README.md) (table of contents) links each lesson directly. |
 | [`course/capstone/`](./course/capstone/) | The single graded capstone: brief menu, worked exemplar, self-applicable rubric. |
 | [`course/progress-checklist.md`](./course/progress-checklist.md) | Track which can-do statements you've achieved. |
 | [`course/stuck.md`](./course/stuck.md) | When you're stuck: hints, FAQ, using Claude to get unstuck. |
@@ -57,8 +57,9 @@ spot-check edges.
 ## How to start
 
 1. Run [`tools/doctor`](./tools/doctor) and fix anything it flags (or use its manual checklist).
-2. Begin with **U1** in [`course/units/`](./course/units/) and follow the default numeric path; you
-   may deviate per each unit's declared prerequisites.
+2. Open the [**unit index**](./course/units/README.md) and begin with **Unit 1 — Set up Claude Code
+   and make your first verified change**, following the default numeric path; you may deviate per
+   each unit's declared prerequisites.
 3. Each unit has a **fast path** and a **skip-check** — skim and skip deliberately if you already
    know the material. Do the labs; they're where the learning is.
 4. Track yourself against the progress checklist; finish with the capstone.

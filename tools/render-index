@@ -1,0 +1,92 @@
+#!/usr/bin/env python3
+"""render-index: generate course/units/README.md — the learner-facing table of contents.
+
+Auto-rendered by Gitea/GitHub/VS Code when the course/units/ folder is opened, so a learner lands
+on a titled index and clicks straight through to a unit's `unit.md` (never the unit.src.md pair).
+Built from each unit's front matter (title, stage, times) so it cannot drift; `--check` is the drift
+gate wired into `make check`, bare-mode writes, wired into `make render` (same pattern as the checklist).
+"""
+import os
+import re
+import sys
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from _common import ROOT, UNITS, Reporter, parse_frontmatter, unit_files  # noqa: E402
+
+# Canonical stage order + learner-facing labels (mirrors meta/glossary.md "Stages").
+STAGES = [
+    ("first-wins", "First Wins"),
+    ("daily-driver", "Daily Driver"),
+    ("force-multiplier", "Force Multiplier"),
+    ("autonomy-scale", "Autonomy & Scale"),
+]
+HEADER = (
+    "<!-- GENERATED from each unit's front matter by tools/render-index — do not hand-edit. "
+    "Run `make render`. -->\n"
+)
+
+
+def unit_num(uid: str) -> int:
+    m = re.match(r"U(\d+)$", uid)
+    return int(m.group(1)) if m else 9999
+
+
+def build() -> str:
+    rows = []  # (num, stage, title, slug, read, lab)
+    for path in unit_files():
+        fm = parse_frontmatter(path)
+        if not fm:
+            continue
+        rows.append(
+            (
+                unit_num(fm["id"]),
+                fm.get("stage", ""),
+                fm.get("title", "").strip('"'),
+                path.parent.name,
+                fm.get("reading_time_min", 0),
+                fm.get("lab_time_min", 0),
+            )
+        )
+    rows.sort(key=lambda r: r[0])
+
+    out = [HEADER, "# Course units\n"]
+    out.append(
+        "The 16 units, in the default order. Each is self-contained; skim a unit's **Skip-check** "
+        "and skip deliberately if you already know it. Track yourself on the "
+        "[progress checklist](../progress-checklist.md); finish with the [capstone](../capstone/).\n"
+    )
+    for stage_key, stage_label in STAGES:
+        srows = [r for r in rows if r[1] == stage_key]
+        if not srows:
+            continue
+        out.append(f"## {stage_label}\n")
+        out.append("| # | Unit | Read | Lab |")
+        out.append("|---|------|------|-----|")
+        for num, _stage, title, slug, read, lab in srows:
+            out.append(f"| {num} | [{title}](./{slug}/unit.md) | {read} min | {lab} min |")
+        out.append("")
+    return "\n".join(out) + "\n"
+
+
+def main(argv):
+    check = "--check" in argv
+    rep = Reporter("render-index")
+    out_path = UNITS / "README.md"
+    rendered = build()
+    rel = out_path.relative_to(ROOT)
+
+    if check:
+        current = out_path.read_text(encoding="utf-8") if out_path.exists() else None
+        rep.check(
+            current == rendered,
+            f"{rel}: in sync with unit front matter",
+            f"{rel}: out of sync — run `make render`",
+        )
+    else:
+        out_path.write_text(rendered, encoding="utf-8")
+        rep.ok(f"{rel}: rendered ({rendered.count('/unit.md)')} units)")
+    return rep.done()
+
+
+if __name__ == "__main__":
+    raise SystemExit(main(sys.argv[1:]))

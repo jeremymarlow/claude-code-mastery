@@ -1,0 +1,76 @@
+#!/usr/bin/env python3
+"""render-units: generate each unit's learner-facing `unit.md` from its authored `unit.src.md`
+by resolving {{vd:key}} tokens (R12.AC2 single-source rule).
+
+This mirrors the render-checklist pattern (a committed generated artifact + a drift gate):
+  - `unit.src.md` is authored — front matter + {{vd:key}} version-data tokens. Maintainers edit it.
+  - `unit.md` is generated — the resolved prose a learner reads, with a leading GENERATED comment.
+
+Usage:
+  tools/render-units            # (re)write every unit.md from its unit.src.md
+  tools/render-units --check    # verify each unit.md matches render(unit.src.md); drift => FAIL
+
+Only units that have a `unit.src.md` are touched — units not yet migrated are left alone, so this
+is safe to wire into `make check` during a gradual rollout.
+"""
+import os
+import re
+import sys
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from _common import ROOT, UNITS, Reporter, load_version_data, render_vd  # noqa: E402
+
+HEADER = (
+    "<!-- GENERATED from unit.src.md by tools/render-units — do not hand-edit. "
+    "Edit unit.src.md, then run `make render`. -->\n"
+)
+LEADING_COMMENT_RE = re.compile(r"^<!--.*?-->\s*", re.DOTALL)
+
+
+def sources():
+    if not UNITS.exists():
+        return []
+    return sorted(UNITS.glob("*/unit.src.md"))
+
+
+def render_source(src, vd):
+    """Return (generated_text, unresolved_keys). Strips any leading source comment and prepends
+    the GENERATED header, so editing unit.md directly is always caught as drift."""
+    text = LEADING_COMMENT_RE.sub("", src.read_text(encoding="utf-8"), count=1)
+    rendered, unresolved = render_vd(text, vd)
+    return HEADER + rendered, unresolved
+
+
+def main(argv):
+    check = "--check" in argv
+    rep = Reporter("render-units")
+    vd = load_version_data()
+    srcs = sources()
+
+    if not srcs:
+        rep.ok("no unit.src.md sources yet — nothing to render")
+        return rep.done()
+
+    for src in srcs:
+        out = src.with_name("unit.md")
+        rel = out.relative_to(ROOT)
+        rendered, unresolved = render_source(src, vd)
+        if unresolved:
+            rep.fail(f"{rel}: unresolved {{vd:key}} in source: {', '.join(sorted(unresolved))}")
+            continue
+        if check:
+            current = out.read_text(encoding="utf-8") if out.exists() else None
+            rep.check(
+                current == rendered,
+                f"{rel}: in sync with unit.src.md",
+                f"{rel}: out of sync with unit.src.md — run `make render`",
+            )
+        else:
+            out.write_text(rendered, encoding="utf-8")
+            rep.ok(f"{rel}: rendered")
+
+    return rep.done()
+
+
+if __name__ == "__main__":
+    raise SystemExit(main(sys.argv[1:]))

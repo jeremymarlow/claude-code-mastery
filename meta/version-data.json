@@ -14,11 +14,10 @@
     "search-refs": {
       "kind": "feature",
       "value": "In-REPL: ask codebase questions in natural language; reference files/dirs with @-mentions (e.g. `@app/main.py`).",
-      "provenance": "in-REPL feature \u2014 not surfaced by `claude --help`",
+      "provenance": "in-REPL `/help` + live @-mention test",
       "verified_version": "2.1.158",
-      "verified_date": "2026-05-29",
-      "unverified": true,
-      "notes": "Verify the exact @-reference behavior interactively via `/help`; not confirmable from CLI --help."
+      "verified_date": "2026-05-30",
+      "unverified": false
     },
     "permission-modes": {
       "kind": "flag",
@@ -49,12 +48,11 @@
     },
     "checkpoint-rewind": {
       "kind": "feature",
-      "value": "In-REPL checkpoint/rewind to undo recent changes; `--no-session-persistence` disables saving sessions.",
-      "provenance": "claude --help confirms --no-session-persistence; the checkpoint/rewind UI is in-REPL",
+      "value": "In-REPL `/rewind` checkpoints/restores recent changes to undo them; `--no-session-persistence` disables saving sessions.",
+      "provenance": "claude --help confirms --no-session-persistence; `/rewind` confirmed via in-REPL `/help`",
       "verified_version": "2.1.158",
-      "verified_date": "2026-05-29",
-      "unverified": true,
-      "notes": "Confirm the exact rewind command/keybinding via in-REPL `/help`; not in CLI --help."
+      "verified_date": "2026-05-30",
+      "unverified": false
     },
     "memory": {
       "kind": "feature",
@@ -67,11 +65,10 @@
     "context-cmds": {
       "kind": "command",
       "value": "In-REPL slash commands: /context, /compact, /clear (inspect and manage the context window).",
-      "provenance": "in-REPL slash commands \u2014 not surfaced by `claude --help`",
+      "provenance": "in-REPL `/help` (command names/behavior confirmed)",
       "verified_version": "2.1.158",
-      "verified_date": "2026-05-29",
-      "unverified": true,
-      "notes": "Verify exact command names/behavior via in-REPL `/help`."
+      "verified_date": "2026-05-30",
+      "unverified": false
     },
     "plan-mode": {
       "kind": "feature",
@@ -92,11 +89,11 @@
     "test-run": {
       "kind": "feature",
       "value": "Tests run through the Bash tool (e.g. `pytest`); no dedicated CLI flag \u2014 Claude invokes the project's existing test runner.",
-      "provenance": "no dedicated CLI surface in `claude --help`; mechanism is tool-use",
+      "provenance": "no dedicated CLI surface in `claude --help`; mechanism is tool-use (conceptual, version-independent)",
       "verified_version": "2.1.158",
-      "verified_date": "2026-05-29",
-      "unverified": true,
-      "notes": "Conceptual; verify the project's runner (taskflow-api uses pytest)."
+      "verified_date": "2026-05-30",
+      "unverified": false,
+      "notes": "Conceptual; the project's runner is pytest for taskflow-api."
     },
     "git-pr": {
       "kind": "flag",
@@ -109,11 +106,10 @@
     "review-cmds": {
       "kind": "command",
       "value": "`claude ultrareview` runs a cloud multi-agent review of the branch/PR; /code-review and /security-review are in-REPL skills.",
-      "provenance": "claude --help (ultrareview command). The /code-review and /security-review slash commands are in-REPL",
+      "provenance": "claude --help (ultrareview command); /code-review and /security-review confirmed present in in-REPL `/help` (2026-05-30)",
       "verified_version": "2.1.158",
-      "verified_date": "2026-05-29",
-      "unverified": false,
-      "notes": "ultrareview verified from --help. Confirm /code-review and /security-review names via in-REPL `/help` (those parts unverified)."
+      "verified_date": "2026-05-30",
+      "unverified": false
     },
     "custom-commands": {
       "kind": "feature",
@@ -139,7 +135,7 @@
       "verified_version": "2.1.158",
       "verified_date": "2026-05-29",
       "unverified": false,
-      "notes": "The inline `--agents <json>` form (with a per-agent `description`) is --help-verified; the persistent on-disk location (e.g. .claude/agents/<name>.md) is a filesystem convention — verify the exact path/front matter via docs before hardcoding."
+      "notes": "The inline `--agents <json>` form (with a per-agent `description`) is --help-verified; the persistent on-disk location (e.g. .claude/agents/<name>.md) is a filesystem convention \u2014 verify the exact path/front matter via docs before hardcoding."
     },
     "hooks": {
       "kind": "feature",
@@ -152,8 +148,8 @@
     },
     "mcp": {
       "kind": "command",
-      "value": "`claude mcp add <name> -- <cmd>` adds a local stdio server (subprocess); `--transport http <url>` adds a remote one. `claude mcp get`/`list` health-check connections; a project `.mcp.json` server shows as `⏸ Pending approval` until approved. `--mcp-config <files>` loads per-session; `--strict-mcp-config` ignores others.",
-      "provenance": "claude mcp --help (add/add-json/get/list/remove/serve); verified live 2026-05-30 — a stdlib stdio server registered via `mcp add` reported `✓ Connected` via `mcp get`; `.mcp.json` format captured from `mcp add -s project`.",
+      "value": "`claude mcp add <name> -- <cmd>` adds a local stdio server (subprocess); `--transport http <url>` adds a remote one. `claude mcp get`/`list` health-check connections; a project `.mcp.json` server shows as `\u23f8 Pending approval` until approved. `--mcp-config <files>` loads per-session; `--strict-mcp-config` ignores others.",
+      "provenance": "claude mcp --help (add/add-json/get/list/remove/serve); verified live 2026-05-30 \u2014 a stdlib stdio server registered via `mcp add` reported `\u2713 Connected` via `mcp get`; `.mcp.json` format captured from `mcp add -s project`.",
       "verified_version": "2.1.158",
       "verified_date": "2026-05-30",
       "unverified": false
@@ -181,7 +177,7 @@
       "verified_version": "2.1.158",
       "verified_date": "2026-05-29",
       "unverified": true,
-      "notes": "CLI mechanism verified; verify the GitHub Action name/setup against official docs before hardcoding."
+      "notes": "CLI mechanism verified (-p/--output-format/--max-budget-usd). The GitHub Action wrapper stays unverified: confirm its name/setup against official docs in an environment with GitHub Actions (maintainer's env uses Gitea, no GitHub Action available to verify, 2026-05-30)."
     },
     "worktrees": {
       "kind": "flag",
@@ -210,12 +206,12 @@
     },
     "output-styles": {
       "kind": "feature",
-      "value": "Output styles / response customization (configured in settings).",
-      "provenance": "not surfaced by `claude --help`",
+      "value": "Output styles customize Claude's response behavior: the Default (standard SWE system prompt) plus three built-in styles \u2014 Proactive (acts immediately, prefers action over planning), Explanatory (adds educational 'Insights'), and Learning (collaborative; adds TODO(human) markers for you to implement). Select via `/config` -> Output style (saved to `.claude/settings.local.json`), or set the `outputStyle` settings field directly.",
+      "provenance": "official docs (built-in output styles) + user-confirmed via `/config` @ 2.1.158, 2026-05-30",
       "verified_version": "2.1.158",
-      "verified_date": "2026-05-29",
-      "unverified": true,
-      "notes": "Awareness-tier; verify the current output-styles mechanism via in-REPL `/help` or official docs before authoring."
+      "verified_date": "2026-05-30",
+      "unverified": false,
+      "notes": "The standalone `/output-style` command was deprecated in v2.1.73 and removed in v2.1.91 \u2014 use `/config` or the `outputStyle` setting."
     },
     "managed-settings": {
       "kind": "setting",
@@ -224,7 +220,7 @@
       "verified_version": "2.1.158",
       "verified_date": "2026-05-29",
       "unverified": true,
-      "notes": "Conceptual only (assumption A4). Verify the managed-settings file path/precedence via official enterprise docs before hardcoding."
+      "notes": "Conceptual only (assumption A4). Stays unverified: the managed/enterprise settings path/precedence needs an enterprise account or official enterprise docs to confirm (not available to the maintainer, 2026-05-30)."
     }
   }
 }

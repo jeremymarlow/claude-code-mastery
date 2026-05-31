@@ -31,11 +31,10 @@ keys:
   search-refs:
     kind: feature
     value: "In-REPL: ask codebase questions in natural language; reference files/dirs with @-mentions (e.g. `@app/main.py`)."
-    provenance: "in-REPL feature — not surfaced by `claude --help`"
+    provenance: "in-REPL `/help` + live @-mention test"
     verified_version: "2.1.158"
-    verified_date: "2026-05-29"
-    unverified: true
-    notes: "Verify the exact @-reference behavior interactively via `/help`; not confirmable from CLI --help."
+    verified_date: "2026-05-30"
+    unverified: false
 
   permission-modes:
     kind: flag
@@ -66,12 +65,11 @@ keys:
 
   checkpoint-rewind:
     kind: feature
-    value: "In-REPL checkpoint/rewind to undo recent changes; `--no-session-persistence` disables saving sessions."
-    provenance: "claude --help confirms --no-session-persistence; the checkpoint/rewind UI is in-REPL"
+    value: "In-REPL `/rewind` checkpoints/restores recent changes to undo them; `--no-session-persistence` disables saving sessions."
+    provenance: "claude --help confirms --no-session-persistence; `/rewind` confirmed via in-REPL `/help`"
     verified_version: "2.1.158"
-    verified_date: "2026-05-29"
-    unverified: true
-    notes: "Confirm the exact rewind command/keybinding via in-REPL `/help`; not in CLI --help."
+    verified_date: "2026-05-30"
+    unverified: false
 
   memory:
     kind: feature
@@ -84,11 +82,10 @@ keys:
   context-cmds:
     kind: command
     value: "In-REPL slash commands: /context, /compact, /clear (inspect and manage the context window)."
-    provenance: "in-REPL slash commands — not surfaced by `claude --help`"
+    provenance: "in-REPL `/help` (command names/behavior confirmed)"
     verified_version: "2.1.158"
-    verified_date: "2026-05-29"
-    unverified: true
-    notes: "Verify exact command names/behavior via in-REPL `/help`."
+    verified_date: "2026-05-30"
+    unverified: false
 
   plan-mode:
     kind: feature
@@ -109,11 +106,11 @@ keys:
   test-run:
     kind: feature
     value: "Tests run through the Bash tool (e.g. `pytest`); no dedicated CLI flag — Claude invokes the project's existing test runner."
-    provenance: "no dedicated CLI surface in `claude --help`; mechanism is tool-use"
+    provenance: "no dedicated CLI surface in `claude --help`; mechanism is tool-use (conceptual, version-independent)"
     verified_version: "2.1.158"
-    verified_date: "2026-05-29"
-    unverified: true
-    notes: "Conceptual; verify the project's runner (taskflow-api uses pytest)."
+    verified_date: "2026-05-30"
+    unverified: false
+    notes: "Conceptual; the project's runner is pytest for taskflow-api."
 
   git-pr:
     kind: flag
@@ -126,11 +123,10 @@ keys:
   review-cmds:
     kind: command
     value: "`claude ultrareview` runs a cloud multi-agent review of the branch/PR; /code-review and /security-review are in-REPL skills."
-    provenance: "claude --help (ultrareview command). The /code-review and /security-review slash commands are in-REPL"
+    provenance: "claude --help (ultrareview command); /code-review and /security-review confirmed present in in-REPL `/help` (2026-05-30)"
     verified_version: "2.1.158"
-    verified_date: "2026-05-29"
+    verified_date: "2026-05-30"
     unverified: false
-    notes: "ultrareview verified from --help. Confirm /code-review and /security-review names via in-REPL `/help` (those parts unverified)."
 
   custom-commands:
     kind: feature
@@ -198,7 +194,7 @@ keys:
     verified_version: "2.1.158"
     verified_date: "2026-05-29"
     unverified: true
-    notes: "CLI mechanism verified; verify the GitHub Action name/setup against official docs before hardcoding."
+    notes: "CLI mechanism verified (-p/--output-format/--max-budget-usd). The GitHub Action wrapper stays unverified: confirm its name/setup against official docs in an environment with GitHub Actions (maintainer's env uses Gitea, no GitHub Action available to verify, 2026-05-30)."
 
   worktrees:
     kind: flag
@@ -227,12 +223,12 @@ keys:
 
   output-styles:
     kind: feature
-    value: "Output styles / response customization (configured in settings)."
-    provenance: "not surfaced by `claude --help`"
+    value: "Output styles customize Claude's response behavior: the Default (standard SWE system prompt) plus three built-in styles — Proactive (acts immediately, prefers action over planning), Explanatory (adds educational 'Insights'), and Learning (collaborative; adds TODO(human) markers for you to implement). Select via `/config` -> Output style (saved to `.claude/settings.local.json`), or set the `outputStyle` settings field directly."
+    provenance: "official docs (built-in output styles) + user-confirmed via `/config` @ 2.1.158, 2026-05-30"
     verified_version: "2.1.158"
-    verified_date: "2026-05-29"
-    unverified: true
-    notes: "Awareness-tier; verify the current output-styles mechanism via in-REPL `/help` or official docs before authoring."
+    verified_date: "2026-05-30"
+    unverified: false
+    notes: "The standalone `/output-style` command was deprecated in v2.1.73 and removed in v2.1.91 — use `/config` or the `outputStyle` setting."
 
   managed-settings:
     kind: setting
@@ -241,4 +237,4 @@ keys:
     verified_version: "2.1.158"
     verified_date: "2026-05-29"
     unverified: true
-    notes: "Conceptual only (assumption A4). Verify the managed-settings file path/precedence via official enterprise docs before hardcoding."
+    notes: "Conceptual only (assumption A4). Stays unverified: the managed/enterprise settings path/precedence needs an enterprise account or official enterprise docs to confirm (not available to the maintainer, 2026-05-30)."

@@ -45,11 +45,12 @@ over memory for specifics; memory is a pointer, the spec is the source of truth.
 inventory + offline mock) · **P5 ✅ — all 16 units (U1–U16) authored; every can-do C1–C17+CV practiced
 by ≥1 lab** · **P6 ✅ — capstone (briefs/exemplar/rubric), build case study + transparency note,
 maintainer guide, README finalized, `tools/render-checklist` added; `make check-strict` green = the
-v1 Definition-of-Done mechanical gate (L3) passes.** Current branch: **`spec/tasks-phase`**.
+v1 Definition-of-Done mechanical gate (L3) passes.** Current branch: **`main`** (P6 committed).
 
-**v1 build is complete.** Remaining is **not release-blocking**: **L1** (7 in-REPL/external version-data
-keys still `unverified` — a one-time interactive `/help`+docs refresh pass, not authorable headlessly);
-and the commit/push of P6 + a CI run on push. See the 🔓 ledger in `decisions.md`.
+**v1 build is complete.** Remaining is **not release-blocking**: **L1** is now mostly closed — the
+interactive `/help`+docs pass (2026-05-30) verified 5 of the 7 keys; only `ci` (GitHub Action wrapper)
+and `managed-settings` (enterprise) stay `unverified`, each blocked by access this environment lacks
+(Gitea instead of GitHub Actions; no enterprise account). See the 🔓 ledger in `decisions.md`.
 
 **Where the detail lives** (don't restate it here):
 - Per-unit build notes (what each unit/lab is, its refs, its traceability) → [`tasks.md`](./tasks.md) §P5.

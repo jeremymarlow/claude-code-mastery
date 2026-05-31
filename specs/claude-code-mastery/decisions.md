@@ -381,18 +381,17 @@ may restate an item for local context but point back here. **Maintenance rule:**
 something, add an entry; when you resolve it, strike it through with the commit/phase that closed it.
 Nothing is "remembered" outside this ledger. (Each entry: **status** · _Resolve in_ · _Also tracked in_.)
 
-**L1 — 7 version-data keys still `unverified: true`** (`search-refs`, `context-cmds`,
-`checkpoint-rewind`, `test-run`, `ci`, `managed-settings`, `output-styles`).
-_Resolve in:_ when each key's home unit is authored (P5) and/or the next refresh — verify via in-REPL
-`/help`/docs, then flip `unverified`→false (R12.AC3). _Also tracked in:_ `meta/version-record.md` →
+**L1 (mostly closed, 2026-05-30) — 2 version-data keys remain `unverified: true`** (`ci`,
+`managed-settings`). An interactive `/help` + docs pass closed **5 of the original 7**: `search-refs`,
+`context-cmds`, `checkpoint-rewind` (rewind command confirmed as `/rewind`), `test-run` (conceptual,
+version-independent), and `output-styles` (Default + Proactive/Explanatory/Learning, selected via
+`/config`; standalone `/output-style` deprecated v2.1.73, removed v2.1.91) — all flipped
+`unverified`→false @ 2026-05-30 (R12.AC3); `version-record.md` bumped with the pass.
+_Resolve the remaining two in:_ an environment with the access the maintainer lacks — `ci` needs a
+GitHub Actions setup to confirm the Action wrapper (this env uses Gitea); `managed-settings` needs an
+enterprise account / official enterprise docs. Their CLI/conceptual parts are already verified; only the
+external-integration surface is unconfirmed. _Also tracked in:_ `meta/version-record.md` →
 "Outstanding to verify".
-- This headless authoring session can't run interactive `/help`, so keys stay `unverified` **even though
-  every home unit is now authored (P5 complete)**: `search-refs` (U2, `@`-mentions); `checkpoint-rewind`
-  + `managed-settings` (U3); `context-cmds` + `output-styles` (U4); `test-run` (U6 — conceptual, no Claude
-  flag); `ci` (U16 — external GitHub Action wrapper). The verifiable flag-parts were confirmed (e.g. `-p`,
-  `--output-format`, `--max-budget-usd` for `ci`; `permission-modes` for U3); what remains is in-REPL /
-  external surface. **One interactive `/help` + docs pass clears all of L1** (decisions P5-U2-vd, P5-U3,
-  P5-U4-vd, P5-U6-vd, P5-U16-vd) — the keys' *home units no longer gate this*; it's purely a verification pass.
 
 **~~L2~~ — ✅ CLOSED (P5/U14, 2026-05-30).** In-session hook wired: `.claude/settings.json` `PostToolUse`/`Write|Edit`
 → `tools/check-on-edit` runs `make check` on `course/`|`meta/` edits (`decision:"block"` on failure). Schema

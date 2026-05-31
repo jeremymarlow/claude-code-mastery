@@ -34,6 +34,10 @@ spec-driven — so the repo is itself a worked example of what it teaches.
 - **Conventions** (naming, layout, tags) live in `meta/conventions.md`. Follow them.
 - **Keep state current.** Check off tasks in `specs/claude-code-mastery/tasks.md`, append non-obvious
   calls to `decisions.md`, bump `meta/version-record.md` on a refresh.
+- **Don't commit or push without the user's go-ahead.** Author changes in the working tree and present
+  them for review first — **especially spec/design edits** (`requirements.md`, `design.md`, and the
+  `tasks/*` plans): commit only once the user has reviewed and approved that gate. **Never push** (any
+  branch, tag, or `main`) without explicit confirmation.
 - **Author in CommonMark**; no meaning by color/emoji alone (R15).
 
 ## Stack

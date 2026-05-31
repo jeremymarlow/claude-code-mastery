@@ -193,6 +193,11 @@ memory "doesn't work," and it's invisible unless you look.
   are configured in the `settings.json` discussed here.
 - [`meta/version-record.md`](../../../meta/version-record.md) — where context/memory version-specifics
   are recorded if your CLI differs.
+- **The exhaustive CLI reference.** Beyond the handful of version-specifics this course pins as
+  version-data tokens, the *full* surface of `claude`'s commands and flags is generated once into
+  [`meta/cli-reference.json`](../../../meta/cli-reference.json) — the machine single-source sibling of
+  [`meta/version-data.yaml`](../../../meta/version-data.yaml) — and rendered for reading as the
+  [CLI reference](../../reference/cli-reference.md). Same "facts live once" discipline: need a flag this
+  course didn't drill? Look there rather than guessing.
 - Stuck? [`course/stuck.md`](../../stuck.md) and the
   [progress checklist](../../progress-checklist.md).
-</content>

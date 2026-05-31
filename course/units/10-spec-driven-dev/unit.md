@@ -213,6 +213,12 @@ those three.
 - The whole [`specs/claude-code-mastery/`](../../../specs/claude-code-mastery/) tree — the dogfooded
   worked example; start at
   [`IMPLEMENTATION.md`](../../../specs/claude-code-mastery/IMPLEMENTATION.md), as every session here does.
+- **A post-v1 enhancement, built the same way.** The course's own
+  [CLI reference](../../reference/cli-reference.md) was added *after* v1 by running this exact chain — a
+  new requirement, a [`design.md`](../../../specs/claude-code-mastery/design.md) §12 that traces to it,
+  an ordered [task plan](../../../specs/claude-code-mastery/tasks/P8-cli-reference.md), then the
+  generator that implements it. Proof the gates-and-traceability discipline scales to real, incremental
+  work — not just greenfield.
 - The phase-gate discipline is the same one in this repo's [`CLAUDE.md`](../../../CLAUDE.md) working
   agreements; the build-against-spec step reuses [Ship a feature](../05-ship-a-feature/unit.md)'s loop.
 - Stuck? [`course/stuck.md`](../../stuck.md) and the

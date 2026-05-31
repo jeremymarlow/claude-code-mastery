@@ -97,12 +97,17 @@ Until 8.7, R16/R17 are invisible to the current hardcoded `R1–R15` check (harm
 - [x] Added the standing R12.AC7 refresh steps to `meta/version-record.md`: regenerate via
       `render-cli-reference --all` + record the cumulative `version-changelog.md` entry.
 
-### 8.6 Dogfood pointers  [R16.AC7, R14.AC2; §12.9]
-- [ ] U4 `unit.src.md` — a light **titled** pointer to `meta/cli-reference.json` as the exhaustive
+### 8.6 Dogfood pointers  [R16.AC7, R14.AC2; §12.9]  ✅
+- [x] U4 `unit.src.md` — a light **titled** pointer to `meta/cli-reference.json` as the exhaustive
       single-source sibling of `version-data.yaml` (no bare codes, per P7 house style); `make render`.
-- [ ] U10 `unit.src.md` — a light callout that this reference was built **spec-driven** (R16/R17 → §12 →
+      → *Going deeper* bullet "**The exhaustive CLI reference.**" links the json (machine sibling of
+      `version-data.yaml`) + the rendered learner page; no `{{vd:…}}` glyph / `R#` code in prose.
+- [x] U10 `unit.src.md` — a light callout that this reference was built **spec-driven** (R16/R17 → §12 →
       this P8 file → implementation); `make render`.
-- [ ] Eyeball both rendered `unit.md`; confirm reading-time unaffected; `make check` green.
+      → *Going deeper* bullet "**A post-v1 enhancement, built the same way.**" links design §12 + this
+      task plan as the requirement→design→tasks chain on a real incremental enhancement.
+- [x] Eyeball both rendered `unit.md`; confirm reading-time unaffected; `make check` green.
+      → both render clean, links resolve, `reading_time_min` unchanged (9 / 11); `make check` all green.
 
 ### 8.7 Resilience: dynamic requirement discovery  [R13.AC5; §12.8]  ⟵ run after 8.2–8.4, 8.6
 - [ ] `check-traceability` — **discover the requirement set from `requirements.md`** (`### Rn` headings),

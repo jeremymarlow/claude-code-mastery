@@ -278,6 +278,15 @@ _Format: **decision-id** — the decision; **Why:** the rationale._
 **P5-U12-vd ✅** — U12 consumes only the *verified* keys `custom-commands` + `skills` (both `unverified: false` @ `2.1.158`, matching the installed CLI) plus `_verified_version`. **No new L1 debt** — contrary to the tasks-index "version keys to verify" note, these were already verified.
 **Why:** both keys were verified from `claude --help` on 2.1.158; their `notes` flag the on-disk paths as filesystem conventions, which the unit surfaces explicitly (Concept §4 + Version-currency note) rather than hardcoding. The command/skill *distinction and authoring method* is version-independent.
 
+**P5-U13-lab ✅** — U13's lab is a prose-self-check lab — NO `start/`/`solution/` refs, NO `verify.sh` (precedent: U8/U10/U12). The learner defines a **read-only `explorer`** subagent in `taskflow-api`'s own `.claude/agents/`, delegates a context-heavy mapping task (e.g. "where is ownership enforced? file:line + one-line note each"), uses the returned result, then **verifies ≥2 cited sites against the code**. Self-check is an objective checklist (R7.AC3) vs. the worked-example `explorer`; optional parallelism stretch (two independent briefs at once). C14 traces via front matter + the `## Lab` heading.
+**Why:** the artifact (an agent definition) lives in the learner's own `.claude/` and the *quality* of a delegation (well-scoped brief? right fencing? did you verify the result?) is a judgment call no script can grade — the same reasoning as U8/U10/U12. The distinctive C14 skill is the *delegation + verification*, not a diff. Read-only fencing + the verify-the-result step are the woven CV/security (R10.AC7) and the bridge to U15's third-party trust-delegation (R10.AC5).
+
+**P5-U13-example ✅** — Worked example is an illustrative `explorer` agent (read-only `Read`/`Grep`/`Glob`, crisp file:line deliverable) shown in the **`--help`-verified `--agents <json>`** shape and as the `.claude/agents/explorer.md` file convention — **not** a committed repo artifact. U13's table row carries **no dogfood requirement** (unlike U12/U14/U16), and the U12 precedent forbids props: building a real subagent purely for the example would be a prop with no genuine consumer (units here are authored by Claude in one pass; the spec-orientation need is already met by the `prime-context` skill). Built-in agent types are referenced only as "confirm with `claude --help`" — not asserted by name, since those are environment/harness-specific.
+**Why:** R14 authenticity means no props; an honest *illustrative* definition the learner reads (clearly framed as such) teaches the form without faking active use. Not naming specific built-in agents keeps the unit version-resilient (R12).
+
+**P5-U13-vd ✅** — U13 consumes only the *verified* `subagents` key (`--agent` / `--agents <json>` / `agents` subcommand, `--help`-verified @ 2.1.158) plus `_verified_version`. Added a `notes` to the key flagging the on-disk `.claude/agents/<name>.md` path + front matter as a filesystem **convention** to confirm via docs (the inline `--agents` form is the verified surface). **No new L1 debt.**
+**Why:** the flag/subcommand surface was verified from `claude --help` this session (re-confirmed live: `--agent`, `--agents <json>` with a per-agent `description`, `agents` subcommand for dispatched sessions); the unit surfaces the path-is-a-convention caveat explicitly (Concept §3 + Version-currency note) rather than hardcoding, mirroring the `custom-commands`/`skills` treatment in U12.
+
 ## Open loops & deferrals 🔓 (canonical ledger)
 
 **This is the single source of truth for what is deliberately unfinished.** Every deferral made
@@ -326,8 +335,8 @@ Status per lab (✅ = refs + verifier created, verified end-to-end fails-clean/p
 - **u07** ✅ (legacy D1 fix) · **u09** ✅ (legacy refactor, behavior-equivalence verifier) — legacy labs;
   both registered in `SEEDED.md` §2 as legacy entries (no *new* primary branch defect)
 - **u02 / u03** — read-only, no `start/`/`solution/` refs (U2 prose answer key; U3 objective `verify.sh` + SEEDED row)
-- **u08 / u10 / u12** — prose-self-check labs, no refs (decisions P5-U8-lab, P5-U10-lab, P5-U12-lab)
-- **u13–u16** — pending (those that mutate)
+- **u08 / u10 / u12 / u13** — prose-self-check labs, no refs (decisions P5-U8-lab, P5-U10-lab, P5-U12-lab, P5-U13-lab)
+- **u14–u16** — pending (those that mutate)
 
 **Decided, not open (do not re-litigate):** tools are no-extension kebab-case (deviation from design
 §7 `.sh`, decision P3-tools); `permission-modes` value per verified CLI (P2-vd); awareness home-unit

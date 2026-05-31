@@ -138,7 +138,8 @@
       "provenance": "claude --help (--agent, --agents, `agents` command)",
       "verified_version": "2.1.158",
       "verified_date": "2026-05-29",
-      "unverified": false
+      "unverified": false,
+      "notes": "The inline `--agents <json>` form (with a per-agent `description`) is --help-verified; the persistent on-disk location (e.g. .claude/agents/<name>.md) is a filesystem convention — verify the exact path/front matter via docs before hardcoding."
     },
     "hooks": {
       "kind": "feature",

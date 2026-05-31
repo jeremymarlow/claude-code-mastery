@@ -26,15 +26,18 @@ Until 8.7, R16/R17 are invisible to the current hardcoded `R1–R15` check (harm
 
 ## Tasks
 
-### 8.1 Help-introspection parser → `tools/_common.py`  [R16; §12.4]
-- [ ] Lift the `Commands:`-section parser out of `check-version-drift` into `_common.py`; **extend** it to
+### 8.1 Help-introspection parser → `tools/_common.py`  [R16; §12.4]  ✅
+- [x] Lift the `Commands:`-section parser out of `check-version-drift` into `_common.py`; **extend** it to
       parse `Usage:`, the top-level description, `Options:` (each flag: `names`, `arg`, `choices`,
       `default`, `description` with deeper-indent wrapped-line folding) and `Arguments:`.
-- [ ] Recursion helper: walk subcommands via `claude <path…> --help`; **depth-capped**, skip the `help`
-      pseudo-command, per-call **timeout**, tolerant fallback (record the raw `usage` block when a
-      sub-section doesn't parse).
-- [ ] Refactor `check-version-drift` onto the shared parser (no behaviour change; its command-list diff
-      still works). `make check` green.
+      → `parse_help()` + `parse_flag_term()` + `_split_choices_default()`; handles both the standard and
+      the 6-space-overflow flag layouts, strips `(choices: …)`/`(default: …)`/`preset:` into fields.
+- [x] Recursion helper: walk subcommands via `claude <path…> --help`; **depth-capped**, skip the `help`
+      pseudo-command, per-call **timeout**, tolerant fallback (degrade to a minimal node, never raise,
+      when a call fails or a sub-section doesn't parse). → `introspect_cli()`; command-head validation
+      drops embedded example blocks (e.g. the `mcp add` `Examples:` block) from the subcommand list.
+- [x] Refactor `check-version-drift` onto the shared parser (no behaviour change; its command-list diff
+      still works — verified "command list unchanged vs snapshot (11 commands)"). `make check` green.
 
 ### 8.2 Generator + machine artifact  [R16.AC1/AC3/AC4/AC6; §12.1–12.4]
 - [ ] `meta/cli-reference.schema.json` — JSON Schema for the artifact (root command tree +

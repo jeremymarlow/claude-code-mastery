@@ -11,37 +11,25 @@ Drift is informational by default (exit 0) so it never blocks day-to-day work; p
 itself the worked example U16 references for "Claude in CI / on a schedule" (R14.AC2).
 """
 import os
-import re
 import subprocess
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from _common import META, Reporter, load_version_data  # noqa: E402
+from _common import (  # noqa: E402
+    META, Reporter, cli_version, load_version_data, parse_help, run_help,
+)
 
 SNAPSHOT = META / "cli-commands.snapshot"
 
 
 def installed_version():
-    out = subprocess.run(["claude", "--version"], capture_output=True, text=True, timeout=30)
-    m = re.search(r"\d+\.\d+\.\d+", out.stdout)
-    return m.group(0) if m else None
+    return cli_version()
 
 
 def installed_commands():
-    out = subprocess.run(["claude", "--help"], capture_output=True, text=True, timeout=30)
-    cmds = set()
-    in_commands = False
-    for line in out.stdout.splitlines():
-        if line.rstrip() == "Commands:":
-            in_commands = True
-            continue
-        if in_commands:
-            # Command rows are indented exactly two spaces; wrapped description lines are
-            # indented far more, so an exact two-space anchor excludes them.
-            m = re.match(r" {2}([a-z][\w|-]*)", line)
-            if m:
-                cmds.add(m.group(1).split("|")[0])  # "plugin|plugins" -> "plugin"
-    return cmds
+    # The shared help parser (R16) yields the top-level command list; it already canonicalises
+    # alternates ("plugin|plugins" -> "plugin") and skips embedded example blocks.
+    return {c["name"] for c in parse_help(run_help([]))["commands"]}
 
 
 def main(argv):

@@ -15,6 +15,7 @@ from __future__ import annotations
 
 import os
 import re
+import subprocess
 import sys
 from pathlib import Path
 
@@ -132,6 +133,182 @@ def render_vd(text: str, vd: dict):
         return f"{value} (unverified — see meta/version-record.md)" if unverified else value
 
     return VD_TOKEN_RE.sub(repl, text), unresolved
+
+
+# --- CLI help introspection (R16; §12.4) -----------------------------------------------------
+#
+# These helpers turn `claude --help` (recursively, over subcommands) into a structured command
+# tree, so the exhaustive CLI reference (meta/cli-reference.json) is *generated from the installed
+# CLI*, never authored from memory (R12.AC3). They are deliberately tolerant of help-shape drift:
+# a line or section that doesn't parse is skipped rather than fatal, so a future CLI whose help
+# format shifts still yields a usable (if coarser) reference — and trips the freshness check.
+
+CLI = "claude"
+HELP_TIMEOUT = 30          # seconds per `claude … --help` call
+HELP_MAX_DEPTH = 3         # how deep to recurse into subcommands
+
+_SECTION_RE = re.compile(r"^(Usage|Arguments|Options|Commands):\s*(.*)$")
+_ENTRY_START_RE = re.compile(r"^ {2}\S")      # a list entry begins at exactly two spaces
+_CONT_RE = re.compile(r"^ {3,}\S")            # wrapped/continuation lines are indented deeper
+_COMMAND_HEAD_RE = re.compile(r"^[a-z][\w-]*(\|[a-z][\w-]*)*$")
+
+
+def run_help(path, timeout=HELP_TIMEOUT):
+    """Return stdout of `claude <path…> --help` (path = [] for the root command)."""
+    out = subprocess.run([CLI, *path, "--help"], capture_output=True, text=True, timeout=timeout)
+    return out.stdout
+
+
+def cli_version(timeout=HELP_TIMEOUT):
+    """Return the installed CLI version (e.g. '2.1.159'), or None if unparseable."""
+    out = subprocess.run([CLI, "--version"], capture_output=True, text=True, timeout=timeout)
+    m = re.search(r"\d+\.\d+\.\d+", out.stdout)
+    return m.group(0) if m else None
+
+
+def _group_entries(lines):
+    """Group a help section's raw lines into entries (each a list of its own raw lines).
+
+    An entry starts at a two-space indent; more-deeply-indented lines (wrapped descriptions,
+    whether at the description column or the six-space overflow column) belong to it.
+    """
+    entries, cur = [], None
+    for line in lines:
+        if not line.strip():
+            continue
+        if _ENTRY_START_RE.match(line):
+            if cur is not None:
+                entries.append(cur)
+            cur = [line]
+        elif cur is not None and _CONT_RE.match(line):
+            cur.append(line)
+    if cur is not None:
+        entries.append(cur)
+    return entries
+
+
+def _term_and_desc(entry_lines):
+    """Split one entry into its term (left column) and joined description (right column).
+
+    The term and description on the first line are separated by ≥2 spaces; when the term is too
+    long, the description starts on the (more-indented) continuation lines instead.
+    """
+    parts = re.split(r"\s{2,}", entry_lines[0].strip(), maxsplit=1)
+    desc = [parts[1]] if len(parts) == 2 else []
+    desc += [c.strip() for c in entry_lines[1:]]
+    return parts[0], " ".join(desc).strip()
+
+
+def parse_flag_term(term):
+    """`-p, --print` → (['-p','--print'], None); `--add-dir <dirs...>` → (['--add-dir'], '<dirs...>')."""
+    arg = None
+    m = re.search(r"\s([<\[].*[>\]])$", term)
+    if m:
+        arg, term = m.group(1), term[:m.start()].rstrip()
+    names = [t.strip() for t in term.split(",") if t.strip()]
+    return names, arg
+
+
+def _split_choices_default(desc):
+    """Lift a `(choices: …)` / `(default: …)` parenthetical out of a description into fields."""
+    choices = default = None
+    cm = re.search(r"\(choices:\s*(.+?)\)", desc)
+    if cm:
+        inner = re.split(r",\s*(?:preset|default):", cm.group(1))[0]
+        choices = re.findall(r'"([^"]*)"', inner) or None
+        desc = (desc[:cm.start()] + desc[cm.end():]).strip()
+    dm = re.search(r"\(default:\s*(.+?)\)", desc)
+    if dm:
+        default = dm.group(1).strip()
+        desc = (desc[:dm.start()] + desc[dm.end():]).strip()
+    return re.sub(r"\s{2,}", " ", desc).strip(), choices, default
+
+
+def parse_help(text):
+    """Parse one `claude … --help` page into {usage, description, arguments, flags, commands}.
+
+    Pure: it stamps no source/provenance (the introspection layer does that) and tolerates
+    unrecognised lines (e.g. embedded example blocks) by skipping them rather than raising.
+    """
+    buckets = {"_desc": [], "Arguments": [], "Options": [], "Commands": []}
+    usage, current = "", "_desc"
+    for line in text.splitlines():
+        m = _SECTION_RE.match(line)
+        if m:
+            if m.group(1) == "Usage":
+                usage, current = m.group(2).strip(), "_desc"
+            else:
+                current = m.group(1)
+            continue
+        buckets[current].append(line)
+
+    description = " ".join(l.strip() for l in buckets["_desc"] if l.strip())
+
+    arguments = []
+    for entry in _group_entries(buckets["Arguments"]):
+        name, desc = _term_and_desc(entry)
+        arguments.append({"name": name, "description": desc})
+
+    flags = []
+    for entry in _group_entries(buckets["Options"]):
+        term, desc = _term_and_desc(entry)
+        if not term.startswith("-"):
+            continue  # defensive: only real flags belong under Options
+        names, arg = parse_flag_term(term)
+        desc, choices, default = _split_choices_default(desc)
+        flags.append({"names": names, "arg": arg, "description": desc,
+                      "choices": choices, "default": default})
+
+    commands = []
+    for entry in _group_entries(buckets["Commands"]):
+        term, desc = _term_and_desc(entry)
+        head = term.split(" ", 1)[0]
+        if not _COMMAND_HEAD_RE.match(head):
+            continue  # skip example blocks / stray lines masquerading as command entries
+        commands.append({"name": head.split("|")[0], "args": term[len(head):].strip(),
+                         "description": desc})
+
+    return {"usage": usage, "description": description,
+            "arguments": arguments, "flags": flags, "commands": commands}
+
+
+def introspect_cli(max_depth=HELP_MAX_DEPTH, timeout=HELP_TIMEOUT):
+    """Recursively introspect the installed CLI into a command-tree node (the reference `root`).
+
+    Each node carries source/provenance (R16.AC3); subcommands are walked via `claude <path…>
+    --help`, depth-capped, skipping the `help` pseudo-command, with a per-call timeout. A call
+    that fails or whose help doesn't parse degrades to a minimal node rather than aborting the sweep.
+    """
+    return _introspect([], None, max_depth, timeout, 0)
+
+
+def _introspect(path, listing_desc, max_depth, timeout, depth):
+    provenance = "claude " + " ".join([*path, "--help"])
+    node = {"name": path[-1] if path else CLI, "path": list(path),
+            "usage": "", "description": listing_desc or "",
+            "source": "cli-help", "provenance": provenance,
+            "flags": [], "arguments": [], "commands": []}
+    try:
+        parsed = parse_help(run_help(path, timeout=timeout))
+    except (FileNotFoundError, subprocess.SubprocessError):
+        return node  # tolerant: keep the listing-level node, recurse no further
+    node["usage"] = parsed["usage"]
+    if parsed["description"]:
+        node["description"] = parsed["description"]
+    node["arguments"] = parsed["arguments"]
+    node["flags"] = [dict(f, source="cli-help", provenance=provenance) for f in parsed["flags"]]
+    for cmd in parsed["commands"]:
+        if cmd["name"] == "help":
+            continue  # the `help` pseudo-command carries no new surface
+        if depth < max_depth:
+            node["commands"].append(
+                _introspect([*path, cmd["name"]], cmd["description"], max_depth, timeout, depth + 1))
+        else:
+            node["commands"].append(
+                {"name": cmd["name"], "path": [*path, cmd["name"]], "usage": "",
+                 "description": cmd["description"], "source": "cli-help",
+                 "provenance": provenance, "flags": [], "arguments": [], "commands": []})
+    return node
 
 
 # --- reporting -------------------------------------------------------------------------------

@@ -46,9 +46,11 @@ units. Spin up a per-unit working file `tasks/P5-units/NN-slug.md` from the temp
 | U15 `15-mcp-and-vetting` | Autonomy | C16 | — | U3,U13 | connect an MCP server (mock) + **vet** a third-party one | R10.AC5 trust-delegation; offline mock (R7.AC7) |
 | U16 `16-automate-and-scale` | Autonomy | C17 | W9 | U8,U14 | headless `-p` in CI + ≥2 parallel worktree agents | dogfood: CI workflow (R14.AC2) |
 
-## Definition of Done (P5)
-- [ ] All 16 `unit.md` exist, schema-valid, each with ≥1 lab + reference solution + reset. [R6, R7]
-- [ ] Every can-do C1–C17+CV is practiced by ≥1 lab; every coverage area covered at its tier. [R1.AC5, R4.AC2]
-- [ ] Every workflow lab contains an explicit verification step (CV). [R10.AC7]
-- [ ] Security woven beyond U3 (reinforced in later units, not unit-3-only). [R10.AC1]
-- [ ] `make check` green across all units (frontmatter, coverage, links, version-refs, traceability). [R13.AC4/AC5]
+## Definition of Done (P5) — ✅ COMPLETE (2026-05-30)
+- [x] All 16 `unit.md` exist, schema-valid, each with ≥1 lab + reference solution/reset *or* a documented no-refs lab (read-only / prose-self-check / objective pipe-test — U2/U8/U10/U12/U13/U14/U15/U16; rationale per unit in `decisions.md`). [R6, R7]
+- [x] Every can-do C1–C17+CV is practiced by ≥1 lab (`check-traceability` "every can-do is practiced by >=1 lab" PASSES); every coverage area covered at its tier. [R1.AC5, R4.AC2]
+- [x] Every workflow lab contains an explicit verification step (CV) — woven through U5/U6/U7/U9/U11 + reinforced as the verify-the-result/diff step in U13/U14/U15/U16. [R10.AC7]
+- [x] Security woven beyond U3 — blast-radius/trust-delegation reinforced in U11 (review), U13 (subagents), U15 (MCP vetting), U16 (unattended safety). [R10.AC1]
+- [x] `make check` green across all 16 units (frontmatter, coverage, links, version-refs, traceability). [R13.AC4/AC5]
+
+**Remaining (→ P6, not P5):** `make check-strict` still PENDs on R8 (capstone requirement) + the rubric-dimension coverage of every can-do — both land with the capstone in P6 (open loop L3). Version debt: `ci` + `checkpoint-rewind` (and the other in-REPL keys) stay `unverified` in L1 pending an interactive `/help` pass.

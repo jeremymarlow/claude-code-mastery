@@ -305,6 +305,14 @@ _Format: **decision-id** — the decision; **Why:** the rationale._
 **P5-U15-vd ✅** — U15 consumes the *verified* `mcp` and `plugins` keys plus `_verified_version`. Updated `mcp` value/provenance/`verified_date`→2026-05-30 to the live-verified `add`/`get`/`list`/`.mcp.json` surface (was the thinner `--mcp-config` description); `plugins` already verified (area 22). **No new L1 debt.**
 **Why:** the `mcp` add/get/serve subcommands and the `.mcp.json` shape were confirmed against `claude mcp --help` *and* exercised live this session (the `✓ Connected` health-check), so the unit names them with real provenance (R12.AC3/AC4) while deferring detail to {{vd:mcp}}/{{vd:plugins}}.
 
+**P5-U16-lab ✅ (final unit — P5 complete)** — `u16-automate-and-scale` is the capstone of the Autonomy stage: headless (`-p`), CI, and parallel agents via git worktrees (W9). Lab ships **no `start/`/`solution/` refs** (the artifact is runs + worktrees + a CI reading in the learner's environment, not a codebase diff — precedent U14/U15), with an objective self-check on observables (`-p` exit/structured output; `git worktree list` ≥2; **per-diff review** before integrating = the W9 verification/CV step). Worked example = this repo's **existing** `.github/workflows/checks.yml` (no new artifact built — it already existed from P3, and self-documents as U16's example). U16 also declares coverage **area 6** (blast-radius) as a deliberate security reinforcement: unattended runs have no interactive approval, so U14 hooks + U3 blast-radius/checkpoints + per-diff review are the safety net (R10.AC1 woven-security closeout). `claude -p` needs no extra service (it's the course prerequisite, R15).
+**Why:** headless/CI/parallel are inherently environmental (a one-shot run, CI triggers, multiple worktrees) — no single shipped `verify.sh` fits, so an objective observable-checklist is the right instrument (precedent U14/U15). Framing the unit around *unattended safety* makes it the natural finale: every prior Autonomy guardrail (hooks, blast radius, verify-the-result) is what makes removing the human safe.
+
+**P5-U16-vd ⚠️ (L1)** — U16 consumes verified `headless` + `worktrees` (`-p`/`--print`, `--output-format`, `--max-budget-usd`, `--worktree` all `--help`-confirmed this session) and two **`unverified`** keys: `ci` (the GitHub Action wrapper — external integration) and `checkpoint-rewind` (in-REPL `/rewind`, area 6). Referenced with the unverified marker; **stay in L1**.
+**Why:** the headless flags are CLI-verified, but the GitHub Action and in-REPL rewind aren't confirmable from a headless session (same honest-deferral rule as every prior in-REPL/external key — P5-U2-vd … P5-U6-vd). One interactive `/help` + a docs pass on the Action clears them.
+
+**P5 COMPLETE (2026-05-30).** All 16 units authored; `check-traceability` now reports **"every can-do is practiced by >=1 lab"** (C1–C17+CV). `make check` green. Remaining is **P6** (capstone/case-study/finalization) — which also clears L3 (`check-strict`: R8 + rubric-dimension coverage).
+
 ## Open loops & deferrals 🔓 (canonical ledger)
 
 **This is the single source of truth for what is deliberately unfinished.** Every deferral made
@@ -318,10 +326,13 @@ Nothing is "remembered" outside this ledger. (Each entry: **status** · _Resolve
 _Resolve in:_ when each key's home unit is authored (P5) and/or the next refresh — verify via in-REPL
 `/help`/docs, then flip `unverified`→false (R12.AC3). _Also tracked in:_ `meta/version-record.md` →
 "Outstanding to verify".
-- This headless authoring session can't run interactive `/help`, so keys stay `unverified` **even where
-  the home unit is authored**: `search-refs` (U2, `@`-mentions); `checkpoint-rewind` + `managed-settings`
-  (U3); `context-cmds` + `output-styles` (U4); `test-run` (U6 — conceptual: tests run via the Bash tool,
-  no Claude flag). One interactive `/help` pass clears them (decisions P5-U2-vd, P5-U3, P5-U4-vd, P5-U6-vd).
+- This headless authoring session can't run interactive `/help`, so keys stay `unverified` **even though
+  every home unit is now authored (P5 complete)**: `search-refs` (U2, `@`-mentions); `checkpoint-rewind`
+  + `managed-settings` (U3); `context-cmds` + `output-styles` (U4); `test-run` (U6 — conceptual, no Claude
+  flag); `ci` (U16 — external GitHub Action wrapper). The verifiable flag-parts were confirmed (e.g. `-p`,
+  `--output-format`, `--max-budget-usd` for `ci`; `permission-modes` for U3); what remains is in-REPL /
+  external surface. **One interactive `/help` + docs pass clears all of L1** (decisions P5-U2-vd, P5-U3,
+  P5-U4-vd, P5-U6-vd, P5-U16-vd) — the keys' *home units no longer gate this*; it's purely a verification pass.
 
 **~~L2~~ — ✅ CLOSED (P5/U14, 2026-05-30).** In-session hook wired: `.claude/settings.json` `PostToolUse`/`Write|Edit`
 → `tools/check-on-edit` runs `make check` on `course/`|`meta/` edits (`decision:"block"` on failure). Schema
@@ -357,7 +368,8 @@ Status per lab (✅ = refs + verifier created, verified end-to-end fails-clean/p
 - **u08 / u10 / u12 / u13** — prose-self-check labs, no refs (decisions P5-U8-lab, P5-U10-lab, P5-U12-lab, P5-U13-lab)
 - **u14** — no `start/`/`solution/` refs (hook in learner's `settings.json`), but self-check is an **objective pipe-test**, not prose (P5-U14-lab)
 - **u15** — no `start/`/`solution/` refs (connection in learner's config + vetting decision), but self-check is objective: `claude mcp get` `✓ Connected` + verify tool result + vetting checklist (P5-U15-lab); ships verified `taskflow_mcp.py` + `taskflow.mcp.json` fixtures
-- **u16** — pending (if it mutates)
+- **u16** — no `start/`/`solution/` refs (headless run + worktrees + CI reading in learner's env), objective self-check on observables (`-p` output, `git worktree list` ≥2, per-diff review); CI dogfood is the existing `.github/workflows/checks.yml` (P5-U16-lab)
+- **L7 status: all 16 P5 labs now accounted** — mutating labs (u01/u05/u06/u07/u09/u11) have `start/`+`solution/`+`verify.sh`; the rest are documented no-refs (read-only / prose-self-check / objective pipe-test). No P5 lab refs outstanding.
 
 **Decided, not open (do not re-litigate):** tools are no-extension kebab-case (deviation from design
 §7 `.sh`, decision P3-tools); `permission-modes` value per verified CLI (P2-vd); awareness home-unit

@@ -373,7 +373,7 @@ match the already-verified surface U15/U16 use — no new from-memory version fa
 **Why:** R12.AC3/AC5 — re-verify, bump only if changed; nothing changed this session. L1 (in-REPL keys)
 is unaffected and stays open as refresh debt, not a release blocker.
 
-## P7 — Quality pass & learner-experience remediation (2026-05-31, in progress)
+## P7 — Quality pass & learner-experience remediation (2026-05-31, COMPLETE)
 
 A systematic post-v1 quality pass (8 lenses: functional run + content). The product verified
 mechanically/functionally clean; findings confined to learner-facing prose + one version-token
@@ -404,7 +404,10 @@ U1 only *establishes* the baseline — the settings/memory mechanism belongs to 
 
 **P7-index ✅** — Closed M5 (navigation). Generated `course/units/README.md` (new `tools/render-index`,
 drift-gated) — a stage-grouped TOC linking each `unit.md` directly with read/lab times; top README
-routes through it.
+routes through it. **Extended at close-out (2026-05-31) with up-navigation breadcrumbs** (decided with
+the user): `tools/render-units` injects `[Claude Code Mastery](../../../README.md) › [Course units](../README.md)`
+above every unit's H1 (generated — DRY, drift-gated, free for future units), and `render-index` adds a
+matching `[‹ Claude Code Mastery]` up-link atop the index, so every page climbs back to the root.
 **Why:** R9.AC2 (navigable entry); a learner clicks a titled lesson and never browses the
 `unit.md`/`unit.src.md` pair. Built from front matter so it can't drift (L2 fixes flow through).
 
@@ -428,6 +431,19 @@ the `tasks.md` P7 index + `IMPLEMENTATION.md` §3, and a **design gate** reinsta
 **Why:** the project is spec-driven (D0.2) and mid-pass we had drifted into building infra + fixes
 without the requirements→design→tasks→gate treatment; this restores it (honors the working agreements
 in `CLAUDE.md` and the phase-gate discipline).
+
+**P7-rollout ✅ (2026-05-31) — COMPLETE.** The gated editorial rollout finished and is committed in
+slices on `spec/quality-pass-phase`: **all 16 units** migrated to `unit.src.md` + de-coded (7.6); the
+cross-cutting sweep done over `course/capstone/{README,briefs,rubric,case-study}.md` + `stuck.md`
+(7.7); and the convention docs (`maintainer-guide.md`, `meta/templates/unit-*.md`, the `close-unit`
+command) updated to teach the split (7.8). The per-unit **render-and-eyeball** caught the predicted
+garbles — sentence-valued / backtick-leading `{{vd:*}}` values (e.g. `test-run`, `git-pr`, `subagents`,
+`hooks`, `mcp`/`plugins`, `headless`/`ci`/`worktrees`) were repositioned to sentence position and the
+redundant parenthetical pointers dropped — and the L2 reading-time bumps (U12 8→10, U13 8→12, U14 8→11)
+landed with the index regenerated. **Kept deliberately:** the rubric's load-bearing `[Cn]`/`[CV]` tags,
+U10's *teaching* R-IDs, and case-study's descriptive `R1–R15`. **L8 struck.** **T2** (unit-dir rename)
+stays an optional, non-blocking follow-up (decision P7-frontmatter/P7-T2; reaffirmed with the user at
+close-out). `make check` green.
 
 ## Open loops & deferrals 🔓 (canonical ledger)
 
@@ -487,21 +503,18 @@ Status per lab (✅ = refs + verifier created, verified end-to-end fails-clean/p
 - **u16** — no `start/`/`solution/` refs (headless run + worktrees + CI reading in learner's env), objective self-check on observables (`-p` output, `git worktree list` ≥2, per-diff review); CI dogfood is the existing `.github/workflows/checks.yml` (P5-U16-lab)
 - **L7 status: all 16 P5 labs now accounted** — mutating labs (u01/u05/u06/u07/u09/u11) have `start/`+`solution/`+`verify.sh`; the rest are documented no-refs (read-only / prose-self-check / objective pipe-test). No P5 lab refs outstanding.
 
-**L8 (in progress, opened 2026-05-30) — learner-prose ergonomics remediation.** Post-v1 quality
-pass (8 lenses) found the product mechanically/functionally clean (strict gate, all lab verifiers,
-substrates, version system, authenticity, accessibility all ✅) with findings confined to
-learner-facing prose: M1 spec requirement-IDs (`R#`) leaking into units; M2 bare taxonomy codes
-(`U#`/`C#`/`W#`/`CV`) used where titles read better; L1 density in some `Concept` passages; L2
-under-declared `reading_time_min` on U12–U14; L3 unexpanded `CV`. **Not release-blocking — polish.**
-Plus **M4 — `{{vd:key}}` tokens rendered raw to learners** (most material; an R15 graceful-degradation
-miss): fixed with the committed-rendered pattern — authored `unit.src.md` → generated+committed
-`unit.md` via new `tools/render-units` (drift gate in `make check`), proven on U1. Full tracker +
-per-unit grid + rollout procedure: [`tasks/P7-quality-pass.md`](./tasks/P7-quality-pass.md) (+ P7
-rationale section above). _Status (2026-05-31, WIP checkpoint committed on `spec/quality-pass-phase`):_ gate
-approved; **U1–U4 fully de-coded + migrated**; **U5–U16 have link-anchors + advances-tails
-auto-de-coded by script but are not migrated and prose codes remain**. `make check` green. _Resolve
-in:_ the editorial roll-out — **next session starts at `tasks/P7-quality-pass.md` → "Resume state"**
-(7.6 U5–U16 prose, 7.7 cross-cutting sweep, 7.8 convention docs, 7.9 close-out).
+**~~L8~~ — ✅ CLOSED (P7, 2026-05-31).** Learner-prose ergonomics remediation complete. The post-v1
+8-lens pass found the product mechanically/functionally clean; findings were confined to learner-facing
+prose (M1 `R#` leakage; M2 bare `U#`/`C#`/`W#`/`CV` codes; L1 density; L2 under-declared
+`reading_time_min` on U12–U14; L3 unexpanded `CV`) plus **M4** (raw `{{vd:key}}` tokens shown to
+learners — an R15 miss) and **M5** (navigation). All resolved: the committed-rendered pattern
+(`unit.src.md` → generated `unit.md` via `tools/render-units`) + the `tools/render-index` TOC closed
+M4/M5, drift-gated in `make check`; **all 16 units** de-coded + migrated (7.6); capstone files +
+`stuck.md` swept (7.7); convention docs updated for the split (7.8). L2 bumps applied (U12 8→10,
+U13 8→12, U14 8→11). **Kept:** rubric `[Cn]`/`[CV]` tags, U10 teaching R-IDs, case-study `R1–R15`.
+Committed in slices on `spec/quality-pass-phase`; `make check` green. _Tracked in:_
+`tasks/P7-quality-pass.md`; decisions P7-render/P7-garble/P7-index/P7-prose/P7-rollout.
+**Sole remaining (non-blocking) follow-up: T2** — optional unit-dir rename, deferred (P7-frontmatter/P7-T2).
 
 **Decided, not open (do not re-litigate):** tools are no-extension kebab-case (deviation from design
 §7 `.sh`, decision P3-tools); `permission-modes` value per verified CLI (P2-vd); awareness home-unit

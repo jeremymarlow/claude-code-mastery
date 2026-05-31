@@ -38,7 +38,7 @@ over memory for specifics; memory is a pointer, the spec is the source of truth.
 |---|---|
 | 1. Requirements (`requirements.md`) | ✅ **APPROVED** (2026-05-29) — turn-by-turn review; gap-free IDs |
 | 2. Design (`design.md`) | ✅ **APPROVED & merged to `main`** (2026-05-29) — §0–§11; design gate passed |
-| 3. Tasks (`tasks.md`) | ✅ v1 **COMPLETE** (2026-05-30) — P1–P6 executed; `make check-strict` green. 🚧 **P7 (Quality pass)** in progress (2026-05-31) |
+| 3. Tasks (`tasks.md`) | ✅ v1 **COMPLETE** (2026-05-30) — P1–P6 executed; `make check-strict` green. ✅ **P7 (Quality pass) COMPLETE** (2026-05-31) |
 | Rationale (`decisions.md`) | ✅ Per-phase decisions + the canonical 🔓 open-loops ledger |
 
 **Phase 3 (Tasks) breakdown:** P1 ✅ · P2 ✅ · P3 ✅ · P4 ✅ (both lab codebases built; `SEEDED.md`
@@ -47,13 +47,15 @@ by ≥1 lab** · **P6 ✅ — capstone (briefs/exemplar/rubric), build case stud
 maintainer guide, README finalized, `tools/render-checklist` added; `make check-strict` green = the
 v1 Definition-of-Done mechanical gate (L3) passes.** Current branch: **`main`** (P6 committed).
 
-**P7 — Quality pass (post-v1, in progress, 2026-05-31).** A systematic 8-lens quality pass found the
-product mechanically/functionally clean; remediation is confined to learner-facing prose + a closed
+**P7 — Quality pass (post-v1, ✅ COMPLETE 2026-05-31).** A systematic 8-lens quality pass found the
+product mechanically/functionally clean; remediation was confined to learner-facing prose + a closed
 version-token rendering gap (new `tools/render-units` committed-rendered pattern + `tools/render-index`
-navigation). **No new requirements** (traces to R5/R6/R9/R12/R15). Gate approved; **U1–U4 done** (migrated +
-de-coded); **U5–U16 partially auto-de-coded (links + advances tails), prose + migration pending** —
-WIP checkpoint committed on branch `spec/quality-pass-phase`. **Next session: `tasks/P7-quality-pass.md` →
-"Resume state".** See also `decisions.md` → "P7 — Quality pass". Tracked as open loop **L8**.
+navigation). **No new requirements** (traces to R5/R6/R9/R12/R15). **All 16 units** migrated to
+`unit.src.md` + de-coded; capstone files + `stuck.md` swept; convention docs updated for the split; L2
+reading-time bumps (U12/U13/U14) applied; per-unit render-and-eyeball fixed the `{{vd:*}}` garbles.
+Committed in slices on branch **`spec/quality-pass-phase`** (not yet merged/pushed). **L8 struck**; the
+only follow-up is **T2** (optional unit-dir rename), deferred — non-blocking. See `decisions.md` →
+"P7 — Quality pass" and `tasks/P7-quality-pass.md`.
 
 **v1 build is complete.** Remaining is **not release-blocking**: **L1** is now mostly closed — the
 interactive `/help`+docs pass (2026-05-30) verified 5 of the 7 keys; only `ci` (GitHub Action wrapper)

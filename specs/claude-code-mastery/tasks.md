@@ -4,9 +4,10 @@
 **Phase:** Tasks / Implementation (Phase 3 of 3)
 **Status:** v1 ✅ **COMPLETE (2026-05-30)** — P1 (Design) ✅, P2 (Scaffolding) ✅, P3 (Tooling) ✅,
 P4 (Codebases) ✅, P5 (Units) ✅, **P6 (Finalization) ✅**. `make check-strict` green — the v1
-Definition-of-Done mechanical gate (L3) passes. **P7 (Quality pass) 🚧 IN PROGRESS (2026-05-31)** —
-post-v1 learner-experience remediation; no new requirements. Remaining non-release-blocking (**L1**
-in-REPL version-key refresh; commit/push + CI). Open loops & deferrals are tracked in `decisions.md`
+Definition-of-Done mechanical gate (L3) passes. **P7 (Quality pass) ✅ COMPLETE (2026-05-31)** —
+post-v1 learner-experience remediation; no new requirements; all 16 units committed-rendered + de-coded,
+capstone/stuck swept, convention docs updated (L8 closed; T2 dir-rename deferred). Remaining
+non-release-blocking (**L1** in-REPL version-key refresh; push + CI). Open loops & deferrals are tracked in `decisions.md`
 → "Open loops & deferrals 🔓" (the canonical ledger).
 
 > **Chunking for context management.** The full build exceeds one context window. This file is an
@@ -123,7 +124,7 @@ Each bullet below: **gist** · _Lab/refs_ · _Traceability & version keys_.
 - [x] Run full enforcement + traceability suite green (local + CI); meet Definition of Done (`IMPLEMENTATION.md` §6)
       — `make check-strict` green; `tools/render-checklist` added (R9.AC5 now genuinely generated)
 
-### P7 — Quality pass & learner-experience remediation 🚧 **IN PROGRESS (2026-05-31)**  → [`tasks/P7-quality-pass.md`](./tasks/P7-quality-pass.md)
+### P7 — Quality pass & learner-experience remediation ✅ **COMPLETE (2026-05-31)**  → [`tasks/P7-quality-pass.md`](./tasks/P7-quality-pass.md)
 Post-v1 quality pass (8 lenses). Mechanically/functionally clean; findings confined to learner-facing
 prose + a version-token rendering gap. **No new requirements** (traces to R5/R6/R9/R12/R15). See
 `decisions.md` → "P7 — Quality pass".
@@ -131,7 +132,8 @@ prose + a version-token rendering gap. **No new requirements** (traces to R5/R6/
 - [x] Version-token **committed-rendered** pattern — `tools/render-units` + `{{vd}}` drift gate; U1 migrated [R12.AC2/R15]
 - [x] Navigation **units index** — `tools/render-index` → `course/units/README.md`; README routes through it [R9.AC2]
 - [x] U1 **pilot** prose — strip `R#` (M1), title-only cross-refs (M2), expand `CV` (L3), light density (L1), title (T1) [R5/R6]
-- [ ] **GATE:** user approves pattern + rollout procedure + U1 voice (before U2–U16)
-- [ ] Roll out U2–U16 (render-migrate + prose; fix `{{vd:settings}}` garble at U3) [R5/R6/R15]
-- [ ] Cross-cutting prose sweep (capstone, stuck); reading-time recompute (L2, U12–U14) [R5.AC6]
-- [ ] Convention docs for the `unit.src.md` split (maintainer-guide, templates, `close-unit`); final green + clean commits
+- [x] **GATE:** user approved pattern + rollout procedure + U1 voice (before U2–U16)
+- [x] Roll out U2–U16 (render-migrate + prose; per-unit render-and-eyeball fixed the `{{vd:*}}` garbles) [R5/R6/R15]
+- [x] Cross-cutting prose sweep (capstone, stuck); reading-time recompute (L2, U12 8→10/U13 8→12/U14 8→11) [R5.AC6]
+- [x] Convention docs for the `unit.src.md` split (maintainer-guide, templates, `close-unit`); final green + clean commits
+- [x] Close-out: **L8 struck**; `IMPLEMENTATION.md` §3 + this index marked complete. (T2 dir-rename deferred — non-blocking.)

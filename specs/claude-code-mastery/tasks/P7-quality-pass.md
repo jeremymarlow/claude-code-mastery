@@ -4,11 +4,11 @@
 product was verified **mechanically and functionally clean**; findings are confined to learner-facing
 prose ergonomics and one version-token rendering gap. **Polish + gap-closure — not release-blocking.**
 
-**Status:** 🚧 **IN PROGRESS (2026-05-31).** Gate **approved** (pattern + U1 voice). **U1–U4 fully
-done** (migrated to `unit.src.md` + rendered; prose de-coded; garbles fixed). **U5–U16: link anchors
-+ `advances \`C#\`` tails already auto-de-coded by script — do NOT redo; but units are NOT migrated
-and prose codes remain.** `make check` green. Work is a WIP checkpoint commit on branch
-`spec/quality-pass-phase`. **NEXT SESSION: start at "## Resume state" below.** No new requirements.
+**Status:** ✅ **COMPLETE (2026-05-31).** Gate approved; the full editorial rollout landed. **All 16
+units** migrated to `unit.src.md` + rendered and prose-de-coded; the cross-cutting sweep (capstone +
+`stuck.md`) and the convention docs are done; L2 reading-time bumps applied; per-unit render-and-eyeball
+fixed the version-token garbles. `make check` green; committed in slices on `spec/quality-pass-phase`.
+No new requirements. **Sole remaining follow-up: T2** (optional unit-dir rename), deferred — non-blocking.
 
 **Inputs:** the in-session 8-lens findings report · existing requirements R5/R6 (unit altitude &
 template), R9.AC2 (navigation), R12.AC2 (version-data single-source/"build step"), R15 (graceful
@@ -56,10 +56,14 @@ degradation) · `meta/version-data.yaml` · the existing generated-artifact patt
 - [x] U1 migrated (`git mv unit.md unit.src.md`; generated `unit.md` with `GENERATED` header).
 - [x] Verified: renders clean, drift gate fails on manual `unit.md` edits + passes on re-render, green.
 
-### 7.3 Navigation index [R9.AC2] — ✅ DONE
+### 7.3 Navigation index + breadcrumbs [R9.AC2] — ✅ DONE
 - [x] `tools/render-index`: generates `course/units/README.md` (stage-grouped TOC linking each
       `unit.md`, read/lab times) from front matter; `--check` drift gate in `make check`.
 - [x] Top README "How it's structured" + "How to start" route through the index.
+- [x] **Up-navigation breadcrumbs** (added at close-out, 2026-05-31): `tools/render-units` injects
+      `[Claude Code Mastery](../../../README.md) › [Course units](../README.md)` above each unit's H1
+      (generated, so all 16 + future units get it for free, drift-gated); `tools/render-index` adds a
+      matching `[‹ Claude Code Mastery]` up-link atop the index. Every page now climbs back to the root.
 
 ### 7.4 U1 pilot prose [R5/R6/R15] — ✅ DONE
 - [x] M1 (drop `R#`), M2 (codes→titles, title-only), L3 (`CV` expanded), light L1; title T1 fixed.
@@ -69,24 +73,26 @@ degradation) · `meta/version-data.yaml` · the existing generated-artifact patt
 - [x] User approved the committed-rendered pattern, the per-unit rollout procedure, and the U1 voice
       (incl. title-only cross-refs; "your first unit" for U1 back-refs). Rollout unblocked.
 
-### 7.6 Roll out to U2–U16 [R5/R6/R15] — 🚧 IN PROGRESS (U1–U4 done; U5–U16 partial)
-Per-unit procedure (render-and-read, not a mechanical `git mv` — see Resume state for the recipe):
-- [x] **U2** ✅ · **U3** ✅ (settings/permission-modes/checkpoint-rewind garbles fixed) · **U4** ✅
-- [ ] U5 · U6 · U7 · U8 — prose codes remain (links+advances auto-done)
-- [ ] U9 · U10 (keep the teaching `R1`/`R2.AC3`/`R1`–`R15`; strip breadcrumb `R3.AC2`/`R7.AC3`) · U11
-- [ ] U12 (L2 rt 8→10) · U13 (L2 rt 8→12) · U14 (L2 rt 8→11) · U15 · U16
+### 7.6 Roll out to U2–U16 [R5/R6/R15] — ✅ DONE (all 16 units)
+Per-unit procedure (render-and-read, not a mechanical `git mv`):
+- [x] **U2 · U3 · U4** (pilot precedent)
+- [x] **U5 · U6 · U7 · U8** (workflow-header + CV + prose-ref de-code; `test-run`/`git-pr` garbles fixed)
+- [x] **U9 · U10 · U11** (U10 keeps teaching `R1`/`R2.AC3`/`R1`–`R15`, drops breadcrumb cites; U11 consolidates CV)
+- [x] **U12 (rt 8→10) · U13 (rt 8→12) · U14 (rt 8→11) · U15 · U16** (L2 bumps + multi-clause token garbles fixed; index regenerated)
 
-### 7.7 Cross-cutting prose sweep — ⏳ PENDING GATE
-- [ ] `course/capstone/{README,briefs,rubric,case-study}.md`, `course/stuck.md` — same M1/M2 sweep
-      with judgment (keep load-bearing rubric `[Cn]` tags). Maintainer-guide may legitimately keep `R#`.
+### 7.7 Cross-cutting prose sweep — ✅ DONE
+- [x] `course/capstone/{README,briefs,rubric,case-study}.md`, `course/stuck.md` swept (M1/M2 with
+      judgment). Kept the load-bearing rubric `[Cn]`/`[CV]` tags and case-study's descriptive `R1–R15`.
 
-### 7.8 Convention docs for the unit.src.md split — ⏳ PENDING GATE
-- [ ] Update `course/maintainer-guide.md`, `meta/templates/unit-*.md`, and the `close-unit` skill:
-      authored file is `unit.src.md`; `make render` regenerates `unit.md`.
+### 7.8 Convention docs for the unit.src.md split — ✅ DONE
+- [x] `course/maintainer-guide.md` (new "Rendered units" invariant + add/update/recipe steps),
+      `meta/templates/unit-*.md`, and the `close-unit` command updated: authored file is `unit.src.md`;
+      `make render` regenerates `unit.md` + the index. (Version tokens illustrated as `{{vd:<key>}}`,
+      which the `check-version-refs` key charset excludes.)
 
-### 7.9 Close-out
-- [ ] `make check` green; reading times recomputed; clean commits on a branch; L8 struck in
-      `decisions.md`; `tasks.md` P7 + `IMPLEMENTATION.md` §3 marked complete.
+### 7.9 Close-out — ✅ DONE
+- [x] `make check` green; reading times recomputed; clean commits on `spec/quality-pass-phase`; **L8
+      struck** in `decisions.md`; `tasks.md` P7 + `IMPLEMENTATION.md` §3 marked complete. T2 deferred.
 
 ## Per-unit grid
 
@@ -98,18 +104,18 @@ Legend: ✅ done · 🔗 link-anchors+advances auto-de-coded (script) · ⬜ pro
 | U2 explore           | ✅ | |
 | U3 operate-safely    | ✅ | settings/permission-modes/checkpoint-rewind garbles fixed |
 | U4 memory-context    | ✅ | home unit for memory/settings — tokens taught here (sentence-position) |
-| U5 ship-feature      | 🔗⬜ | `**The workflow — W1.**`→`**The workflow.**`; CV expand; bare U1/U2/U4/U10 prose refs |
-| U6 tdd               | 🔗⬜ | `**The workflow — W2.**`; CV; U5/U7 prose refs |
-| U7 debug             | 🔗⬜ | `**The workflow — W3.**`; CV; U5/U6/U9 prose; "the W2 reflex" |
-| U8 git-pr            | 🔗⬜ | `**The workflow — W4.**`; CV; U5–U7/U9/U16 prose; R7.AC3/AC7/AC8 breadcrumbs |
-| U9 legacy-refactor   | 🔗⬜ | W8/W5 in prose; CV; U2/U5/U7/U8 prose; R7.AC3 |
-| U10 spec-driven      | 🔗⬜ | **KEEP teaching** `R1`/`R2.AC3`/`R1`–`R15`; strip breadcrumb R3.AC2/R7.AC3; W7; U5/U11 prose; CV |
-| U11 review           | 🔗⬜ | L11 "advances `C12` and consolidates `CV`" (irregular); CV ×3; W6; U3/U5/U6/U10/U12/U16 prose; R7.AC3 |
-| U12 commands-skills  | 🔗⬜ | L9–10 "Advances\n`C13`" (multi-line, not auto-removed); R14/R7.AC3; U13 prose; **L2 rt 8→10** |
-| U13 subagents        | 🔗⬜ | "the U12 line"; R7.AC3; **L2 rt 8→12** |
-| U14 hooks            | 🔗⬜ | "the C15 move"; R14/R13; U15 prose; **L2 rt 8→11** |
-| U15 mcp-vetting      | 🔗⬜ | R10.AC5 ×4; U16 prose; CV |
-| U16 automate-scale   | 🔗⬜ | many `(W9)` in prose; R14/R12.AC7/R15; U14 prose; CV |
+| U5 ship-feature      | ✅ | workflow header + CV + U1/U2/U4/U10 refs de-coded; `thinking` token garble fixed |
+| U6 tdd               | ✅ | workflow header + CV; U5/U7 refs; `test-run` (sentence-valued) repositioned ×3 |
+| U7 debug             | ✅ | workflow header + CV; U5/U6/U9 refs; "the W2 reflex" → "red→green reflex from TDD" |
+| U8 git-pr            | ✅ | workflow header + CV; U5–U7/U9/U16 refs; R7.AC3/AC7/AC8 dropped; `git-pr` garbles ×4 fixed |
+| U9 legacy-refactor   | ✅ | W8/W5 labels dropped; CV; U2/U5/U7/U8 refs; R7.AC3 dropped; "deep onboarding" dup fixed |
+| U10 spec-driven      | ✅ | **kept teaching** `R1`/`R2.AC3`/`R1`–`R15`/`[R3]`; dropped breadcrumb R3.AC2/R7.AC3; W7; U5/U11 refs; CV |
+| U11 review           | ✅ | irregular "advances `C12`/consolidates `CV`" tail removed; CV consolidated; W6; refs; `review-cmds` garbles fixed |
+| U12 commands-skills  | ✅ | multi-line "Advances `C13`" removed; R14/R7.AC3 dropped; U13 refs; **rt 8→10**; `custom-commands`/`skills` garbles fixed |
+| U13 subagents        | ✅ | "the U12 line" dropped; R7.AC3 dropped; **rt 8→12**; `subagents` garbles fixed |
+| U14 hooks            | ✅ | "the C15 move" reworded; R14/R13 dropped; U15 refs; **rt 8→11**; `hooks` (3-sentence) garbles fixed |
+| U15 mcp-vetting      | ✅ | R10.AC5 ×4 dropped; U16 refs; `mcp`/`plugins` garbles fixed |
+| U16 automate-scale   | ✅ | `(W9)` stripped; R14/R12.AC7/R15 dropped; U14 refs; `headless`/`ci`/`worktrees`/`checkpoint-rewind` garbles fixed |
 
 ## Locked decisions (do not re-litigate)
 
@@ -121,7 +127,11 @@ Legend: ✅ done · 🔗 link-anchors+advances auto-de-coded (script) · ⬜ pro
 
 Full rationale: `decisions.md` → "P7 — Quality pass".
 
-## Resume state (NEXT SESSION — START HERE)
+## Resume state (⚠️ SUPERSEDED — P7 is complete; kept for historical reference)
+
+> The rollout below is **done** (all 16 units migrated + de-coded, 2026-05-31). This section is the
+> procedure that was followed; it is no longer a live to-do. See the Status header at the top.
+
 
 **Branch:** `spec/quality-pass-phase` (local only, not pushed). **Done & committed:** the P7 spec, the infra
 (`render-units`/`render-index` + Makefile gates), U1 pilot, navigation index, and U2–U4 fully

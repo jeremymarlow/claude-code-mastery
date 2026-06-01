@@ -43,26 +43,41 @@ re-measures the corpus for the attribution map anyway).
    9.7–9.8 wiring).
 3. **Verify the agent format before authoring (R12.AC3).** 9.1 confirms the `.claude/agents/<name>.md`
    path + front-matter schema against `claude --help`/docs first; the repo has **zero** agents today, so
-   nothing is authored from memory.
+   nothing is authored from memory. **Confirmed (2026-05-31, official docs):** project scope
+   `.claude/agents/*.md` (committed to VCS) is the supported, recommended mechanism — no user/machine
+   scope needed; required front matter is `name` + `description`; `tools` is a comma-separated allowlist
+   that **inherits all tools if omitted** (so read-only fencing must list `Read, Grep, Glob` explicitly);
+   `model` ∈ `sonnet|opus|haiku|<id>|inherit`. Recorded in `vd:subagents` notes.
+4. **On-disk agents load at session start (operational).** Agent files authored directly on disk are
+   **not dispatchable until a session restart / `/agents` reload** (only `/agents`-created ones load
+   live). So the 9.1 authoring session can't itself dispatch the panel; the **9.4 pilot must run in a
+   fresh/reloaded session** that has the committed agents loaded. Same watcher caveat as the U14 hook.
 
 ## Tasks
 
-### 9.1 Verify agent format + author the 11-reviewer panel  [R18.AC2/AC4/AC5; §13.2/§13.3]
-- [ ] **Confirm the `.claude/agents/<name>.md` schema** (front-matter fields: `description`, tools,
+### 9.1 Verify agent format + author the 11-reviewer panel  [R18.AC2/AC4/AC5; §13.2/§13.3]  ✅ DONE (2026-05-31)
+- [x] **Confirm the `.claude/agents/<name>.md` schema** (front-matter fields: `description`, tools,
       model; body) against `claude --help` + docs (R12.AC3); record the confirmed shape. The inline
       `--agents <json>` form is `--help`-verified (`{{vd:subagents}}`); the on-disk path/front-matter is
-      a *convention* to confirm before relying on a detail.
-- [ ] Author a **shared reviewer mandate** snippet (subjective & candid — no flatter/please/discourage;
+      a *convention* to confirm before relying on a detail. — Confirmed @ 2.1.159 against official docs
+      (`code.claude.com/docs/en/sub-agents`): required `name` + `description`; `tools` comma-list (inherits
+      all if omitted → read-only fencing must list `Read, Grep, Glob`); `model` ∈ `sonnet|opus|haiku|<id>|inherit`.
+      Recorded in `vd:subagents` notes (provenance + verified_date 2026-05-31). **U13 gaps found → ledger L13.**
+- [x] Author a **shared reviewer mandate** snippet (subjective & candid — no flatter/please/discourage;
       evidence-grounded with session + locator; both parties, both directions; the §13.4 output contract)
       and reuse it verbatim in each persona body (agents don't `include`; single-source the wording).
-- [ ] Author the **10 persona agents** under `.claude/agents/`, each **read-only** (`Read, Grep, Glob`):
+- [x] Author the **10 persona agents** under `.claude/agents/`, each **read-only** (`Read, Grep, Glob`):
       `process-architect`, `context-engineer`, `verification-hawk`, `tooling-economist`, `safety-steward`
       (process); `intent-alignment`, `dialogue-clarity`, `collaboration-partner` (communication);
       `outcome-auditor`, `devils-advocate` (cross-cutting). Each: a sharp `description` (when to dispatch)
-      + the shared mandate + its persona lens (§13.2 table).
-- [ ] Author the **`control`** agent: the §13.4 output contract **only** — **no persona lens, no candor
+      + the shared mandate + its persona lens (§13.2 table). All `model: opus` (holds the model constant
+      across the panel + control, so the only variable vs. the control is the prompt scaffolding).
+- [x] Author the **`control`** agent: the §13.4 output contract **only** — **no persona lens, no candor
       mandate** (the deliberate baseline; R18.AC5 scope note). Same read-only tools.
-- [ ] `make check` green (agents live under `.claude/`, scanned by traceability; harmless until wired).
+- [x] `make check` green (agents live under `.claude/`, scanned by traceability; harmless until wired).
+      _Note:_ a literal `R18.AC5` in the control's rationale comment first tripped `check-traceability`
+      (flipping R18 → referenced prematurely); reworded to cite decision `P9-control` so R18 stays `PEND`
+      until the real 9.7–9.8 wiring.
 
 ### 9.2 Corpus conventions + completeness gate + model-attribution map + README  [R18.AC6/AC7/AC9/AC10; §13.1/§13.4/§13.8]
 - [ ] `meta/conventions.md` — add the `log/evaluations/` layout + naming: `<session>/<reviewer>.md`

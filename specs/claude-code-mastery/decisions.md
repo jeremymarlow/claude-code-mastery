@@ -787,8 +787,11 @@ diff (one `claude --help` call) but no longer maintains a duplicate names-only a
 `tasks/P8-cli-reference.md` §8.9; design §5/§12.7.
 
 **L11 — R18 collaboration retrospective: gates done, build pending.** Requirements (R18) + design (§13)
-+ tasks plan (`tasks/P9`) ✅ **approved & committed** on `feat/collaboration-retrospective`; the build
-(P9 9.1–9.9: the 11-reviewer panel, `/evaluate-session`+`/evaluate-global`, the ~242-leaf matrix corpus,
++ tasks plan (`tasks/P9`) ✅ **approved & committed** on `feat/collaboration-retrospective`. **9.1 ✅
+DONE** (2026-05-31): agent schema confirmed against official docs + recorded in `vd:subagents`; the
+**11-reviewer panel authored** under `.claude/agents/` (10 read-only personas + `control`, all
+`model: opus`); U13 doc gaps captured in **L13**. The rest of the build (P9 9.2–9.9:
+`/evaluate-session`+`/evaluate-global`, the ~253-leaf matrix corpus over the frozen 23 sessions,
 syntheses, the case study, `tools/check-evaluations`, U13/§10 dogfood wiring) is **not yet executed**.
 R18 shows `PEND` in `make check` (non-failing) until the case study + U13/§10 references land;
 `make check-strict` will fail on R18 (+ an incomplete corpus) until then. _Resolve in:_ P9 execution.
@@ -798,6 +801,26 @@ _Also tracked in:_ `tasks/P9-collaboration-retrospective.md`; decisions → "P9 
 learner-facing docs) is an **approved requirement** but its **design is deferred by the user until R18
 ships**. Shows `PEND` (non-failing) in `make check`. _Resolve in:_ a future design+tasks phase after R18.
 _Also tracked in:_ `requirements.md` R19; `design.md` §11 (R19 ⏳).
+
+**L13 — U13 (subagents) prose gaps found during P9 9.1 doc-refresh (fix later).** Cross-checking U13
+against the authoritative subagents docs (`code.claude.com/docs/en/sub-agents`, refreshed 2026-05-31)
+surfaced three **correctness** gaps in the shipped unit — the delegation pedagogy is right, but the
+on-disk authoring details are incomplete, so a learner copying the worked example would hit them:
+1. **`name` is a *required* front-matter field** (with `description`); U13's file-form example shows
+   only `description` + `tools`, so a learner writing `.claude/agents/explorer.md` from it authors an
+   invalid agent. Identity comes from the `name` field, not the filename.
+2. **Omitting `tools` inherits *all* tools** — fencing is opt-in. U13's example lists `tools` correctly
+   but never states the silent inherit-all default (the "over-broad tools" pitfall doesn't cover it), so
+   dropping `tools` to "keep it minimal" does the opposite.
+3. **On-disk agents load at session start** — a file added/edited directly on disk isn't dispatchable
+   until a session restart (only `/agents`-created ones load live). U13's **lab** has the learner write
+   `.claude/agents/explorer.md` and delegate it in the same session, which fails without a reload (same
+   watcher caveat as the U14 hook, P5-U14-dogfood).
+Optional enrichment (lower priority): project-vs-user scope + "commit project agents to VCS"; subagents
+can't spawn subagents; custom subagents load `CLAUDE.md` + git status (only Explore/Plan skip them).
+_Resolve in:_ a U13 prose pass — can ride with **9.8** (which already edits U13 to reference the real
+panel) or a separate doc-accuracy fix. _Also tracked in:_ `tasks/P9` §9.8; the `vd:subagents` `notes`
+now record the authoritative schema (#1/#2) for single-sourcing.
 
 **Decided, not open (do not re-litigate):** tools are no-extension kebab-case (deviation from design
 §7 `.sh`, decision P3-tools); `permission-modes` value per verified CLI (P2-vd); awareness home-unit

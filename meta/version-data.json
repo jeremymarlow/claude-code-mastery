@@ -131,11 +131,11 @@
     "subagents": {
       "kind": "command",
       "value": "`--agent <agent>` / `--agents <json>` set session agents; the `agents` subcommand manages background agents.",
-      "provenance": "claude --help (--agent, --agents, `agents` command)",
-      "verified_version": "2.1.158",
-      "verified_date": "2026-05-29",
+      "provenance": "claude --help (--agent, --agents, `agents` command); on-disk file schema from official docs code.claude.com/docs/en/sub-agents (2026-05-31)",
+      "verified_version": "2.1.159",
+      "verified_date": "2026-05-31",
       "unverified": false,
-      "notes": "The inline `--agents <json>` form (with a per-agent `description`) is --help-verified; the persistent on-disk location (e.g. .claude/agents/<name>.md) is a filesystem convention \u2014 verify the exact path/front matter via docs before hardcoding."
+      "notes": "The inline `--agents <json>` form (with a per-agent `description`) is --help-verified. On-disk subagents are Markdown files at `.claude/agents/<name>.md` (project scope, checked into VCS) with YAML front matter \u2014 docs-confirmed (2026-05-31): only `name` and `description` are required; `tools` is a comma-separated allowlist (e.g. `Read, Grep, Glob`) that INHERITS ALL TOOLS IF OMITTED (so read-only fencing must list tools explicitly); `model` accepts `sonnet`/`opus`/`haiku`/a full model ID/`inherit` (default `inherit`); the Markdown body IS the agent's entire system prompt (it does not receive the main Claude Code system prompt). Other optional fields: disallowedTools, permissionMode, mcpServers, hooks, maxTurns, skills, initialPrompt, memory, effort, background, isolation, color."
     },
     "hooks": {
       "kind": "feature",

@@ -33,14 +33,17 @@ re-measures the corpus for the attribution map anyway).
    (9.3) can dispatch them; the command + leaf-format must exist before the pilot (9.4); the pilot must
    pass before the full leaf pass (9.5). All leaves must exist before per-reviewer globals (9.6); globals
    before the corner (9.6); the corner before the case study (9.7).
-2. **R18 stays PEND (non-failing) until wired.** `check-traceability` already discovers R18 from its
-   `### R18` heading (post-P8 generalization), but R18 is not *referenced* by a course artifact until the
-   case study (9.7) + the U13/§10 dogfood pointers (9.8) land. So plain `make check` stays **green**
-   (R18 shows `PEND`) throughout the build; **`make check-strict` fails on R18 until 9.7–9.8**. Gate
-   "done" on strict only after wiring — do not treat the mid-build PEND as a regression. Likewise
-   `tools/check-evaluations` (9.2) PENDs in `make check` while the corpus is in progress and hard-fails
-   only under `--strict`, so **strict green = R18 referenced *and* corpus complete** (end of 9.6 + the
-   9.7–9.8 wiring).
+2. **R18 traceability flips at 9.2; the binding "done" gate is `check-evaluations`.** This plan first
+   predicted R18 would stay traceability-`PEND` until the case study (9.7) + U13/§10 (9.8). **In practice
+   9.2 itself references R18** — `meta/conventions.md` documents the corpus layout (citing R18.AC7/AC10)
+   and `tools/check-evaluations` implements R18.AC9 — both genuine built-course artifacts, so
+   `check-traceability` legitimately stops flagging R18 from **9.2** on. That does **not** mean R18 is
+   done: the real completeness gate is **`tools/check-evaluations`**, which shows a non-failing `PEND`
+   progress readout in `make check` (so the one-session-at-a-time build stays green) and **hard-fails in
+   `make check-strict` until the matrix is whole** (end of 9.6). The case study (9.7) is the R18.AC8
+   learner deliverable. **Do not scrub R18 from genuine implementing artifacts to force a `PEND`** — the
+   gate that matters is corpus completeness, not the traceability mention. (Contrast 9.1, where an `R18`
+   token in an *agent's rationale comment* was incidental and correctly reworded out.)
 3. **Verify the agent format before authoring (R12.AC3).** 9.1 confirms the `.claude/agents/<name>.md`
    path + front-matter schema against `claude --help`/docs first; the repo has **zero** agents today, so
    nothing is authored from memory. **Confirmed (2026-05-31, official docs):** project scope
@@ -80,27 +83,31 @@ re-measures the corpus for the attribution map anyway).
       until the real 9.7–9.8 wiring.
 
 ### 9.2 Corpus conventions + completeness gate + model-attribution map + README  [R18.AC6/AC7/AC9/AC10; §13.1/§13.4/§13.8]
-- [ ] `meta/conventions.md` — add the `log/evaluations/` layout + naming: `<session>/<reviewer>.md`
+### 9.2 Corpus conventions + completeness gate + model-attribution map + README  [R18.AC6/AC7/AC9/AC10; §13.1/§13.4/§13.8]  ✅ DONE (2026-05-31)
+- [x] `meta/conventions.md` — add the `log/evaluations/` layout + naming: `<session>/<reviewer>.md`
       (leaf), `<session>/_synthesis.md` (per-session margin), `_global/<reviewer>.md` (per-reviewer
       global margin), `_global/_overall.md` (corner). `<session>` = transcript filename stem; `<reviewer>`
-      = agent id (R13.AC1).
-- [ ] **Per-session model attribution**, derived from each `.jsonl`'s `model` field (R18.AC7, **not**
-      assumed): record the map in `log/evaluations/README.md`. Known split — the foundational
-      `2026-05-29_1845-requirements-and-design-spec-creation` ran on **`claude-sonnet-4-6`**; the other
-      22 on **`claude-opus-4-8`** (a session may switch models mid-stream — attribute from the file, flag
-      if mixed).
-- [ ] **Refresh the corpus figures** in `design.md` §13.1/§13.2/§13.7 + ledger L11 to the frozen 23
-      sessions (≈253 leaves; re-measured token total from this slice's pass), per the freeze decision.
-- [ ] `log/evaluations/README.md` — corpus orientation: the matrix, the grade vocabulary
-      (**did well / did okay / could improve**, per party × axis + overall), the leaf front-matter schema
-      (§13.4), the candor mandate, the model-attribution map, and the run protocol (rendered-primary,
-      raw-on-demand; secret-scan before commit).
-- [ ] `tools/check-evaluations` — discovery-based completeness gate: expected sessions from
+      = agent id (R13.AC1). — Added a dedicated section + `log/` rows in the layout/naming tables.
+- [x] **Per-session model attribution**, derived from each `.jsonl`'s `.message.model` field (R18.AC7,
+      **not** assumed): map recorded in `log/evaluations/README.md`. **Verified result: all 23 sessions
+      ran on `claude-opus-4-8`**, except the foundational `2026-05-29_1845-requirements-and-design-spec-creation`,
+      which is **mixed/opus-dominant** — its first 2 assistant turns were `claude-sonnet-4-6`, then opus
+      for the remaining 222 (the "flag if mixed" case). **The earlier "foundational = sonnet" was an
+      assumption and was wrong** → corrected decision `P9-model-attr`, design §13.4, and the pilot rationale.
+- [x] **Refresh the corpus figures** to the frozen 23 sessions: `design.md` §13.1 (23-session matrix),
+      §13.2 (253 leaves), §13.7 (≈1.11M tokens re-measured; ≈12M leaf-tier; min 14k/max 127k) + the §13.5
+      "~23 leaves" globals; ledger L11 (≈253). Per the freeze decision.
+- [x] `log/evaluations/README.md` — corpus orientation: the matrix, the grade vocabulary
+      (`did-well`/`did-okay`/`could-improve`, per party × axis + overall), the leaf front-matter schema
+      (§13.4), the candor mandate, the verified model-attribution map (+ a regen one-liner), and the run
+      protocol (rendered-primary, raw-on-demand; secret-scan before commit).
+- [x] `tools/check-evaluations` — discovery-based completeness gate: expected sessions from
       `log/transcripts/rendered/*.md`, expected reviewers from `.claude/agents/*.md` (no hardcoded
       lists); asserts every session has all reviewer leaves + `_synthesis.md`, and — once all sessions
       are covered — a `_global/<reviewer>.md` per reviewer + `_global/_overall.md`. **`PEND` progress
-      readout in `make check`; hard-fail in `make check-strict`** (new `evaluations` target). Verify it
-      PENDs cleanly against the empty/partial corpus now.
+      readout in `make check`; hard-fail in `make check-strict`** (new `evaluations` target, wired into
+      both). Verified: PENDs cleanly (0/253 leaves, 0/23 syntheses, global deferred) at exit 0 in default;
+      FAILs at exit 1 under `--strict`; real misconfig (no sessions/reviewers) fails in both modes.
 
 ### 9.3 Leaf format + `/evaluate-session` orchestration command  [R18.AC2/AC3/AC6; §13.4/§13.6]
 - [ ] Pin the **leaf-eval format** (§13.4): YAML front matter (`session`, `reviewer`, `model_evaluated`,
@@ -114,9 +121,10 @@ re-measures the corpus for the attribution map anyway).
 
 ### 9.4 Pilot one session (de-risk before the full run)  [R18.AC2/AC3/AC5]
 - [ ] Run `/evaluate-session` on the pilot session **`2026-05-29_1845-requirements-and-design-spec-creation`**
-      (reconfirm 2026-05-31). Chosen deliberately: it is the **only `claude-sonnet-4-6` session**, so the
-      pilot also de-risks the **model-attribution path** (R18.AC7) and stress-tests the **communication**
-      personas (it is the heaviest human↔Claude design dialogue). Eyeball ≥3 leaves **incl. the
+      (reconfirm 2026-05-31). Chosen deliberately: it is the **only mixed-model session** (sonnet for
+      turns 1–2, then opus), so the pilot uniquely de-risks the **mixed model-attribution / flag path**
+      (R18.AC7), and it is the heaviest human↔Claude design dialogue, stress-testing the **communication**
+      personas. Eyeball ≥3 leaves **incl. the
       control**: is the prose verbose & insight-led (not a grade dump)? are claims **cited to the
       transcript**? is it candid (neither flattering nor harsh)? does it cover **both parties**? does the
       control read materially different from the personas (the experiment is working)?
@@ -124,7 +132,7 @@ re-measures the corpus for the attribution map anyway).
       gate** — do not start the full pass until a pilot session reads well. Note adjustments for the
       close-out decision entry.
 
-### 9.5 Leaf pass — all 22 sessions + per-session syntheses  [R18.AC2/AC6; §13.5]
+### 9.5 Leaf pass — all 23 sessions + per-session syntheses  [R18.AC2/AC6; §13.5]
 - [ ] For each session (incremental, **one at a time** — the maintainer's workflow): run
       `/evaluate-session`, caching the 11 leaves; then write `<session>/_synthesis.md` — the cross-cutting
       story, where reviewers **agreed/disagreed**, consolidated per-party/per-axis grades, both parties;
@@ -137,7 +145,7 @@ re-measures the corpus for the attribution map anyway).
       accrete; also note status in the 🔓 ledger.
 
 ### 9.6 Global pass — per-reviewer globals + overall corner  [R18.AC6; §13.5/§13.6]
-- [ ] `.claude/commands/evaluate-global.md` — re-dispatch **each reviewer over its own ~22 leaves** to
+- [ ] `.claude/commands/evaluate-global.md` — re-dispatch **each reviewer over its own ~23 leaves** to
       write `_global/<reviewer>.md`: the longitudinal arc in *its* lens (did this dimension improve across
       sessions? recurring per-party strengths/failure modes; the sonnet-vs-opus caveat). Control does the
       same over its own leaves.

@@ -1,0 +1,85 @@
+#!/usr/bin/env python3
+"""check-evaluations (R18.AC9): completeness gate for the collaboration-retrospective corpus.
+
+Discovery-based — no hardcoded lists (R13.AC1), so it self-maintains as transcripts or the reviewer
+roster change:
+  - expected SESSIONS  = stems of log/transcripts/rendered/*.md
+  - expected REVIEWERS = stems of .claude/agents/*.md
+
+The session x reviewer matrix (design.md §13) is complete when:
+  - every session has a leaf  <session>/<reviewer>.md  for every reviewer, and a <session>/_synthesis.md;
+  - and (once all sessions are covered) a _global/<reviewer>.md per reviewer + _global/_overall.md.
+
+This complements check-traceability, which only verifies R18 is *referenced* — not that the corpus is
+*complete*. Follows the repo PEND/strict pattern: an informational progress readout (non-failing) in
+`make check`, so the legitimate one-session-at-a-time build stays green, and a hard FAIL in
+`make check-strict` until the matrix is whole. Real misconfiguration (no sessions / no reviewers) FAILs
+in both modes.
+"""
+import os
+import sys
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from _common import ROOT, Reporter  # noqa: E402
+
+RENDERED = ROOT / "log" / "transcripts" / "rendered"
+AGENTS = ROOT / ".claude" / "agents"
+EVAL = ROOT / "log" / "evaluations"
+
+
+def main(argv):
+    strict = "--strict" in argv
+    rep = Reporter("check-evaluations")
+
+    sessions = sorted(p.stem for p in RENDERED.glob("*.md"))
+    reviewers = sorted(p.stem for p in AGENTS.glob("*.md"))
+
+    # Real misconfiguration fails in both modes (not a "pending" — there is nothing to build toward).
+    if not rep.check(bool(sessions),
+                     f"discovered {len(sessions)} session(s) in log/transcripts/rendered/",
+                     "no rendered transcripts in log/transcripts/rendered/ — nothing to evaluate"):
+        return rep.done(strict=strict)
+    if not rep.check(bool(reviewers),
+                     f"discovered {len(reviewers)} reviewer(s) in .claude/agents/",
+                     "no reviewer agents in .claude/agents/ — nothing to evaluate with"):
+        return rep.done(strict=strict)
+
+    # Leaves + per-session syntheses.
+    missing_leaves, missing_synth = [], []
+    for s in sessions:
+        sdir = EVAL / s
+        missing_leaves += [f"{s}/{r}" for r in reviewers if not (sdir / f"{r}.md").is_file()]
+        if not (sdir / "_synthesis.md").is_file():
+            missing_synth.append(s)
+
+    n_leaves = len(sessions) * len(reviewers)
+    if missing_leaves:
+        sessions_touched = len({m.split("/")[0] for m in missing_leaves})
+        rep.pending(f"leaf evals: {n_leaves - len(missing_leaves)}/{n_leaves} present "
+                    f"({len(missing_leaves)} missing across {sessions_touched} session(s))")
+    else:
+        rep.ok(f"all {n_leaves} leaf evals present ({len(sessions)} sessions x {len(reviewers)} reviewers)")
+
+    if missing_synth:
+        rep.pending(f"per-session syntheses: {len(sessions) - len(missing_synth)}/{len(sessions)} present")
+    else:
+        rep.ok(f"all {len(sessions)} per-session syntheses present")
+
+    # Global tier — only meaningful once the full leaf+synthesis pass is done (ordering, §13.5).
+    gdir = EVAL / "_global"
+    missing_globals = [r for r in reviewers if not (gdir / f"{r}.md").is_file()]
+    have_overall = (gdir / "_overall.md").is_file()
+    if missing_leaves or missing_synth:
+        rep.pending("global tier (per-reviewer globals + overall corner): deferred until the leaf pass completes")
+    elif missing_globals or not have_overall:
+        tail = "" if have_overall else " + corner _overall.md"
+        rep.pending(f"global tier: {len(reviewers) - len(missing_globals)}/{len(reviewers)} "
+                    f"per-reviewer globals{tail} present")
+    else:
+        rep.ok(f"global tier complete ({len(reviewers)} per-reviewer globals + _overall.md corner)")
+
+    return rep.done(strict=strict)
+
+
+if __name__ == "__main__":
+    raise SystemExit(main(sys.argv[1:]))

@@ -687,7 +687,7 @@ build itself follows the post-v1 enhancement playbook (R13.AC3).
 | **Evaluation corpus** (the leaf evals + syntheses) | maintainer / internal record | `log/evaluations/**` |
 | **Case study** (derived narrative) | learner (capstone exemplar) | `course/case-studies/collaboration-retrospective.md` |
 
-The Tier-1 evals form a **22-session × 11-reviewer matrix**, summarized along both margins and then to a
+The Tier-1 evals form a **23-session × 11-reviewer matrix**, summarized along both margins and then to a
 bottom line (R18.AC6); each artifact is derived from and traceable to the ones beneath it:
 
 ```
@@ -731,8 +731,9 @@ output contract (so it is comparable) but intentionally **omits** the persona le
 subjective/candor mandate of R18.AC5. R18.AC5's "every reviewer" is read as the **ten persona
 reviewers**; the control sits alongside the panel as a baseline instrument, not a persona reviewer. This
 scoped exception is recorded in `decisions.md` (it does not require amending the approved R18 — but AC5
-can be tightened to "every persona reviewer" if preferred). Corpus scale: **11 reviewers × 22 sessions ≈
-242 leaf evals**, accreted one session at a time (the maintainer's stated workflow).
+can be tightened to "every persona reviewer" if preferred). Corpus scale: **11 reviewers × 23 sessions =
+253 leaf evals**, accreted one session at a time (the maintainer's stated workflow). (Corpus frozen at
+the 23 sessions present at P9 start, 2026-05-31.)
 
 This panel **retires the gap noted in decision P5-U13-example** (the repo had no authentic subagent to
 show in U13); it now does, so U13 references the panel as its real worked example (R14.AC2, R18.AC4).
@@ -764,9 +765,11 @@ sourced wording, repeated per agent since agents don't `include`):
 full turn-by-turn human↔Claude exchange, readable and citable by heading). A reviewer **may** consult
 the raw `log/transcripts/raw/<session>.jsonl` for a specific turn when the rendered view is insufficient
 (thinking is collapsed and tool output truncated to 40 lines in the render). Each dispatch is told the
-session's **verified model attribution** (R18.AC7), read from the raw `.jsonl` `model` field — not
-assumed (`claude-sonnet-4-6` for the foundational `2026-05-29_1845…` session, `claude-opus-4-8` for the
-rest).
+session's **verified model attribution** (R18.AC7), read from the raw `.jsonl` `.message.model` field —
+not assumed. Verified 2026-05-31: **all 23 sessions ran on `claude-opus-4-8`**, except the foundational
+`2026-05-29_1845…` session, which is **mixed/opus-dominant** (sonnet-4-6 for its first 2 turns, then
+opus for the remaining 222) — the only mixed-model session, attributed opus with a sonnet-start flag.
+(An earlier "foundational = sonnet" reading was an assumption and was wrong; see decision `P9-model-attr`.)
 
 **Leaf file = `log/evaluations/<session>/<reviewer>.md`.** A small machine-parseable YAML front matter
 (for Tier-2/3 aggregation) over a verbose prose body:
@@ -801,7 +804,7 @@ free-length: as long as the evidence warrants.
   them into `_synthesis.md`: the cross-cutting story, where reviewers **agreed and disagreed**,
   consolidated per-party/per-axis grades, both parties. Cites the leaves (traceable, R18.AC6).
 - **Per-reviewer global (session-axis margin).** Once **all** sessions' leaves exist, **each reviewer is
-  re-dispatched over its own ~22 leaves** to write `_global/<reviewer>.md`: the longitudinal arc in *its*
+  re-dispatched over its own ~23 leaves** to write `_global/<reviewer>.md`: the longitudinal arc in *its*
   lens (did this dimension improve across the sessions? recurring strengths/failure modes per party; the
   sonnet-vs-opus caveat). Reading only its own leaves (~55k tokens) keeps each global **deep and cheap**,
   and the lens voice survives to the global level instead of being averaged away. The control does the
@@ -819,7 +822,7 @@ over one session and writes the eleven leaf files — an authentic R14 dogfood (
 exercises subagents (U13) and parallel delegation (U16). The command also records the session's verified
 model attribution (§13.4) so each reviewer is told which model it is judging. A sibling
 **`/evaluate-global`** command runs the margin/corner passes once every session's leaves exist: it
-re-dispatches **each reviewer over its own ~22 leaves** to write `_global/<reviewer>.md`, then a final
+re-dispatches **each reviewer over its own ~23 leaves** to write `_global/<reviewer>.md`, then a final
 pass writes the corner `_global/_overall.md`. Both commands dispatch reviewers **in parallel** (U16) for
 wall-clock — not token — savings.
 
@@ -827,21 +830,22 @@ wall-clock — not token — savings.
 
 Measured against the actual `log/transcripts/rendered/` corpus (not estimated):
 
-- Rendered corpus ≈ **1.05M tokens** across 22 sessions; mean ≈ 48k/session; range ≈ 14k (smallest) to
-  ≈ 127k (the P7 closeout session, a 506 KB outlier). (token ≈ bytes/4 — rough, and a likely **floor**
-  for markdown + code + tool output.)
+- Rendered corpus ≈ **1.11M tokens** across 23 sessions; mean ≈ 48k/session; range ≈ 14k (smallest, the
+  L1 verification session) to ≈ 127k (the P7 closeout session, a 494 KB outlier). (token ≈ bytes/4 —
+  rough, and a likely **floor** for markdown + code + tool output. Re-measured 2026-05-31 over the frozen
+  23-session corpus.)
 - **Subagents do not share the orchestrator's context** — each runs in its own fresh window — so a
-  session transcript is read once **per reviewer**. Leaf tier, whole corpus: 11 × 1.05M ≈ **11.5M
+  session transcript is read once **per reviewer**. Leaf tier, whole corpus: 11 × 1.11M ≈ **~12M
   tokens** of transcript input; with per-subagent overhead and the two synthesis tiers, the full
-  one-time pass is on the order of **~13–16M tokens**.
+  one-time pass is on the order of **~13–17M tokens**.
 - **Fit is not a constraint:** the largest transcript (≈127k) is **12.7%** of a single 1M window — ample
   headroom. The cost here is *spend*, not overflow.
 - **Never one big run:** the pass is driven session-by-session, so each invocation is one session's
   panel (≈159k–1.4M tokens) — an ordinary run.
-- **The global tier is cheap:** each per-reviewer global reads only its own ~22 leaves (~55k tokens) →
-  ~12 × 55k ≈ **~0.7M tokens** for the whole column margin; the corner blends eleven short globals
+- **The global tier is cheap:** each per-reviewer global reads only its own ~23 leaves (~55k tokens) →
+  ~11 × 55k ≈ **~0.7M tokens** for the whole column margin; the corner blends eleven short globals
   (negligible). So the per-reviewer-global structure (§13.5) adds only ~5% to the pass — well worth the
-  preserved lens depth, and far cheaper than a single agent re-reading all 242 leaves (~605k in one
+  preserved lens depth, and far cheaper than a single agent re-reading all 253 leaves (~630k in one
   shallow-blending context).
 
 **Independence vs. economy — a deliberate call.** A single agent reading each transcript once and

@@ -21,8 +21,10 @@ See `design.md` §9 for the canonical tree. Top level:
 | `meta/` | Single-source machine-readable artifacts (this file lives here). |
 | `meta/templates/` | Unit templates (`unit-core.md`, `unit-awareness.md`). |
 | `tools/` | `doctor`, checks, drift detection, `verify-lab`/`reset-lab`. |
-| `.claude/` | Dogfooding: commands, skills, hooks, `settings.json`. |
+| `.claude/` | Dogfooding: commands, skills, hooks, `settings.json`, `agents/` (the R18 reviewer panel). |
 | `.github/workflows/` | CI backstop running the check suite. |
+| `log/transcripts/{raw,rendered}/` | Captured build-session transcripts: raw `.jsonl` + rendered `.md`. |
+| `log/evaluations/` | R18 collaboration-retrospective corpus — the session × reviewer evaluation matrix. |
 
 ## Naming rules
 
@@ -42,6 +44,9 @@ See `design.md` §9 for the canonical tree. Top level:
 | Lab starting state | git **tag** `start/uNN-labM` | `start/u05-lab1` |
 | Lab reference solution | git **branch** `solution/uNN-labM` | `solution/u05-lab1` |
 | Version-data key | kebab-case, referenced in prose as `{{vd:key}}` | `{{vd:permission-modes}}` |
+| Reviewer (subagent) ID | kebab-case agent `name`, file `.claude/agents/<id>.md` | `process-architect`, `control` |
+| Evaluation session ID | the transcript filename **stem** (no extension) | `2026-05-30_0816-p4-sample-codebases` |
+| Leaf evaluation | `log/evaluations/<session>/<reviewer>.md` | `…/2026-05-30_0816-p4-sample-codebases/safety-steward.md` |
 
 ## Lab substrate
 
@@ -65,6 +70,29 @@ rows for `start/uNN-labM` (tag) and `solution/uNN-labM` (branch) are above; this
   secrets, ever. **[R7.AC7]**
 - **BYO variants** (a lab run against the learner's own repo) are marked **non-verifiable** and are
   never the required path. **[R7.AC8]**
+
+## Collaboration-retrospective evaluations (`log/evaluations/`)
+
+The R18 corpus is a **session × reviewer matrix** (`design.md` §13; build plan `tasks/P9`). Layout —
+discoverable, no hardcoded lists (the gate `tools/check-evaluations` derives the expected set from
+`log/transcripts/rendered/*.md` × `.claude/agents/*.md`):
+
+| Path | Tier | Holds |
+|---|---|---|
+| `log/evaluations/<session>/<reviewer>.md` | **leaf** (cell) | one reviewer's evaluation of one session — cached, immutable once written |
+| `log/evaluations/<session>/_synthesis.md` | **per-session** (reviewer-axis margin) | all reviewers consolidated for that one session |
+| `log/evaluations/_global/<reviewer>.md` | **per-reviewer global** (session-axis margin) | one reviewer across all its leaves |
+| `log/evaluations/_global/_overall.md` | **corner** | the per-reviewer globals blended → bottom line |
+| `log/evaluations/README.md` | — | corpus orientation, grade vocabulary, leaf schema, verified model-attribution map, run protocol |
+
+- `<session>` = the transcript filename **stem**; `<reviewer>` = an agent `name` from `.claude/agents/`.
+- **Grade vocabulary:** `did-well` / `did-okay` / `could-improve`, per party (`human`, `claude`) × axis
+  (`process`, `communication`) plus one `overall` — a scannable summary that never replaces the prose.
+- **Cached = immutable:** a leaf is written once and committed as evidence; re-running a reviewer is a
+  new dated file, not an overwrite.
+- **Provenance & safety:** every insight cites the transcript (session + locator); model attribution is
+  read from the raw `.jsonl` `.message.model` field, never assumed (R18.AC7); run `tools/scan-secrets`
+  over new files before committing (R18.AC10).
 
 ## Version-specific values
 

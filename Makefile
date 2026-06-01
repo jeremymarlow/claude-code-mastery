@@ -9,15 +9,16 @@ PY ?= $(shell [ -x .venv/bin/python ] && echo .venv/bin/python || echo python3)
 TOOLS := ./tools
 
 .PHONY: check check-strict frontmatter coverage checklist units index links version-refs \
-        cli-reference changelog traceability drift doctor venv render help
+        cli-reference changelog traceability evaluations drift doctor venv render help
 
 ## Run the required + traceability checks (PENDING items do not fail; see check-strict).
-check: frontmatter coverage checklist units index links version-refs cli-reference changelog traceability
+check: frontmatter coverage checklist units index links version-refs cli-reference changelog traceability evaluations
 	@echo "make check: all checks passed"
 
 ## Release gate: same suite, but PENDING (not-yet-authored coverage) becomes FAIL.
 check-strict: frontmatter coverage checklist units index links version-refs cli-reference changelog
 	@$(TOOLS)/check-traceability --strict
+	@$(TOOLS)/check-evaluations --strict
 	@echo "make check-strict: all checks passed (strict)"
 
 frontmatter:
@@ -54,6 +55,11 @@ changelog:
 
 traceability:
 	@$(PY) $(TOOLS)/check-traceability
+
+## R18.AC9: completeness gate for the collaboration-retrospective corpus (log/evaluations/).
+## Discovery-based; PENDING progress readout in `make check`, hard-fail in `make check-strict`.
+evaluations:
+	@$(PY) $(TOOLS)/check-evaluations
 
 ## Drift is informational; run on demand or on a schedule (R12.AC7). The cheap top-level
 ## command-list diff (check-version-drift) and the full re-introspection (--check --cli) both

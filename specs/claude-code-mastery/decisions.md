@@ -682,10 +682,10 @@ Locked calls (the deliberation — do not re-litigate):
 |---|---|---|
 | P9-panel | **11 reviewers = 10 fenced read-only personas + 1 no-persona control**, balanced 5 process / 3 communication / 2 cross-cutting. | Reviewed 8 → 12 → rebalanced: merged `power-user`+`efficiency-economist`→`tooling-economist` and `prompt-critic`+`clarity-coach`→`dialogue-clarity`; added `intent-alignment`; de-overlapped safety/verification. Fixes a process-heavy 7:2 axis tilt. The user's "subjective regardless of persona; no please/discourage" implies *topical* diversity with **uniform honesty**, so dimension-reviewers (not clashing temperaments) are the right shape. |
 | P9-control | The control follows the output contract but **omits the persona lens + candor mandate**; R18.AC5's "every reviewer" reads as the 10 persona reviewers. | A baseline to measure whether the persona scaffolding changes the evaluations (per-session and longitudinally). User-added during the panel review. |
-| P9-matrix | **Matrix, not linear tiers** (R18.AC6 amended): each reviewer synthesizes its **own** leaves into a per-reviewer global (session-axis margin); one corner pass blends them. | Deeper *and* cheaper-per-context than one agent re-reading all 242 leaves; the lens voice survives to the global level; extends the control experiment to the longitudinal view. |
+| P9-matrix | **Matrix, not linear tiers** (R18.AC6 amended): each reviewer synthesizes its **own** leaves into a per-reviewer global (session-axis margin); one corner pass blends them. | Deeper *and* cheaper-per-context than one agent re-reading all 253 leaves; the lens voice survives to the global level; extends the control experiment to the longitudinal view. |
 | P9-independence | **One subagent per reviewer** (separate contexts; ~11× transcript reads, ~13–16M tokens one-time) over a single shared-context pass (~11× cheaper). **Rendered-primary, raw-on-demand.** | Subagents don't share context; the ~11× cost is the price of independent reviews + a valid control (a shared pass would let the control see the personas). Grounded in measured corpus size (~1.05M tokens; largest session = 12.7% of a 1M window — fit is not the constraint). |
 | P9-checkeval | Build **`tools/check-evaluations`** (discovery-based; `PEND` in `make check`, fail in `--strict`) rather than rely on traceability + the ledger. | Reconsidered the initial "skip": `check-traceability` only checks R18 is *referenced*, not that the corpus is *complete* — leaving completeness to a hand-maintained ledger (the memory-over-files pattern the project rejects). The PEND/strict pattern keeps the incremental build green while making a complete corpus the real "done" gate. |
-| P9-model-attr | **Per-session model attribution read from the `.jsonl`** (R18.AC7), never assumed. | Foundational `2026-05-29_1845` session = `claude-sonnet-4-6`; the other 21 = `claude-opus-4-8` (verified from the transcripts this session). |
+| P9-model-attr | **Per-session model attribution read from the `.jsonl`** (R18.AC7), never assumed. | **Corrected 2026-05-31 (9.2), against the raw `.message.model` field:** the earlier "foundational session = `claude-sonnet-4-6`" was an *assumption and it was wrong*. The verified record: **all 23 sessions ran on `claude-opus-4-8`**, except the foundational `2026-05-29_1845` session, which is **mixed/opus-dominant** — its first **2** assistant turns were `claude-sonnet-4-6`, then it switched to `claude-opus-4-8` for the remaining **222**. So it is the **only mixed-model session**, attributed `claude-opus-4-8` with a sonnet-start flag (the "flag if mixed" case). This is the verify-don't-trust thesis catching the project's own record; the accurate map lives in `log/evaluations/README.md`. |
 | P9-no-cando | **No new can-do**; R18 extends the requirement set only. | The `C1–C17+CV` taxonomy is closed (R1 design); a curriculum change would return to the design gate. |
 
 Gates: requirements `51d27fe` (R18+R19); R18.AC6 matrix amendment `82e4a8b`; design §13 `ef7fc05`; the
@@ -790,9 +790,13 @@ diff (one `claude --help` call) but no longer maintains a duplicate names-only a
 + tasks plan (`tasks/P9`) ✅ **approved & committed** on `feat/collaboration-retrospective`. **9.1 ✅
 DONE** (2026-05-31): agent schema confirmed against official docs + recorded in `vd:subagents`; the
 **11-reviewer panel authored** under `.claude/agents/` (10 read-only personas + `control`, all
-`model: opus`); U13 doc gaps captured in **L13**. The rest of the build (P9 9.2–9.9:
-`/evaluate-session`+`/evaluate-global`, the ~253-leaf matrix corpus over the frozen 23 sessions,
-syntheses, the case study, `tools/check-evaluations`, U13/§10 dogfood wiring) is **not yet executed**.
+`model: opus`); U13 doc gaps captured in **L13**. **9.2 ✅ DONE** (2026-05-31): `log/evaluations/`
+conventions + README (with the **verified** model-attribution map — corrected: all 23 sessions opus-4-8,
+foundational mixed/opus-dominant, the assumed "sonnet" was wrong → `P9-model-attr` corrected); the
+discovery-based **`tools/check-evaluations`** gate built + wired into `make check`/`check-strict`
+(PEND→strict-fail, verified); §13/L11 corpus figures refreshed to the frozen 23 sessions / ~253 leaves
+/ ~1.11M tokens. The rest (P9 9.3–9.9: `/evaluate-session`+`/evaluate-global`, the ~253-leaf matrix
+corpus, syntheses, the case study, U13/§10 dogfood wiring) is **not yet executed**.
 R18 shows `PEND` in `make check` (non-failing) until the case study + U13/§10 references land;
 `make check-strict` will fail on R18 (+ an incomplete corpus) until then. _Resolve in:_ P9 execution.
 _Also tracked in:_ `tasks/P9-collaboration-retrospective.md`; decisions → "P9 …".

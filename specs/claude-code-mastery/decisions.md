@@ -464,6 +464,17 @@ credentials. **Removed** the now-superseded lossy `.txt` `/export` logs. The raw
 machine-parseable record; the `.md` is the readable view (thinking is stored redacted by Claude Code,
 so none renders). Decided with the user; recorded here as a closeout amendment — **does not reopen L8.**
 
+**P7-amendment-2 ✅ (2026-05-31) — transcript filename timestamp = first-event-local.** Changed the
+`capture-session` naming convention from **file mtime** (`date -r "$src"`, which equals *last activity*
+and drifts every turn until capture — it had produced a fabricated future `1953` stamp this session) to
+the **first event timestamp in the `.jsonl`, converted to local time** — a stable anchor that makes the
+name idempotent across re-captures and sorts the corpus by when each session *began*. Updated SKILL.md
+§2 with the extraction snippet, and **back-filled all 18 prior pairs** via `git mv` (pure renames, no
+content change). Two logs moved across a day boundary, correctly — `requirements-and-design-spec-creation`
+(`05-30_0931`→`05-29_1845`) and `catalog-approval-and-scaffolding` (`05-30_0933`→`05-29_2146`) — because
+they *started* on 05-29; the old mtime had mis-sorted them. **Why:** decided with the user after watching
+the mtime drift live; a name that changes while you work can't identify a session.
+
 ## P8 — Version-resilience enhancements: CLI reference + changelog digest (post-v1, in progress)
 
 **P8-requirements ✅ (2026-05-31)** — New requirement **R16** approved at the requirements gate: an

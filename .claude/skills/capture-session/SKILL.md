@@ -30,8 +30,25 @@ changes.** Do not guess which file is ours, and do not touch the existing corpus
 
 ## 2. Name the outputs
 If the argument `$1` is given, use it verbatim as `<name>`. **If absent, derive a self-describing name
-yourself**: `<YYYY-MM-DD_HHMM>-<slug>`, where the date/time comes from the transcript
-(`date -r "$src" +'%Y-%m-%d_%H%M'`) and the **slug summarizes what the session actually *did* across
+yourself**: `<YYYY-MM-DD_HHMM>-<slug>`, where the date/time is the **first event timestamp** in the
+transcript, converted to local time — a *stable* anchor (file mtime drifts as the session keeps
+writing, so it is **not** used):
+```bash
+ts=$(python3 - "$src" <<'PY'
+import sys, json
+from datetime import datetime
+for line in open(sys.argv[1]):
+    line = line.strip()
+    if not line: continue
+    try: d = json.loads(line)
+    except ValueError: continue
+    if d.get("timestamp"):                       # first event that carries a timestamp
+        dt = datetime.fromisoformat(d["timestamp"].replace("Z", "+00:00")).astimezone()
+        print(f"{dt:%Y-%m-%d_%H%M}"); break
+PY
+)
+```
+The **slug summarizes what the session actually *did* across
 its whole arc** — not just the first prompt, and *not* the raw `aiTitle` (often vague, e.g. "Continue
 with next unit"). Skim the session's prompt sequence and the work done, then write a concise
 lowercase-kebab slug in the style of the back-filled logs — e.g. `p4-sample-codebases`,

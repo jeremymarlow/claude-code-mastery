@@ -817,9 +817,10 @@ discovery-based **`tools/check-evaluations`** gate built + wired into `make chec
 persisted (column complete, 11/253), scan clean; substance strong, the control reads differently from the
 personas, `devils-advocate` dissents (experiment working). Adjustments applied (output-contract no
 preamble/fence; **`model_evaluated` quoted** — the mixed-session colon broke YAML; command strip + scan
-glob). Measured cost ≈ **1.1M tokens/session → ~25M** for the full pass. **9.5 ⏸ PAUSED** by the
-maintainer to review budget + decide the per-session workflow (one fresh session per evaluated session).
-The rest (P9 9.5–9.9: the remaining 22 sessions' leaves + syntheses, `/evaluate-global`, the case study,
+glob). Measured cost ≈ **1.1M tokens/session → ~25M** for the full pass. **9.5 🟢 IN PROGRESS** —
+workflow decided (2026-05-31): the **full corpus, one evaluated-session per _fresh_ Claude session**
+(ritual in `tasks/P9` §9.5). Done: foundational leaves (11/253); **its `_synthesis.md` still pending**.
+The rest (the remaining 22 sessions' leaves + all syntheses, `/evaluate-global` + corner, the case study,
 U13/§10 dogfood wiring) is **not yet executed**. See decision **P9-pilot**.
 R18 shows `PEND` in `make check` (non-failing) until the case study + U13/§10 references land;
 `make check-strict` will fail on R18 (+ an incomplete corpus) until then. _Resolve in:_ P9 execution.

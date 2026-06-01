@@ -143,12 +143,23 @@ re-measures the corpus for the attribution map anyway).
       pass projects to **~25M** (vs. the §13.7 ~13–17M estimate; reviewers read more thoroughly). Surfaced
       to the maintainer.
 
-### 9.5 Leaf pass — all 23 sessions + per-session syntheses  [R18.AC2/AC6; §13.5]  ⏸ PAUSED (2026-05-31)
-> **Paused by the maintainer after the 9.4 pilot** to review usage/context budget and decide the
-> execution workflow — specifically whether to run **one fresh Claude session per evaluated session**
-> (recommended: keeps the orchestrator context clean; each persist adds ~20k, and the per-session
-> subagent spend is ~1.1M) vs. batching several per session. The foundational column (11 leaves) is the
-> only one built so far. Resume per the decision; the remaining 22 sessions are untouched.
+### 9.5 Leaf pass — all 23 sessions + per-session syntheses  [R18.AC2/AC6; §13.5]  🟢 IN PROGRESS — leaves 11/253, syntheses 0/23 (2026-05-31)
+> **Workflow (decided 2026-05-31): build the full 23-session corpus, one evaluated-session per _fresh_
+> Claude session**, to keep the orchestrator context clean (each session ≈ 1.1M subagent tokens + ~20k
+> to persist; ~25M total). **Per-session ritual in a new session:**
+> 1. (optional) `/prime-context` to orient.
+> 2. `/evaluate-session <slug>` — dispatches the 11 reviewers, persists the 11 leaves. **Verify on first
+>    resume that `$1` substitutes in the REPL form** (the Skill-tool launch didn't — see 9.4 open finding).
+> 3. Review the leaves (spot-check evidence-citation + the front matter parses; `model_evaluated` quoted).
+> 4. Write `log/evaluations/<slug>/_synthesis.md` — the per-session synthesis (cross-cutting story,
+>    agreements/disagreements, consolidated per-party/per-axis grades; cites the leaves).
+> 5. `tools/scan-secrets log/evaluations/<slug>/*.md`, human-review any flag (R18.AC10).
+> 6. Commit the session's batch (+ push); `tools/check-evaluations` shows progress.
+>
+> **Done:** `2026-05-29_1845-…` (foundational) — 11 leaves persisted; **its `_synthesis.md` is still
+> pending** (leaves were built in the 9.4 pilot before the synthesis step was part of the ritual).
+> **Next:** the remaining 22 (suggest chronological — `2026-05-29_2146-catalog-approval-and-scaffolding`).
+> One fresh session per row; nothing else in flight.
 - [ ] For each session (incremental, **one at a time** — the maintainer's workflow): run
       `/evaluate-session`, caching the 11 leaves; then write `<session>/_synthesis.md` — the cross-cutting
       story, where reviewers **agreed/disagreed**, consolidated per-party/per-axis grades, both parties;

@@ -795,8 +795,12 @@ conventions + README (with the **verified** model-attribution map — corrected:
 foundational mixed/opus-dominant, the assumed "sonnet" was wrong → `P9-model-attr` corrected); the
 discovery-based **`tools/check-evaluations`** gate built + wired into `make check`/`check-strict`
 (PEND→strict-fail, verified); §13/L11 corpus figures refreshed to the frozen 23 sessions / ~253 leaves
-/ ~1.11M tokens. The rest (P9 9.3–9.9: `/evaluate-session`+`/evaluate-global`, the ~253-leaf matrix
-corpus, syntheses, the case study, U13/§10 dogfood wiring) is **not yet executed**.
+/ ~1.11M tokens. **9.3 ✅ DONE** (2026-05-31): leaf format pinned (single-sourced in the agent output
+contracts + README schema); `.claude/commands/evaluate-session.md` authored — fans out all 11 reviewers
+in parallel over one session, verifies attribution from the raw `.message.model` field, persists the
+returned leaves (read-only subagents don't write), no auto-commit. The rest (P9 9.4–9.9: the pilot, the
+~253-leaf matrix corpus, `/evaluate-global` + syntheses, the case study, U13/§10 dogfood wiring) is
+**not yet executed**.
 R18 shows `PEND` in `make check` (non-failing) until the case study + U13/§10 references land;
 `make check-strict` will fail on R18 (+ an incomplete corpus) until then. _Resolve in:_ P9 execution.
 _Also tracked in:_ `tasks/P9-collaboration-retrospective.md`; decisions → "P9 …".

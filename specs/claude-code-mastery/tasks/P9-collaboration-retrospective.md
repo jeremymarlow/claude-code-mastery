@@ -109,15 +109,20 @@ re-measures the corpus for the attribution map anyway).
       both). Verified: PENDs cleanly (0/253 leaves, 0/23 syntheses, global deferred) at exit 0 in default;
       FAILs at exit 1 under `--strict`; real misconfig (no sessions/reviewers) fails in both modes.
 
-### 9.3 Leaf format + `/evaluate-session` orchestration command  [R18.AC2/AC3/AC6; §13.4/§13.6]
-- [ ] Pin the **leaf-eval format** (§13.4): YAML front matter (`session`, `reviewer`, `model_evaluated`,
+### 9.3 Leaf format + `/evaluate-session` orchestration command  [R18.AC2/AC3/AC6; §13.4/§13.6]  ✅ DONE (2026-05-31)
+- [x] Pin the **leaf-eval format** (§13.4): YAML front matter (`session`, `reviewer`, `model_evaluated`,
       `grades.{human,claude}.{process,communication}` + `grades.overall`) over a verbose, significance-
       ordered, evidence-cited prose body (`## Insights`, `## What worked / what didn't`, `## Bottom line`).
-- [ ] `.claude/commands/evaluate-session.md` — dispatches all 11 reviewers over one session (parallel,
+      — Single-sourced: it lives verbatim in every agent's "Output contract" (9.1) and in the
+      `log/evaluations/README.md` schema; the command (step 4) validates returned leaves against it.
+- [x] `.claude/commands/evaluate-session.md` — dispatches all 11 reviewers over one session (parallel,
       U16), passing each the **rendered** transcript path + the session's model attribution; collects each
       returned eval and **writes** `log/evaluations/<session>/<reviewer>.md` (subagents don't write — the
-      command's main session persists the files, U13). Authentic R14 dogfood (commands, U12).
-- [ ] `make check` green.
+      command's main session persists the files, U13). Authentic R14 dogfood (commands, U12). Also:
+      verifies attribution from the raw `.message.model` field (R18.AC7), treats existing leaves as
+      cached/immutable (no overwrite), scan-secrets reminder + **no auto-commit** (maintainer's call),
+      and notes the load-at-session-start caveat as a precondition. `_synthesis.md` is left to 9.5.
+- [x] `make check` green.
 
 ### 9.4 Pilot one session (de-risk before the full run)  [R18.AC2/AC3/AC5]
 - [ ] Run `/evaluate-session` on the pilot session **`2026-05-29_1845-requirements-and-design-spec-creation`**

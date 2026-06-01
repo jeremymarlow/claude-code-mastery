@@ -133,3 +133,21 @@ What stays **closed**, deliberately: the **can-do set** (`C1–C17 + CV`) is a f
 design. An enhancement extends the *requirement* set and the artifacts, not the learner-outcome
 taxonomy — a change that needs a new can-do is a curriculum change (back to the design gate for
 R1/R2), not a post-v1 enhancement.
+
+## Why this repo runs with auto-memory off
+
+The committed [`.claude/settings.json`](../.claude/settings.json) sets `"autoMemoryEnabled": false`,
+so Claude Code's per-machine auto-memory does **not** load or write while you work in this repo. This
+is deliberate and consistent with the project's first working agreement — *source of truth is the
+files, not memory* ([`CLAUDE.md`](../CLAUDE.md)). Every durable fact about this build lives in a
+version-controlled file (`CLAUDE.md`, the spec, `meta/*`, the 🔓 open-loops ledger), so it stays
+uniform across machines and shows up in diffs; auto-memory is per-machine and uncommitted, which would
+let context silently diverge between checkouts and bypass review. Orientation comes from the
+[`prime-context` skill](../.claude/skills/prime-context/SKILL.md) reading those files, not from
+recalled memory.
+
+This is a maintainer/build-environment choice, **not** a statement that auto-memory is bad — U4
+teaches memory as a genuine feature, and a learner working in their own project may well want it on.
+It is off *here* because this repo's whole thesis is that the files are the source of truth. To
+re-enable it locally without committing the change, set `"autoMemoryEnabled": true` in a gitignored
+`.claude/settings.local.json` (local scope wins over project scope).

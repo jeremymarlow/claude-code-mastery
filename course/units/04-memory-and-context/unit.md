@@ -106,7 +106,7 @@ over why Claude "ignored" it. Before you trust a behavior change, **inspect the 
 your file is actually loaded.** That 10-second check is the difference between steering Claude and
 imagining you are.
 
-**Version currency.** This unit was verified against Claude Code `2.1.158`; the
+**Version currency.** This unit was verified against Claude Code `2.1.159`; the
 context-management commands are in-REPL and may shift between releases — confirm them with `/help` and
 see [`meta/version-record.md`](../../../meta/version-record.md) if your version differs.
 

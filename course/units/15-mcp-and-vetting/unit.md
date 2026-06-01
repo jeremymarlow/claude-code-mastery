@@ -111,7 +111,7 @@ before you delegate.
 handshake says the *pipe* works, not that the *answer* is right — so verify the results a tool returns,
 exactly as you verified a subagent's report ([Subagents](../13-subagents/unit.md)).
 
-**Version currency.** Verified against Claude Code 2.1.158. The `claude mcp`
+**Version currency.** Verified against Claude Code 2.1.159. The `claude mcp`
 subcommands and the `.mcp.json` shape were confirmed live (a stdlib stdio server connected `✓
 Connected`); confirm them against `claude mcp --help` before relying on a detail. The
 extension-vetting surface: `claude plugin|plugins` manages plugins; `--plugin-dir <path>` / `--plugin-url <url>` load a plugin for one session. Tracked in

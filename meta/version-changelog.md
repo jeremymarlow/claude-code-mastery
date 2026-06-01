@@ -26,12 +26,13 @@ Entry shape (newest first):
 
 ---
 
-## 2.1.158 → 2.1.159  (drift-ahead of the recorded 2.1.158; retrieved 2026-05-31 from https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md)
+## 2.1.158 → 2.1.159  (retrieved 2026-05-31 from https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md)
 
-The installed CLI moved to **2.1.159** while the course stays verified against **2.1.158** (decision
-P8-no-bump — no user-facing change warranted a bump). Recorded here ahead of a formal refresh:
+The course is now verified against **2.1.159** (refresh 2026-05-31, closing the L9 drift-ahead — the
+reference was generated at 2.1.159 during P8 while the recorded anchor was held at 2.1.158 to keep the
+upgrade trigger armed until the feature shipped).
 
-- **2.1.159** — Internal infrastructure improvements (no user-facing changes). _Course impact:_ none — the command/flag surface is unchanged (`check-version-drift`: command list unchanged), so `cli-reference.json` and every version-data value stand.
+- **2.1.159** — Internal infrastructure improvements (no user-facing changes). _Course impact:_ none — the command/flag surface is unchanged (`check-version-drift`: command list unchanged; `render-cli-reference --check` byte-stable), so `cli-reference.json` and every version-data value stand.
 
 ## 2.1.158  (baseline — first tracked version; retrieved 2026-05-31 from https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md)
 

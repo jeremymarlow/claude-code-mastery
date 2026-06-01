@@ -110,7 +110,7 @@ ran and reported success" is not verification — it's the thing you verify. Thi
 verify-don't-trust habit from [Operate safely](../03-operate-safely/unit.md), and it's the bridge to the trust
 question you'll face again when you delegate to *third-party* code (MCP servers) later in this stage.
 
-**Version currency.** Verified against Claude Code 2.1.158. The inline `--agents`
+**Version currency.** Verified against Claude Code 2.1.159. The inline `--agents`
 flag, the `--agent` selector, and the `agents` subcommand are `--help`-verified; the persistent
 on-disk location (e.g. `.claude/agents/<name>.md`) and its front-matter fields are a filesystem
 **convention** — confirm the exact path and format against `claude --help` and the docs before relying

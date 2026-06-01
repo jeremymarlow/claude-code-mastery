@@ -92,7 +92,7 @@ a way to come back to an open PR later: `--from-pr [value]` resumes a session li
 > your name on them. Let Claude write the first draft of all of it — then read the diff and make the
 > words match the code. An unread AI-drafted PR description is how false claims get your sign-off.
 
-**Version currency.** This unit was verified against Claude Code `2.1.158`. The
+**Version currency.** This unit was verified against Claude Code `2.1.159`. The
 version-specific surface is the `gh` integration and the `--from-pr` flag: `--from-pr [value]` resumes a session linked to a PR by number/URL; PR creation uses the `gh` CLI via the Bash tool. Confirm with
 `claude --help` and see [`meta/version-record.md`](../../../meta/version-record.md) if your version
 differs. `git` and `gh` themselves are external tools Claude drives through the Bash tool.

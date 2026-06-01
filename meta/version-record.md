@@ -10,6 +10,7 @@ own `verified_version` + `verified_date` + `provenance`.
 
 | Verified CLI version | Date | Method | By |
 |---|---|---|---|
+| 2.1.159 | 2026-05-31 | version refresh (L9 close): installed CLI advanced 2.1.158→2.1.159 — **internal infrastructure, no user-facing change** per the official CHANGELOG (see `version-changelog.md`). `cli-reference.json` re-introspected byte-stable + command list unchanged (`render-cli-reference --check`, `check-version-drift`), so every `{{vd:key}}` value stands; `_verified_version` bumped. Per-key `verified_version`/dates left at their genuine individual-verification — 2.1.159 added nothing to re-confirm. `ci` + `managed-settings` **remain `unverified`** (still no GitHub Actions / enterprise access) | version refresh |
 | 2.1.158 | 2026-05-30 | in-REPL `/help` + docs pass (L1 close): 5 of 7 `unverified` keys confirmed — `search-refs`, `context-cmds`, `checkpoint-rewind` (rewind = `/rewind`), `test-run`, `output-styles`; `ci` + `managed-settings` stay `unverified` (no GitHub Actions / enterprise account to verify against); also confirmed `review-cmds` slash names (`/code-review`, `/security-review`) in-REPL | L1 verification |
 | 2.1.158 | 2026-05-29 | `claude --version` + `claude --help` (P2 version-data seeding); 19/26 keys confirmed from CLI help, 7 marked `unverified` pending in-REPL `/help` / docs | spec build (P2) |
 

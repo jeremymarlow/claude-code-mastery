@@ -90,7 +90,7 @@ This is the same diff-reading reflex from your first unit, now on a change big e
 > for when a problem is hard enough to warrant it, not a default for routine work (it costs latency and
 > tokens). Know it exists; the lab's feature doesn't need it.
 
-**Version currency.** This unit was verified against Claude Code `2.1.158`; plan mode and
+**Version currency.** This unit was verified against Claude Code `2.1.159`; plan mode and
 the effort/thinking controls are version-specific surface — confirm with `claude --help` / `/help` and see
 [`meta/version-record.md`](../../../meta/version-record.md) if your version differs.
 

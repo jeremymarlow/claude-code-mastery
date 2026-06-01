@@ -109,7 +109,7 @@ depends on the model remembering will eventually be forgotten; a standard wired 
 Hooks are how you turn "we always run the checks / we never touch the generated file" from an intention
 into policy-as-code.
 
-**Version currency.** Verified against Claude Code 2.1.158. The hook **event-name
+**Version currency.** Verified against Claude Code 2.1.159. The hook **event-name
 enum** and the `settings.json` `{matcher, hooks:[{type, command}]}` structure are verified against the
 settings schema; the full event list is large and grows, so this unit teaches the common events and
 defers the authoritative enum and output-field details to the docs. Hooks run a command on a lifecycle event, configured in settings.json as `hooks.<Event>: [{matcher, hooks:[{type:"command", command}]}]`. Common events: PreToolUse (can block), PostToolUse, Stop, SessionStart, PreCompact. `--include-hook-events` streams them; `--bare` skips hooks. Tracked in

@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "_verified_version": "2.1.158",
-  "_verified_date": "2026-05-29",
+  "_verified_version": "2.1.159",
+  "_verified_date": "2026-05-31",
   "keys": {
     "cli-basics": {
       "kind": "feature",

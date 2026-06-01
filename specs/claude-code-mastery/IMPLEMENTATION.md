@@ -80,9 +80,10 @@ spec-driven) + **U4** (single-source version data, points at `cli-reference.json
 `cli-reference-supplement.yaml`, `course/reference/cli-reference.md`, `meta/version-changelog.md` +
 `tools/check-version-changelog`; `check-traceability` now **discovers requirements dynamically** from
 `requirements.md` (no hardcoded `R#` range, R13.AC5); maintainer-guide gained the "Adding a post-v1
-enhancement" playbook. **Note:** `cli-reference.json` is generated @ CLI **2.1.159** while
-`version-record.md` records **2.1.158** — a deliberate drift-ahead (decision P8-no-bump; ledger **L9**).
-Built on **`feat/cli-reference`**, now **merged & on `main`**. See `decisions.md` → "P8 — …" and `tasks/P8-cli-reference.md`.
+enhancement" playbook. **Note:** the P8 drift-ahead (`cli-reference.json` @ **2.1.159**, `version-record.md`
+@ 2.1.158) was closed by the **version refresh of 2026-05-31** — `version-record.md` now records **2.1.159**
+(internal-infra bump, surface byte-stable; ledger **L9** struck). Built on **`feat/cli-reference`**, now
+**merged & on `main`**. See `decisions.md` → "P8 — …" / L9 and `tasks/P8-cli-reference.md`.
 
 **v1 build is complete.** Remaining is **not release-blocking**: **L1** is now mostly closed — the
 interactive `/help`+docs pass (2026-05-30) verified 5 of the 7 keys; only `ci` (GitHub Action wrapper)

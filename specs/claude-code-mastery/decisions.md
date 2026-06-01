@@ -684,14 +684,17 @@ Committed in slices on `spec/quality-pass-phase`; `make check` green. _Tracked i
 `tasks/P7-quality-pass.md`; decisions P7-render/P7-garble/P7-index/P7-prose/P7-rollout.
 **Sole remaining (non-blocking) follow-up: T2** — optional unit-dir rename, deferred (P7-frontmatter/P7-T2).
 
-**L9 (P8, 2026-05-31) — version-record drift-ahead.** `meta/cli-reference.json` is generated @ CLI
-**2.1.159** while `meta/version-record.md` records the verified version as **2.1.158** — a deliberate,
-documented gap (decision P8-no-bump: 2.1.159 is "internal infrastructure, no user-facing changes," so a
-full re-verification bump is low-value churn now). `check-version-changelog` keys off the **recorded**
-version, so `make check` stays green; `version-changelog.md` carries both the 2.1.158 baseline and a real
-2.1.158 → 2.1.159 entry. _Resolve in:_ the next intentional refresh (re-verify the flagged keys against
-the installed CLI, bump `version-record.md`, regenerate via `render-cli-reference --all`). _Also tracked
-in:_ `meta/version-record.md`; decisions P8-no-bump, P8-execution.
+**~~L9~~ — ✅ CLOSED (version refresh, 2026-05-31).** The drift-ahead is resolved: `meta/version-record.md`
+now records **2.1.159**, matching the installed CLI and the P8-generated `cli-reference.json`. Confirmed no
+re-verification was owed — the official CHANGELOG reports 2.1.159 as **internal infrastructure, no
+user-facing change**, and `render-cli-reference --check` + `check-version-drift` confirm the command/flag
+surface is byte-stable, so every `{{vd:key}}` value stands. Bumped `_verified_version`→2.1.159 (the overall
+content stamp; propagated to the 12 unit `{{vd:_verified_version}}` callouts via `make render`) and
+regenerated the `version-data.json` twin; per-key `verified_version`/dates left at their genuine
+individual-verification (nothing new to re-confirm). `version-changelog.md` 2.1.158→2.1.159 entry reframed
+from drift-ahead to recorded. `make drift`/`check`/`check-version-changelog` all green; `ci` +
+`managed-settings` **remain `unverified`** (L1, still no GitHub Actions / enterprise access). _Tracked in:_
+`meta/version-record.md`; decisions P8-no-bump, P8-execution.
 
 **L10 (P8, 2026-05-31) — `cli-commands.snapshot` ⊂ `cli-reference.json`.** The older
 `meta/cli-commands.snapshot` (names-only command list, consumed by `check-version-drift`) is now a strict

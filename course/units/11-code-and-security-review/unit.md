@@ -107,7 +107,7 @@ from the finding. Any one alone leaves a hole.
 > repro, dismiss the false ones with a reason. An unread review pasted into a PR is the same anti-pattern
 > as an unread AI diff: authority you didn't earn.
 
-**Version currency.** This unit was verified against Claude Code `2.1.158`. The review
+**Version currency.** This unit was verified against Claude Code `2.1.159`. The review
 commands are the version-specific surface: `claude ultrareview` runs a cloud multi-agent review of the branch/PR; /code-review and /security-review are in-REPL skills. Confirm the exact names with `/help`
 and see [`meta/version-record.md`](../../../meta/version-record.md) if your version differs. The review
 *method* (triage findings, confirm with a test) is version-independent.

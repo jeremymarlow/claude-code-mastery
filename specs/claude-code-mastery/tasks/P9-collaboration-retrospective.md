@@ -18,7 +18,14 @@ each slice; commit in slices; **ask before push/merge** (CLAUDE.md working agree
 + the `model` field for attribution) · tooling to reuse: `tools/scan-secrets` (the R18.AC10 gate),
 `tools/render-units`/`render-index` (the committed-rendered + breadcrumb convention the case study
 follows) · the U13 subagent surface (`{{vd:subagents}}`, `--help`-verified @ **2.1.159**) for the agent
-format. Measured corpus size: ~1.05M tokens across 22 sessions (`design.md` §13.7).
+format. Measured corpus size: ~1.05M tokens across 22 sessions (`design.md` §13.7) — **now 23
+sessions** (the `2026-05-31_1908-r18-retrospective…` planning session was captured after this plan was
+drafted). **Corpus frozen at these 23** (reconfirm 2026-05-31): the evaluated set is whatever is in
+`log/transcripts/rendered/` today; P9's own build sessions are captured at close-out (9.9) and are
+deliberately **out** of the evaluated corpus — `check-evaluations` will flip back to `PEND` for them,
+which is informational, not a regression. **Refresh the stale figures (22→23 sessions, ≈242→253 leaves,
+"other 21"→"other 22" on opus) in `design.md` §13.1/§13.2/§13.7 and ledger L11 as part of 9.2** (which
+re-measures the corpus for the attribution map anyway).
 
 ## Ordering constraints (important)
 
@@ -65,8 +72,10 @@ format. Measured corpus size: ~1.05M tokens across 22 sessions (`design.md` §13
 - [ ] **Per-session model attribution**, derived from each `.jsonl`'s `model` field (R18.AC7, **not**
       assumed): record the map in `log/evaluations/README.md`. Known split — the foundational
       `2026-05-29_1845-requirements-and-design-spec-creation` ran on **`claude-sonnet-4-6`**; the other
-      21 on **`claude-opus-4-8`** (a session may switch models mid-stream — attribute from the file, flag
+      22 on **`claude-opus-4-8`** (a session may switch models mid-stream — attribute from the file, flag
       if mixed).
+- [ ] **Refresh the corpus figures** in `design.md` §13.1/§13.2/§13.7 + ledger L11 to the frozen 23
+      sessions (≈253 leaves; re-measured token total from this slice's pass), per the freeze decision.
 - [ ] `log/evaluations/README.md` — corpus orientation: the matrix, the grade vocabulary
       (**did well / did okay / could improve**, per party × axis + overall), the leaf front-matter schema
       (§13.4), the candor mandate, the model-attribution map, and the run protocol (rendered-primary,
@@ -89,7 +98,10 @@ format. Measured corpus size: ~1.05M tokens across 22 sessions (`design.md` §13
 - [ ] `make check` green.
 
 ### 9.4 Pilot one session (de-risk before the full run)  [R18.AC2/AC3/AC5]
-- [ ] Run `/evaluate-session` on **one** representative mid-size session; eyeball ≥3 leaves **incl. the
+- [ ] Run `/evaluate-session` on the pilot session **`2026-05-29_1845-requirements-and-design-spec-creation`**
+      (reconfirm 2026-05-31). Chosen deliberately: it is the **only `claude-sonnet-4-6` session**, so the
+      pilot also de-risks the **model-attribution path** (R18.AC7) and stress-tests the **communication**
+      personas (it is the heaviest human↔Claude design dialogue). Eyeball ≥3 leaves **incl. the
       control**: is the prose verbose & insight-led (not a grade dump)? are claims **cited to the
       transcript**? is it candid (neither flattering nor harsh)? does it cover **both parties**? does the
       control read materially different from the personas (the experiment is working)?
@@ -103,7 +115,9 @@ format. Measured corpus size: ~1.05M tokens across 22 sessions (`design.md` §13
       story, where reviewers **agreed/disagreed**, consolidated per-party/per-axis grades, both parties;
       cites the leaves.
 - [ ] `tools/scan-secrets log/evaluations/<session>/**` before committing each session's batch (R18.AC10),
-      human-reviewing any flag. Commit per session (cached = immutable once written).
+      human-reviewing any flag. **Commit per session** (cached = immutable once written) — **batch
+      commit go-ahead granted** (reconfirm 2026-05-31): commit each clean-scanned session batch
+      uninterrupted; **push remains a separate explicit ask** (CLAUDE.md).
 - [ ] Watch `tools/check-evaluations` (built in 9.2) as the **live progress readout** as sessions
       accrete; also note status in the 🔓 ledger.
 
@@ -164,6 +178,16 @@ format. Measured corpus size: ~1.05M tokens across 22 sessions (`design.md` §13
   reviewers from `.claude/agents/`); `PEND` in `make check`, hard-fail in `--strict`. Covers
   *completeness* — the gap `check-traceability` (which only checks R18 is *referenced*) leaves.
 - **Model attribution from the `.jsonl`** — never assumed (R18.AC7).
+
+**Reconfirmation calls (2026-05-31, before execution):**
+- **Corpus frozen at 23 sessions** — the set in `log/transcripts/rendered/` today, incl. the
+  `2026-05-31_1908-r18-retrospective…` planning session. P9's own build sessions (captured at 9.9) are
+  out of the evaluated corpus; `check-evaluations` returning to `PEND` for them afterward is expected.
+  Stale §13/L11 figures (22→23, ≈242→253, other-21→other-22) refreshed in 9.2.
+- **Batch commit go-ahead** — commit each clean-scanned session batch in 9.5 uninterrupted; **push is
+  still a separate explicit ask.**
+- **Pilot = `2026-05-29_1845-requirements-and-design-spec-creation`** — the only sonnet-4-6 session;
+  also de-risks model attribution + the communication personas.
 
 ## Traceability (this phase)
 

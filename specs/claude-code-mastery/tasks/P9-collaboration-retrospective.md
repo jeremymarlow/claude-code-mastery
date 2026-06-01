@@ -124,20 +124,31 @@ re-measures the corpus for the attribution map anyway).
       and notes the load-at-session-start caveat as a precondition. `_synthesis.md` is left to 9.5.
 - [x] `make check` green.
 
-### 9.4 Pilot one session (de-risk before the full run)  [R18.AC2/AC3/AC5]
-- [ ] Run `/evaluate-session` on the pilot session **`2026-05-29_1845-requirements-and-design-spec-creation`**
-      (reconfirm 2026-05-31). Chosen deliberately: it is the **only mixed-model session** (sonnet for
-      turns 1–2, then opus), so the pilot uniquely de-risks the **mixed model-attribution / flag path**
-      (R18.AC7), and it is the heaviest human↔Claude design dialogue, stress-testing the **communication**
-      personas. Eyeball ≥3 leaves **incl. the
-      control**: is the prose verbose & insight-led (not a grade dump)? are claims **cited to the
-      transcript**? is it candid (neither flattering nor harsh)? does it cover **both parties**? does the
-      control read materially different from the personas (the experiment is working)?
-- [ ] Adjust the mandate / persona bodies / leaf contract as needed, re-run, confirm. **This is a real
-      gate** — do not start the full pass until a pilot session reads well. Note adjustments for the
-      close-out decision entry.
+### 9.4 Pilot one session (de-risk before the full run)  [R18.AC2/AC3/AC5]  ✅ DONE — PASS (2026-05-31)
+- [x] Ran `/evaluate-session` on **`2026-05-29_1845-requirements-and-design-spec-creation`** — all 11
+      reviewers dispatched in parallel, 11 leaves persisted, scan-secrets clean, `check-evaluations` shows
+      the column complete (11/253). **Gate PASS on substance:** leaves are verbose, evidence-cited, both
+      parties, correct grade vocab; the **control reads materially different** (generalist, no sharp lens)
+      from the personas; **`devils-advocate` dissented** (`did-okay`) against the mild generosity of the
+      rest — the experiment is working; strong inter-reviewer agreement on concrete findings (batch
+      cancellations, redundant reads, the human's verbatim-ratification drift).
+- [x] **Adjustments applied** (the gate's "adjust as needed"): (a) tightened all 11 agent output
+      contracts to forbid preamble / surrounding ``` fence (reviewers added them despite "return only");
+      (b) **quoted `model_evaluated`** in the leaf template + README + all 11 pilot leaves — unquoted, the
+      "(mixed: …)" colon made the YAML front matter fail to parse (caught on render); (c) command step 4
+      strips preamble/fence on persist + step 5 uses `scan-secrets …/*.md` (file args, not a dir).
+      **Open finding:** `/evaluate-session`'s `$1` did **not** substitute when launched via the Skill tool
+      (rendered `…/.md`); verify the REPL `/evaluate-session <slug>` form substitutes before relying on it.
+- [x] **Cost reality (measured):** one session's 11 reviewers ≈ **1.1M tokens** → the full 23-session
+      pass projects to **~25M** (vs. the §13.7 ~13–17M estimate; reviewers read more thoroughly). Surfaced
+      to the maintainer.
 
-### 9.5 Leaf pass — all 23 sessions + per-session syntheses  [R18.AC2/AC6; §13.5]
+### 9.5 Leaf pass — all 23 sessions + per-session syntheses  [R18.AC2/AC6; §13.5]  ⏸ PAUSED (2026-05-31)
+> **Paused by the maintainer after the 9.4 pilot** to review usage/context budget and decide the
+> execution workflow — specifically whether to run **one fresh Claude session per evaluated session**
+> (recommended: keeps the orchestrator context clean; each persist adds ~20k, and the per-session
+> subagent spend is ~1.1M) vs. batching several per session. The foundational column (11 leaves) is the
+> only one built so far. Resume per the decision; the remaining 22 sessions are untouched.
 - [ ] For each session (incremental, **one at a time** — the maintainer's workflow): run
       `/evaluate-session`, caching the 11 leaves; then write `<session>/_synthesis.md` — the cross-cutting
       story, where reviewers **agreed/disagreed**, consolidated per-party/per-axis grades, both parties;

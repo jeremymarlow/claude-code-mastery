@@ -33,13 +33,14 @@ You evaluate **one** session. You are given its **slug**, the path to its **rend
 ## Output contract
 
 Return **exactly one Markdown document** — your evaluation — and nothing else. The orchestrator writes
-it verbatim to `log/evaluations/<slug>/control.md`. Use this shape:
+it verbatim to `log/evaluations/<slug>/control.md`. Return **only** this document — no preamble, no
+surrounding ``` fence, no trailing commentary; begin at the `---` front-matter line. Use this shape:
 
 ```
 ---
 session: <slug>
 reviewer: control
-model_evaluated: <the model you were told>
+model_evaluated: "<the model you were told>"   # quote it — may contain a colon for mixed sessions
 grades:                        # vocabulary: did-well | did-okay | could-improve
   human:   { process: <grade>, communication: <grade> }
   claude:  { process: <grade>, communication: <grade> }

@@ -57,7 +57,7 @@ Every leaf (`<session>/<reviewer>.md`) is YAML front matter over a verbose prose
 ---
 session: <slug>
 reviewer: <reviewer-id>
-model_evaluated: <model that produced Claude's side that session>
+model_evaluated: "<model that produced Claude's side that session>"   # quote (may contain a colon)
 grades:                        # did-well | did-okay | could-improve
   human:   { process: <grade>, communication: <grade> }
   claude:  { process: <grade>, communication: <grade> }

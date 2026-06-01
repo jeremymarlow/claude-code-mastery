@@ -56,16 +56,19 @@ Do each step, in order:
    behavior must come from its own (lens-less, mandate-less) definition, not from a different prompt.
 
 4. **Persist the leaves.** Create `log/evaluations/$1/` and write each reviewer's returned document
-   **verbatim** to `log/evaluations/$1/<reviewer>.md` (filename = the agent's name). Spot-check each
-   before saving:
+   to `log/evaluations/$1/<reviewer>.md` (filename = the agent's name). **Strip any preamble or
+   surrounding ``` fence the reviewer added — persist from the `---` front-matter line down.** Spot-check
+   each before saving:
    - front matter present and well-formed: `session: $1`, `reviewer:` equals the filename stem,
-     `model_evaluated:` equals the step-2 attribution, and the `grades` block uses **only**
+     `model_evaluated:` equals the step-2 attribution **and is quoted** (the value may contain a colon
+     for mixed-model sessions — unquoted, the YAML fails to parse), and the `grades` block uses **only**
      `did-well` / `did-okay` / `could-improve`;
    - the body is verbose and **evidence-cited** (insights with `_Evidence:_` locators), covers **both
      parties**, and is not a grade dump.
    If a returned eval is malformed or thin, **re-dispatch that one reviewer** rather than accept it.
 
-5. **Progress + safety (no commit here).** Run `tools/scan-secrets log/evaluations/$1/**` and
+5. **Progress + safety (no commit here).** Run `tools/scan-secrets log/evaluations/$1/*.md` (it takes
+   file arguments, not a directory) and
    human-review any flag before this batch is committed (R18.AC10). Then run `tools/check-evaluations`
    (or `make check`) for the matrix progress readout. **Do not commit** — committing the session's batch
    is the maintainer's call per `CLAUDE.md`; report the batch as ready for review.

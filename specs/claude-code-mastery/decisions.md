@@ -690,7 +690,24 @@ Locked calls (the deliberation — do not re-litigate):
 
 Gates: requirements `51d27fe` (R18+R19); R18.AC6 matrix amendment `82e4a8b`; design §13 `ef7fc05`; the
 `check-evaluations` adoption + `tasks/P9` + this entry committed at close-out. Build = `tasks/P9`
-(9.1–9.9), not yet executed.
+(9.1–9.9), executed in slices (9.1–9.4 done; 9.5 paused).
+
+**P9-pilot (2026-05-31) — the 9.4 pilot passed; the full leaf pass is paused for a budget/workflow call.**
+Ran `/evaluate-session` over the foundational session; all 11 reviewers returned verbose, evidence-cited,
+both-parties leaves (persisted, scan clean, column complete). The experiment is working: the **control**
+(no lens, no candor mandate) reads as a generalist summary while the personas bring distinct angles, and
+**`devils-advocate`** alone dissented (`did-okay`) against the panel's mild generosity — a built-in
+calibration check. Strong inter-reviewer agreement on concrete findings (repeated parallel-batch
+cancellations, redundant reads, the human's verbatim-ratification drift past R1) is exactly the material
+the per-session synthesis will consolidate. **Adjustments made at the gate:** (1) all 11 agent output
+contracts now forbid preamble / a surrounding ``` fence (reviewers added them despite "return only");
+(2) **`model_evaluated` is quoted** in the template/README/leaves — the mixed-session value
+`claude-opus-4-8 (mixed: …)` contains a colon that breaks unquoted YAML front matter (caught on render);
+(3) the command strips preamble/fence on persist and scans secrets with a `*.md` file glob. **Open:**
+`/evaluate-session`'s `$1` didn't substitute when launched via the Skill tool — verify the REPL form.
+**Measured cost:** ~1.1M tokens for one session's 11 reviewers → **~25M** projected for the full 23 (above
+the §13.7 ~13–17M estimate). The maintainer **paused 9.5** to weigh that and decide the execution cadence
+(leaning: one fresh Claude session per evaluated session, to keep the orchestrator context clean).
 
 ## Open loops & deferrals 🔓 (canonical ledger)
 
@@ -795,12 +812,15 @@ conventions + README (with the **verified** model-attribution map — corrected:
 foundational mixed/opus-dominant, the assumed "sonnet" was wrong → `P9-model-attr` corrected); the
 discovery-based **`tools/check-evaluations`** gate built + wired into `make check`/`check-strict`
 (PEND→strict-fail, verified); §13/L11 corpus figures refreshed to the frozen 23 sessions / ~253 leaves
-/ ~1.11M tokens. **9.3 ✅ DONE** (2026-05-31): leaf format pinned (single-sourced in the agent output
-contracts + README schema); `.claude/commands/evaluate-session.md` authored — fans out all 11 reviewers
-in parallel over one session, verifies attribution from the raw `.message.model` field, persists the
-returned leaves (read-only subagents don't write), no auto-commit. The rest (P9 9.4–9.9: the pilot, the
-~253-leaf matrix corpus, `/evaluate-global` + syntheses, the case study, U13/§10 dogfood wiring) is
-**not yet executed**.
+/ ~1.11M tokens. **9.3 ✅ DONE** (2026-05-31): leaf format pinned + `/evaluate-session` command authored.
+**9.4 ✅ DONE — pilot PASS** (2026-05-31): ran the panel over the foundational session — 11 leaves
+persisted (column complete, 11/253), scan clean; substance strong, the control reads differently from the
+personas, `devils-advocate` dissents (experiment working). Adjustments applied (output-contract no
+preamble/fence; **`model_evaluated` quoted** — the mixed-session colon broke YAML; command strip + scan
+glob). Measured cost ≈ **1.1M tokens/session → ~25M** for the full pass. **9.5 ⏸ PAUSED** by the
+maintainer to review budget + decide the per-session workflow (one fresh session per evaluated session).
+The rest (P9 9.5–9.9: the remaining 22 sessions' leaves + syntheses, `/evaluate-global`, the case study,
+U13/§10 dogfood wiring) is **not yet executed**. See decision **P9-pilot**.
 R18 shows `PEND` in `make check` (non-failing) until the case study + U13/§10 references land;
 `make check-strict` will fail on R18 (+ an incomplete corpus) until then. _Resolve in:_ P9 execution.
 _Also tracked in:_ `tasks/P9-collaboration-retrospective.md`; decisions → "P9 …".

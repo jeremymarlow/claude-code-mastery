@@ -53,9 +53,9 @@ version-token rendering gap (new `tools/render-units` committed-rendered pattern
 navigation). **No new requirements** (traces to R5/R6/R9/R12/R15). **All 16 units** migrated to
 `unit.src.md` + de-coded; capstone files + `stuck.md` swept; convention docs updated for the split; L2
 reading-time bumps (U12/U13/U14) applied; per-unit render-and-eyeball fixed the `{{vd:*}}` garbles.
-Built in slices on branch **`spec/quality-pass-phase`**, now **merged & pushed to `main`**. **L8 struck**; the
-only follow-up is **T2** (optional unit-dir rename), deferred — non-blocking. See `decisions.md` →
-"P7 — Quality pass" and `tasks/P7-quality-pass.md`.
+Built in slices on branch **`spec/quality-pass-phase`**, now **merged & pushed to `main`**. **L8 struck**; its
+lone optional follow-up **T2** (unit-dir rename) is now **closed as won't-do** (2026-05-31, P7-T2-close) —
+**P7 has no outstanding items.** See `decisions.md` → "P7 — Quality pass" and `tasks/P7-quality-pass.md`.
 
 **Closeout amendment (2026-05-31):** added a session-transcript capture workflow
 (`tools/render-transcript`, `tools/scan-secrets`, the `capture-session` skill) and back-filled the 14

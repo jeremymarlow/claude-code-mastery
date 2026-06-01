@@ -6,7 +6,7 @@
 P4 (Codebases) ✅, P5 (Units) ✅, **P6 (Finalization) ✅**. `make check-strict` green — the v1
 Definition-of-Done mechanical gate (L3) passes. **P7 (Quality pass) ✅ COMPLETE (2026-05-31)** —
 post-v1 learner-experience remediation; no new requirements; all 16 units committed-rendered + de-coded,
-capstone/stuck swept, convention docs updated (L8 closed; T2 dir-rename deferred). **P8 (CLI reference +
+capstone/stuck swept, convention docs updated (L8 closed; T2 dir-rename closed as won't-do). **P8 (CLI reference +
 changelog digest) ✅ COMPLETE (2026-05-31)** — two new requirements (R16/R17) built spec-first on
 `feat/cli-reference`; `make check` green. Remaining non-release-blocking (**L1** in-REPL version-key
 refresh; **L9** version-record drift-ahead at 2.1.158 vs artifact 2.1.159; P8 merge to `main`). Open
@@ -138,7 +138,7 @@ prose + a version-token rendering gap. **No new requirements** (traces to R5/R6/
 - [x] Roll out U2–U16 (render-migrate + prose; per-unit render-and-eyeball fixed the `{{vd:*}}` garbles) [R5/R6/R15]
 - [x] Cross-cutting prose sweep (capstone, stuck); reading-time recompute (L2, U12 8→10/U13 8→12/U14 8→11) [R5.AC6]
 - [x] Convention docs for the `unit.src.md` split (maintainer-guide, templates, `close-unit`); final green + clean commits
-- [x] Close-out: **L8 struck**; `IMPLEMENTATION.md` §3 + this index marked complete. (T2 dir-rename deferred — non-blocking.)
+- [x] Close-out: **L8 struck**; `IMPLEMENTATION.md` §3 + this index marked complete. (T2 dir-rename **closed as won't-do** 2026-05-31, P7-T2-close.)
 
 ### P8 — Version-resilience enhancements: CLI reference + changelog digest ✅ **COMPLETE (2026-05-31)**  → [`tasks/P8-cli-reference.md`](./tasks/P8-cli-reference.md)
 Post-v1, non-release-blocking. **Two new requirements** (R16 exhaustive generated CLI reference; R17

@@ -8,7 +8,8 @@ prose ergonomics and one version-token rendering gap. **Polish + gap-closure —
 units** migrated to `unit.src.md` + rendered and prose-de-coded; the cross-cutting sweep (capstone +
 `stuck.md`) and the convention docs are done; L2 reading-time bumps applied; per-unit render-and-eyeball
 fixed the version-token garbles. `make check` green; committed in slices on `spec/quality-pass-phase`.
-No new requirements. **Sole remaining follow-up: T2** (optional unit-dir rename), deferred — non-blocking.
+No new requirements. **T2** (optional unit-dir rename) — the lone remaining follow-up — is now **closed
+as won't-do** (2026-05-31, decision P7-T2-close); P7 has **no outstanding items**.
 
 **Inputs:** the in-session 8-lens findings report · existing requirements R5/R6 (unit altitude &
 template), R9.AC2 (navigation), R12.AC2 (version-data single-source/"build step"), R15 (graceful
@@ -39,8 +40,9 @@ degradation) · `meta/version-data.yaml` · the existing generated-artifact patt
 - **M5** navigation: README linked only the bare units dir — **fixed** via generated
   `course/units/README.md` index (`render-index`). [R9.AC2]
 - **T1** U1 title was the lone non-conforming title — **fixed**. Others already conform. [R6]
-- **T2** unit dir slug `01-onboarding-first-win` ≠ title — **deferred/optional** (slugs are short
-  identifiers; the index links titles directly; meta is slug-agnostic). [non-blocking]
+- **T2** unit dir slug `01-onboarding-first-win` ≠ title — **closed as won't-do** (2026-05-31,
+  P7-T2-close): cosmetic, with real path/link/history churn for zero functional gain (slugs are short
+  stable identifiers; the index links titles directly; meta is slug-agnostic). [non-blocking]
 - **L1** density in some `Concept` passages — light editorial relief, no reading-time bloat. [R5]
 - **L2** `reading_time_min` under-declared on U12 (8→~10), U13 (8→~12), U14 (8→~11) — recompute. [R5.AC6]
 - **L3** `CV` unexpanded on first use per unit — expand once, then the code is fine. [R6]
@@ -92,7 +94,8 @@ Per-unit procedure (render-and-read, not a mechanical `git mv`):
 
 ### 7.9 Close-out — ✅ DONE
 - [x] `make check` green; reading times recomputed; clean commits on `spec/quality-pass-phase`; **L8
-      struck** in `decisions.md`; `tasks.md` P7 + `IMPLEMENTATION.md` §3 marked complete. T2 deferred.
+      struck** in `decisions.md`; `tasks.md` P7 + `IMPLEMENTATION.md` §3 marked complete. T2 **closed as
+      won't-do** (2026-05-31, P7-T2-close).
 
 ### 7.10 Closeout amendment — session-transcript corpus ✅ (post-close, 2026-05-31)
 - [x] Added transcript-capture tooling (`tools/render-transcript`, `tools/scan-secrets`, the
@@ -132,7 +135,8 @@ Legend: ✅ done · 🔗 link-anchors+advances auto-de-coded (script) · ⬜ pro
   schema-bound and consumed by the checks; not humanized. No "At a glance" block.
 - **Cross-ref style: title-only** — "the **Operate safely** unit", never bare `U3`.
 - **Committed-rendered units** — `unit.src.md` authored, `unit.md` generated+committed, drift-gated.
-- **T2 dir rename deferred** — optional; `01-setup-and-first-change` if ever wanted.
+- **T2 dir rename — closed as won't-do** (2026-05-31, P7-T2-close): cosmetic, with real
+  path/link/history churn for zero functional gain. The slugs stay as-is.
 
 Full rationale: `decisions.md` → "P7 — Quality pass".
 

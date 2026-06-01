@@ -424,6 +424,8 @@ the machine/traceability layer, so stripping them from prose costs nothing (trac
 humanizing/relocating). Unit dir rename (T2) **deferred/optional** — slugs are short identifiers, the
 index links titles, and meta is slug-agnostic (`use-case-catalog.yaml` keys on `U1`).
 **Why:** see P7-render; T2 is cosmetic once the index exists.
+**Update (2026-05-31): T2 closed as won't-do** — see decision **P7-T2-close** below; the rename is
+no longer wanted.
 
 **P7-process ✅** — This phase was **retro-fitted into the spec methodology**: the freelance
 `quality-pass.md` tracker was folded into the canonical `tasks/P7-quality-pass.md` + this section +
@@ -442,8 +444,8 @@ garbles — sentence-valued / backtick-leading `{{vd:*}}` values (e.g. `test-run
 redundant parenthetical pointers dropped — and the L2 reading-time bumps (U12 8→10, U13 8→12, U14 8→11)
 landed with the index regenerated. **Kept deliberately:** the rubric's load-bearing `[Cn]`/`[CV]` tags,
 U10's *teaching* R-IDs, and case-study's descriptive `R1–R15`. **L8 struck.** **T2** (unit-dir rename)
-stays an optional, non-blocking follow-up (decision P7-frontmatter/P7-T2; reaffirmed with the user at
-close-out). `make check` green.
+was the sole optional follow-up — now **closed as won't-do** (2026-05-31, decision P7-T2-close).
+`make check` green.
 
 **P7-amendment ✅ (post-close, 2026-05-31) — session-transcript corpus.** After P7 closed, added a
 transcript-capture workflow (repo infrastructure, not course content) so build sessions are archived
@@ -626,6 +628,18 @@ already the regenerated single source of the command surface (refreshed by `rend
 the same `parse_help` introspection. `make drift` / `make check` green. _Tracked in:_ design §5/§12.7;
 `tasks/P3-tooling.md` §3.5, `tasks/P8-cli-reference.md` §8.9; ledger L10 struck.
 
+**P7-T2-close ✅ (2026-05-31, decided with user) — T2 (unit-dir rename) closed as won't-do.** The lone
+remaining P7 follow-up — renaming unit dirs so the slug matches the title (e.g.
+`01-onboarding-first-win` → `01-setup-and-first-change`) — is **no longer wanted**, not merely deferred.
+**Why:** it was always cosmetic (P7-frontmatter/P7-T2: slugs are short stable identifiers, the index
+links titles, and `meta/*` keys on `U1` not the slug), and the rename now carries real churn against
+**zero** functional gain — it would rewrite paths referenced by `course/units/README.md`, the
+committed-rendered `unit.md`/`unit.src.md` pairs, `check-links`, and the in-session `check-on-edit`
+hook's `course/` glob, plus muddy `git log --follow` history on every unit — to change a string a learner
+never types. Declining it removes the project's last open follow-up; the P7 quality pass is now fully
+closed with no outstanding items. _Tracked in:_ `tasks/P7-quality-pass.md`; `tasks.md` P7 row;
+`IMPLEMENTATION.md` §3.
+
 ## R8 traceability restored & strict-confirm guard (2026-05-31)
 
 **Regression found & fixed.** `make check-strict` had been silently red since P7 (`cfd04ec`, slice 7.7):
@@ -717,7 +731,9 @@ M4/M5, drift-gated in `make check`; **all 16 units** de-coded + migrated (7.6); 
 U13 8→12, U14 8→11). **Kept:** rubric `[Cn]`/`[CV]` tags, U10 teaching R-IDs, case-study `R1–R15`.
 Committed in slices on `spec/quality-pass-phase`; `make check` green. _Tracked in:_
 `tasks/P7-quality-pass.md`; decisions P7-render/P7-garble/P7-index/P7-prose/P7-rollout.
-**Sole remaining (non-blocking) follow-up: T2** — optional unit-dir rename, deferred (P7-frontmatter/P7-T2).
+**~~T2~~ — ✅ CLOSED as won't-do (2026-05-31).** The optional unit-dir rename is no longer wanted —
+cosmetic, with real path/link/history churn for zero functional gain. _Tracked in:_ decision
+**P7-T2-close** above. **This was the project's last open follow-up; no deferrals remain except L1.**
 
 **~~L9~~ — ✅ CLOSED (version refresh, 2026-05-31).** The drift-ahead is resolved: `meta/version-record.md`
 now records **2.1.159**, matching the installed CLI and the P8-generated `cli-reference.json`. Confirmed no

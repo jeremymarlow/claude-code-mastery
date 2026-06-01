@@ -472,6 +472,8 @@ it. The R13.AC5 check automates the inverse (every requirement referenced; every
 | R15 ✅ | §9 | CommonMark/a11y/portability conventions |
 | R16 ✅ | §12, §8 | `render-cli-reference`, `cli-reference.json` + supplement + schema, `course/reference/` page |
 | R17 ✅ | §12, §8 | `version-changelog.md` + `check-version-changelog`, refresh-process step |
+| R18 🟨 | §13 | persona panel (`.claude/agents/`), `log/evaluations/**` (matrix: leaf + per-session + per-reviewer globals + overall corner), `course/case-studies/collaboration-retrospective.md`; referenced by U13 + §10 |
+| R19 ⏳ | _design deferred_ | breadcrumb nav — approved requirement; design pending (deferred by user until R18 ships) |
 
 ## 12. Exhaustive CLI reference & version-change digest  → produces `meta/cli-reference.*`, `course/reference/cli-reference.md`, `meta/version-changelog.md`  [R16, R17]  ✅ AUTHORED (2026-05-31)
 
@@ -668,3 +670,218 @@ course/reference/cli-reference.md    # generated learner-facing page (R16.AC2)
 tools/render-cli-reference           # generate | render | all | check (§12.1)
 tools/check-version-changelog        # digest-entry-exists check (R17.AC5)
 ```
+
+## 13. Collaboration retrospective  → produces `.claude/agents/*`, `log/evaluations/**`, `course/case-studies/collaboration-retrospective.md`  [R18]  🟨 PROPOSED (2026-05-31)
+
+A multi-perspective, self-evaluating retrospective of how this course was actually built with Claude
+Code: a panel of **subjective persona subagents** (plus a no-persona control) reads the real session transcripts and renders
+verbose, evidence-cited, candid insights — what the **human author** and **Claude** each did well, did
+okay on, and could improve, across **process/workflow** and **human-language communication** (R18.AC1).
+It is **authentic dogfooding** (R14): the reviewers are real `.claude/agents/` the repo runs, and the
+build itself follows the post-v1 enhancement playbook (R13.AC3).
+
+### 13.1 Two deliverables, the evaluation matrix (R18.AC6/AC8)
+
+| Deliverable | Audience | Lives in |
+|---|---|---|
+| **Evaluation corpus** (the leaf evals + syntheses) | maintainer / internal record | `log/evaluations/**` |
+| **Case study** (derived narrative) | learner (capstone exemplar) | `course/case-studies/collaboration-retrospective.md` |
+
+The Tier-1 evals form a **22-session × 11-reviewer matrix**, summarized along both margins and then to a
+bottom line (R18.AC6); each artifact is derived from and traceable to the ones beneath it:
+
+```
+LEAF (cells)    log/evaluations/<session>/<reviewer>.md   — CACHED, immutable once written
+MARGIN · rows   log/evaluations/<session>/_synthesis.md   — all reviewers × one session  (per-session synthesis)
+MARGIN · cols   log/evaluations/_global/<reviewer>.md     — one reviewer × all sessions  (each synthesizes its OWN 22 leaves)
+CORNER          log/evaluations/_global/_overall.md       — blends the per-reviewer globals → bottom line
+                  └─► course/case-studies/collaboration-retrospective.md   (learner-facing render of the corner)
+```
+
+`<session>` = the transcript filename stem (e.g. `2026-05-30_0816-p4-sample-codebases`); `<reviewer>` =
+the persona id (e.g. `process-architect`). "Cached" = a leaf eval is written once, committed, and
+treated as immutable evidence; it is **not** regenerated (re-running a persona is a new, dated file, not
+an overwrite). Every synthesis (both margins + the corner) carries verbose cross-cutting insights **and**
+roll-up grades (R18.AC2/AC3/AC6).
+
+### 13.2 The persona panel (R18.AC4) — proposed
+
+Eleven reviewers, each a real `.claude/agents/<id>.md`: **ten personas** that each span **both axes** and
+judge **both parties** through a distinct, opinionated lens, plus **one no-persona control** (below). The
+cut is balanced across the two R18 axes — **5 process · 3 communication · 2 cross-cutting** — and merges
+the redundant overlaps. Remaining deliberate overlaps (e.g. verification vs. safety) are a feature: two
+perspectives on the same moment make the Tier-2 synthesis richer.
+
+| Reviewer id | Persona | Axis | Primary lens (what it praises / faults) |
+|---|---|---|---|
+| `process-architect` | The Process Architect | process | Spec-driven discipline: planning before building, holding gates, state hygiene (decisions/ledger/§3 upkeep), slicing |
+| `context-engineer` | The Context Engineer | process | Memory (`CLAUDE.md`) & context-window management: priming, slicing per unit, avoiding context dumps, cross-session continuity |
+| `verification-hawk` | The Verification Hawk | process | Verify-don't-trust: checking claims, reading diffs, the no-version-from-memory rule, **verifying before acting**, honest uncertainty |
+| `tooling-economist` | The Tooling Economist | process | CLI/feature fluency **and** economy: right tool at the right time (subagents, hooks, plan mode, headless, MCP), model fit (opus-vs-sonnet), wasted turns / rework / tool-call batching, missed opportunities |
+| `safety-steward` | The Safety Steward | process | Responsible use: approval discipline (no commit/push without go-ahead), blast radius, untrusted input, reversibility |
+| `intent-alignment` | The Alignment Reviewer | communication | Converging on **what** to build: ambiguity, the clarifying-question-vs-assumption dynamic, requirement elicitation, scope agreement, convergence speed |
+| `dialogue-clarity` | The Communication Coach | communication | Clarity of the **exchange, both directions** — the human's instruction quality (scope, decisiveness, feedback) **and** Claude's replies (tradeoffs surfaced, concision/structure, honest failure reporting, **no sycophancy**) |
+| `collaboration-partner` | The Pair-Programming Partner | communication | The working relationship: autonomy calibration (delegate vs. over-ask), the correction loop, trust calibration, momentum vs. derailment |
+| `outcome-auditor` | The Outcome Auditor | cross-cutting | The work **product**, not just the process: did the spec/code/prose come out correct and sound; bugs or sloppy artifacts that slipped through |
+| `devils-advocate` | The Devil's Advocate | cross-cutting | Contrarian stress-test: challenges rosy reads, hunts what the other reviewers missed, guards against over-generous grading |
+| `control` | _(no persona — baseline)_ | — | **Control instrument.** Default Claude given **only** the evaluation task + the output contract — **no persona lens, no candor mandate** — to measure the marginal effect of the persona scaffolding on the other 10 |
+
+**On the control (R18.AC5 scope note).** The control is a deliberate baseline: it follows the §13.4
+output contract (so it is comparable) but intentionally **omits** the persona lens and the
+subjective/candor mandate of R18.AC5. R18.AC5's "every reviewer" is read as the **ten persona
+reviewers**; the control sits alongside the panel as a baseline instrument, not a persona reviewer. This
+scoped exception is recorded in `decisions.md` (it does not require amending the approved R18 — but AC5
+can be tightened to "every persona reviewer" if preferred). Corpus scale: **11 reviewers × 22 sessions ≈
+242 leaf evals**, accreted one session at a time (the maintainer's stated workflow).
+
+This panel **retires the gap noted in decision P5-U13-example** (the repo had no authentic subagent to
+show in U13); it now does, so U13 references the panel as its real worked example (R14.AC2, R18.AC4).
+
+### 13.3 Agent definition format (R18.AC4/AC5; R12.AC3)
+
+Each reviewer is a file `.claude/agents/<id>.md`: front matter (`description` — *when the orchestrator
+dispatches it*; `tools: [Read, Grep, Glob]` — **read-only**, blast-radius fenced per U13/U3; a `model`),
+and a body carrying the **shared reviewer mandate** + its **persona lens**. The shared mandate (single-
+sourced wording, repeated per agent since agents don't `include`):
+
+- **Subjective and candid (R18.AC5).** Render a real opinion through your lens. Do **not** flatter,
+  soften to please, or discourage. Praise what genuinely worked; name what genuinely didn't. Accuracy
+  and thoroughness over diplomacy.
+- **Evidence-grounded (R18.AC5).** Every insight cites transcript evidence — the session slug + a
+  locator (turn heading or a short quoted snippet). Never assert from memory; if the transcript doesn't
+  show it, don't claim it.
+- **Both parties, both directions.** Assess the human author **and** Claude; cover strengths **and**
+  weaknesses (no one-sided reviews).
+- **Output contract** (§13.4): verbose, significance-ordered insights + a compact grade block.
+
+> **Version-currency (R12.AC3).** The `.claude/agents/<name>.md` path and front-matter fields are a
+> filesystem **convention** (per U13 / `{{vd:subagents}}`); confirm the exact schema against
+> `claude --help` and the docs at build time rather than authoring it from memory.
+
+### 13.4 What a reviewer reads, and the leaf-eval format
+
+**Evidence source.** Primary = the **rendered** transcript `log/transcripts/rendered/<session>.md` (the
+full turn-by-turn human↔Claude exchange, readable and citable by heading). A reviewer **may** consult
+the raw `log/transcripts/raw/<session>.jsonl` for a specific turn when the rendered view is insufficient
+(thinking is collapsed and tool output truncated to 40 lines in the render). Each dispatch is told the
+session's **verified model attribution** (R18.AC7), read from the raw `.jsonl` `model` field — not
+assumed (`claude-sonnet-4-6` for the foundational `2026-05-29_1845…` session, `claude-opus-4-8` for the
+rest).
+
+**Leaf file = `log/evaluations/<session>/<reviewer>.md`.** A small machine-parseable YAML front matter
+(for Tier-2/3 aggregation) over a verbose prose body:
+
+```
+---
+session: 2026-05-30_0816-p4-sample-codebases
+reviewer: process-architect
+model_evaluated: claude-opus-4-8
+grades:                      # did-well | did-okay | could-improve  (R18.AC3)
+  human:   { process: did-well, communication: did-okay }
+  claude:  { process: did-okay, communication: did-well }
+  overall: did-okay
+---
+## Insights (ordered by significance)        # the substance — R18.AC2
+1. **<headline>** — <verbose reasoning>. _Evidence:_ <session locator / quote>.  [human|claude] [process|comms]
+2. ...
+## What worked / what didn't  (both parties)
+## Bottom line
+```
+
+The grade block is a scannable **summary** that never replaces the prose (R18.AC3). The body is
+free-length: as long as the evidence warrants.
+
+### 13.5 Producing each tier
+
+- **Leaf (cells).** The main session (orchestrator) dispatches each panel agent on one session;
+  the agent returns its evaluation; the orchestrator **writes** the leaf file (subagents return a
+  result, they don't write/commit — U13). The human drives this **one session at a time** (their stated
+  workflow), so the corpus accretes per session and stays reviewable.
+- **Per-session synthesis (reviewer-axis margin).** Once a session's reviewers all exist, consolidate
+  them into `_synthesis.md`: the cross-cutting story, where reviewers **agreed and disagreed**,
+  consolidated per-party/per-axis grades, both parties. Cites the leaves (traceable, R18.AC6).
+- **Per-reviewer global (session-axis margin).** Once **all** sessions' leaves exist, **each reviewer is
+  re-dispatched over its own ~22 leaves** to write `_global/<reviewer>.md`: the longitudinal arc in *its*
+  lens (did this dimension improve across the sessions? recurring strengths/failure modes per party; the
+  sonnet-vs-opus caveat). Reading only its own leaves (~55k tokens) keeps each global **deep and cheap**,
+  and the lens voice survives to the global level instead of being averaged away. The control does the
+  same over its own leaves (extending the baseline experiment to the longitudinal view).
+- **Overall global (corner).** A final pass blends the per-reviewer globals (+ control) into
+  `_global/_overall.md`: the bottom line and the top did-well/okay/could-improve themes across the whole
+  project. The learner-facing `course/case-studies/collaboration-retrospective.md` is the **teaching
+  render** of this corner (R18.AC8), cross-referenced as capstone-exemplar material (R8.AC2, R14.AC4)
+  alongside the existing build case study.
+
+### 13.6 Orchestration (dogfood) — adopted
+
+A thin **`/evaluate-session <session-slug>`** command (`.claude/commands/`) dispatches the panel
+over one session and writes the eleven leaf files — an authentic R14 dogfood (commands, U12) that also
+exercises subagents (U13) and parallel delegation (U16). The command also records the session's verified
+model attribution (§13.4) so each reviewer is told which model it is judging. A sibling
+**`/evaluate-global`** command runs the margin/corner passes once every session's leaves exist: it
+re-dispatches **each reviewer over its own ~22 leaves** to write `_global/<reviewer>.md`, then a final
+pass writes the corner `_global/_overall.md`. Both commands dispatch reviewers **in parallel** (U16) for
+wall-clock — not token — savings.
+
+### 13.7 Cost & feasibility (grounded, 2026-05-31)
+
+Measured against the actual `log/transcripts/rendered/` corpus (not estimated):
+
+- Rendered corpus ≈ **1.05M tokens** across 22 sessions; mean ≈ 48k/session; range ≈ 14k (smallest) to
+  ≈ 127k (the P7 closeout session, a 506 KB outlier). (token ≈ bytes/4 — rough, and a likely **floor**
+  for markdown + code + tool output.)
+- **Subagents do not share the orchestrator's context** — each runs in its own fresh window — so a
+  session transcript is read once **per reviewer**. Leaf tier, whole corpus: 11 × 1.05M ≈ **11.5M
+  tokens** of transcript input; with per-subagent overhead and the two synthesis tiers, the full
+  one-time pass is on the order of **~13–16M tokens**.
+- **Fit is not a constraint:** the largest transcript (≈127k) is **12.7%** of a single 1M window — ample
+  headroom. The cost here is *spend*, not overflow.
+- **Never one big run:** the pass is driven session-by-session, so each invocation is one session's
+  panel (≈159k–1.4M tokens) — an ordinary run.
+- **The global tier is cheap:** each per-reviewer global reads only its own ~22 leaves (~55k tokens) →
+  ~12 × 55k ≈ **~0.7M tokens** for the whole column margin; the corner blends eleven short globals
+  (negligible). So the per-reviewer-global structure (§13.5) adds only ~5% to the pass — well worth the
+  preserved lens depth, and far cheaper than a single agent re-reading all 242 leaves (~605k in one
+  shallow-blending context).
+
+**Independence vs. economy — a deliberate call.** A single agent reading each transcript once and
+emitting all eleven evals would be ~11× cheaper, but the personas would anchor on one another and the
+**control would see the persona evals**, destroying both reviewer independence and the control
+experiment (§13.2). We therefore **keep one fenced subagent per reviewer** and accept the ~11× read cost
+as the price of the rigor R18 is built on. Two economy guards are load-bearing: **rendered-primary,
+raw-on-demand** (§13.4 — reading raw `.jsonl` whole would be ~8.9M × 11, untenable) and **read-only
+fenced agents** (no wasted tool churn). Reviewers may be dispatched **in parallel** per session (U16) for
+wall-clock — not token — savings.
+
+### 13.8 Honesty, provenance, safety & enforcement (R18.AC5/AC9/AC10)
+
+- **Provenance.** Insights cite the transcript; the model attribution is read from the `.jsonl`, not
+  assumed. References to `log/transcripts/` stay accurate (R14.AC6, `check-links`).
+- **Secrets.** The transcripts already passed the capture workflow's secret-scan gate; the new eval
+  files quote already-scanned material — run `tools/scan-secrets` over `log/evaluations/**` before each
+  commit anyway (R18.AC10), human-reviewing any flag.
+- **Enforcement, generalized (R18.AC9; playbook step 5).** `check-traceability` already discovers `R18`
+  from its `### R18` heading and requires it be referenced by a delivered artifact — satisfied by the
+  case study, U13's panel reference, and the §10 dogfooding rows. **No bespoke completeness check is
+  added** (decided): corpus completeness (every session has its panel + `_synthesis.md`; the per-reviewer globals +
+  `_global/_overall.md` once all are done) is tracked by hand via the 🔓 ledger rather than a new tool,
+  keeping the check suite lean.
+
+### 13.9 Repo additions (§9) and dogfooding/traceability updates
+
+```
+.claude/agents/<11 reviewers>.md                      # 10 persona reviewers + 1 no-persona control (R18.AC4)
+.claude/commands/evaluate-session.md                  # leaf-tier orchestration dogfood (§13.6)
+.claude/commands/evaluate-global.md                   # margin/corner orchestration dogfood (§13.6)
+log/evaluations/<session>/<reviewer>.md               # leaf evals — cells (cached)
+log/evaluations/<session>/_synthesis.md               # per-session synthesis (reviewer-axis margin)
+log/evaluations/_global/<reviewer>.md                 # per-reviewer global (session-axis margin)
+log/evaluations/_global/_overall.md                   # overall global (corner) -> case study
+log/evaluations/README.md                             # corpus orientation + protocol
+course/case-studies/collaboration-retrospective.md    # learner-facing render of the corner (R18.AC8)
+```
+
+§10 dogfooding inventory gains: **persona panel** (`.claude/agents/`) → referenced by **U13**
+(R14.AC2, R18.AC4); **collaboration retrospective case study** → capstone exemplar (R8.AC2, R14.AC4).
+`meta/conventions.md` gains the `log/evaluations/` layout + `<session>/<reviewer>.md` naming (R13.AC1).
+Build plan: `tasks/P9-collaboration-retrospective.md`.

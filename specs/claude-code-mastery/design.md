@@ -862,10 +862,16 @@ wall-clock — not token — savings.
   commit anyway (R18.AC10), human-reviewing any flag.
 - **Enforcement, generalized (R18.AC9; playbook step 5).** `check-traceability` already discovers `R18`
   from its `### R18` heading and requires it be referenced by a delivered artifact — satisfied by the
-  case study, U13's panel reference, and the §10 dogfooding rows. **No bespoke completeness check is
-  added** (decided): corpus completeness (every session has its panel + `_synthesis.md`; the per-reviewer globals +
-  `_global/_overall.md` once all are done) is tracked by hand via the 🔓 ledger rather than a new tool,
-  keeping the check suite lean.
+  case study, U13's panel reference, and the §10 dogfooding rows. **Plus a completeness gate,
+  `tools/check-evaluations`** — discovery-based (expected sessions from `log/transcripts/rendered/*.md`,
+  expected reviewers from `.claude/agents/*.md`; no hardcoded lists): every session has all reviewer
+  leaves + a `_synthesis.md`, and once all sessions are covered, a `_global/<reviewer>.md` per reviewer +
+  the `_global/_overall.md` corner. It follows the repo's `PEND`/`--strict` pattern — an **informational
+  progress readout** (non-failing) in `make check` so the legitimate incremental build stays green, and a
+  **hard fail in `make check-strict`** until the corpus is whole. This covers what traceability cannot:
+  `check-traceability` is satisfied the moment R18 is *referenced* (even by an empty corpus); the gate
+  makes a *complete* corpus the real "R18 done" signal, and self-maintains as transcripts or the roster
+  change.
 
 ### 13.9 Repo additions (§9) and dogfooding/traceability updates
 
@@ -879,6 +885,7 @@ log/evaluations/_global/<reviewer>.md                 # per-reviewer global (ses
 log/evaluations/_global/_overall.md                   # overall global (corner) -> case study
 log/evaluations/README.md                             # corpus orientation + protocol
 course/case-studies/collaboration-retrospective.md    # learner-facing render of the corner (R18.AC8)
+tools/check-evaluations                               # corpus completeness gate (PEND in check / fail in strict)
 ```
 
 §10 dogfooding inventory gains: **persona panel** (`.claude/agents/`) → referenced by **U13**

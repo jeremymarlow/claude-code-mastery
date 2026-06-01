@@ -64,7 +64,7 @@ gate, and removed the lossy `/export` `.txt` logs they replace. See `decisions.m
 
 **P8 — Version-resilience enhancements: CLI reference + changelog digest (post-v1, ✅ COMPLETE 2026-05-31).**
 Two new requirements **APPROVED**, **design §12 APPROVED & committed**, and **all 9 task slices (8.1–8.9)
-built** spec-first on `feat/cli-reference`; `make check` green. Not yet merged to `main` (awaiting go-ahead).
+built** spec-first on `feat/cli-reference`; `make check` green. **Merged to `main`** (2026-05-31).
 - **R16** — exhaustive, generated, version-resilient CLI reference: one tool (`tools/render-cli-reference`,
   modes `--generate`/`--render`/`--all`/`--check`) recursively introspects `claude --help` →
   `meta/cli-reference.json` (byte-stable machine truth) ∪ a provenance-tracked
@@ -82,7 +82,7 @@ spec-driven) + **U4** (single-source version data, points at `cli-reference.json
 `requirements.md` (no hardcoded `R#` range, R13.AC5); maintainer-guide gained the "Adding a post-v1
 enhancement" playbook. **Note:** `cli-reference.json` is generated @ CLI **2.1.159** while
 `version-record.md` records **2.1.158** — a deliberate drift-ahead (decision P8-no-bump; ledger **L9**).
-Branch **`feat/cli-reference`**. See `decisions.md` → "P8 — …" and `tasks/P8-cli-reference.md`.
+Built on **`feat/cli-reference`**, now **merged & on `main`**. See `decisions.md` → "P8 — …" and `tasks/P8-cli-reference.md`.
 
 **v1 build is complete.** Remaining is **not release-blocking**: **L1** is now mostly closed — the
 interactive `/help`+docs pass (2026-05-30) verified 5 of the 7 keys; only `ci` (GitHub Action wrapper)

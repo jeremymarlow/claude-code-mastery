@@ -649,9 +649,10 @@ _Tracked in:_ `tasks/P4-codebases.md`; decision P4-bugs.
 **~~L5~~ — ✅ CLOSED (P6, 2026-05-30).** The three §6.5 briefs (A/B/C) are finalized in
 `course/capstone/briefs.md` (decided with user). _Tracked in:_ `tasks/P6-finalize.md`; decision P6-capstone.
 
-**L6 — awareness-tier depth** for coverage rows 27–29 may need more than a mention (row 10 / extended
-thinking was handled as a U5 mention+pointer — P5-U5-vd — so it's no longer a concern).
-_Resolve in:_ P5 (each home unit); home units assigned (P2-cov) — revisit only if a unit needs more depth.
+**~~L6~~ — ✅ SETTLED for v1 (2026-05-31).** Awareness-tier depth for coverage rows 27–29 is adequate at
+v1: home units are assigned (P2-cov), every awareness area is covered at its assigned tier, and row 10 /
+extended thinking was handled as a U5 mention+pointer (P5-U5-vd). No area was judged too thin during the
+P7 quality pass. _Revisit only if_ a specific unit later reads thin — per-unit, not a standing loop.
 _Also tracked in:_ coverage-matrix `tier_note`s.
 
 **L7 — per-lab `start/`/`solution/` refs + verifiers not all created** (`start/uNN-labM` tag,

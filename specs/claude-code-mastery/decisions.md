@@ -661,6 +661,37 @@ and `CLAUDE.md` adds a working agreement: confirm a finished change on **strict*
 `make check` for fast mid-edit feedback. Pre-commit/CI stay on non-strict so work-in-progress (a future
 unit's pending labs) can still be committed; "done" is gated on strict at the points that mean "done".
 
+## P9 — Collaboration retrospective: requirements + design + tasks gates (post-v1, 2026-05-31)
+
+A new post-v1 enhancement (**R18**) plus a deferred sibling (**R19**), run through the gated playbook
+(R13.AC3). **Requirements ✅, design ✅ (§13), tasks plan ✅ (`tasks/P9`) — all committed on
+`feat/collaboration-retrospective`; the build is not yet executed.**
+
+- **R18 — collaboration retrospective.** A panel of subjective persona subagents reads the real session
+  transcripts and renders verbose, evidence-cited, candid evaluations of what the **human** and **Claude**
+  each did well / okay / could improve, across **process** and **communication** — structured as a
+  **session × reviewer matrix** (leaf cells → per-session synthesis + per-reviewer global → overall
+  corner), delivered as both an internal corpus (`log/evaluations/`) and a learner case study
+  (`course/case-studies/`). Authentic dogfood (R14): real `.claude/agents/`, built spec-driven.
+- **R19 — breadcrumb navigation** for learner docs. Approved requirement; **design deferred by the user
+  until R18 ships** (ledger L12).
+
+Locked calls (the deliberation — do not re-litigate):
+
+| # | Decision | Why |
+|---|---|---|
+| P9-panel | **11 reviewers = 10 fenced read-only personas + 1 no-persona control**, balanced 5 process / 3 communication / 2 cross-cutting. | Reviewed 8 → 12 → rebalanced: merged `power-user`+`efficiency-economist`→`tooling-economist` and `prompt-critic`+`clarity-coach`→`dialogue-clarity`; added `intent-alignment`; de-overlapped safety/verification. Fixes a process-heavy 7:2 axis tilt. The user's "subjective regardless of persona; no please/discourage" implies *topical* diversity with **uniform honesty**, so dimension-reviewers (not clashing temperaments) are the right shape. |
+| P9-control | The control follows the output contract but **omits the persona lens + candor mandate**; R18.AC5's "every reviewer" reads as the 10 persona reviewers. | A baseline to measure whether the persona scaffolding changes the evaluations (per-session and longitudinally). User-added during the panel review. |
+| P9-matrix | **Matrix, not linear tiers** (R18.AC6 amended): each reviewer synthesizes its **own** leaves into a per-reviewer global (session-axis margin); one corner pass blends them. | Deeper *and* cheaper-per-context than one agent re-reading all 242 leaves; the lens voice survives to the global level; extends the control experiment to the longitudinal view. |
+| P9-independence | **One subagent per reviewer** (separate contexts; ~11× transcript reads, ~13–16M tokens one-time) over a single shared-context pass (~11× cheaper). **Rendered-primary, raw-on-demand.** | Subagents don't share context; the ~11× cost is the price of independent reviews + a valid control (a shared pass would let the control see the personas). Grounded in measured corpus size (~1.05M tokens; largest session = 12.7% of a 1M window — fit is not the constraint). |
+| P9-checkeval | Build **`tools/check-evaluations`** (discovery-based; `PEND` in `make check`, fail in `--strict`) rather than rely on traceability + the ledger. | Reconsidered the initial "skip": `check-traceability` only checks R18 is *referenced*, not that the corpus is *complete* — leaving completeness to a hand-maintained ledger (the memory-over-files pattern the project rejects). The PEND/strict pattern keeps the incremental build green while making a complete corpus the real "done" gate. |
+| P9-model-attr | **Per-session model attribution read from the `.jsonl`** (R18.AC7), never assumed. | Foundational `2026-05-29_1845` session = `claude-sonnet-4-6`; the other 21 = `claude-opus-4-8` (verified from the transcripts this session). |
+| P9-no-cando | **No new can-do**; R18 extends the requirement set only. | The `C1–C17+CV` taxonomy is closed (R1 design); a curriculum change would return to the design gate. |
+
+Gates: requirements `51d27fe` (R18+R19); R18.AC6 matrix amendment `82e4a8b`; design §13 `ef7fc05`; the
+`check-evaluations` adoption + `tasks/P9` + this entry committed at close-out. Build = `tasks/P9`
+(9.1–9.9), not yet executed.
+
 ## Open loops & deferrals 🔓 (canonical ledger)
 
 **This is the single source of truth for what is deliberately unfinished.** Every deferral made
@@ -754,6 +785,19 @@ diff (one `claude --help` call) but no longer maintains a duplicate names-only a
 `render-cli-reference --check --cli` re-introspection is unchanged. `make drift` / `make check` green
 (`command list unchanged vs cli-reference.json (11 commands)`). _Tracked in:_ decision **P8-L10** below;
 `tasks/P8-cli-reference.md` §8.9; design §5/§12.7.
+
+**L11 — R18 collaboration retrospective: gates done, build pending.** Requirements (R18) + design (§13)
++ tasks plan (`tasks/P9`) ✅ **approved & committed** on `feat/collaboration-retrospective`; the build
+(P9 9.1–9.9: the 11-reviewer panel, `/evaluate-session`+`/evaluate-global`, the ~242-leaf matrix corpus,
+syntheses, the case study, `tools/check-evaluations`, U13/§10 dogfood wiring) is **not yet executed**.
+R18 shows `PEND` in `make check` (non-failing) until the case study + U13/§10 references land;
+`make check-strict` will fail on R18 (+ an incomplete corpus) until then. _Resolve in:_ P9 execution.
+_Also tracked in:_ `tasks/P9-collaboration-retrospective.md`; decisions → "P9 …".
+
+**L12 — R19 breadcrumb navigation: approved, design deferred.** R19 (top-of-page breadcrumb trails on
+learner-facing docs) is an **approved requirement** but its **design is deferred by the user until R18
+ships**. Shows `PEND` (non-failing) in `make check`. _Resolve in:_ a future design+tasks phase after R18.
+_Also tracked in:_ `requirements.md` R19; `design.md` §11 (R19 ⏳).
 
 **Decided, not open (do not re-litigate):** tools are no-extension kebab-case (deviation from design
 §7 `.sh`, decision P3-tools); `permission-modes` value per verified CLI (P2-vd); awareness home-unit

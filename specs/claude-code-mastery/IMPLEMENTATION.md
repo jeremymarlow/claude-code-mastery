@@ -90,6 +90,16 @@ interactive `/help`+docs pass (2026-05-30) verified 5 of the 7 keys; only `ci` (
 and `managed-settings` (enterprise) stay `unverified`, each blocked by access this environment lacks
 (Gitea instead of GitHub Actions; no enterprise account). See the 🔓 ledger in `decisions.md`.
 
+**P9 — Collaboration retrospective (R18) + breadcrumb nav (R19) (post-v1, 🟨 SPEC'D — build pending, 2026-05-31).**
+Two new requirements via the post-v1 playbook. **R18** — a multi-agent, self-evaluating retrospective of
+this build: 11 subjective reviewers (10 fenced read-only personas + 1 no-persona control) read the
+session transcripts into a **session × reviewer matrix** corpus (`log/evaluations/`) + a learner case
+study (`course/case-studies/`) — has **requirements + design (§13) + a tasks plan (`tasks/P9`) approved &
+committed** on branch **`feat/collaboration-retrospective`**; the build (P9 9.1–9.9) is **not yet
+executed**. **R19** (breadcrumb nav for learner docs) is an approved requirement with **design deferred**
+until R18 ships. Both show non-failing `PEND` in `make check`. See `decisions.md` → "P9 …" / ledger
+**L11**–**L12** and `tasks/P9-collaboration-retrospective.md`.
+
 **Where the detail lives** (don't restate it here):
 - Per-unit build notes (what each unit/lab is, its refs, its traceability) → [`tasks.md`](./tasks.md) §P5.
 - Design decisions, rationale, and the 🔓 open-loops ledger → [`decisions.md`](./decisions.md).

@@ -9,7 +9,7 @@ PY ?= $(shell [ -x .venv/bin/python ] && echo .venv/bin/python || echo python3)
 TOOLS := ./tools
 
 .PHONY: check check-strict frontmatter coverage checklist units index links version-refs \
-        cli-reference changelog traceability drift doctor venv render snapshot help
+        cli-reference changelog traceability drift doctor venv render help
 
 ## Run the required + traceability checks (PENDING items do not fail; see check-strict).
 check: frontmatter coverage checklist units index links version-refs cli-reference changelog traceability
@@ -55,8 +55,9 @@ changelog:
 traceability:
 	@$(PY) $(TOOLS)/check-traceability
 
-## Drift is informational; run on demand or on a schedule (R12.AC7). Also re-introspects the
-## installed CLI to confirm cli-reference.json is fresh (the --check --cli machine-freshness path).
+## Drift is informational; run on demand or on a schedule (R12.AC7). The cheap top-level
+## command-list diff (check-version-drift) and the full re-introspection (--check --cli) both
+## compare the installed CLI against the committed cli-reference.json (the recorded surface, L10).
 drift:
 	@$(PY) $(TOOLS)/check-version-drift
 	@$(PY) $(TOOLS)/render-cli-reference --check --cli
@@ -76,11 +77,6 @@ render:
 	@$(PY) $(TOOLS)/render-units
 	@$(PY) $(TOOLS)/render-index
 	@$(PY) $(TOOLS)/render-cli-reference --render
-
-## Refresh the CLI command snapshot used by drift detection.
-snapshot:
-	@claude --help | awk '/^Commands:/{f=1;next} f && /^  [a-z]/{n=$$1; sub(/\|.*/,"",n); print n}' | sort > meta/cli-commands.snapshot
-	@echo "wrote meta/cli-commands.snapshot"
 
 help:
 	@grep -B1 -E '^[a-z][a-zA-Z-]+:' Makefile | grep -E '^(##|[a-z])' | sed 'N;s/\n/ /;s/## //'

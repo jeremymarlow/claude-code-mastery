@@ -143,6 +143,9 @@ Until 8.7, R16/R17 are invisible to the current hardcoded `R1–R15` check (harm
       `IMPLEMENTATION.md` §3 (P8 ✅ COMPLETE — design → tasks → complete); updated `decisions.md`
       (**P8-complete** entry) + the 🔓 ledger — **L9** (version-record drift-ahead 2.1.158 vs artifact
       2.1.159) and **L10** (`cli-commands.snapshot` ⊂ `cli-reference.json` fold) logged as non-blocking.
+- [x] **L10 closed (2026-05-31):** folded `check-version-drift`'s command-list diff onto the committed
+      `cli-reference.json` (top-level command names = the recorded surface) and retired
+      `meta/cli-commands.snapshot` + the `make snapshot` target. `make drift` / `make check` green.
 - [ ] Final commit (this close-out slice) on `feat/cli-reference`; then open PR / merge to `main` —
       **ask before push/merge** (CLAUDE.md). ⟵ awaiting go-ahead.
 

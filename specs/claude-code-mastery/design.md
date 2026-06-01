@@ -203,8 +203,9 @@ unprocessed Markdown viewer still shows a legible placeholder (R15.AC2 graceful 
 *method*, seeded at **2.1.158 / 2026-05-29** (R12.AC5). Bumped on every refresh (R12.AC7).
 
 **Drift-detection check** — `tools/check-version-drift` (§8): compares installed `claude --version`
-to `version-record`; where feasible, diffs the current `claude --help` command list against a recorded
-snapshot to surface new/removed/renamed commands (R12.AC6). Doubles as a hooks/CI worked example
+to `version-record`; where feasible, diffs the current `claude --help` command list against the
+committed CLI reference (`cli-reference.json`, §12 — the single recorded command surface) to surface
+new/removed/renamed commands (R12.AC6). Doubles as a hooks/CI worked example
 (R14.AC2). **Hard rule (R12.AC3):** no `{{vd:*}}` value is authored from model memory — each is
 verified against the installed CLI (`--help`/`/help`/docs) or marked `unverified: true`.
 
@@ -627,8 +628,9 @@ The R12.AC7 refresh process (in `version-record.md`) gains two standing steps: *
 `tools/render-cli-reference --all` — regenerate the machine reference + re-render the page; **(b)** add
 the cumulative `version-changelog.md` digest entry. Both touch only generated/maintainer artifacts
 (R12.AC8); the reference is **bootstrapped by the drift trigger, not hand-maintained**.
-`meta/cli-commands.snapshot` (names-only drift signal) is now a strict subset of `cli-reference.json`;
-kept as the cheap signal for this phase, with folding-them-together logged as a non-blocking open-loop.
+`check-version-drift`'s cheap top-level command-list diff reads its recorded surface directly from
+`cli-reference.json` (the former names-only `cli-commands.snapshot` was folded into it — L10 closed);
+the full `render-cli-reference --check --cli` re-introspection is the deeper freshness gate.
 
 ### 12.8 Enforcement & resilience (R13, R16.AC6, R17.AC5)
 

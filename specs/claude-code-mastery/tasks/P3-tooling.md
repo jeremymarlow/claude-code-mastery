@@ -29,7 +29,8 @@ one and so the checks exist as the authentic worked examples the hooks/CI units 
 
 ### 3.5 Drift detection (R12.AC6)
 - [x] `check-version-drift` — installed `claude --version` vs `version-record`; where feasible diff the
-      `claude --help` command list vs a recorded snapshot to surface new/removed/renamed commands. [R12.AC6]
+      `claude --help` command list vs the committed `cli-reference.json` (the recorded surface; was a
+      separate `cli-commands.snapshot` until the L10 fold) to surface new/removed/renamed commands. [R12.AC6]
 
 ### 3.6 Lab tooling (design §7)
 - [x] `tools/verify-lab.sh <id>` — run a lab's automated check. [R7.AC5]

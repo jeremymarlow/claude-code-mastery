@@ -14,7 +14,8 @@ if command -v make >/dev/null 2>&1; then
   make check
 else
   echo "pre-commit: make not found; running checks directly…"
+  py="python3"; [ -x .venv/bin/python ] && py=".venv/bin/python"
   for c in check-frontmatter check-coverage check-links check-version-refs check-traceability; do
-    python3 "tools/$c"
+    "$py" "tools/$c"
   done
 fi

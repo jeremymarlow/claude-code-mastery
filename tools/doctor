@@ -5,24 +5,33 @@ Checks, in order, and reports pass/fail for each:
   1. install        — the `claude` CLI is on PATH
   2. version        — `claude --version` parses; compared to the recorded verified version
   3. auth + first   — a real non-interactive command round-trips (`claude -p`), proving auth works
-  4. tooling deps   — the course's own check suite can run (python + pyyaml + jsonschema)
+  4. tooling deps   — the course's own check suite can run (python + pyyaml + jsonschema in .venv)
+
+If the Python tooling deps are missing, the doctor explains how to create the project venv (.venv)
+with either uv or pip — or creates it for you with `--setup-venv`. Once .venv exists, `make`
+auto-detects .venv/bin/python, so there is no manual activation step.
 
 It doubles as a worked example of *scripting Claude Code* (R14.AC2): note how step 3 drives the
 CLI headlessly with `-p` and inspects the result — the same pattern U16 generalizes.
 
 Usage:
-  tools/doctor              # run all checks (step 3 makes one real API call)
-  tools/doctor --no-probe   # skip the API round-trip (offline / CI-safe)
-  tools/doctor --manual     # also print the manual checklist fallback
+  tools/doctor                    # run all checks (step 3 makes one real API call)
+  tools/doctor --no-probe         # skip the API round-trip (offline / CI-safe)
+  tools/doctor --manual           # also print the manual checklist fallback
+  tools/doctor --setup-venv       # create .venv + install deps (uv if available, else pip)
+  tools/doctor --setup-venv --pip # force pip for the venv setup
 """
 import os
 import re
 import shutil
 import subprocess
 import sys
+from pathlib import Path
 
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from _common import META, Reporter, load_version_data  # noqa: E402
+REPO_ROOT = Path(__file__).resolve().parent.parent
+VENV_DIR = REPO_ROOT / ".venv"
+VENV_PY = VENV_DIR / "bin" / "python"
+TOOLING_DEPS = ("pyyaml", "jsonschema")   # imported as: yaml, jsonschema
 
 MANUAL_CHECKLIST = """
 Manual checklist (if the doctor can't run, or to self-verify):
@@ -30,10 +39,61 @@ Manual checklist (if the doctor can't run, or to self-verify):
   [ ] `claude` opens an interactive session (then type /exit).
   [ ] You are authenticated (run `claude auth` if not).
   [ ] `claude -p "reply with ok"` prints a reply — proves auth + a first command.
-  [ ] Python 3 is available with pyyaml + jsonschema (`make check` runs the course's own checks).
+  [ ] The course venv exists at .venv with pyyaml + jsonschema (create it with
+      `tools/doctor --setup-venv`, or `make venv`); `make` then auto-detects it.
 If `claude --version` differs from meta/version-record.md, see that file: some version-specific
 details may have moved (they live in meta/version-data.yaml, referenced as {{vd:key}}).
 """.rstrip()
+
+VENV_HELP = """\
+Set up the course's Python virtualenv at .venv (one time), then re-run the doctor:
+
+  Using uv (fast):
+    uv venv .venv
+    uv pip install --python .venv/bin/python pyyaml jsonschema
+
+  Using pip (standard library):
+    python3 -m venv .venv
+    .venv/bin/python -m pip install --upgrade pip pyyaml jsonschema
+
+Or let the doctor do it:
+    tools/doctor --setup-venv         # uses uv if available, otherwise pip
+    tools/doctor --setup-venv --pip   # force pip
+
+Once .venv exists, `make` auto-detects .venv/bin/python — you do not need to activate it.
+""".rstrip()
+
+
+def _run(cmd):
+    """Echo and run a setup command, returning its exit code."""
+    print("  $ " + " ".join(str(c) for c in cmd))
+    return subprocess.run(cmd).returncode
+
+
+def setup_venv(prefer_pip=False):
+    """Create .venv (if absent) and install the course tooling deps.
+
+    Stdlib-only so it runs before any dependency exists (the bootstrap case). Prefers uv unless
+    --pip is given; falls back to pip + the standard-library `venv` module otherwise.
+    """
+    uv = shutil.which("uv")
+    fresh = not VENV_PY.exists()
+    if not fresh:
+        print(f"doctor: .venv already exists at {VENV_DIR}; refreshing tooling deps")
+    if uv and not prefer_pip:
+        rc = _run([uv, "venv", VENV_DIR]) if fresh else 0
+        if rc == 0:
+            rc = _run([uv, "pip", "install", "--python", VENV_PY, *TOOLING_DEPS])
+    else:
+        rc = _run([sys.executable, "-m", "venv", VENV_DIR]) if fresh else 0
+        if rc == 0:
+            rc = _run([VENV_PY, "-m", "pip", "install", "--upgrade", "pip", *TOOLING_DEPS])
+    if rc == 0:
+        print(f"\ndoctor: .venv ready at {VENV_DIR}. `make` auto-detects it — no activation "
+              "needed. Re-run `tools/doctor` (or `make doctor`) to finish the preflight.")
+    else:
+        print("\ndoctor: venv setup failed; run the commands above manually.")
+    return rc
 
 
 def _ver_tuple(v):
@@ -41,6 +101,20 @@ def _ver_tuple(v):
 
 
 def main(argv):
+    if "--setup-venv" in argv:
+        return setup_venv(prefer_pip="--pip" in argv)
+
+    # The full preflight needs the course tooling deps (pyyaml backs _common). If they aren't
+    # importable we can't load _common at all — so guide venv setup first, then bail (re-running
+    # the doctor after `--setup-venv` resumes the full check).
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    try:
+        from _common import Reporter, load_version_data
+    except ImportError as exc:
+        print(f"doctor: course tooling dependency missing ({getattr(exc, 'name', None) or exc}).\n")
+        print(VENV_HELP)
+        return 1
+
     rep = Reporter("doctor")
     probe = "--no-probe" not in argv
     recorded = load_version_data().get("_verified_version")
@@ -86,13 +160,18 @@ def main(argv):
     else:
         rep.pending("skipped auth/first-command probe (--no-probe)")
 
-    # 4. tooling deps
+    # 4. tooling deps (+ project venv)
     try:
         import yaml  # noqa: F401
         import jsonschema  # noqa: F401
-        rep.ok("course tooling deps present (python, pyyaml, jsonschema)")
+        where = f"in {VENV_DIR.name}/" if sys.prefix == str(VENV_DIR) else "(active environment)"
+        rep.ok(f"course tooling deps present (python, pyyaml, jsonschema) {where}")
     except ImportError as exc:
-        rep.fail(f"missing tooling dependency: {exc.name} (pip install pyyaml jsonschema)")
+        rep.fail(f"missing tooling dependency: {exc.name}")
+        print(VENV_HELP)
+    if not VENV_PY.exists():
+        rep.pending(f"no project venv at {VENV_DIR.name}/ — create it with "
+                    "`tools/doctor --setup-venv` (or `make venv`); `make` then auto-detects it")
 
     code = rep.done()
     if code or "--manual" in argv:

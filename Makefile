@@ -1,13 +1,15 @@
 # Course enforcement suite. `make check` runs the required checks (R13.AC4) plus traceability
 # (R13.AC5); it is the same suite wired into the git pre-commit hook and CI (R13.AC6).
 #
-# PY can be overridden (e.g. `make check PY=python`). The repo's virtualenv lives at .venv.
+# PY auto-detects the project venv (.venv/bin/python) when present — so no manual activation is
+# needed — and falls back to python3 otherwise. Override explicitly with `make check PY=python`.
+# Create the venv with `make venv` (or `tools/doctor --setup-venv`).
 
-PY ?= python3
+PY ?= $(shell [ -x .venv/bin/python ] && echo .venv/bin/python || echo python3)
 TOOLS := ./tools
 
 .PHONY: check check-strict frontmatter coverage checklist units index links version-refs \
-        cli-reference changelog traceability drift doctor render snapshot help
+        cli-reference changelog traceability drift doctor venv render snapshot help
 
 ## Run the required + traceability checks (PENDING items do not fail; see check-strict).
 check: frontmatter coverage checklist units index links version-refs cli-reference changelog traceability
@@ -62,6 +64,10 @@ drift:
 ## Learner preflight (makes one real `claude -p` call unless --no-probe).
 doctor:
 	@$(PY) $(TOOLS)/doctor
+
+## One-time setup: create the project venv (.venv) + tooling deps (uv if available, else pip).
+venv:
+	@$(PY) $(TOOLS)/doctor --setup-venv
 
 ## Verify all {{vd:key}} references in course/ resolve; refresh generated learner docs.
 render:

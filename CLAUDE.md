@@ -47,4 +47,6 @@ spec-driven — so the repo is itself a worked example of what it teaches.
 ## Stack
 
 Python throughout — sample codebases (`taskflow-api` FastAPI + SQLModel + pytest; `taskflow-cli`
-argparse) and the `tools/` check suite. A project virtualenv lives at `.venv` (pyyaml, jsonschema).
+argparse) and the `tools/` check suite. A project virtualenv lives at `.venv` (pyyaml, jsonschema);
+create it with `tools/doctor --setup-venv` (or `make venv`). `make`/`PY` auto-detect `.venv/bin/python`
+when present — no manual activation needed.

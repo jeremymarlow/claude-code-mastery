@@ -40,7 +40,9 @@ spot-check edges.
   provision it). Run [`tools/doctor`](./tools/doctor) to confirm. This is the one assumed paid
   prerequisite; no required lab depends on a second paid service.
 - A working terminal, **Git**, and a code editor. macOS/Linux, or **WSL** on Windows.
-- **Python** (the sample codebases and tooling are Python). A virtualenv lives at `.venv`.
+- **Python** (the sample codebases and tooling are Python). A virtualenv lives at `.venv` — create
+  it with [`tools/doctor --setup-venv`](./tools/doctor) (uv or pip, your choice), or `make venv`;
+  `make` then auto-detects it, so there's no activation step.
 
 ## How it's structured
 

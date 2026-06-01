@@ -99,8 +99,8 @@ plan (`tasks/P9`) **approved & committed**. **Build: 9.1–9.4 ✅ DONE** (panel
 `.claude/agents/`; corpus conventions + `tools/check-evaluations` gate; `/evaluate-session` command;
 pilot **PASS** over the foundational session). **9.5 🟢 IN PROGRESS** — full-corpus leaf pass, one
 evaluated-session per *fresh* session; leaf and synthesis stages run as separate passes. Leaf cells:
-**77/253 — 7 of 23 sessions** have a full 11-reviewer pass (foundational, catalog-approval, design-approval,
-p4-sample-codebases, u1-onboarding, u3-operate-safely, u5-unit-authoring); 16 sessions remain. Per-session syntheses: **1/23**
+**88/253 — 8 of 23 sessions** have a full 11-reviewer pass (foundational, catalog-approval, design-approval,
+p4-sample-codebases, u1-onboarding, u3-operate-safely, u5-unit-authoring, u6-open-loops-audit); 15 sessions remain. Per-session syntheses: **1/23**
 (foundational only). Then 9.6 globals/corner → 9.7 case study → 9.8 dogfood wiring → 9.9
 close-out. R18 shows non-failing `PEND` in `make check` until the case study + U13/§10 refs land;
 `check-evaluations` reports leaf/synthesis progress (`PEND` in `check`, hard-fail in `check-strict` until

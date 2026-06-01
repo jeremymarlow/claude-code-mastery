@@ -143,7 +143,7 @@ re-measures the corpus for the attribution map anyway).
       pass projects to **~25M** (vs. the §13.7 ~13–17M estimate; reviewers read more thoroughly). Surfaced
       to the maintainer.
 
-### 9.5 Leaf pass — all 23 sessions + per-session syntheses  [R18.AC2/AC6; §13.5]  🟢 IN PROGRESS — leaves 77/253 (7/23 sessions), syntheses 1/23 (2026-06-01)
+### 9.5 Leaf pass — all 23 sessions + per-session syntheses  [R18.AC2/AC6; §13.5]  🟢 IN PROGRESS — leaves 88/253 (8/23 sessions), syntheses 1/23 (2026-06-01)
 > **Workflow (decided 2026-05-31): build the full 23-session corpus, one evaluated-session per _fresh_
 > Claude session**, to keep the orchestrator context clean (each session ≈ 1.1M subagent tokens + ~20k
 > to persist; ~25M total). **Per-session ritual in a new session:**

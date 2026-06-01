@@ -3,22 +3,22 @@ description: Sync every project state file after a unit's prose is authored, the
 argument-hint: <NN>
 ---
 
-Close out unit **U$1** — bring every state-tracking file in sync now that `course/units/$1-*/unit.src.md`
+Close out unit **U$0** — bring every state-tracking file in sync now that `course/units/$0-*/unit.src.md`
 is authored (the committed `unit.md` is generated from it by `make render`), then verify. Pull
 specifics from the files, not memory; follow `meta/conventions.md`.
 
 Do each step, in order:
 
-1. **`specs/claude-code-mastery/IMPLEMENTATION.md` §3** — update the P5 progress marker so U$1 is in the
+1. **`specs/claude-code-mastery/IMPLEMENTATION.md` §3** — update the P5 progress marker so U$0 is in the
    done list (and the matching `tasks.md` status header if it tracks a count). Keep §3 terse.
 2. **`specs/claude-code-mastery/tasks.md`** — add or confirm the unit's detail bullet (gist ·
-   _Lab/refs_ · _Trace & version keys_). **Only check the `[ ] **U$1**` box if the unit is *fully*
+   _Lab/refs_ · _Trace & version keys_). **Only check the `[ ] **U$0**` box if the unit is *fully*
    done** — prose authored **and** its lab complete: either the mutating lab's `start/`/`solution/`
    refs + `verify.sh` exist and pass end-to-end, or it is a no-refs unit (read-only / prose-self-check,
    like U2/U8/U12) that needs none. If lab artifacts are still pending, **leave the box unchecked**,
    record the prose as authored, and ensure step 3 keeps that lab open in **L7**. A checked box must
    never coexist with pending L7 lab refs for the same unit.
-3. **`specs/claude-code-mastery/decisions.md`** — add the `P5-U$1-*` rationale entries (lab choice, any
+3. **`specs/claude-code-mastery/decisions.md`** — add the `P5-U$0-*` rationale entries (lab choice, any
    built artifacts, vd/L1 status), each with a **Why:** line, and refresh the 🔓 open-loops ledger —
    **L7** (per-lab `start/`/`solution/` refs + verifier status) and **L1** (version debt) for this unit.
 4. **Verify version currency** — any `{{vd:*}}` key the unit introduced must be `unverified: false` in

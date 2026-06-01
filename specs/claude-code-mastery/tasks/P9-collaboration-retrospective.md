@@ -148,8 +148,9 @@ re-measures the corpus for the attribution map anyway).
 > Claude session**, to keep the orchestrator context clean (each session ≈ 1.1M subagent tokens + ~20k
 > to persist; ~25M total). **Per-session ritual in a new session:**
 > 1. (optional) `/prime-context` to orient.
-> 2. `/evaluate-session <slug>` — dispatches the 11 reviewers, persists the 11 leaves. **Verify on first
->    resume that `$1` substitutes in the REPL form** (the Skill-tool launch didn't — see 9.4 open finding).
+> 2. `/evaluate-session <slug>` — dispatches the 11 reviewers, persists the 11 leaves. (The earlier
+>    `$1`-didn't-substitute bug is **fixed** — it was 0-based positional args; the command now uses
+>    `$ARGUMENTS`. See decision **P9-cmd-args**.)
 > 3. Review the leaves (spot-check evidence-citation + the front matter parses; `model_evaluated` quoted).
 > 4. Write `log/evaluations/<slug>/_synthesis.md` — the per-session synthesis (cross-cutting story,
 >    agreements/disagreements, consolidated per-party/per-axis grades; cites the leaves).

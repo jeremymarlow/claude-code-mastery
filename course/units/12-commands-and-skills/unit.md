@@ -57,11 +57,12 @@ prompting; they differ in how they're triggered and how much structure they carr
 
 **1 — A custom slash command is a saved prompt.** It's a markdown file under `.claude/commands/`; the
 filename is the command, so `close-unit.md` becomes `/close-unit`. Invoking it expands the file's contents
-into the conversation exactly as if you'd typed them — including any arguments you pass (`$1`, `$2`,
-`$ARGUMENTS`). That's the whole model: a *prompt template you trigger deliberately*. Reach for a command
+into the conversation exactly as if you'd typed them — including any arguments you pass (`$ARGUMENTS` for
+the whole string, or by position — and positions are 0-based, so `$0` is the *first* argument, `$1` the
+second). That's the whole model: a *prompt template you trigger deliberately*. Reach for a command
 when you catch yourself re-typing the same paragraph — a scaffolder, a "draft release notes from the
 diff," a "review this against our checklist" pass. The invocation surface (how it's called, argument
-syntax, how to disable them) is the version-specific part: Custom slash commands are user-defined skills, invoked as /name; `--disable-slash-commands` turns all skills off.
+syntax, how to disable them) is the version-specific part: Custom slash commands are user-defined skills, invoked as /name (file `.claude/commands/<name>.md` becomes `/<name>`); `--disable-slash-commands` turns all skills off. Arguments: `$ARGUMENTS` expands to the full argument string; positional access is 0-based — `$0` is the first argument, `$1` the second (shorthand for `$ARGUMENTS[N]`); declare named args via an `arguments:` frontmatter list for `$name` substitution. Gotcha: `$1` is the SECOND arg, not the first — a single-arg command must use `$ARGUMENTS` or `$0`.
 
 **2 — A skill is a packaged capability Claude can reach for.** It's a `SKILL.md` under
 `.claude/skills/<name>/`, with front matter carrying a `name` and — critically — a `description`. You
@@ -93,7 +94,7 @@ is exactly why *this* repo commits `close-unit` and `prime-context`.
 **Version currency.** Verified against Claude Code `2.1.159`. The on-disk locations
 (`.claude/commands/`, `.claude/skills/<name>/SKILL.md`) are filesystem **conventions** — confirm the
 exact paths and the invocation/argument syntax against `claude --help` and the docs before relying on a
-detail. Commands: Custom slash commands are user-defined skills, invoked as /name; `--disable-slash-commands` turns all skills off. Skills: Skills resolve via /skill-name; reusable packaged capabilities. Tracked in
+detail. Commands: Custom slash commands are user-defined skills, invoked as /name (file `.claude/commands/<name>.md` becomes `/<name>`); `--disable-slash-commands` turns all skills off. Arguments: `$ARGUMENTS` expands to the full argument string; positional access is 0-based — `$0` is the first argument, `$1` the second (shorthand for `$ARGUMENTS[N]`); declare named args via an `arguments:` frontmatter list for `$name` substitution. Gotcha: `$1` is the SECOND arg, not the first — a single-arg command must use `$ARGUMENTS` or `$0`. Skills: Skills resolve via /skill-name; reusable packaged capabilities. Tracked in
 [`meta/version-record.md`](../../../meta/version-record.md).
 
 ## Worked example
@@ -114,7 +115,8 @@ prompt.
 
 **The command — [`.claude/commands/close-unit.md`](../../../.claude/commands/close-unit.md).** Its front
 matter is a `description` and an `argument-hint: <NN>`. The body is a prompt that uses that argument
-(`$1`) and walks Claude through the chore of *closing out a finished unit*: update `IMPLEMENTATION.md`
+(`$0` — the first positional argument; `$1` would be the *second*) and walks Claude through the chore of
+*closing out a finished unit*: update `IMPLEMENTATION.md`
 §3, check the `tasks.md` box and its detail bullet, add the `decisions.md` rationale + refresh the
 open-loops ledger, verify version currency, and run `make check`. You run it deliberately —
 `/close-unit 13` the moment that unit's prose is done — and it expands into that checklist. It's a *prompt you
@@ -212,7 +214,7 @@ against them and the checklist above.
   headlessly and in parallel.
 - **Scope & sources** — project vs. personal `.claude/` is the same distinction as settings sources in
   [Memory & context](../04-memory-and-context/unit.md).
-- The invocation, argument, and resolution surfaces: Custom slash commands are user-defined skills, invoked as /name; `--disable-slash-commands` turns all skills off. Skills resolve via /skill-name; reusable packaged capabilities.
+- The invocation, argument, and resolution surfaces: Custom slash commands are user-defined skills, invoked as /name (file `.claude/commands/<name>.md` becomes `/<name>`); `--disable-slash-commands` turns all skills off. Arguments: `$ARGUMENTS` expands to the full argument string; positional access is 0-based — `$0` is the first argument, `$1` the second (shorthand for `$ARGUMENTS[N]`); declare named args via an `arguments:` frontmatter list for `$name` substitution. Gotcha: `$1` is the SECOND arg, not the first — a single-arg command must use `$ARGUMENTS` or `$0`. Skills resolve via /skill-name; reusable packaged capabilities.
   Version-specifics in [`meta/version-record.md`](../../../meta/version-record.md). Confirm with
   `claude --help`.
 - Stuck? [`course/stuck.md`](../../stuck.md) and the

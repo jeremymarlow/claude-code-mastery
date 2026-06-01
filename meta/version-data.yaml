@@ -130,10 +130,10 @@ keys:
 
   custom-commands:
     kind: feature
-    value: "Custom slash commands are user-defined skills, invoked as /name; `--disable-slash-commands` turns all skills off."
-    provenance: "claude --help (--disable-slash-commands: 'Disable all skills')"
-    verified_version: "2.1.158"
-    verified_date: "2026-05-29"
+    value: "Custom slash commands are user-defined skills, invoked as /name (file `.claude/commands/<name>.md` becomes `/<name>`); `--disable-slash-commands` turns all skills off. Arguments: `$ARGUMENTS` expands to the full argument string; positional access is 0-based — `$0` is the first argument, `$1` the second (shorthand for `$ARGUMENTS[N]`); declare named args via an `arguments:` frontmatter list for `$name` substitution. Gotcha: `$1` is the SECOND arg, not the first — a single-arg command must use `$ARGUMENTS` or `$0`."
+    provenance: "claude --help (--disable-slash-commands: 'Disable all skills'); official docs code.claude.com/docs/en/skills 'Available string substitutions' (0-based $N = $ARGUMENTS[N]; $name via arguments: frontmatter); confirmed at runtime on 2.1.159 — a single-arg command's $1 rendered empty (consistent with 0-based indexing)"
+    verified_version: "2.1.159"
+    verified_date: "2026-06-01"
     unverified: false
     notes: "The on-disk location (e.g. .claude/commands/) is a filesystem convention — verify the exact path via docs before hardcoding."
 

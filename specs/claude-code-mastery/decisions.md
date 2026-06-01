@@ -703,11 +703,30 @@ the per-session synthesis will consolidate. **Adjustments made at the gate:** (1
 contracts now forbid preamble / a surrounding ``` fence (reviewers added them despite "return only");
 (2) **`model_evaluated` is quoted** in the template/README/leaves — the mixed-session value
 `claude-opus-4-8 (mixed: …)` contains a colon that breaks unquoted YAML front matter (caught on render);
-(3) the command strips preamble/fence on persist and scans secrets with a `*.md` file glob. **Open:**
-`/evaluate-session`'s `$1` didn't substitute when launched via the Skill tool — verify the REPL form.
+(3) the command strips preamble/fence on persist and scans secrets with a `*.md` file glob. ~~**Open:**
+`/evaluate-session`'s `$1` didn't substitute when launched via the Skill tool — verify the REPL form.~~
+**Resolved 2026-06-01 (P9-cmd-args):** root cause was 0-based positional args (`$1` = the *second* arg);
+fixed to `$ARGUMENTS`. Not a launch-method issue — it failed from the REPL too.
 **Measured cost:** ~1.1M tokens for one session's 11 reviewers → **~25M** projected for the full 23 (above
 the §13.7 ~13–17M estimate). The maintainer **paused 9.5** to weigh that and decide the execution cadence
 (leaning: one fresh Claude session per evaluated session, to keep the orchestrator context clean).
+
+**P9-cmd-args (2026-06-01) — root-caused the `$1`-didn't-substitute bug: positional args are 0-based, so
+`$1` is the SECOND argument.** The P9-pilot "Open" finding (above) recurred when the maintainer launched
+`/evaluate-session <slug>` from the REPL with a valid slug — the body still rendered empty `` placeholders.
+Verified against the official docs (`code.claude.com/docs/en/skills` → "Available string substitutions",
+2026-06-01) and confirmed at runtime on 2.1.159: `$ARGUMENTS` is the full argument string; positional
+access is **0-based** (`$0` = first arg, `$1` = second, shorthand for `$ARGUMENTS[N]`); `$name` needs an
+`arguments:` frontmatter list. **Both** dogfooded commands had the bug — `evaluate-session.md` and
+`close-unit.md` each used `$1` for their single argument, which is empty (no second arg). **Fix:**
+`evaluate-session.md` → `$ARGUMENTS` (single slug, reads cleanly standalone); `close-unit.md` → `$0` (reads
+cleanly embedded in `U$0`/`$0-*` identifiers). **U12** taught it wrong too (the commands unit): its prose
+listed `$1`/`$2` as example args and described `close-unit`'s arg as `$1` — corrected to the 0-based truth
+and the dogfood example now matches the fixed command. The version-specific syntax is **single-sourced**
+into `{{vd:custom-commands}}` (value + provenance + `verified_version: 2.1.159`, `verified_date:
+2026-06-01`), so U12 line 63's "argument syntax … is the version-specific part" pointer is now accurate.
+**Why:** R12.AC3 — a version-specific Claude Code fact verified against docs+runtime, not authored from
+memory; quarantined in the vd key so it can't drift back into prose. _Resolves_ the P9-pilot open finding.
 
 ## Open loops & deferrals 🔓 (canonical ledger)
 

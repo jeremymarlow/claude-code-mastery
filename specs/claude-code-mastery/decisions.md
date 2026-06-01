@@ -838,10 +838,13 @@ personas, `devils-advocate` dissents (experiment working). Adjustments applied (
 preamble/fence; **`model_evaluated` quoted** — the mixed-session colon broke YAML; command strip + scan
 glob). Measured cost ≈ **1.1M tokens/session → ~25M** for the full pass. **9.5 🟢 IN PROGRESS** —
 workflow decided (2026-05-31): the **full corpus, one evaluated-session per _fresh_ Claude session**
-(ritual in `tasks/P9` §9.5). Done: **foundational session complete — 11 leaves + `_synthesis.md`**
-(synthesis backfilled 2026-06-01; `check-evaluations` reads 1/23 sessions, 11/253 leaves). The rest (the
-remaining 22 sessions' leaves + syntheses, `/evaluate-global` + corner, the case study, U13/§10 dogfood
-wiring) is **not yet executed**. See decision **P9-pilot**.
+(ritual in `tasks/P9` §9.5). Progress (2026-06-01): `check-evaluations` reads **66/253 leaves across 6/23
+sessions** (foundational, catalog-approval, design-approval, p4-sample-codebases, u1-onboarding,
+u3-operate-safely) and **1/23 syntheses** (foundational). In practice the **leaf and synthesis stages have
+run as separate passes** (`/evaluate-session` writes leaves only), so **5 leaf-complete sessions await
+`_synthesis.md`**. The rest (those 5 syntheses + the remaining 17 sessions' leaves & syntheses,
+`/evaluate-global` + corner, the case study, U13/§10 dogfood wiring) is **not yet executed**. See decision
+**P9-pilot**.
 R18 shows `PEND` in `make check` (non-failing) until the case study + U13/§10 references land;
 `make check-strict` will fail on R18 (+ an incomplete corpus) until then. _Resolve in:_ P9 execution.
 _Also tracked in:_ `tasks/P9-collaboration-retrospective.md`; decisions → "P9 …".

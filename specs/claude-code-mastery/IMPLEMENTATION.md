@@ -98,8 +98,10 @@ personas + 1 no-persona control) read the session transcripts into a **session �
 plan (`tasks/P9`) **approved & committed**. **Build: 9.1–9.4 ✅ DONE** (panel authored under
 `.claude/agents/`; corpus conventions + `tools/check-evaluations` gate; `/evaluate-session` command;
 pilot **PASS** over the foundational session). **9.5 🟢 IN PROGRESS** — full-corpus leaf pass, one
-evaluated-session per *fresh* session: **1/23 sessions complete** (foundational — 11 leaves + synthesis);
-22 remaining (~1.1M tokens each). Then 9.6 globals/corner → 9.7 case study → 9.8 dogfood wiring → 9.9
+evaluated-session per *fresh* session; leaf and synthesis stages run as separate passes. Leaf cells:
+**66/253 — 6 of 23 sessions** have a full 11-reviewer pass (foundational, catalog-approval, design-approval,
+p4-sample-codebases, u1-onboarding, u3-operate-safely); 17 sessions remain. Per-session syntheses: **1/23**
+(foundational only). Then 9.6 globals/corner → 9.7 case study → 9.8 dogfood wiring → 9.9
 close-out. R18 shows non-failing `PEND` in `make check` until the case study + U13/§10 refs land;
 `check-evaluations` reports leaf/synthesis progress (`PEND` in `check`, hard-fail in `check-strict` until
 the matrix is whole). **R19** (breadcrumb nav for learner docs) is an approved requirement with **design

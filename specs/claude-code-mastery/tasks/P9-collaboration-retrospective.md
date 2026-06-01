@@ -143,7 +143,7 @@ re-measures the corpus for the attribution map anyway).
       pass projects to **~25M** (vs. the §13.7 ~13–17M estimate; reviewers read more thoroughly). Surfaced
       to the maintainer.
 
-### 9.5 Leaf pass — all 23 sessions + per-session syntheses  [R18.AC2/AC6; §13.5]  🟢 IN PROGRESS — leaves 11/253, syntheses 0/23 (2026-05-31)
+### 9.5 Leaf pass — all 23 sessions + per-session syntheses  [R18.AC2/AC6; §13.5]  🟢 IN PROGRESS — 1/23 sessions complete (leaves 11/253, syntheses 1/23) (2026-06-01)
 > **Workflow (decided 2026-05-31): build the full 23-session corpus, one evaluated-session per _fresh_
 > Claude session**, to keep the orchestrator context clean (each session ≈ 1.1M subagent tokens + ~20k
 > to persist; ~25M total). **Per-session ritual in a new session:**
@@ -156,8 +156,8 @@ re-measures the corpus for the attribution map anyway).
 > 5. `tools/scan-secrets log/evaluations/<slug>/*.md`, human-review any flag (R18.AC10).
 > 6. Commit the session's batch (+ push); `tools/check-evaluations` shows progress.
 >
-> **Done:** `2026-05-29_1845-…` (foundational) — 11 leaves persisted; **its `_synthesis.md` is still
-> pending** (leaves were built in the 9.4 pilot before the synthesis step was part of the ritual).
+> **Done:** `2026-05-29_1845-…` (foundational) — **11 leaves + `_synthesis.md` complete** (leaves built
+> in the 9.4 pilot; synthesis backfilled 2026-06-01, establishing the synthesis format for the corpus).
 > **Next:** the remaining 22 (suggest chronological — `2026-05-29_2146-catalog-approval-and-scaffolding`).
 > One fresh session per row; nothing else in flight.
 - [ ] For each session (incremental, **one at a time** — the maintainer's workflow): run

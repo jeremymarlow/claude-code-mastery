@@ -90,15 +90,21 @@ interactive `/help`+docs pass (2026-05-30) verified 5 of the 7 keys; only `ci` (
 and `managed-settings` (enterprise) stay `unverified`, each blocked by access this environment lacks
 (Gitea instead of GitHub Actions; no enterprise account). See the 🔓 ledger in `decisions.md`.
 
-**P9 — Collaboration retrospective (R18) + breadcrumb nav (R19) (post-v1, 🟨 SPEC'D — build pending, 2026-05-31).**
-Two new requirements via the post-v1 playbook. **R18** — a multi-agent, self-evaluating retrospective of
-this build: 11 subjective reviewers (10 fenced read-only personas + 1 no-persona control) read the
-session transcripts into a **session × reviewer matrix** corpus (`log/evaluations/`) + a learner case
-study (`course/case-studies/`) — has **requirements + design (§13) + a tasks plan (`tasks/P9`) approved &
-committed** on branch **`feat/collaboration-retrospective`**; the build (P9 9.1–9.9) is **not yet
-executed**. **R19** (breadcrumb nav for learner docs) is an approved requirement with **design deferred**
-until R18 ships. Both show non-failing `PEND` in `make check`. See `decisions.md` → "P9 …" / ledger
-**L11**–**L12** and `tasks/P9-collaboration-retrospective.md`.
+**P9 — Collaboration retrospective (R18) + breadcrumb nav (R19) (post-v1, 🟢 BUILDING — 2026-06-01).**
+Two new requirements via the post-v1 playbook, on branch **`feat/collaboration-retrospective`**. **R18** —
+a multi-agent, self-evaluating retrospective of this build: 11 subjective reviewers (10 fenced read-only
+personas + 1 no-persona control) read the session transcripts into a **session × reviewer matrix** corpus
+(`log/evaluations/`) + a learner case study (`course/case-studies/`). Requirements + design (§13) + tasks
+plan (`tasks/P9`) **approved & committed**. **Build: 9.1–9.4 ✅ DONE** (panel authored under
+`.claude/agents/`; corpus conventions + `tools/check-evaluations` gate; `/evaluate-session` command;
+pilot **PASS** over the foundational session). **9.5 🟢 IN PROGRESS** — full-corpus leaf pass, one
+evaluated-session per *fresh* session: **1/23 sessions complete** (foundational — 11 leaves + synthesis);
+22 remaining (~1.1M tokens each). Then 9.6 globals/corner → 9.7 case study → 9.8 dogfood wiring → 9.9
+close-out. R18 shows non-failing `PEND` in `make check` until the case study + U13/§10 refs land;
+`check-evaluations` reports leaf/synthesis progress (`PEND` in `check`, hard-fail in `check-strict` until
+the matrix is whole). **R19** (breadcrumb nav for learner docs) is an approved requirement with **design
+deferred** until R18 ships. See `decisions.md` → "P9 …" / ledger **L11**–**L13** and
+`tasks/P9-collaboration-retrospective.md`.
 
 **Where the detail lives** (don't restate it here):
 - Per-unit build notes (what each unit/lab is, its refs, its traceability) → [`tasks.md`](./tasks.md) §P5.

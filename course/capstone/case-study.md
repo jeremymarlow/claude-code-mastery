@@ -21,7 +21,7 @@ of work where ad-hoc prompting falls apart and a deliberate process pays for its
 We ran the [Kiro-style spec workflow](../units/10-spec-driven-dev/unit.md) the course teaches,
 on the course itself. The artifacts are not illustrations — they are the spec we actually built from:
 
-- **Requirements** ([`requirements.md`](../../specs/claude-code-mastery/requirements.md)) — R1–R15 in
+- **Requirements** ([`requirements.md`](../../specs/claude-code-mastery/requirements.md)) — R1–R17 in
   EARS form, with stable IDs. Approved turn-by-turn **before** any design work began.
 - **Design** ([`design.md`](../../specs/claude-code-mastery/design.md)) — architecture, the unit
   model, the version-resilience mechanism, the lab/codebase plan, and a traceability table mapping

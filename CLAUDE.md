@@ -37,6 +37,11 @@ spec-driven — so the repo is itself a worked example of what it teaches.
   in the canonical **🔓 open-loops ledger** (`decisions.md`) — add a row when you defer, strike it
   through when you resolve — and refresh **`IMPLEMENTATION.md` §3** (the first thing a fresh session
   reads) at every phase/unit boundary. Don't let parallel lists drift; point them at the ledger.
+- **Confirm a finished change with `make check-strict`, not just `make check`.** Strict is the
+  Definition-of-Done gate: it turns not-yet-referenced requirements and pending lab/rubric refs into
+  hard failures. Plain `make check` reports those as non-failing `PEND`, so it can stay green while a
+  real regression lands (a P7 prose sweep once dropped the only `R8` reference and `make check` never
+  noticed). Use plain `make check` for fast mid-edit feedback; gate "done" on strict.
 - **Don't commit or push without the user's go-ahead.** Author changes in the working tree and present
   them for review first — **especially spec/design edits** (`requirements.md`, `design.md`, and the
   `tasks/*` plans): commit only once the user has reviewed and approved that gate. **Never push** (any

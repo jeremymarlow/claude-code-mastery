@@ -1,5 +1,11 @@
 # Capstone rubric
 
+<!-- Traceability (R8 — the capstone is the sole graded assessment): brief menu R8.AC2;
+     this self-applicable, work-product rubric R8.AC3/AC4; verification reflection R8.AC6;
+     optional AI self-grade R8.AC5; optional mid-course checkpoint R8.AC7. Kept as a comment,
+     not learner-facing prose, per the P7 de-coding sweep — but R8 must resolve to a built-course
+     artifact for check-traceability (R13.AC5). See decisions.md → "R8 traceability". -->
+
 This is how you grade your **capstone work product** — not yourself. It is **self-applicable**:
 a solo learner can score their own capstone against it with no external evaluator. The
 dimensions below collectively cover **every can-do** in the capability map (including the cross-cutting

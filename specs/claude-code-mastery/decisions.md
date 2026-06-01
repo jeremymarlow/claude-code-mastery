@@ -612,6 +612,27 @@ resilience work spec-first, dogfooding the very additive pattern 8.8 documents. 
 to `main` (awaiting user go-ahead — CLAUDE.md ask-before-push); the drift-ahead is ledger **L9**; the
 `cli-commands.snapshot ⊂ cli-reference.json` fold is ledger **L10** (both non-blocking).
 
+## R8 traceability restored & strict-confirm guard (2026-05-31)
+
+**Regression found & fixed.** `make check-strict` had been silently red since P7 (`cfd04ec`, slice 7.7):
+that learner-prose de-coding sweep dropped every `R#.AC#` breadcrumb from the capstone files, and **R8
+(the capstone) was the one requirement whose only reference lived in that prose** — so it stopped
+resolving to any built-course artifact, failing `check-traceability` in strict mode. It went unnoticed
+because P7 gated on plain `make check` (where an unreferenced requirement is a non-failing `PEND`), not
+`make check-strict`.
+
+**Fix (Option A — chosen over re-adding a visible prose cite, which would undo P7's intent, and over a
+new meta/ traceability artifact, which is overkill for one requirement):** added a **non-rendered HTML
+comment** anchoring R8 (and its ACs) atop `course/capstone/rubric.md` — the rubric being R8.AC3/AC4's
+artifact. This matches the existing convention (unit templates + `progress-checklist.md` already carry
+`<!-- … R#.AC# -->` comments), restores the token for `check-traceability`, and stays invisible to
+learners. Also touched up `case-study.md`'s descriptive "R1–R15" → "R1–R17" (stale post-P8's R16/R17).
+
+**Guard against recurrence:** `/close-unit` step 5 now runs **`make check-strict`** (was `make check`),
+and `CLAUDE.md` adds a working agreement: confirm a finished change on **strict**, reserve plain
+`make check` for fast mid-edit feedback. Pre-commit/CI stay on non-strict so work-in-progress (a future
+unit's pending labs) can still be committed; "done" is gated on strict at the points that mean "done".
+
 ## Open loops & deferrals 🔓 (canonical ledger)
 
 **This is the single source of truth for what is deliberately unfinished.** Every deferral made

@@ -24,9 +24,12 @@ Do each step, in order:
 4. **Verify version currency** — any `{{vd:*}}` key the unit introduced must be `unverified: false` in
    `meta/version-data.yaml`, verified against the installed CLI (R12.AC3–AC4). Flag any that isn't as
    open **L1** debt rather than claiming it's done.
-5. **Run `make check`** and report the result — it must be green before the unit counts as closed. If
-   you edited `unit.src.md`, run `make render` first so the generated `unit.md` (and the unit index) are
-   current; otherwise the render drift gate in `make check` will fail.
+5. **Run `make check-strict`** and report the result — it must be green before the unit counts as closed.
+   Use **strict**, not plain `make check`: strict turns not-yet-referenced requirements and pending lab/
+   rubric refs into hard failures, so "closed" means the Definition-of-Done gate actually passes. (A plain
+   `make check` reports those as non-failing `PEND` — that gap let a P7 prose sweep silently drop the only
+   `R8` reference without turning the suite red.) If you edited `unit.src.md`, run `make render` first so
+   the generated `unit.md` (and the unit index) are current; otherwise the render drift gate will fail.
 
 Then report a short summary of what each file received and the check result. Do not invent status: if a
 verifier, a `SEEDED.md` §2 row, or a vd key isn't actually done, say so and leave it open in the ledger.

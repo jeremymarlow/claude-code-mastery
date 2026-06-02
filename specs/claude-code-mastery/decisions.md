@@ -878,18 +878,18 @@ per _fresh_ Claude session" ritual is **retired**. Now that `/evaluate-session` 
 11-reviewer pass costs the orchestrator only ~11 receipts + the validation reads — cheap on the master
 context. Remaining sessions run as **ordinary work**, closing/compacting context by **standard
 context-management practice**, not a one-session-per-fresh-context rule. Progress (2026-06-01):
-`check-evaluations` reads **132/253 leaves across 12/23 sessions** (foundational, catalog-approval,
+`check-evaluations` reads **143/253 leaves across 13/23 sessions** (foundational, catalog-approval,
 design-approval, p4-sample-codebases, u1-onboarding, u3-operate-safely, unit-authoring-and-lab-ref-pushes,
 open-loops-audit-and-u6, unit-authoring-through-u10, u12-commands-and-skills-dogfooding, u13-subagents-authoring,
-p6-capstone-finalization) and **1/23 syntheses** (foundational). In practice the **leaf and synthesis
-stages run as separate passes** (`/evaluate-session` writes leaves only), so **11 leaf-complete sessions
-await `_synthesis.md`**. The rest (those 11 syntheses + the remaining 11 sessions' leaves & syntheses,
+p6-capstone-finalization, l1-version-key-verification) and **1/23 syntheses** (foundational). In practice the
+**leaf and synthesis stages run as separate passes** (`/evaluate-session` writes leaves only), so **12 leaf-complete
+sessions await `_synthesis.md`**. The rest (those 12 syntheses + the remaining 10 sessions' leaves & syntheses,
 `/evaluate-global` + corner, the case study, U13/§10 dogfood wiring) is **not yet executed**. See decisions
 **P9-pilot**, **P9-leaf-write**, **P9-leaf-workflow**.
 R18 **already passes `check-traceability`** (referenced from the 9.2 corpus artifacts — `meta/conventions.md`,
 `tools/check-evaluations`, the `/evaluate-session` command; see `tasks/P9` §note 2), so its binding gate is
 **corpus completeness** via `check-evaluations`, not the traceability mention. `make check-strict` currently
-fails on **R19** (unreferenced — design deferred, L12) **+ the incomplete corpus** (132/253 leaves, 1/23
+fails on **R19** (unreferenced — design deferred, L12) **+ the incomplete corpus** (143/253 leaves, 1/23
 syntheses) — both expected until the matrix is whole. _Resolve in:_ P9 execution.
 _Also tracked in:_ `tasks/P9-collaboration-retrospective.md`; decisions → "P9 …".
 

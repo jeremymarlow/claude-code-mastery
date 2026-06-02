@@ -102,8 +102,8 @@ synthesis stages run as separate passes. **Workflow update (2026-06-01, `P9-leaf
 "one evaluated-session per *fresh* session" ritual is **retired** — now that `/evaluate-session` reviewers
 write their own leaves and return only receipts (`P9-leaf-write`), the master-context cost is small, so
 remaining passes run as **ordinary work** under standard context management. Leaf cells:
-**132/253 — 12 of 23 sessions** have a full 11-reviewer pass (foundational, catalog-approval, design-approval,
-p4-sample-codebases, u1-onboarding, u3-operate-safely, u5-unit-authoring, u6-open-loops-audit, u10-unit-authoring, u12-commands-skills, u13-subagents, p6-capstone-finalization); 11 sessions remain. Per-session syntheses: **1/23**
+**143/253 — 13 of 23 sessions** have a full 11-reviewer pass (foundational, catalog-approval, design-approval,
+p4-sample-codebases, u1-onboarding, u3-operate-safely, u5-unit-authoring, u6-open-loops-audit, u10-unit-authoring, u12-commands-skills, u13-subagents, p6-capstone-finalization, l1-version-key-verification); 10 sessions remain. Per-session syntheses: **1/23**
 (foundational only). Then 9.6 globals/corner → 9.7 case study → 9.8 dogfood wiring → 9.9
 close-out. R18 **already passes `check-traceability`** (referenced from the 9.2 corpus artifacts —
 `meta/conventions.md`, `tools/check-evaluations`, the `/evaluate-session` command); its binding gate is

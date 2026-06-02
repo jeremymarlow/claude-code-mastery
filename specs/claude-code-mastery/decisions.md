@@ -690,7 +690,7 @@ Locked calls (the deliberation — do not re-litigate):
 
 Gates: requirements `51d27fe` (R18+R19); R18.AC6 matrix amendment `82e4a8b`; design §13 `ef7fc05`; the
 `check-evaluations` adoption + `tasks/P9` + this entry committed at close-out. Build = `tasks/P9`
-(9.1–9.9), executed in slices (9.1–9.4 done; 9.5 paused).
+(9.1–9.9), executed in slices (**9.1–9.5 done** — leaves 253/253 + syntheses 23/23; **9.6 globals/corner next**).
 
 **P9-pilot (2026-05-31) — the 9.4 pilot passed; the full leaf pass is paused for a budget/workflow call.**
 Ran `/evaluate-session` over the foundational session; all 11 reviewers returned verbose, evidence-cited,
@@ -762,6 +762,22 @@ other work, managing/compacting context by **standard practice**, not a one-sess
 The per-session steps are unchanged (dispatch → validate → scan → check → present for commit); only the
 "must be a brand-new session each time" constraint is dropped. _Updates_ the `tasks/P9` §9.5 workflow note
 and IMPLEMENTATION.md §3.
+
+**P9-synthesis-pass (2026-06-02) — the synthesis stage of 9.5 is complete; all 23 per-session syntheses
+written.** With the leaf matrix whole (253/253), the 22 remaining `_synthesis.md` files were authored as a
+single follow-on pass (the foundational one already existed from the format-establishing backfill), each
+rolling its session's 11 leaves into the house format: YAML grade matrix, the modal/consolidated grades,
+where-the-panel-agreed, the dissents (with the `control`-vs-lens gap called out), and a bottom line.
+`check-evaluations` now reports "all 253 leaf evals present" **and** "all 23 per-session syntheses present";
+the only remaining PEND is the **9.6 global tier** (0/11 per-reviewer globals + corner). Run as ordinary
+work per `P9-leaf-workflow` (no fresh-context ritual); leaves were read directly (not re-dispatched), so the
+syntheses are an orchestrator-side consolidation, not a second reviewer pass. **Note on provenance scope:**
+the syntheses consolidate *what the leaves say* — they are not an independent re-evaluation of each session,
+and several recurring cross-session patterns they surface (git-authorization erosion; the duplicate-batch
+tool pathology; check-strict discipline; the `control`-vs-lens gap) are **provisional inputs for the 9.6
+per-reviewer globals**, which remain the authoritative longitudinal view per `design.md §13.5` — the
+syntheses must not pre-empt or anchor them (the contamination risk `log/evaluations/_observations-provisional.md`
+also guards). _Resolve next in:_ 9.6 (globals + corner).
 
 **P9-leaf-lint (2026-06-01) — single-source the leaf validation in a tool; gate committed leaves.**
 The `/evaluate-session` step-4 "are these leaves sane + what's the overall grade" check was being
@@ -896,24 +912,27 @@ discovery-based **`tools/check-evaluations`** gate built + wired into `make chec
 persisted (column complete, 11/253), scan clean; substance strong, the control reads differently from the
 personas, `devils-advocate` dissents (experiment working). Adjustments applied (output-contract no
 preamble/fence; **`model_evaluated` quoted** — the mixed-session colon broke YAML; command strip + scan
-glob). Measured cost ≈ **1.1M tokens/session → ~25M** for the full pass. **9.5 🟢 IN PROGRESS** —
+glob). Measured cost ≈ **1.1M tokens/session → ~25M** for the full pass. **9.5 ✅ COMPLETE (2026-06-02)** —
 **workflow superseded (2026-06-01, decision `P9-leaf-workflow`):** the original "one evaluated-session
 per _fresh_ Claude session" ritual is **retired**. Now that `/evaluate-session` has the reviewers
 **write their own leaves and return only a short receipt** (decision `P9-leaf-write`), a full
 11-reviewer pass costs the orchestrator only ~11 receipts + the validation reads — cheap on the master
 context. Remaining sessions run as **ordinary work**, closing/compacting context by **standard
 context-management practice**, not a one-session-per-fresh-context rule. **Leaf pass ✅ COMPLETE
-(2026-06-01):** `check-evaluations` reads **253/253 leaves across all 23/23 sessions** (the full
-session × reviewer matrix) and **1/23 syntheses** (foundational). In practice the **leaf and synthesis
-stages run as separate passes** (`/evaluate-session` writes leaves only), so **22 leaf-complete sessions
-await `_synthesis.md`**. The remaining P9 work is the **non-leaf** tail: those 22 per-session syntheses,
-`/evaluate-global` + corner, the case study, and U13/§10 dogfood wiring — **not yet executed**. See decisions
-**P9-pilot**, **P9-leaf-write**, **P9-leaf-workflow**.
+(2026-06-01) + synthesis pass ✅ COMPLETE (2026-06-02):** `check-evaluations` reads **253/253 leaves across
+all 23/23 sessions** (the full session × reviewer matrix) **and 23/23 per-session syntheses** ("all 23
+per-session syntheses present"). The **leaf and synthesis stages ran as separate passes**
+(`/evaluate-session` writes leaves only; syntheses written as a follow-on pass, see decision
+`P9-synthesis-pass`). The remaining P9 work is the **9.6+ tail**: the **per-reviewer globals + corner**
+(`_global/<reviewer>.md` + `_overall.md`, 0/11 — the only `check-evaluations` PEND left), the case study
+(9.7), U13/§10 dogfood wiring (9.8), and close-out (9.9) — **not yet executed**. See decisions
+**P9-pilot**, **P9-leaf-write**, **P9-leaf-workflow**, **P9-synthesis-pass**.
 R18 **already passes `check-traceability`** (referenced from the 9.2 corpus artifacts — `meta/conventions.md`,
 `tools/check-evaluations`, the `/evaluate-session` command; see `tasks/P9` §note 2), so its binding gate is
-**corpus completeness** via `check-evaluations`. The leaf-present gate now **passes** (253/253); `make
-check-strict` still fails on **R19** (unreferenced — design deferred, L12) and the **per-session syntheses**
-(1/23) — both expected until the synthesis pass completes. _Resolve in:_ P9 execution.
+**corpus completeness** via `check-evaluations`. The leaf-present and synthesis-present gates now **pass**
+(253/253 leaves, 23/23 syntheses); `make check-strict` now fails only on **R19** (unreferenced — design
+deferred, L12) and the **pending 9.6 global tier** (0/11 per-reviewer globals + corner) — both expected
+until the globals pass completes. _Resolve in:_ P9 execution (9.6+).
 _Also tracked in:_ `tasks/P9-collaboration-retrospective.md`; decisions → "P9 …".
 
 **L12 — R19 breadcrumb navigation: approved, design deferred.** R19 (top-of-page breadcrumb trails on

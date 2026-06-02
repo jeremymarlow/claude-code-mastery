@@ -7,8 +7,8 @@ cells → per-session synthesis + per-reviewer global → overall corner), deliv
 evaluation corpus (`log/evaluations/`) and a learner-facing case study (`course/case-studies/`). Post-v1,
 **not release-blocking**. R19 (breadcrumbs) is a **separate** requirement, design deferred — not built here.
 
-**Status:** 🟢 **APPROVED & EXECUTING** — tasks-gate approved & committed; **9.1–9.4 ✅ done, 9.5 🟢 in
-progress** (leaf pass underway — see `IMPLEMENTATION.md` §3 / ledger **L11** for live counts). Requirements ✅
+**Status:** 🟢 **APPROVED & EXECUTING** — tasks-gate approved & committed; **9.1–9.5 ✅ done** (253/253
+leaves + 23/23 per-session syntheses), **9.6 globals/corner next** (see `IMPLEMENTATION.md` §3 / ledger **L11**). Requirements ✅
 (R18, incl. the AC6 matrix amendment, `82e4a8b`). Design ✅ **APPROVED & committed** (§13 + §11 row, `ef7fc05`).
 Branch **`feat/collaboration-retrospective`** (pushed). Execute top-to-bottom; `make check` green after
 each slice; commit in slices; **ask before push/merge** (CLAUDE.md working agreement).
@@ -144,7 +144,7 @@ re-measures the corpus for the attribution map anyway).
       pass projects to **~25M** (vs. the §13.7 ~13–17M estimate; reviewers read more thoroughly). Surfaced
       to the maintainer.
 
-### 9.5 Leaf pass — all 23 sessions + per-session syntheses  [R18.AC2/AC6; §13.5]  🟢 IN PROGRESS — leaves ✅ 253/253 (23/23 sessions COMPLETE), syntheses 1/23 (2026-06-01)
+### 9.5 Leaf pass — all 23 sessions + per-session syntheses  [R18.AC2/AC6; §13.5]  ✅ COMPLETE — leaves 253/253 + syntheses 23/23 (2026-06-02)
 > **Workflow (superseded 2026-06-01 by decision `P9-leaf-workflow`):** the original "one evaluated-session
 > per _fresh_ Claude session" ritual is **retired**. With the `P9-leaf-write` redesign the reviewers write
 > their own leaves and return only short receipts, so a full 11-reviewer pass costs the orchestrator only
@@ -166,10 +166,14 @@ re-measures the corpus for the attribution map anyway).
 > leaves only (it states the synthesis is "the next step"). So leaf-complete sessions can outrun their syntheses.
 > **Leaf pass ✅ COMPLETE (23/23, 253/253 leaves, 2026-06-01):** every rendered session has a full
 > 11-reviewer pass; `check-evaluations` leaf-present gate passes.
-> **Syntheses done (1/23):** foundational only (backfilled 2026-06-01, establishing the format).
-> **Awaiting `_synthesis.md` (22):** the other 22 leaf-complete sessions.
-> **Next:** the synthesis pass — write the 22 pending `_synthesis.md`, then 9.6 globals/corner → 9.7
-> case study → 9.8 dogfood wiring → 9.9 close-out. Nothing else in flight.
+> **Synthesis pass ✅ COMPLETE (23/23, 2026-06-02):** every session now has its `_synthesis.md`
+> (`check-evaluations` confirms "all 23 per-session syntheses present"). Written as a single follow-on pass
+> by reading each session's 11 leaves directly (not re-dispatched). See decision **P9-synthesis-pass**.
+> **Next:** 9.6 per-reviewer globals + corner (`_global/<reviewer>.md` + `_overall.md`, **0/11** — the only
+> `check-evaluations` PEND left) → 9.7 case study → 9.8 dogfood wiring → 9.9 close-out. Nothing else in flight.
+> **Caveat for 9.6:** the syntheses consolidate *what the leaves say*; the recurring cross-session patterns
+> they surface are provisional inputs only — the per-reviewer globals are the authoritative longitudinal view
+> (§13.5) and must be derived fresh, not anchored on the syntheses (or `_observations-provisional.md`).
 - [ ] For each session (incremental, **one at a time** — the maintainer's workflow): run
       `/evaluate-session`, caching the 11 leaves; then write `<session>/_synthesis.md` — the cross-cutting
       story, where reviewers **agreed/disagreed**, consolidated per-party/per-axis grades, both parties;

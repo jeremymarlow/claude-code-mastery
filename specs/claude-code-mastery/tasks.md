@@ -156,17 +156,18 @@ per-version changelog digest) approved + designed (§12) + built spec-first on `
 - [x] 8.8 maintainer-guide "Adding a post-v1 enhancement" playbook [R13.AC3]
 - [x] 8.9 close-out (state sync; `make check` green; merge to `main` gated on user go-ahead)
 
-### P9 — Collaboration retrospective (R18) + breadcrumb nav (R19) 🟨 **SPEC'D — build pending (2026-05-31)**  → [`tasks/P9-collaboration-retrospective.md`](./tasks/P9-collaboration-retrospective.md)
+### P9 — Collaboration retrospective (R18) + breadcrumb nav (R19) 🟢 **BUILDING — 9.1–9.5 done, 9.6 next (2026-06-02)**  → [`tasks/P9-collaboration-retrospective.md`](./tasks/P9-collaboration-retrospective.md)
 Post-v1, non-release-blocking. **R18** (multi-agent self-evaluating retrospective — 11 persona/control
 subagents → session × reviewer matrix corpus + learner case study) has requirements + design (§13) +
-tasks plan **approved & committed** on `feat/collaboration-retrospective`; build (9.1–9.9) **not yet
-executed**. **R19** (breadcrumb nav) approved, **design deferred** until R18 ships. See `decisions.md` →
+tasks plan **approved & committed** on `feat/collaboration-retrospective`; build **9.1–9.5 ✅ done** (panel
++ corpus tooling + **253/253 leaves + 23/23 per-session syntheses**); **9.6–9.9 pending**. **R19** (breadcrumb
+nav) approved, **design deferred** until R18 ships. See `decisions.md` →
 "P9 …" / ledger **L11**–**L12**.
-- [ ] 9.1 verify agent format + author 11-reviewer panel (10 personas + control) [R18.AC2/AC4/AC5]
-- [ ] 9.2 corpus conventions + `tools/check-evaluations` + model-attribution map + README [R18.AC6/AC7/AC9/AC10]
-- [ ] 9.3 leaf format + `/evaluate-session` command [R18.AC2/AC3/AC6]
-- [ ] 9.4 pilot one session (de-risk before the full run) [R18.AC2/AC3/AC5]
-- [ ] 9.5 leaf pass — 22 sessions + per-session syntheses [R18.AC2/AC6]
+- [x] 9.1 verify agent format + author 11-reviewer panel (10 personas + control) [R18.AC2/AC4/AC5]
+- [x] 9.2 corpus conventions + `tools/check-evaluations` + model-attribution map + README [R18.AC6/AC7/AC9/AC10]
+- [x] 9.3 leaf format + `/evaluate-session` command [R18.AC2/AC3/AC6]
+- [x] 9.4 pilot one session (de-risk before the full run) [R18.AC2/AC3/AC5]
+- [x] 9.5 leaf pass (253/253) + per-session syntheses (23/23) [R18.AC2/AC6]
 - [ ] 9.6 global pass — per-reviewer globals + overall corner [R18.AC6]
 - [ ] 9.7 learner-facing case study [R18.AC8, R8.AC2, R14.AC4]
 - [ ] 9.8 dogfood wiring (U13 + §10) → flips R18 referenced [R18.AC9, R14.AC2]

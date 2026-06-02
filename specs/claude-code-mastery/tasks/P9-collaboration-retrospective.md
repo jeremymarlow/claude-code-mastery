@@ -7,8 +7,9 @@ cells → per-session synthesis + per-reviewer global → overall corner), deliv
 evaluation corpus (`log/evaluations/`) and a learner-facing case study (`course/case-studies/`). Post-v1,
 **not release-blocking**. R19 (breadcrumbs) is a **separate** requirement, design deferred — not built here.
 
-**Status:** 📋 **DRAFT — awaiting tasks-gate approval** (not yet executed). Requirements ✅ (R18, incl.
-the AC6 matrix amendment, `82e4a8b`). Design ✅ **APPROVED & committed** (§13 + §11 row, `ef7fc05`).
+**Status:** 🟢 **APPROVED & EXECUTING** — tasks-gate approved & committed; **9.1–9.4 ✅ done, 9.5 🟢 in
+progress** (leaf pass underway — see `IMPLEMENTATION.md` §3 / ledger **L11** for live counts). Requirements ✅
+(R18, incl. the AC6 matrix amendment, `82e4a8b`). Design ✅ **APPROVED & committed** (§13 + §11 row, `ef7fc05`).
 Branch **`feat/collaboration-retrospective`** (pushed). Execute top-to-bottom; `make check` green after
 each slice; commit in slices; **ask before push/merge** (CLAUDE.md working agreement).
 

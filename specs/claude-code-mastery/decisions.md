@@ -838,16 +838,19 @@ personas, `devils-advocate` dissents (experiment working). Adjustments applied (
 preamble/fence; **`model_evaluated` quoted** — the mixed-session colon broke YAML; command strip + scan
 glob). Measured cost ≈ **1.1M tokens/session → ~25M** for the full pass. **9.5 🟢 IN PROGRESS** —
 workflow decided (2026-05-31): the **full corpus, one evaluated-session per _fresh_ Claude session**
-(ritual in `tasks/P9` §9.5). Progress (2026-06-01): `check-evaluations` reads **110/253 leaves across 10/23
+(ritual in `tasks/P9` §9.5). Progress (2026-06-01): `check-evaluations` reads **121/253 leaves across 11/23
 sessions** (foundational, catalog-approval, design-approval, p4-sample-codebases, u1-onboarding,
 u3-operate-safely, unit-authoring-and-lab-ref-pushes, open-loops-audit-and-u6, unit-authoring-through-u10,
-u12-commands-and-skills-dogfooding) and **1/23 syntheses** (foundational). In practice the
-**leaf and synthesis stages have run as separate passes** (`/evaluate-session` writes leaves only), so **9
-leaf-complete sessions await `_synthesis.md`**. The rest (those 9 syntheses + the remaining 13 sessions' leaves & syntheses,
+u12-commands-and-skills-dogfooding, u13-subagents-authoring) and **1/23 syntheses** (foundational). In practice the
+**leaf and synthesis stages have run as separate passes** (`/evaluate-session` writes leaves only), so **10
+leaf-complete sessions await `_synthesis.md`**. The rest (those 10 syntheses + the remaining 12 sessions' leaves & syntheses,
 `/evaluate-global` + corner, the case study, U13/§10 dogfood wiring) is **not yet executed**. See decision
 **P9-pilot**.
-R18 shows `PEND` in `make check` (non-failing) until the case study + U13/§10 references land;
-`make check-strict` will fail on R18 (+ an incomplete corpus) until then. _Resolve in:_ P9 execution.
+R18 **already passes `check-traceability`** (referenced from the 9.2 corpus artifacts — `meta/conventions.md`,
+`tools/check-evaluations`, the `/evaluate-session` command; see `tasks/P9` §note 2), so its binding gate is
+**corpus completeness** via `check-evaluations`, not the traceability mention. `make check-strict` currently
+fails on **R19** (unreferenced — design deferred, L12) **+ the incomplete corpus** (121/253 leaves, 1/23
+syntheses) — both expected until the matrix is whole. _Resolve in:_ P9 execution.
 _Also tracked in:_ `tasks/P9-collaboration-retrospective.md`; decisions → "P9 …".
 
 **L12 — R19 breadcrumb navigation: approved, design deferred.** R19 (top-of-page breadcrumb trails on

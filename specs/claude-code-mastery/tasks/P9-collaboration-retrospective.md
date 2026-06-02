@@ -7,8 +7,9 @@ cells → per-session synthesis + per-reviewer global → overall corner), deliv
 evaluation corpus (`log/evaluations/`) and a learner-facing case study (`course/case-studies/`). Post-v1,
 **not release-blocking**. R19 (breadcrumbs) is a **separate** requirement, design deferred — not built here.
 
-**Status:** 🟢 **APPROVED & EXECUTING** — tasks-gate approved & committed; **9.1–9.5 ✅ done** (253/253
-leaves + 23/23 per-session syntheses), **9.6 globals/corner next** (see `IMPLEMENTATION.md` §3 / ledger **L11**). Requirements ✅
+**Status:** 🟢 **APPROVED & EXECUTING** — tasks-gate approved & committed; **9.1–9.6 ✅ done** (253/253
+leaves + 23/23 per-session syntheses + 11/11 per-reviewer globals + the `_overall.md` corner;
+`check-evaluations` reports "global tier complete"), **9.7 case study next** (see `IMPLEMENTATION.md` §3 / ledger **L11**). Requirements ✅
 (R18, incl. the AC6 matrix amendment, `82e4a8b`). Design ✅ **APPROVED & committed** (§13 + §11 row, `ef7fc05`).
 Branch **`feat/collaboration-retrospective`** (pushed). Execute top-to-bottom; `make check` green after
 each slice; commit in slices; **ask before push/merge** (CLAUDE.md working agreement).
@@ -185,15 +186,29 @@ re-measures the corpus for the attribution map anyway).
 - [ ] Watch `tools/check-evaluations` (built in 9.2) as the **live progress readout** as sessions
       accrete; also note status in the 🔓 ledger.
 
-### 9.6 Global pass — per-reviewer globals + overall corner  [R18.AC6; §13.5/§13.6]
-- [ ] `.claude/commands/evaluate-global.md` — re-dispatch **each reviewer over its own ~23 leaves** to
-      write `_global/<reviewer>.md`: the longitudinal arc in *its* lens (did this dimension improve across
-      sessions? recurring per-party strengths/failure modes; the sonnet-vs-opus caveat). Control does the
-      same over its own leaves.
-- [ ] Final corner pass → `_global/_overall.md`: blends the 11 per-reviewer globals into the bottom line
+### 9.6 Global pass — per-reviewer globals + overall corner  [R18.AC6; §13.5/§13.6]  ✅ DONE (2026-06-02)
+- [x] Re-dispatch **each reviewer over its own ~23 leaves** to write `_global/<reviewer>.md`: the
+      longitudinal arc in *its* lens (did this dimension improve across sessions? recurring per-party
+      strengths/failure modes; the sonnet-vs-opus caveat). Control did the same over its own leaves.
+      **Done via direct subagent dispatch** (user chose this over authoring a saved
+      `.claude/commands/evaluate-global.md` — the validated contract below was used verbatim per reviewer).
+      Pilot wrote 3 (control/devils-advocate/process-architect); the remaining 8 dispatched 2026-06-02
+      (collaboration-partner, context-engineer, dialogue-clarity, intent-alignment, outcome-auditor,
+      safety-steward, tooling-economist, verification-hawk). **All 11 present.**
+- [x] Final corner pass → `_global/_overall.md`: blends the 11 per-reviewer globals into the bottom line
       + top did-well/okay/could-improve themes; notes where the **control** diverged from the personas
-      (the experiment's result). `scan-secrets` over `_global/**`; commit.
+      (the experiment's result) and reconciles the devils-advocate valence gap. `scan-secrets`
+      `_global/**` clean (12 files); `check-evaluations` → "global tier complete (11 + corner)".
+- [ ] Commit (awaiting user go-ahead).
 
+> **✅ DONE (2026-06-02).** All 11 globals + corner written; `check-evaluations` passes the global gate;
+> `make check-strict` now fails only on **R19** (deferred, L12). Findings converged hard: **human steady,
+> Claude mixed** (10/11 concur). Corner verdict: **output did-well, process did-okay** — the lens-free
+> `control` reached the same headline as the panel (so the core read needs no scaffolding), while the
+> personas bought teaching-grade *mechanism*; devils-advocate's stricter re-grade was credited to the
+> *process* axis (human-as-backstop, self-confirming verification, strict-gate skipped), not waved away.
+>
+> **Historical handoff (pilot, retained for the record):**
 > **🟢 PILOT DONE (3/11, 2026-06-02) — full run greenlit; resume here.** Ran a 3-reviewer global pilot
 > (`control`, `devils-advocate`, `process-architect`) to test whether the lenses diverge enough to justify
 > the full matrix. **They do, decisively** — same 23 leaves, three different *verdicts*: control = "sound,

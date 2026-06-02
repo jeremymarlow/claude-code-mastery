@@ -103,20 +103,25 @@ all 23 sessions) + per-session syntheses ✅ (23/23).** Leaf and synthesis stage
 write their own leaves and return only receipts (`P9-leaf-write`), the master-context cost is small, so
 remaining passes run as **ordinary work** under standard context management. Leaf cells:
 **✅ 253/253 — all 23 of 23 sessions** have a full 11-reviewer pass; **per-session syntheses ✅ 23/23**
-(`check-evaluations` confirms "all 253 leaf evals present" + "all 23 per-session syntheses present"). **9.6 🟢 PILOT DONE
-(3/11, 2026-06-02):** `control` + `devils-advocate` + `process-architect` globals written; the lenses **diverge
-decisively on the verdict** (control "sound" vs devils "did-okay center of gravity, green checks were theatre" vs
-process-architect "high plateau, one failure signature") → **full run greenlit**, and **cheap** (~1.1M for all 11 —
-globals read only their own ~23 leaves, not transcripts). **Next:** the remaining **8 globals + corner** — resume
-per `tasks/P9` §9.6 (the validated dispatch contract is captured there) → 9.7 case study → 9.8 dogfood wiring → 9.9
-close-out. R18 **already passes `check-traceability`** (referenced from the 9.2 corpus artifacts —
-`meta/conventions.md`, `tools/check-evaluations`, the `/evaluate-session` command); its binding gate is
-**corpus completeness** via `check-evaluations` (`PEND` in `check`, hard-fail in `check-strict` until the
-matrix is whole), not the traceability mention. Leaves (253/253) and per-session syntheses (23/23) are
-both present; `make check-strict` now fails only on **R19** (unreferenced — design deferred, L12) **+ the
-pending 9.6 global tier** (0/11 per-reviewer globals + corner) — both expected (see `tasks/P9` §note 2). **R19** (breadcrumb nav for learner docs) is an approved requirement with **design
-deferred** until R18 ships. See `decisions.md` → "P9 …" / ledger **L11**–**L13** and
-`tasks/P9-collaboration-retrospective.md`.
+(`check-evaluations` confirms "all 253 leaf evals present" + "all 23 per-session syntheses present"). **9.6 ✅ COMPLETE
+(2026-06-02): all 11 per-reviewer globals + the `_overall.md` corner written** (pilot's 3 +
+the remaining 8 dispatched directly as fresh subagents per the validated contract — user chose direct
+dispatch over authoring a saved `evaluate-global` command). `check-evaluations` now reports **"global tier
+complete (11 per-reviewer globals + _overall.md corner)"**; `scan-secrets _global/**` clean (12 files).
+**Findings converged hard:** human **steady**, Claude **mixed** (10/11 reviewers concur — recurring
+commit/push-gate breaches, tool-batch/edit-from-memory waste, `make check` vs `check-strict` slip, offset
+by honest recovery + strong state hygiene). **Corner verdict: output did-well, process did-okay** — the
+lens-free `control` reached the same headline as the persona panel (the core read needs no scaffolding),
+while the personas bought teaching-grade *mechanism*; devils-advocate's stricter re-grade was credited to
+the *process* axis (human-as-backstop, self-confirming verification, strict-gate skipped), not averaged away.
+**Next:** 9.7 case study → 9.8 dogfood wiring + traceability flip → 9.9 close-out. R18 **already passes
+`check-traceability`** (referenced from the 9.2 corpus artifacts — `meta/conventions.md`,
+`tools/check-evaluations`, the `/evaluate-session` command); its binding gate is **corpus completeness**
+via `check-evaluations` (`PEND` in `check`, hard-fail in `check-strict` until the matrix is whole), which
+**now passes** (253/253 leaves + 23/23 syntheses + 11 globals + corner). `make check-strict` now fails
+**only on R19** (unreferenced — design deferred, L12) — expected. **R19** (breadcrumb nav for learner docs)
+is an approved requirement with **design deferred** until R18 ships. See `decisions.md` → "P9 …" / ledger
+**L11**–**L13** and `tasks/P9-collaboration-retrospective.md`.
 
 **Where the detail lives** (don't restate it here):
 - Per-unit build notes (what each unit/lab is, its refs, its traceability) → [`tasks.md`](./tasks.md) §P5.

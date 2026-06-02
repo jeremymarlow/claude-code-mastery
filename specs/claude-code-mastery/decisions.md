@@ -804,6 +804,32 @@ keeping completeness `PEND`. Touched: `meta/evaluation-leaf.schema.json`, `tools
 `tools/lint-evaluations`, `tools/check-evaluations`, `.claude/commands/evaluate-session.md`,
 `meta/conventions.md`, `log/evaluations/README.md`. Within R18 scope (no new requirement).
 
+**P9-globals (2026-06-02) — 9.6 global tier complete: 11 per-reviewer globals + the `_overall.md` corner.**
+After the 3-reviewer pilot (`P9-pilot`, 2026-06-02) confirmed the lenses diverge enough to justify the full
+matrix, the **remaining 8 globals** (collaboration-partner, context-engineer, dialogue-clarity,
+intent-alignment, outcome-auditor, safety-steward, tooling-economist, verification-hawk) were written by
+**dispatching each reviewer directly as a fresh subagent** per the §9.6 validated contract (each reads ONLY
+its own 23 leaves via `Glob log/evaluations/*/<reviewer>.md`, honors per-leaf `model_evaluated`, writes
+`_global/<reviewer>.md`, returns a receipt only). **Decision: direct dispatch over authoring a saved
+`.claude/commands/evaluate-global.md`** — the user chose this; the contract was mechanical enough to run
+verbatim without a command wrapper, and a one-shot tail (8 globals + corner) doesn't repay command
+authoring. The 11 globals converged sharply: **human `steady`, Claude `mixed`** in 10/11 lenses (tooling-
+economist upgrades human→improving; dialogue-clarity upgrades Claude→steady on the comms axis only).
+Recurring Claude failure modes named across lenses: the **per-change commit/push gate** (breached in the
+P7–P8 cluster, healed only once hardened into `CLAUDE.md`), **tool-batch/duplicate-batch + edit-from-memory**
+waste (never improved despite the fix sitting in Claude's own memory), and **gating "done" on `make check`
+rather than the prescribed `check-strict`**. Offsetting strengths: faithful state hygiene, verify-don't-trust
+on version facts, and honest, non-deflecting recovery. The **corner** (`_overall.md`, dispatched as one
+blend pass over the 11 globals) lands on **output = did-well, process = did-okay**, and treats two matrix
+results as first-class: (1) the lens-free **control reached the same headline verdict as the persona panel**
+— so the core read needs no persona scaffolding, while the personas buy teaching-grade *mechanism and
+resolution*; (2) **devils-advocate's stricter "did-okay" re-grade is reconciled, not averaged away** —
+credited to the *process* axis (human-as-backstop, self-confirming verification, skipped strict-gate) and
+corroborated by the panel's own evidence, while its "largely theatre" framing is discounted as overreach.
+`scan-secrets _global/**` clean (12 files); `check-evaluations` → "global tier complete". `make check-strict`
+now fails only on R19 (deferred). Not yet committed (awaiting user go-ahead). _Next:_ 9.7 learner case
+study. _Tracked in:_ `tasks/P9` §9.6; ledger **L11**.
+
 ## Open loops & deferrals 🔓 (canonical ledger)
 
 **This is the single source of truth for what is deliberately unfinished.** Every deferral made
@@ -929,13 +955,17 @@ per-session syntheses present"). The **leaf and synthesis stages ran as separate
 **P9-pilot**, **P9-leaf-write**, **P9-leaf-workflow**, **P9-synthesis-pass**.
 R18 **already passes `check-traceability`** (referenced from the 9.2 corpus artifacts — `meta/conventions.md`,
 `tools/check-evaluations`, the `/evaluate-session` command; see `tasks/P9` §note 2), so its binding gate is
-**corpus completeness** via `check-evaluations`. The leaf-present and synthesis-present gates now **pass**
-(253/253 leaves, 23/23 syntheses); `make check-strict` now fails only on **R19** (unreferenced — design
-deferred, L12) and the **9.6 global tier** (now **3/11 — pilot done 2026-06-02**: control + devils-advocate
-+ process-architect; the lenses diverged decisively on the verdict → full run greenlit, ~1.1M total since
-globals read only their own leaves) — both expected until the globals pass completes. _Resolve in:_ P9
-execution (9.6 — remaining 8 globals + corner; validated dispatch contract in `tasks/P9` §9.6).
-_Also tracked in:_ `tasks/P9-collaboration-retrospective.md`; decisions → "P9 …".
+**corpus completeness** via `check-evaluations`, which now **passes in full**: 253/253 leaves, 23/23
+syntheses, **and the 9.6 global tier ✅ COMPLETE (2026-06-02) — all 11 per-reviewer globals + the
+`_overall.md` corner** ("global tier complete (11 per-reviewer globals + _overall.md corner)").
+The pilot's 3 (control + devils-advocate + process-architect) plus the remaining 8 (dispatched directly as
+fresh subagents per the §9.6 validated contract — user chose direct dispatch over authoring a saved
+`evaluate-global` command). Findings converged: **human steady, Claude mixed** (10/11 concur); corner
+verdict **output did-well, process did-okay**, control reached the panel's headline (core read needs no
+scaffolding) while personas added teaching-grade mechanism, devils-advocate's re-grade credited to the
+process axis. `scan-secrets _global/**` clean. `make check-strict` now fails **only on R19** (unreferenced
+— design deferred, L12) — expected. _Remaining P9:_ 9.7 case study → 9.8 dogfood wiring + traceability
+flip → 9.9 close-out. _Also tracked in:_ `tasks/P9-collaboration-retrospective.md`; decision **P9-globals** below.
 
 **L12 — R19 breadcrumb navigation: approved, design deferred.** R19 (top-of-page breadcrumb trails on
 learner-facing docs) is an **approved requirement** but its **design is deferred by the user until R18

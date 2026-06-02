@@ -20,7 +20,7 @@ import os
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from _common import ROOT, Reporter  # noqa: E402
+from _common import ROOT, Reporter, load_leaf_schema, validate_leaf  # noqa: E402
 
 RENDERED = ROOT / "log" / "transcripts" / "rendered"
 AGENTS = ROOT / ".claude" / "agents"
@@ -44,15 +44,30 @@ def main(argv):
                      "no reviewer agents in .claude/agents/ — nothing to evaluate with"):
         return rep.done(strict=strict)
 
-    # Leaves + per-session syntheses.
-    missing_leaves, missing_synth = [], []
+    # Leaves + per-session syntheses. Completeness is PEND/strict (the corpus builds incrementally);
+    # validity of a leaf that DOES exist is a hard FAIL in both modes — a malformed committed leaf is
+    # a real defect, not pending work. Both use the shared validator (single source with lint-evaluations).
+    schema = load_leaf_schema()
+    missing_leaves, missing_synth, invalid = [], [], 0
     for s in sessions:
         sdir = EVAL / s
-        missing_leaves += [f"{s}/{r}" for r in reviewers if not (sdir / f"{r}.md").is_file()]
+        for r in reviewers:
+            leaf = sdir / f"{r}.md"
+            if not leaf.is_file():
+                missing_leaves.append(f"{s}/{r}")
+                continue
+            errors, _ = validate_leaf(leaf, schema=schema, expected_session=s)
+            if errors:
+                invalid += 1
+                for e in errors:
+                    rep.fail(f"{leaf.relative_to(ROOT)}: {e}")
         if not (sdir / "_synthesis.md").is_file():
             missing_synth.append(s)
 
     n_leaves = len(sessions) * len(reviewers)
+    n_present = n_leaves - len(missing_leaves)
+    if n_present and not invalid:
+        rep.ok(f"all {n_present} present leaf eval(s) valid against evaluation-leaf.schema.json")
     if missing_leaves:
         sessions_touched = len({m.split("/")[0] for m in missing_leaves})
         rep.pending(f"leaf evals: {n_leaves - len(missing_leaves)}/{n_leaves} present "

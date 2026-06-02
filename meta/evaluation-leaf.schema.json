@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://claude-code-mastery/meta/evaluation-leaf.schema.json",
+  "title": "Collaboration-retrospective leaf evaluation front matter (R18; design.md §13)",
+  "description": "Schema for the YAML front matter of one leaf cell `log/evaluations/<session>/<reviewer>.md`. The verbose prose body below the front matter is judged by a human reviewer, not by this schema; only its structure is single-sourced here so `tools/lint-evaluations` and `tools/check-evaluations` validate every leaf the same way.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["session", "reviewer", "model_evaluated", "grades"],
+  "properties": {
+    "session": {
+      "type": "string",
+      "minLength": 1,
+      "description": "The evaluated session's transcript filename stem (must equal the leaf's parent directory)."
+    },
+    "reviewer": {
+      "type": "string",
+      "minLength": 1,
+      "description": "The reviewer agent id (must equal the leaf's filename stem)."
+    },
+    "model_evaluated": {
+      "type": "string",
+      "minLength": 1,
+      "description": "The model that produced Claude's side of the evaluated session (R18.AC7), derived from the raw transcript — never assumed. Quote it in the YAML source: a mixed-model value contains a colon that breaks unquoted YAML."
+    },
+    "grades": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["human", "claude", "overall"],
+      "description": "Per-party process/communication grades plus one consolidated overall grade. Requiring both parties here is what structurally guarantees a leaf covers both sides.",
+      "properties": {
+        "human": { "$ref": "#/$defs/partyGrades" },
+        "claude": { "$ref": "#/$defs/partyGrades" },
+        "overall": { "$ref": "#/$defs/grade" }
+      }
+    }
+  },
+  "$defs": {
+    "grade": {
+      "enum": ["did-well", "did-okay", "could-improve"],
+      "description": "The leaf grade vocabulary (log/evaluations/README.md). Deliberately non-numeric and non-ranking."
+    },
+    "partyGrades": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["process", "communication"],
+      "properties": {
+        "process": { "$ref": "#/$defs/grade" },
+        "communication": { "$ref": "#/$defs/grade" }
+      }
+    }
+  }
+}

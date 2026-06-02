@@ -93,6 +93,94 @@ def unit_files():
     return sorted(UNITS.glob("*/unit.md"))
 
 
+# --- collaboration-retrospective leaves (R18; design.md §13) ---------------------------------
+#
+# A leaf cell is YAML front matter (validated against meta/evaluation-leaf.schema.json) over a
+# verbose prose body. `validate_leaf` is the single source of leaf-validity rules so the interactive
+# linter (tools/lint-evaluations) and the corpus gate (tools/check-evaluations) agree exactly.
+#
+# We validate STRUCTURE only. Substance — whether the prose is insightful, evidence-cited, and even-
+# handed across both parties — is the human reviewer's eyeball, deliberately not mechanized: the
+# panel cites legitimately in varied styles (inline `(turn …)` quotes vs an `_Evidence:_` marker;
+# `[human]` vs `[human comms]` vs `[human|claude]` tags), so any text heuristic for those would
+# false-flag good leaves. The schema's required human+claude+overall grades already guarantee a leaf
+# structurally addresses both parties; the only body rule here is a generous floor that catches a
+# near-empty grade-dump (real leaves run 6k–13k chars; the floor sits well below that).
+
+EVAL_DIR = ROOT / "log" / "evaluations"
+LEAF_SCHEMA_PATH = META / "evaluation-leaf.schema.json"
+LEAF_GRADES = ("did-well", "did-okay", "could-improve")
+MIN_LEAF_BODY_CHARS = 1500
+
+_LEAF_FM_RE = re.compile(r"\A---\n(.*?)\n---\n?(.*)\Z", re.DOTALL)
+_MODEL_QUOTED_RE = re.compile(r'''^model_evaluated:\s*(".*"|'.*')\s*$''', re.MULTILINE)
+
+
+def load_leaf_schema():
+    import json
+    return json.loads(LEAF_SCHEMA_PATH.read_text(encoding="utf-8"))
+
+
+def validate_leaf(path: Path, schema=None, expected_session=None, expected_model=None):
+    """Validate one leaf file against the schema + source/body rules (single source of truth).
+
+    Returns (errors: list[str], overall: str | None). An empty error list means valid; `overall`
+    is the parsed grades.overall (None if unparseable) so callers can tabulate without re-reading.
+    The reviewer id is taken from the filename stem; `expected_session` defaults to the parent dir
+    name; pass `expected_model` to also assert the attribution string (R18.AC7).
+    """
+    import jsonschema
+
+    if schema is None:
+        schema = load_leaf_schema()
+    if expected_session is None:
+        expected_session = path.parent.name
+
+    errors: list[str] = []
+    text = path.read_text(encoding="utf-8")
+
+    m = _LEAF_FM_RE.match(text)
+    if not m:
+        if not text.startswith("---"):
+            errors.append("must begin at '---' (strip any preamble or ``` fence above the front matter)")
+        else:
+            errors.append("front matter is not closed by a '---' line")
+        return errors, None
+
+    fm_text, body = m.group(1), m.group(2)
+    try:
+        fm = yaml.safe_load(fm_text)
+    except yaml.YAMLError as e:
+        return [f"front matter is not valid YAML: {e}"], None
+    if not isinstance(fm, dict):
+        return ["front matter did not parse to a mapping"], None
+
+    validator = jsonschema.Draft202012Validator(schema)
+    for e in sorted(validator.iter_errors(fm), key=lambda e: list(e.path)):
+        loc = "/".join(str(p) for p in e.path) or "(root)"
+        errors.append(f"{loc}: {e.message}")
+
+    grades = fm.get("grades")
+    overall = grades.get("overall") if isinstance(grades, dict) else None
+
+    reviewer = path.stem
+    if fm.get("reviewer") != reviewer:
+        errors.append(f"reviewer '{fm.get('reviewer')}' != filename stem '{reviewer}'")
+    if fm.get("session") != expected_session:
+        errors.append(f"session '{fm.get('session')}' != directory '{expected_session}'")
+    if not _MODEL_QUOTED_RE.search(fm_text):
+        errors.append("model_evaluated must be quoted in the YAML source "
+                      "(a colon in a mixed-model value breaks unquoted YAML)")
+    if expected_model is not None and fm.get("model_evaluated") != expected_model:
+        errors.append(f"model_evaluated '{fm.get('model_evaluated')}' != expected '{expected_model}'")
+
+    if len(body.strip()) < MIN_LEAF_BODY_CHARS:
+        errors.append(f"body is only {len(body.strip())} chars (< {MIN_LEAF_BODY_CHARS}) — "
+                      "a leaf is a verbose evidence-cited review, not a grade dump")
+
+    return errors, overall
+
+
 # --- version-data resolution ({{vd:key}}) ----------------------------------------------------
 
 VD_TOKEN_RE = re.compile(r"\{\{vd:([A-Za-z0-9_-]+)\}\}")

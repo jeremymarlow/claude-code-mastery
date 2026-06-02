@@ -51,6 +51,11 @@ it.** Three levels, per party (`human`, `claude`) × axis (`process`, `communica
 
 ## Leaf front-matter schema
 
+The front matter is machine-validated against [`meta/evaluation-leaf.schema.json`](../../meta/evaluation-leaf.schema.json)
+(the canonical grade enum). `tools/lint-evaluations <session>` checks a freshly-written batch (and
+prints each leaf's `overall`); `tools/check-evaluations` re-checks every committed leaf in `make check`.
+Both validate **structure** only — the body's insight, evidence, and even-handedness are judged by eye.
+
 Every leaf (`<session>/<reviewer>.md`) is YAML front matter over a verbose prose body:
 
 ```
@@ -137,5 +142,7 @@ done
   (each reviewer over its own leaves), then the `_global/_overall.md` corner.
 - **Secret scan before every commit.** Run `tools/scan-secrets log/evaluations/<session>/**` and
   human-review any flag before committing (R18.AC10).
-- **Completeness gate.** `tools/check-evaluations` reports progress (`PEND`) in `make check` and
-  hard-fails in `make check-strict` until the matrix is whole — discovery-based, no hardcoded lists.
+- **Validity + completeness gate.** `tools/check-evaluations` (discovery-based, no hardcoded lists)
+  reports corpus *completeness* as `PEND` in `make check` / hard-fail in `make check-strict` until the
+  matrix is whole, **and** hard-fails in both modes on any *present* leaf that doesn't validate against
+  the leaf schema. Validate a single batch interactively with `tools/lint-evaluations <session>`.

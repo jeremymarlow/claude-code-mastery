@@ -1,0 +1,136 @@
+#!/usr/bin/env python3
+"""lint-evaluations (R18): validate a session's leaf evaluations the same way every time.
+
+The `/evaluate-session` skill dispatches 11 reviewers that each write their own leaf; step 4 of the
+skill then has to confirm those leaves are well-formed and pull out the overall grades. Doing that
+from memory drifted run-to-run, so this tool single-sources the check (the rules live in
+`_common.validate_leaf` against `meta/evaluation-leaf.schema.json`, shared with the corpus gate
+`tools/check-evaluations`).
+
+It validates STRUCTURE — front matter schema, quoted attribution, reviewer/session match, a grade-
+dump floor — and prints each leaf's `overall` grade so the run's report is generated, not grepped.
+It does NOT judge whether the prose is insightful or evidence-cited: the panel cites in varied styles
+(see `_common`), so that stays the human reviewer's eyeball.
+
+Usage:
+  tools/lint-evaluations <session-slug>        # one session (the skill's step 4)
+  tools/lint-evaluations --all                 # every session that has any leaves
+  tools/lint-evaluations <slug> --model <attr> # also assert the model attribution (R18.AC7)
+
+Exit non-zero if any present leaf is invalid, or (for a single named session) if a reviewer's leaf
+is missing. Corpus *completeness* across all sessions remains `tools/check-evaluations`' job.
+"""
+import os
+import sys
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from _common import (  # noqa: E402
+    EVAL_DIR, ROOT, Reporter, load_leaf_schema, validate_leaf,
+)
+
+AGENTS = ROOT / ".claude" / "agents"
+
+
+def reviewers():
+    return sorted(p.stem for p in AGENTS.glob("*.md"))
+
+
+def leaf_files(sdir):
+    """Leaf cells in a session dir: <reviewer>.md, excluding the _synthesis margin and _global."""
+    return sorted(p for p in sdir.glob("*.md") if not p.name.startswith("_"))
+
+
+def lint_session(rep, slug, schema, panel, expected_model=None, require_full=True):
+    sdir = EVAL_DIR / slug
+    if not sdir.is_dir():
+        rep.fail(f"{slug}: no evaluations directory at log/evaluations/{slug}/")
+        return
+    leaves = leaf_files(sdir)
+    if not leaves:
+        rep.fail(f"{slug}: directory holds no leaf files")
+        return
+
+    grade_tally = {}
+    models = set()
+    for path in leaves:
+        rel = path.relative_to(ROOT)
+        errors, overall = validate_leaf(path, schema=schema, expected_session=slug,
+                                        expected_model=expected_model)
+        # Track the attribution actually written, to catch a leaf that drifted from its peers.
+        fm_model = _model_of(path)
+        if fm_model is not None:
+            models.add(fm_model)
+        if errors:
+            for e in errors:
+                rep.fail(f"{rel}: {e}")
+        else:
+            grade_tally[overall] = grade_tally.get(overall, 0) + 1
+            rep.ok(f"{rel}: valid — overall: {overall}")
+
+    # Every leaf in a session evaluates the same model; divergent strings mean a mistaken attribution.
+    if len(models) > 1:
+        rep.fail(f"{slug}: leaves disagree on model_evaluated: {sorted(models)}")
+
+    # For a single named session, all reviewers should have reported in before the batch is committed.
+    if require_full:
+        present = {p.stem for p in leaves}
+        missing = [r for r in panel if r not in present]
+        if missing:
+            rep.fail(f"{slug}: missing leaf for {len(missing)} reviewer(s): {', '.join(missing)}")
+
+    if grade_tally:
+        summary = ", ".join(f"{n} {g}" for g, n in sorted(grade_tally.items()))
+        rep.ok(f"{slug}: {len(leaves)} leaf/leaves valid · overall grades: {summary}")
+
+
+def _model_of(path):
+    """Cheap read of just the model_evaluated value (None if absent/unparseable)."""
+    import yaml
+    text = path.read_text(encoding="utf-8")
+    if not text.startswith("---"):
+        return None
+    fm = text.split("---", 2)
+    if len(fm) < 3:
+        return None
+    try:
+        data = yaml.safe_load(fm[1])
+    except yaml.YAMLError:
+        return None
+    return data.get("model_evaluated") if isinstance(data, dict) else None
+
+
+def main(argv):
+    args = [a for a in argv if not a.startswith("--")]
+    do_all = "--all" in argv
+    expected_model = None
+    if "--model" in argv:
+        i = argv.index("--model")
+        if i + 1 < len(argv):
+            expected_model = argv[i + 1]
+            args = [a for a in args if a != expected_model]
+
+    rep = Reporter("lint-evaluations")
+    schema = load_leaf_schema()
+    panel = reviewers()
+    if not panel:
+        rep.fail("no reviewer agents in .claude/agents/ — nothing to validate against")
+        return rep.done()
+
+    if do_all:
+        slugs = sorted(p.name for p in EVAL_DIR.iterdir()
+                       if p.is_dir() and not p.name.startswith("_") and leaf_files(p))
+        if not slugs:
+            rep.ok("no session has leaves yet — nothing to validate")
+            return rep.done()
+        for slug in slugs:
+            lint_session(rep, slug, schema, panel, require_full=False)
+    elif args:
+        lint_session(rep, args[0], schema, panel, expected_model=expected_model, require_full=True)
+    else:
+        rep.fail("usage: tools/lint-evaluations <session-slug> [--model <attr>] | --all")
+
+    return rep.done()
+
+
+if __name__ == "__main__":
+    raise SystemExit(main(sys.argv[1:]))

@@ -88,6 +88,12 @@ discoverable, no hardcoded lists (the gate `tools/check-evaluations` derives the
 - `<session>` = the transcript filename **stem**; `<reviewer>` = an agent `name` from `.claude/agents/`.
 - **Grade vocabulary:** `did-well` / `did-okay` / `could-improve`, per party (`human`, `claude`) × axis
   (`process`, `communication`) plus one `overall` — a scannable summary that never replaces the prose.
+- **Leaf front matter** is single-sourced as `meta/evaluation-leaf.schema.json` (the grade enum lives
+  there). Two tools validate every leaf the *same* way against it: `tools/lint-evaluations <session>`
+  (the interactive step-4 check in `/evaluate-session`; also prints each leaf's `overall`) and
+  `tools/check-evaluations` (the corpus gate, which now hard-fails a malformed *present* leaf in both
+  `make check` and `--strict`, separate from the completeness `PEND`). Validation is **structural**;
+  whether the prose is insightful, evidence-cited, and even-handed stays the human reviewer's eyeball.
 - **Cached = immutable:** a leaf is written once and committed as evidence; re-running a reviewer is a
   new dated file, not an overwrite.
 - **Provenance & safety:** every insight cites the transcript (session + locator); model attribution is

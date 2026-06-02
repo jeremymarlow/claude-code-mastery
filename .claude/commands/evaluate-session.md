@@ -58,17 +58,26 @@ Do each step, in order:
    **P9-leaf-write**). Dispatch the `control` with the identical brief — its different behavior must come from
    its own (lens-less, mandate-less) definition, not from a different prompt.
 
-4. **Validate the written leaves (no re-emission — the point of the redesign).** Each reviewer wrote its own
-   file; you never reproduce its prose. Lint `log/evaluations/$ARGUMENTS/*.md`:
-   - **first line is `---`** — if a preamble or surrounding ``` fence leaked in above it, strip everything
-     before the first `---` with a quick `sed`/`awk` (a mechanical fix, not a rewrite);
-   - front matter well-formed: `session: $ARGUMENTS`, `reviewer:` equals the filename stem, `model_evaluated:`
-     equals the step-2 attribution **and is quoted** (a colon in a mixed-model value breaks unquoted YAML),
-     and the `grades` block uses **only** `did-well` / `did-okay` / `could-improve`;
-   - the body is verbose and **evidence-cited** (insights with `_Evidence:_` locators), covers **both
-     parties**, and is not a grade dump.
-   For anything **substantive** — a missing file, a thin/one-sided body, wrong attribution, malformed grades —
-   **re-dispatch that one reviewer** (never hand-author a reviewer's prose).
+4. **Validate the written leaves with the linter (no re-emission, no ad-hoc checks).** Each reviewer wrote
+   its own file; you never reproduce its prose. Run the single-source validator:
+
+   ```
+   tools/lint-evaluations $ARGUMENTS --model "<attribution from step 2>"
+   ```
+
+   It checks every leaf the same way — first line `---` (no preamble/fence), front matter valid against
+   `meta/evaluation-leaf.schema.json` (the `grades` vocab is `did-well`/`did-okay`/`could-improve` only),
+   `reviewer` equals the filename stem, `session` equals the directory, `model_evaluated` quoted **and**
+   equal to the step-2 attribution, all eleven reviewers present, and a body floor that catches a grade
+   dump — then prints each leaf's `overall` grade so your report table is generated, not grepped. Exit 0 =
+   all valid. The linter checks **structure**; substance is still your eyeball: skim that each body is
+   genuinely verbose, evidence-bearing (the panel cites in varied styles — inline `(turn …)` quotes or an
+   `_Evidence:_` marker), and even-handed across both parties.
+
+   - If the linter flags a leaf with a **preamble/fence above the `---`**, strip everything before the first
+     `---` with a quick `sed`/`awk` (a mechanical fix, not a rewrite) and re-run.
+   - For anything **substantive** — a missing file, a thin/one-sided body, wrong attribution, malformed
+     grades — **re-dispatch that one reviewer** (never hand-author a reviewer's prose), then re-run the linter.
 
 5. **Progress + safety (no commit here).** Run `tools/scan-secrets log/evaluations/$ARGUMENTS/*.md` (it takes
    file arguments, not a directory) and

@@ -763,6 +763,31 @@ The per-session steps are unchanged (dispatch → validate → scan → check �
 "must be a brand-new session each time" constraint is dropped. _Updates_ the `tasks/P9` §9.5 workflow note
 and IMPLEMENTATION.md §3.
 
+**P9-leaf-lint (2026-06-01) — single-source the leaf validation in a tool; gate committed leaves.**
+The `/evaluate-session` step-4 "are these leaves sane + what's the overall grade" check was being
+reconstructed ad hoc each run (the exact anti-pattern the course teaches against — a repeated mechanical
+check derived from memory, drifting run-to-run). Fixed with the same shape the repo already uses for unit
+front matter (`check-frontmatter` + `unit-frontmatter.schema.json`): a new `meta/evaluation-leaf.schema.json`
+(canonical grade enum + structure), a shared `_common.validate_leaf`, the interactive
+`tools/lint-evaluations <session>` (called from step 4; also prints each leaf's `overall` so the report
+table is generated, not grepped), and `tools/check-evaluations` reusing the **same** validator so a
+malformed *present* leaf hard-fails `make check`/`--strict` (a real defect — distinct from the corpus
+*completeness* `PEND`). **Scope = "gate committed leaves"** (chosen over the thinner "lint only" and the
+fuller "also derive attribution from the raw transcript"; the latter would re-read 23 large `.jsonl` on
+every `make check` for marginal gain — the linter instead checks intra-session model agreement, and takes
+an optional `--model` to assert the step-2 attribution interactively). **Validates structure only** —
+a decision grounded in the data, not assumed: profiling all 143 committed leaves showed the panel cites
+legitimately in varied styles (2 `devils-advocate` leaves cite inline with `(turn …)` quotes and no
+`_Evidence:_` marker; party tags appear as `[human]`, `[human comms]`, `[human|claude]`), so any
+evidence/“both-parties” text heuristic would false-flag good leaves. The schema's required human+claude+
+overall grades already make “covers both parties” structural; the only body rule is a 1500-char floor
+(real leaves run 6.1k–12.8k) that catches a near-empty grade dump. Substance stays the human eyeball.
+Verified: linter green on all 143 existing leaves (zero false positives), negative tests trip on preamble/
+unquoted-model/short-body/missing-reviewer, `check-evaluations` hard-fails an invalid present leaf while
+keeping completeness `PEND`. Touched: `meta/evaluation-leaf.schema.json`, `tools/_common.py`,
+`tools/lint-evaluations`, `tools/check-evaluations`, `.claude/commands/evaluate-session.md`,
+`meta/conventions.md`, `log/evaluations/README.md`. Within R18 scope (no new requirement).
+
 ## Open loops & deferrals 🔓 (canonical ledger)
 
 **This is the single source of truth for what is deliberately unfinished.** Every deferral made

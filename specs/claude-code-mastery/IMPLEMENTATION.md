@@ -103,8 +103,12 @@ all 23 sessions) + per-session syntheses ✅ (23/23).** Leaf and synthesis stage
 write their own leaves and return only receipts (`P9-leaf-write`), the master-context cost is small, so
 remaining passes run as **ordinary work** under standard context management. Leaf cells:
 **✅ 253/253 — all 23 of 23 sessions** have a full 11-reviewer pass; **per-session syntheses ✅ 23/23**
-(`check-evaluations` confirms "all 253 leaf evals present" + "all 23 per-session syntheses present"). **Next: 9.6**
-per-reviewer globals + corner → 9.7 case study → 9.8 dogfood wiring → 9.9
+(`check-evaluations` confirms "all 253 leaf evals present" + "all 23 per-session syntheses present"). **9.6 🟢 PILOT DONE
+(3/11, 2026-06-02):** `control` + `devils-advocate` + `process-architect` globals written; the lenses **diverge
+decisively on the verdict** (control "sound" vs devils "did-okay center of gravity, green checks were theatre" vs
+process-architect "high plateau, one failure signature") → **full run greenlit**, and **cheap** (~1.1M for all 11 —
+globals read only their own ~23 leaves, not transcripts). **Next:** the remaining **8 globals + corner** — resume
+per `tasks/P9` §9.6 (the validated dispatch contract is captured there) → 9.7 case study → 9.8 dogfood wiring → 9.9
 close-out. R18 **already passes `check-traceability`** (referenced from the 9.2 corpus artifacts —
 `meta/conventions.md`, `tools/check-evaluations`, the `/evaluate-session` command); its binding gate is
 **corpus completeness** via `check-evaluations` (`PEND` in `check`, hard-fail in `check-strict` until the

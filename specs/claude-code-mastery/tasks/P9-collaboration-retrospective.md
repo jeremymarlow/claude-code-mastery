@@ -194,6 +194,43 @@ re-measures the corpus for the attribution map anyway).
       + top did-well/okay/could-improve themes; notes where the **control** diverged from the personas
       (the experiment's result). `scan-secrets` over `_global/**`; commit.
 
+> **🟢 PILOT DONE (3/11, 2026-06-02) — full run greenlit; resume here.** Ran a 3-reviewer global pilot
+> (`control`, `devils-advocate`, `process-architect`) to test whether the lenses diverge enough to justify
+> the full matrix. **They do, decisively** — same 23 leaves, three different *verdicts*: control = "sound,
+> high-trust collaboration"; process-architect = "high plateau, one failure signature, governance
+> self-sharpened"; devils-advocate = **re-grades the corpus to a did-okay center of gravity** ("green checks
+> were theatre; the human + luck carried it, not the process"). They agree on facts (human steady / Claude
+> mixed; human is the error-corrector; tool-batching pathology never improved) but diverge on valence — so a
+> single "default-perspective" global would have produced ≈ the control's read and **erased the contrarian
+> re-grade**, the most valuable cell. **Cost surprise:** each global ≈ 75–115k *subagent* tokens (reads only
+> its own ~23 leaves, ~55k — NOT the transcripts), so all 11 ≈ **~1.1M**, not the 13–16M §13.7 feared (that
+> was the leaf pass, done). The global tier is cheap.
+>
+> **Next session — finish 9.6:** `/prime-context`, then dispatch the **remaining 8** reviewers
+> (collaboration-partner, context-engineer, dialogue-clarity, intent-alignment, outcome-auditor,
+> safety-steward, tooling-economist, verification-hawk) as fresh subagents, **then the corner**. Best to
+> first lift the contract below into `.claude/commands/evaluate-global.md` (the unchecked task above) so the
+> run is mechanical, not ad-hoc.
+>
+> **Dispatch contract (validated by the pilot — use verbatim per reviewer):**
+> - Dispatch each via its `subagent_type`; it runs in a **fresh** context.
+> - **Reads ONLY its own 23 leaves:** Glob `log/evaluations/*/<reviewer>.md`. Must NOT read other reviewers'
+>   leaves, any `_synthesis.md`, `_observations-provisional.md`, or transcripts — keeps the lens pure + the
+>   experiment valid.
+> - **Model caveat to pass:** 22 sessions `claude-opus-4-8`; foundational `2026-05-29_1845` is mixed/
+>   opus-dominant (sonnet-start) — honor each leaf's `model_evaluated`, never assume.
+> - **Personas** keep their lens + candor mandate (one-line lens reminder in the prompt). **`control` gets a
+>   neutral, lens-free, candor-free prompt** (task only) — it is the baseline; do not inject a lens.
+> - **Writes** `log/evaluations/_global/<reviewer>.md` beginning at `---`, returns only a receipt. Shape:
+>   front matter `reviewer / scope / model_note / trajectory{human,claude}` → `## The longitudinal arc` →
+>   `## Recurring patterns (ordered by significance)` (each cites ≥2 of its own slugs, `[human|claude]`) →
+>   `## Per party — recurring strengths & failure modes` → `## Bottom line`. (The 3 pilot files are the
+>   exemplars.)
+> - **Corner** (`_overall.md`): dispatch one pass (or orchestrator) that reads all 11 globals → bottom line +
+>   top themes + **where the control diverged from the personas**, and **reconcile the gap** between
+>   devils-advocate's stricter did-okay re-grade and the panel's modal did-well (that gap is a real finding,
+>   not an error). Then `scan-secrets log/evaluations/_global/**`; present for commit.
+
 ### 9.7 Learner-facing case study  [R18.AC6/AC8; R8.AC2, R14.AC4; §13.5]
 - [ ] `course/case-studies/collaboration-retrospective.md` — the **teaching render** of the corner: an
       honest, candid account of what effective (and ineffective) human+Claude co-authorship looked like

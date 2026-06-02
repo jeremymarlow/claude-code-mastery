@@ -931,8 +931,10 @@ R18 **already passes `check-traceability`** (referenced from the 9.2 corpus arti
 `tools/check-evaluations`, the `/evaluate-session` command; see `tasks/P9` §note 2), so its binding gate is
 **corpus completeness** via `check-evaluations`. The leaf-present and synthesis-present gates now **pass**
 (253/253 leaves, 23/23 syntheses); `make check-strict` now fails only on **R19** (unreferenced — design
-deferred, L12) and the **pending 9.6 global tier** (0/11 per-reviewer globals + corner) — both expected
-until the globals pass completes. _Resolve in:_ P9 execution (9.6+).
+deferred, L12) and the **9.6 global tier** (now **3/11 — pilot done 2026-06-02**: control + devils-advocate
++ process-architect; the lenses diverged decisively on the verdict → full run greenlit, ~1.1M total since
+globals read only their own leaves) — both expected until the globals pass completes. _Resolve in:_ P9
+execution (9.6 — remaining 8 globals + corner; validated dispatch contract in `tasks/P9` §9.6).
 _Also tracked in:_ `tasks/P9-collaboration-retrospective.md`; decisions → "P9 …".
 
 **L12 — R19 breadcrumb navigation: approved, design deferred.** R19 (top-of-page breadcrumb trails on

@@ -144,7 +144,7 @@ re-measures the corpus for the attribution map anyway).
       pass projects to **~25M** (vs. the §13.7 ~13–17M estimate; reviewers read more thoroughly). Surfaced
       to the maintainer.
 
-### 9.5 Leaf pass — all 23 sessions + per-session syntheses  [R18.AC2/AC6; §13.5]  🟢 IN PROGRESS — leaves 165/253 (15/23 sessions), syntheses 1/23 (2026-06-01)
+### 9.5 Leaf pass — all 23 sessions + per-session syntheses  [R18.AC2/AC6; §13.5]  🟢 IN PROGRESS — leaves ✅ 253/253 (23/23 sessions COMPLETE), syntheses 1/23 (2026-06-01)
 > **Workflow (superseded 2026-06-01 by decision `P9-leaf-workflow`):** the original "one evaluated-session
 > per _fresh_ Claude session" ritual is **retired**. With the `P9-leaf-write` redesign the reviewers write
 > their own leaves and return only short receipts, so a full 11-reviewer pass costs the orchestrator only
@@ -164,18 +164,12 @@ re-measures the corpus for the attribution map anyway).
 >
 > **Note (2026-06-01): leaf and synthesis stages run as _separate_ passes** — `/evaluate-session` persists
 > leaves only (it states the synthesis is "the next step"). So leaf-complete sessions can outrun their syntheses.
-> **Leaf pass done (15/23):** `2026-05-29_1845-…` (foundational), `2026-05-29_2146-catalog-approval`,
-> `2026-05-30_0725-design-approval`, `2026-05-30_0816-p4-sample-codebases`, `2026-05-30_0848-u1-onboarding`,
-> `2026-05-30_0942-u3-operate-safely`, `2026-05-30_1249-unit-authoring-and-lab-ref-pushes`,
-> `2026-05-30_1316-open-loops-audit-and-u6`, `2026-05-30_1415-unit-authoring-through-u10`,
-> `2026-05-30_1557-u12-commands-and-skills-dogfooding`, `2026-05-30_1703-u13-subagents-authoring`,
-> `2026-05-30_1930-p6-capstone-finalization`, `2026-05-30_2224-l1-version-key-verification`,
-> `2026-05-30_2322-quality-pass-8-lens-review-and-p7-start`,
-> `2026-05-31_0832-p7-rollout-closeout-and-session-transcript-tooling`.
+> **Leaf pass ✅ COMPLETE (23/23, 253/253 leaves, 2026-06-01):** every rendered session has a full
+> 11-reviewer pass; `check-evaluations` leaf-present gate passes.
 > **Syntheses done (1/23):** foundational only (backfilled 2026-06-01, establishing the format).
-> **Awaiting `_synthesis.md` (14):** the other 14 leaf-complete sessions.
-> **Next:** continue the leaf pass on the remaining **8** sessions (chronological) and backfill the
-> pending syntheses. Nothing else in flight.
+> **Awaiting `_synthesis.md` (22):** the other 22 leaf-complete sessions.
+> **Next:** the synthesis pass — write the 22 pending `_synthesis.md`, then 9.6 globals/corner → 9.7
+> case study → 9.8 dogfood wiring → 9.9 close-out. Nothing else in flight.
 - [ ] For each session (incremental, **one at a time** — the maintainer's workflow): run
       `/evaluate-session`, caching the 11 leaves; then write `<session>/_synthesis.md` — the cross-cutting
       story, where reviewers **agreed/disagreed**, consolidated per-party/per-axis grades, both parties;

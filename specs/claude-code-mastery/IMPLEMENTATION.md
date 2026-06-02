@@ -97,19 +97,20 @@ personas + 1 no-persona control) read the session transcripts into a **session �
 (`log/evaluations/`) + a learner case study (`course/case-studies/`). Requirements + design (§13) + tasks
 plan (`tasks/P9`) **approved & committed**. **Build: 9.1–9.4 ✅ DONE** (panel authored under
 `.claude/agents/`; corpus conventions + `tools/check-evaluations` gate; `/evaluate-session` command;
-pilot **PASS** over the foundational session). **9.5 🟢 IN PROGRESS** — full-corpus leaf pass; leaf and
-synthesis stages run as separate passes. **Workflow update (2026-06-01, `P9-leaf-workflow`):** the
+pilot **PASS** over the foundational session). **9.5 🟢 IN PROGRESS — leaf pass ✅ COMPLETE (253/253,
+all 23 sessions); per-session syntheses next** — leaf and synthesis stages run as separate passes. **Workflow update (2026-06-01, `P9-leaf-workflow`):** the
 "one evaluated-session per *fresh* session" ritual is **retired** — now that `/evaluate-session` reviewers
 write their own leaves and return only receipts (`P9-leaf-write`), the master-context cost is small, so
 remaining passes run as **ordinary work** under standard context management. Leaf cells:
-**165/253 — 15 of 23 sessions** have a full 11-reviewer pass (foundational, catalog-approval, design-approval,
-p4-sample-codebases, u1-onboarding, u3-operate-safely, u5-unit-authoring, u6-open-loops-audit, u10-unit-authoring, u12-commands-skills, u13-subagents, p6-capstone-finalization, l1-version-key-verification, quality-pass-8-lens-review-and-p7-start, p7-rollout-closeout-and-session-transcript-tooling); 8 sessions remain. Per-session syntheses: **1/23**
+**✅ 253/253 — all 23 of 23 sessions** have a full 11-reviewer pass (the leaf matrix is complete;
+`check-evaluations` leaf-present gate passes). Per-session syntheses: **1/23**
 (foundational only). Then 9.6 globals/corner → 9.7 case study → 9.8 dogfood wiring → 9.9
 close-out. R18 **already passes `check-traceability`** (referenced from the 9.2 corpus artifacts —
 `meta/conventions.md`, `tools/check-evaluations`, the `/evaluate-session` command); its binding gate is
 **corpus completeness** via `check-evaluations` (`PEND` in `check`, hard-fail in `check-strict` until the
-matrix is whole), not the traceability mention. `make check-strict` currently fails on **R19** (unreferenced
-— design deferred, L12) **+ the incomplete corpus** — both expected (see `tasks/P9` §note 2). **R19** (breadcrumb nav for learner docs) is an approved requirement with **design
+matrix is whole), not the traceability mention. The **leaf-present gate now passes** (253/253); `make
+check-strict` currently fails on **R19** (unreferenced — design deferred, L12) **+ the pending per-session
+syntheses** (1/23) — both expected (see `tasks/P9` §note 2). **R19** (breadcrumb nav for learner docs) is an approved requirement with **design
 deferred** until R18 ships. See `decisions.md` → "P9 …" / ledger **L11**–**L13** and
 `tasks/P9-collaboration-retrospective.md`.
 

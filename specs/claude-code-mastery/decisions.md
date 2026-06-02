@@ -902,21 +902,18 @@ per _fresh_ Claude session" ritual is **retired**. Now that `/evaluate-session` 
 **write their own leaves and return only a short receipt** (decision `P9-leaf-write`), a full
 11-reviewer pass costs the orchestrator only ~11 receipts + the validation reads — cheap on the master
 context. Remaining sessions run as **ordinary work**, closing/compacting context by **standard
-context-management practice**, not a one-session-per-fresh-context rule. Progress (2026-06-01):
-`check-evaluations` reads **165/253 leaves across 15/23 sessions** (foundational, catalog-approval,
-design-approval, p4-sample-codebases, u1-onboarding, u3-operate-safely, unit-authoring-and-lab-ref-pushes,
-open-loops-audit-and-u6, unit-authoring-through-u10, u12-commands-and-skills-dogfooding, u13-subagents-authoring,
-p6-capstone-finalization, l1-version-key-verification, quality-pass-8-lens-review-and-p7-start,
-p7-rollout-closeout-and-session-transcript-tooling) and **1/23 syntheses** (foundational). In practice the
-**leaf and synthesis stages run as separate passes** (`/evaluate-session` writes leaves only), so **14 leaf-complete
-sessions await `_synthesis.md`**. The rest (those 14 syntheses + the remaining 8 sessions' leaves & syntheses,
-`/evaluate-global` + corner, the case study, U13/§10 dogfood wiring) is **not yet executed**. See decisions
+context-management practice**, not a one-session-per-fresh-context rule. **Leaf pass ✅ COMPLETE
+(2026-06-01):** `check-evaluations` reads **253/253 leaves across all 23/23 sessions** (the full
+session × reviewer matrix) and **1/23 syntheses** (foundational). In practice the **leaf and synthesis
+stages run as separate passes** (`/evaluate-session` writes leaves only), so **22 leaf-complete sessions
+await `_synthesis.md`**. The remaining P9 work is the **non-leaf** tail: those 22 per-session syntheses,
+`/evaluate-global` + corner, the case study, and U13/§10 dogfood wiring — **not yet executed**. See decisions
 **P9-pilot**, **P9-leaf-write**, **P9-leaf-workflow**.
 R18 **already passes `check-traceability`** (referenced from the 9.2 corpus artifacts — `meta/conventions.md`,
 `tools/check-evaluations`, the `/evaluate-session` command; see `tasks/P9` §note 2), so its binding gate is
-**corpus completeness** via `check-evaluations`, not the traceability mention. `make check-strict` currently
-fails on **R19** (unreferenced — design deferred, L12) **+ the incomplete corpus** (165/253 leaves, 1/23
-syntheses) — both expected until the matrix is whole. _Resolve in:_ P9 execution.
+**corpus completeness** via `check-evaluations`. The leaf-present gate now **passes** (253/253); `make
+check-strict` still fails on **R19** (unreferenced — design deferred, L12) and the **per-session syntheses**
+(1/23) — both expected until the synthesis pass completes. _Resolve in:_ P9 execution.
 _Also tracked in:_ `tasks/P9-collaboration-retrospective.md`; decisions → "P9 …".
 
 **L12 — R19 breadcrumb navigation: approved, design deferred.** R19 (top-of-page breadcrumb trails on

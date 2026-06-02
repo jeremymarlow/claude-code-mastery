@@ -144,30 +144,35 @@ re-measures the corpus for the attribution map anyway).
       pass projects to **~25M** (vs. the §13.7 ~13–17M estimate; reviewers read more thoroughly). Surfaced
       to the maintainer.
 
-### 9.5 Leaf pass — all 23 sessions + per-session syntheses  [R18.AC2/AC6; §13.5]  🟢 IN PROGRESS — leaves 88/253 (8/23 sessions), syntheses 1/23 (2026-06-01)
-> **Workflow (decided 2026-05-31): build the full 23-session corpus, one evaluated-session per _fresh_
-> Claude session**, to keep the orchestrator context clean (each session ≈ 1.1M subagent tokens + ~20k
-> to persist; ~25M total). **Per-session ritual in a new session:**
+### 9.5 Leaf pass — all 23 sessions + per-session syntheses  [R18.AC2/AC6; §13.5]  🟢 IN PROGRESS — leaves 132/253 (12/23 sessions), syntheses 1/23 (2026-06-01)
+> **Workflow (superseded 2026-06-01 by decision `P9-leaf-workflow`):** the original "one evaluated-session
+> per _fresh_ Claude session" ritual is **retired**. With the `P9-leaf-write` redesign the reviewers write
+> their own leaves and return only short receipts, so a full 11-reviewer pass costs the orchestrator only
+> the receipts + post-write validation reads (no leaf round-trips through the master context). Remaining
+> passes therefore run as **ordinary work**, closing/compacting context by **standard context-management
+> practice** — not a one-session-per-fresh-context rule. **Per-session steps (unchanged):**
 > 1. (optional) `/prime-context` to orient.
-> 2. `/evaluate-session <slug>` — dispatches the 11 reviewers, persists the 11 leaves. (The earlier
->    `$1`-didn't-substitute bug is **fixed** — it was 0-based positional args; the command now uses
->    `$ARGUMENTS`. See decision **P9-cmd-args**.)
-> 3. Review the leaves (spot-check evidence-citation + the front matter parses; `model_evaluated` quoted).
+> 2. `/evaluate-session <slug>` — dispatches the 11 reviewers; each **writes its own leaf** and returns a
+>    receipt (the orchestrator no longer re-emits leaves). Uses `$ARGUMENTS` (the `$1` bug is fixed; see
+>    **P9-cmd-args**).
+> 3. Validate the leaves (first line `---`; front matter parses; `model_evaluated` quoted; grade vocab;
+>    evidence-cited) — re-dispatch any substantive failure; never hand-author a reviewer's prose.
 > 4. Write `log/evaluations/<slug>/_synthesis.md` — the per-session synthesis (cross-cutting story,
 >    agreements/disagreements, consolidated per-party/per-axis grades; cites the leaves).
 > 5. `tools/scan-secrets log/evaluations/<slug>/*.md`, human-review any flag (R18.AC10).
-> 6. Commit the session's batch (+ push); `tools/check-evaluations` shows progress.
+> 6. Present the batch for commit (+ push on a separate explicit ask); `tools/check-evaluations` shows progress.
 >
-> **Note (2026-06-01): leaf and synthesis stages have run as _separate_ passes**, not bundled per fresh
-> session as the ritual above describes — `/evaluate-session` persists leaves only (it states the synthesis
-> is "the next step"). So leaf-complete sessions can outrun their syntheses.
-> **Leaf pass done (6/23):** `2026-05-29_1845-…` (foundational), `2026-05-29_2146-catalog-approval`,
+> **Note (2026-06-01): leaf and synthesis stages run as _separate_ passes** — `/evaluate-session` persists
+> leaves only (it states the synthesis is "the next step"). So leaf-complete sessions can outrun their syntheses.
+> **Leaf pass done (12/23):** `2026-05-29_1845-…` (foundational), `2026-05-29_2146-catalog-approval`,
 > `2026-05-30_0725-design-approval`, `2026-05-30_0816-p4-sample-codebases`, `2026-05-30_0848-u1-onboarding`,
-> `2026-05-30_0942-u3-operate-safely`. **Syntheses done (1/23):** foundational only (backfilled 2026-06-01,
-> establishing the format). **Awaiting `_synthesis.md` (5):** catalog-approval, design-approval,
-> p4-sample-codebases, u1-onboarding, u3-operate-safely.
-> **Next:** backfill those 5 syntheses, then continue the leaf pass on the remaining **17** sessions
-> (suggest chronological — `2026-05-30_1249-unit-authoring-and-lab-ref-pushes`). Nothing else in flight.
+> `2026-05-30_0942-u3-operate-safely`, `2026-05-30_1249-unit-authoring-and-lab-ref-pushes`,
+> `2026-05-30_1316-open-loops-audit-and-u6`, `2026-05-30_1415-unit-authoring-through-u10`,
+> `2026-05-30_1557-u12-commands-and-skills-dogfooding`, `2026-05-30_1703-u13-subagents-authoring`,
+> `2026-05-30_1930-p6-capstone-finalization`. **Syntheses done (1/23):** foundational only (backfilled
+> 2026-06-01, establishing the format). **Awaiting `_synthesis.md` (11):** the other 11 leaf-complete sessions.
+> **Next:** continue the leaf pass on the remaining **11** sessions (suggest chronological —
+> `2026-05-30_2224-l1-version-key-verification`) and backfill the pending syntheses. Nothing else in flight.
 - [ ] For each session (incremental, **one at a time** — the maintainer's workflow): run
       `/evaluate-session`, caching the 11 leaves; then write `<session>/_synthesis.md` — the cross-cutting
       story, where reviewers **agreed/disagreed**, consolidated per-party/per-axis grades, both parties;

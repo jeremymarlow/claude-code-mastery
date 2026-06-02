@@ -748,6 +748,21 @@ where least-privilege ≠ read-only — when a subagent must persist its own out
 *exactly* the write it needs, and an efficiency win can justify relaxing a stricter default. Already-cached
 leaves stay immutable (the orchestrator dispatches only missing reviewers, so no agent overwrites one).
 
+**P9-leaf-workflow (2026-06-01) — retire the "one evaluated-session per _fresh_ Claude session" ritual;
+run the remaining leaf passes as ordinary work.** The fresh-context rule was adopted (2026-05-31) when the
+orchestrator persisted every leaf itself, so a single session's pass dragged ~11 full leaf documents
+*twice* through the master context (≈1.1M subagent tokens **plus** the re-typed `Write` payloads) — heavy
+enough that starting each evaluated-session in a clean context was the safe play. The **`P9-leaf-write`**
+redesign removed that load: the reviewers now write their own leaves and return only short receipts, so a
+full 11-reviewer pass costs the orchestrator only the receipts + the post-write validation reads — a small,
+bounded footprint. Confirmed on the **first run under the new contract** (the `2026-05-30_1930-p6-capstone-finalization`
+leaf pass, 2026-06-01): 11 leaves written, validated, secret-scanned, with the orchestrator context barely
+moved. **So:** remaining evaluations (the rest of 9.5's leaves + the per-session syntheses) run like any
+other work, managing/compacting context by **standard practice**, not a one-session-per-fresh-context rule.
+The per-session steps are unchanged (dispatch → validate → scan → check → present for commit); only the
+"must be a brand-new session each time" constraint is dropped. _Updates_ the `tasks/P9` §9.5 workflow note
+and IMPLEMENTATION.md §3.
+
 ## Open loops & deferrals 🔓 (canonical ledger)
 
 **This is the single source of truth for what is deliberately unfinished.** Every deferral made
@@ -857,19 +872,24 @@ persisted (column complete, 11/253), scan clean; substance strong, the control r
 personas, `devils-advocate` dissents (experiment working). Adjustments applied (output-contract no
 preamble/fence; **`model_evaluated` quoted** — the mixed-session colon broke YAML; command strip + scan
 glob). Measured cost ≈ **1.1M tokens/session → ~25M** for the full pass. **9.5 🟢 IN PROGRESS** —
-workflow decided (2026-05-31): the **full corpus, one evaluated-session per _fresh_ Claude session**
-(ritual in `tasks/P9` §9.5). Progress (2026-06-01): `check-evaluations` reads **121/253 leaves across 11/23
-sessions** (foundational, catalog-approval, design-approval, p4-sample-codebases, u1-onboarding,
-u3-operate-safely, unit-authoring-and-lab-ref-pushes, open-loops-audit-and-u6, unit-authoring-through-u10,
-u12-commands-and-skills-dogfooding, u13-subagents-authoring) and **1/23 syntheses** (foundational). In practice the
-**leaf and synthesis stages have run as separate passes** (`/evaluate-session` writes leaves only), so **10
-leaf-complete sessions await `_synthesis.md`**. The rest (those 10 syntheses + the remaining 12 sessions' leaves & syntheses,
-`/evaluate-global` + corner, the case study, U13/§10 dogfood wiring) is **not yet executed**. See decision
-**P9-pilot**.
+**workflow superseded (2026-06-01, decision `P9-leaf-workflow`):** the original "one evaluated-session
+per _fresh_ Claude session" ritual is **retired**. Now that `/evaluate-session` has the reviewers
+**write their own leaves and return only a short receipt** (decision `P9-leaf-write`), a full
+11-reviewer pass costs the orchestrator only ~11 receipts + the validation reads — cheap on the master
+context. Remaining sessions run as **ordinary work**, closing/compacting context by **standard
+context-management practice**, not a one-session-per-fresh-context rule. Progress (2026-06-01):
+`check-evaluations` reads **132/253 leaves across 12/23 sessions** (foundational, catalog-approval,
+design-approval, p4-sample-codebases, u1-onboarding, u3-operate-safely, unit-authoring-and-lab-ref-pushes,
+open-loops-audit-and-u6, unit-authoring-through-u10, u12-commands-and-skills-dogfooding, u13-subagents-authoring,
+p6-capstone-finalization) and **1/23 syntheses** (foundational). In practice the **leaf and synthesis
+stages run as separate passes** (`/evaluate-session` writes leaves only), so **11 leaf-complete sessions
+await `_synthesis.md`**. The rest (those 11 syntheses + the remaining 11 sessions' leaves & syntheses,
+`/evaluate-global` + corner, the case study, U13/§10 dogfood wiring) is **not yet executed**. See decisions
+**P9-pilot**, **P9-leaf-write**, **P9-leaf-workflow**.
 R18 **already passes `check-traceability`** (referenced from the 9.2 corpus artifacts — `meta/conventions.md`,
 `tools/check-evaluations`, the `/evaluate-session` command; see `tasks/P9` §note 2), so its binding gate is
 **corpus completeness** via `check-evaluations`, not the traceability mention. `make check-strict` currently
-fails on **R19** (unreferenced — design deferred, L12) **+ the incomplete corpus** (121/253 leaves, 1/23
+fails on **R19** (unreferenced — design deferred, L12) **+ the incomplete corpus** (132/253 leaves, 1/23
 syntheses) — both expected until the matrix is whole. _Resolve in:_ P9 execution.
 _Also tracked in:_ `tasks/P9-collaboration-retrospective.md`; decisions → "P9 …".
 

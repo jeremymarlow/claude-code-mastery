@@ -77,3 +77,7 @@ also serves as the worked exemplar for your capstone.
 **Maintaining or extending the course?** See
 [`course/maintainer-guide.md`](./course/maintainer-guide.md) — how to add or update a unit without
 breaking the catalog, coverage matrix, or capability map, and how to refresh when the CLI changes.
+
+## License
+
+Released under the [MIT License](./LICENSE) — © 2026 Jeremy Marlow.

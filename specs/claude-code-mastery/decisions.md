@@ -728,6 +728,26 @@ into `{{vd:custom-commands}}` (value + provenance + `verified_version: 2.1.159`,
 **Why:** R12.AC3 — a version-specific Claude Code fact verified against docs+runtime, not authored from
 memory; quarantined in the vd key so it can't drift back into prose. _Resolves_ the P9-pilot open finding.
 
+**P9-leaf-write (2026-06-01) — reviewers now write their own leaf file (least-privilege `+Write`),
+reversing the original read-only / orchestrator-persists contract.** Decided with the maintainer after two
+efficiency observations on the live leaf pass: (1) **latency** — the orchestrator re-emitted each ~2–4 KB
+leaf as a full `Write` payload across 11 serial calls, the slow part of the loop; (2) **token waste** —
+every leaf crossed the orchestrator's context **twice** (inbound as the agent's result, outbound as the
+re-typed `Write`), the orchestrator adding nothing to the text. Both share one root cause: the document
+round-tripping through the orchestrator. **Fix:** grant each reviewer `Write` (now `tools: Read, Grep,
+Glob, Write`) and have it **write its own leaf** to a predetermined path, then **return only a short
+receipt** (path + `overall` grade + one sentence) — so the prose never round-trips. The orchestrator
+validates post-write (first line `---`; quoted `model_evaluated`; grade vocab; evidence-cited; a mechanical
+`sed` strip if a preamble leaks) and re-dispatches substantive failures; **commit stays the maintainer's
+call** (agents write, never commit). Touched: the 11 `.claude/agents/*.md`, `/evaluate-session`, design
+§13.3/§13.5/§13.6/§13.7. **Why acceptable:** the panel is a trusted, internal, self-authored artifact
+writing one predetermined file with no Bash/Edit/network — `Read, Grep, Glob, Write` *is* the
+least-privilege grant for "read transcripts, write one verdict," and the token/latency savings outweigh the
+marginal fencing cost of one scoped write. **Teachable moment (flagged for U13, L13):** a real-world case
+where least-privilege ≠ read-only — when a subagent must persist its own output, the right fence is
+*exactly* the write it needs, and an efficiency win can justify relaxing a stricter default. Already-cached
+leaves stay immutable (the orchestrator dispatches only missing reviewers, so no agent overwrites one).
+
 ## Open loops & deferrals 🔓 (canonical ledger)
 
 **This is the single source of truth for what is deliberately unfinished.** Every deferral made
@@ -872,6 +892,14 @@ on-disk authoring details are incomplete, so a learner copying the worked exampl
    until a session restart (only `/agents`-created ones load live). U13's **lab** has the learner write
    `.claude/agents/explorer.md` and delegate it in the same session, which fails without a reload (same
    watcher caveat as the U14 hook, P5-U14-dogfood).
+4. **Least-privilege ≠ always read-only (teachable moment, flagged by `P9-leaf-write`).** U13/U3 frame
+   fencing as "grant the minimum," and the panel originally modeled that as pure read-only (`Read, Grep,
+   Glob`). When the leaf pass made the orchestrator-persists pattern expensive (token round-trip + 11
+   serial `Write` calls), the panel was relaxed to `Read, Grep, Glob, Write` so each reviewer writes its
+   own leaf. The lesson worth teaching: least-privilege means *exactly the tools the job needs* — for a
+   reviewer that must persist one verdict, that includes a single scoped `Write` (still no Bash/Edit/
+   network) — and a real efficiency win can justify relaxing a stricter default, deliberately and recorded.
+   A clean real-world example of the security-vs-cost tradeoff to weave into U13 when 9.8 wires it.
 Optional enrichment (lower priority): project-vs-user scope + "commit project agents to VCS"; subagents
 can't spawn subagents; custom subagents load `CLAUDE.md` + git status (only Explore/Plan skip them).
 _Resolve in:_ a U13 prose pass — can ride with **9.8** (which already edits U13 to reference the real

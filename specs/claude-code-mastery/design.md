@@ -741,7 +741,7 @@ show in U13); it now does, so U13 references the panel as its real worked exampl
 ### 13.3 Agent definition format (R18.AC4/AC5; R12.AC3)
 
 Each reviewer is a file `.claude/agents/<id>.md`: front matter (`description` — *when the orchestrator
-dispatches it*; `tools: [Read, Grep, Glob]` — **read-only**, blast-radius fenced per U13/U3; a `model`),
+dispatches it*; `tools: [Read, Grep, Glob, Write]` — **least-privilege**: it reads transcripts and writes its one leaf file, nothing more (no Bash/Edit/network), blast-radius fenced per U13/U3; a `model`),
 and a body carrying the **shared reviewer mandate** + its **persona lens**. The shared mandate (single-
 sourced wording, repeated per agent since agents don't `include`):
 
@@ -797,8 +797,11 @@ free-length: as long as the evidence warrants.
 ### 13.5 Producing each tier
 
 - **Leaf (cells).** The main session (orchestrator) dispatches each panel agent on one session;
-  the agent returns its evaluation; the orchestrator **writes** the leaf file (subagents return a
-  result, they don't write/commit — U13). The human drives this **one session at a time** (their stated
+  each agent **writes its own leaf file** (to a predetermined path) and returns only a short receipt, so the
+  evaluation never round-trips through the orchestrator (the token + latency fix — decision **P9-leaf-write**,
+  which relaxes the original read-only contract to least-privilege `+Write`); the orchestrator validates the
+  written files and re-dispatches any that fail, and **commit stays the maintainer's call** (agents write, never
+  commit). The human drives this **one session at a time** (their stated
   workflow), so the corpus accretes per session and stays reviewable.
 - **Per-session synthesis (reviewer-axis margin).** Once a session's reviewers all exist, consolidate
   them into `_synthesis.md`: the cross-cutting story, where reviewers **agreed and disagreed**,
@@ -818,7 +821,7 @@ free-length: as long as the evidence warrants.
 ### 13.6 Orchestration (dogfood) — adopted
 
 A thin **`/evaluate-session <session-slug>`** command (`.claude/commands/`) dispatches the panel
-over one session and writes the eleven leaf files — an authentic R14 dogfood (commands, U12) that also
+over one session; each reviewer **writes its own leaf file** (least-privilege `+Write`, decision **P9-leaf-write**) — an authentic R14 dogfood (commands, U12) that also
 exercises subagents (U13) and parallel delegation (U16). The command also records the session's verified
 model attribution (§13.4) so each reviewer is told which model it is judging. A sibling
 **`/evaluate-global`** command runs the margin/corner passes once every session's leaves exist: it
@@ -853,9 +856,10 @@ emitting all eleven evals would be ~11× cheaper, but the personas would anchor 
 **control would see the persona evals**, destroying both reviewer independence and the control
 experiment (§13.2). We therefore **keep one fenced subagent per reviewer** and accept the ~11× read cost
 as the price of the rigor R18 is built on. Two economy guards are load-bearing: **rendered-primary,
-raw-on-demand** (§13.4 — reading raw `.jsonl` whole would be ~8.9M × 11, untenable) and **read-only
-fenced agents** (no wasted tool churn). Reviewers may be dispatched **in parallel** per session (U16) for
-wall-clock — not token — savings.
+raw-on-demand** (§13.4 — reading raw `.jsonl` whole would be ~8.9M × 11, untenable) and **tightly-fenced
+agents writing their own leaves** (least-privilege `Read, Grep, Glob, Write` — no Bash/network churn, and the
+leaf never round-trips through the orchestrator; decision **P9-leaf-write**). Reviewers may be dispatched **in
+parallel** per session (U16) for wall-clock — not token — savings.
 
 ### 13.8 Honesty, provenance, safety & enforcement (R18.AC5/AC9/AC10)
 

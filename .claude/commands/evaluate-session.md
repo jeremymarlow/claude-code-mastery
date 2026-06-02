@@ -1,5 +1,5 @@
 ---
-description: Dispatch the 11-reviewer panel over one build session and write its leaf evaluations
+description: Dispatch the 11-reviewer panel over one build session; each reviewer writes its own leaf evaluation
 argument-hint: <session-slug>
 ---
 
@@ -48,24 +48,27 @@ Do each step, in order:
    > Evaluate build session **`$ARGUMENTS`**. Rendered transcript: `log/transcripts/rendered/$ARGUMENTS.md` — your
    > primary source; consult `log/transcripts/raw/$ARGUMENTS.jsonl` only for a specific turn if the render is
    > insufficient. The model that produced Claude's side of this session: **\<attribution from step 2>**.
-   > Produce your leaf evaluation exactly per your output contract, and return **only** that one Markdown
-   > document.
+   > **Write** your leaf evaluation to `log/evaluations/$ARGUMENTS/<your-reviewer-name>.md`, exactly per your
+   > output contract (begin at the `---` line; no preamble or ``` fence). Then **return only a short receipt** —
+   > the path you wrote, your `overall` grade, and one sentence — **not** the document itself.
 
-   The reviewers are read-only (`Read, Grep, Glob`): they **return** their evaluation as their result;
-   they do not (and cannot) write files. Dispatch the `control` with the identical brief — its different
-   behavior must come from its own (lens-less, mandate-less) definition, not from a different prompt.
+   `mkdir -p log/evaluations/$ARGUMENTS/` first so the writes land. The reviewers run **least-privilege**
+   (`Read, Grep, Glob, Write`): each **writes its own leaf** to the path above and returns only a receipt — the
+   full document never round-trips through the orchestrator (the token + latency fix; see decision
+   **P9-leaf-write**). Dispatch the `control` with the identical brief — its different behavior must come from
+   its own (lens-less, mandate-less) definition, not from a different prompt.
 
-4. **Persist the leaves.** Create `log/evaluations/$ARGUMENTS/` and write each reviewer's returned document
-   to `log/evaluations/$ARGUMENTS/<reviewer>.md` (filename = the agent's name). **Strip any preamble or
-   surrounding ``` fence the reviewer added — persist from the `---` front-matter line down.** Spot-check
-   each before saving:
-   - front matter present and well-formed: `session: $ARGUMENTS`, `reviewer:` equals the filename stem,
-     `model_evaluated:` equals the step-2 attribution **and is quoted** (the value may contain a colon
-     for mixed-model sessions — unquoted, the YAML fails to parse), and the `grades` block uses **only**
-     `did-well` / `did-okay` / `could-improve`;
+4. **Validate the written leaves (no re-emission — the point of the redesign).** Each reviewer wrote its own
+   file; you never reproduce its prose. Lint `log/evaluations/$ARGUMENTS/*.md`:
+   - **first line is `---`** — if a preamble or surrounding ``` fence leaked in above it, strip everything
+     before the first `---` with a quick `sed`/`awk` (a mechanical fix, not a rewrite);
+   - front matter well-formed: `session: $ARGUMENTS`, `reviewer:` equals the filename stem, `model_evaluated:`
+     equals the step-2 attribution **and is quoted** (a colon in a mixed-model value breaks unquoted YAML),
+     and the `grades` block uses **only** `did-well` / `did-okay` / `could-improve`;
    - the body is verbose and **evidence-cited** (insights with `_Evidence:_` locators), covers **both
      parties**, and is not a grade dump.
-   If a returned eval is malformed or thin, **re-dispatch that one reviewer** rather than accept it.
+   For anything **substantive** — a missing file, a thin/one-sided body, wrong attribution, malformed grades —
+   **re-dispatch that one reviewer** (never hand-author a reviewer's prose).
 
 5. **Progress + safety (no commit here).** Run `tools/scan-secrets log/evaluations/$ARGUMENTS/*.md` (it takes
    file arguments, not a directory) and

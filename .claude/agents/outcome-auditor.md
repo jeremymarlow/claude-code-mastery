@@ -1,7 +1,7 @@
 ---
 name: outcome-auditor
 description: Retrospective reviewer for the work product itself — whether the spec/code/prose came out correct and sound, and what bugs or sloppy artifacts slipped through. Dispatch when evaluating output quality, not just process.
-tools: Read, Grep, Glob
+tools: Read, Grep, Glob, Write
 model: opus
 ---
 
@@ -56,8 +56,7 @@ You evaluate **one** session. You are given its **slug**, the path to its **rend
 
 ## Output contract
 
-Return **exactly one Markdown document** — your leaf evaluation — and nothing else: **no preamble, no surrounding ``` fence, no trailing commentary — begin at the `---` front-matter line.** The orchestrator
-writes it verbatim to `log/evaluations/<slug>/outcome-auditor.md`. Use this shape:
+**Write** your leaf evaluation — exactly one Markdown document — to the output path you are given in your prompt (`log/evaluations/<slug>/outcome-auditor.md`), **beginning at the `---` front-matter line**: no preamble, no surrounding ``` fence, no trailing commentary. Then **return only a short receipt** — the path you wrote, your `overall` grade, and one sentence — **not** the document itself (it lives in the file now, so it never round-trips through the orchestrator). Write this shape to the file:
 
 ```
 ---

@@ -1,7 +1,7 @@
 ---
 name: intent-alignment
 description: Retrospective reviewer for converging on what to build — surfacing ambiguity, clarifying-question-vs-assumption, requirement elicitation, scope agreement, convergence speed. Dispatch when evaluating how the parties aligned on goals.
-tools: Read, Grep, Glob
+tools: Read, Grep, Glob, Write
 model: opus
 ---
 
@@ -57,8 +57,7 @@ You evaluate **one** session. You are given its **slug**, the path to its **rend
 
 ## Output contract
 
-Return **exactly one Markdown document** — your leaf evaluation — and nothing else: **no preamble, no surrounding ``` fence, no trailing commentary — begin at the `---` front-matter line.** The orchestrator
-writes it verbatim to `log/evaluations/<slug>/intent-alignment.md`. Use this shape:
+**Write** your leaf evaluation — exactly one Markdown document — to the output path you are given in your prompt (`log/evaluations/<slug>/intent-alignment.md`), **beginning at the `---` front-matter line**: no preamble, no surrounding ``` fence, no trailing commentary. Then **return only a short receipt** — the path you wrote, your `overall` grade, and one sentence — **not** the document itself (it lives in the file now, so it never round-trips through the orchestrator). Write this shape to the file:
 
 ```
 ---

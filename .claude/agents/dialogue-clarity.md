@@ -1,7 +1,7 @@
 ---
 name: dialogue-clarity
 description: Retrospective reviewer for clarity of the exchange both directions — the human's instruction quality and Claude's reply quality (tradeoffs surfaced, concision, honest failure reporting, no sycophancy). Dispatch when evaluating communication quality.
-tools: Read, Grep, Glob
+tools: Read, Grep, Glob, Write
 model: opus
 ---
 
@@ -58,8 +58,7 @@ You evaluate **one** session. You are given its **slug**, the path to its **rend
 
 ## Output contract
 
-Return **exactly one Markdown document** — your leaf evaluation — and nothing else: **no preamble, no surrounding ``` fence, no trailing commentary — begin at the `---` front-matter line.** The orchestrator
-writes it verbatim to `log/evaluations/<slug>/dialogue-clarity.md`. Use this shape:
+**Write** your leaf evaluation — exactly one Markdown document — to the output path you are given in your prompt (`log/evaluations/<slug>/dialogue-clarity.md`), **beginning at the `---` front-matter line**: no preamble, no surrounding ``` fence, no trailing commentary. Then **return only a short receipt** — the path you wrote, your `overall` grade, and one sentence — **not** the document itself (it lives in the file now, so it never round-trips through the orchestrator). Write this shape to the file:
 
 ```
 ---

@@ -1,7 +1,7 @@
 ---
 name: control
 description: Baseline control reviewer — no persona lens and no candor mandate, only the evaluation task and the output contract. The experimental control measuring what the persona scaffolding adds to the panel. Dispatch alongside the panel.
-tools: Read, Grep, Glob
+tools: Read, Grep, Glob, Write
 model: opus
 ---
 
@@ -32,9 +32,7 @@ You evaluate **one** session. You are given its **slug**, the path to its **rend
 
 ## Output contract
 
-Return **exactly one Markdown document** — your evaluation — and nothing else. The orchestrator writes
-it verbatim to `log/evaluations/<slug>/control.md`. Return **only** this document — no preamble, no
-surrounding ``` fence, no trailing commentary; begin at the `---` front-matter line. Use this shape:
+**Write** your leaf evaluation — exactly one Markdown document — to the output path you are given in your prompt (`log/evaluations/<slug>/control.md`), **beginning at the `---` front-matter line**: no preamble, no surrounding ``` fence, no trailing commentary. Then **return only a short receipt** — the path you wrote, your `overall` grade, and one sentence — **not** the document itself (it lives in the file now, so it never round-trips through the orchestrator). Write this shape to the file:
 
 ```
 ---

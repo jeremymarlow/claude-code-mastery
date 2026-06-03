@@ -441,6 +441,8 @@ Each is referenced by the unit that teaches its feature (R14.AC2), and reference
 | **Decision log** (`decisions.md`) | maintainers; optional teaching material | R14.AC7 |
 | **CLI reference** (`meta/cli-reference.json` → `course/reference/cli-reference.md`) | U4 (single-source version data); U10 (spec-driven build) | R16, R14.AC2 |
 | **Version changelog digest** (`meta/version-changelog.md`) | U4 / maintainer refresh trail | R17, R14.AC2/AC7 |
+| **Reviewer panel** (`.claude/agents/`, 11 subagents) | U13 subagents (the real worked example, retiring P5-U13-example) | R18.AC4, R14.AC2 |
+| **Collaboration retrospective** (`course/case-studies/`) | capstone exemplar (R8.AC2); U13 | R18.AC8, R14.AC4/AC8 |
 
 - **Build case study (R14.AC4):** "how this course was built and is maintained with Claude Code"
   (spec-driven workflow + R12.AC7 refresh process) → lives in `course/capstone/` and **doubles as the

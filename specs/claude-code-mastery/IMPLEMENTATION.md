@@ -120,7 +120,11 @@ missing honesty guarantee → **new requirement `R14.AC8`** (disclose conflicts 
 transparency family) — the retrospective carries a dedicated **conflict-of-interest** passage (the panel is
 Claude evaluating a build Claude co-authored), the control-overclaim fixed, verdicts recalibrated to
 attribute-don't-assert. Spec edits (`requirements.md` R14.AC8, `design.md` §10/§11) **approved & committed**
-(decision **P9-coi**). **Next:** 9.8 dogfood wiring + traceability flip → 9.9 close-out. R18 **already passes
+(decision **P9-coi**). **9.8 ✅ DONE (2026-06-02, awaiting commit):** the real 11-subagent panel is wired
+into **U13** as the worked example (retiring **P5-U13-example**); the four **L13** U13 correctness gaps
+fixed in the same prose pass (`name` required, tools-inherit-all default, load-at-session-start, least-
+privilege≠read-only) — **L13 struck**; panel + retrospective rows added to `design.md` §10 and a
+reviewer-panel row to the build case-study table. **Next:** 9.9 close-out. R18 **already passes
 `check-traceability`** (referenced from the 9.2 corpus artifacts — `meta/conventions.md`,
 `tools/check-evaluations`, the `/evaluate-session` command); its binding gate is **corpus completeness**
 via `check-evaluations` (`PEND` in `check`, hard-fail in `check-strict` until the matrix is whole), which

@@ -275,14 +275,20 @@ re-measures the corpus for the attribution map anyway).
       the case study + `case-studies/README.md` index + the R14.AC8 spec edits (requirements + design)
       landed in this batch (user-approved requirements/design gate).
 
-### 9.8 Dogfood wiring + traceability flip  [R18.AC4/AC9, R14.AC2; §13.9/§10]
-- [ ] U13 `unit.src.md` — reference the **real persona panel** as the worked subagent example, **retiring
+### 9.8 Dogfood wiring + traceability flip  [R18.AC4/AC9, R14.AC2; §13.9/§10]  ✅ DONE (2026-06-02)
+> **Also closed L13 (the four U13 correctness gaps) in the same prose pass** — decision **P9-9.8**:
+> `name` required + `description`; tools-inherit-all default (fencing is opt-out); on-disk agents load at
+> session start (lab caveat); least-privilege≠read-only (the panel's deliberate read-only→+`Write`
+> widening). U13 reading time 12→13 min. Optional L13 enrichments deferred (reading-time budget).
+- [x] U13 `unit.src.md` — reference the **real persona panel** as the worked subagent example, **retiring
       decision P5-U13-example** (the repo previously had no authentic subagent to show; now it does).
       Light titled pointer, P7 house style (no bare codes); `make render`; eyeball; reading-time unaffected.
-- [ ] `design.md` §10 dogfooding inventory — add the **persona panel** (→ U13) and the **collaboration
-      retrospective case study** (→ capstone exemplar) rows.
-- [ ] Confirm `check-traceability` now finds **R18 referenced** (case study + U13 + §10); `make check`
-      green and **`make check-strict`** no longer fails on R18.
+      **Done** — "A real panel in this repo" block added; `make render` clean; reading-time honestly 12→13.
+- [x] `design.md` §10 dogfooding inventory — add the **persona panel** (→ U13) and the **collaboration
+      retrospective case study** (→ capstone exemplar) rows. **Done** (+ a reviewer-panel row in the build
+      case study's extensions table — the previously-parked item).
+- [x] Confirm `check-traceability` now finds **R18 referenced** (case study + U13 + §10); `make check`
+      green and **`make check-strict`** no longer fails on R18. **Confirmed** — strict's only PEND is R19.
 
 ### 9.9 Close-out  [continuity hygiene]
 - [ ] `make check` **and** `make check-strict` green — strict green now confirms **R18 referenced *and*

@@ -10,7 +10,7 @@ can_do: [C14]
 workflows: []
 coverage_areas: [19]
 prerequisites: [U12]
-reading_time_min: 12
+reading_time_min: 13
 lab_time_min: 20
 ---
 
@@ -82,9 +82,12 @@ report.
 **3 — How it works in Claude Code.** The main agent invokes a subagent through its task/agent tool;
 you rarely call it by hand, you *describe a task* and let the main agent dispatch it. You can define
 **custom** agents two ways: inline for a session with `--agents <json>` (the `--help` example is
-`{"reviewer": {"description": "Reviews ..."}}`), or persistently as a file under `.claude/agents/`. An
-agent definition carries a **`description`** — *when* the main agent should reach for it — and usually
-an allowed-tools list and a model. The `description` is the trigger, exactly as it was for a skill in
+`{"reviewer": {"description": "Reviews ..."}}`), or persistently as a file under `.claude/agents/`. A
+file-form agent's front matter needs a **`name`** (its identity — *not* the filename) and a
+**`description`** (*when* the main agent should reach for it), plus optionally an allowed-tools list and
+a model. **Tools are opt-out, not opt-in:** omit the tools list and the agent **inherits every tool the
+main session has** — so fencing a read-only helper means naming its tools explicitly (`Read`, `Grep`,
+`Glob`), never just leaving them off. The `description` is the trigger, exactly as it was for a skill in
 [Commands & skills](../12-commands-and-skills/unit.md): vague description, never dispatched at the right moment;
 sharp description naming the situation, picked up when it fits. Background/dispatched agents are managed
 with the `agents` subcommand. The version-specific surface is the flags, the subcommand, and the on-disk
@@ -159,6 +162,19 @@ mode delegation can hide.
 pre-packaged; defining your own, as above, is how you fence and brief one for *your* task. Confirm what
 ships with `claude --help`.)
 
+**A real panel in this repo.** The `explorer` above is illustrative; for a genuine, in-use example this
+course ships a **panel of 11 subagents** under [`.claude/agents/`](../../../.claude/agents/) — ten
+critique "personas" plus a lens-free control — that read this build's own session transcripts and each
+write one independent evaluation (the [collaboration retrospective](../../case-studies/collaboration-retrospective.md)
+is what they produced). Open one: it's a `.claude/agents/<id>.md` with `name` + `description` front
+matter and an explicit `tools` line — the file form your lab needs. It also corrects a tempting
+half-truth about fencing: **least-privilege means *the tools the job needs*, not "always read-only."**
+The reviewers began pure read-only (`Read`, `Grep`, `Glob`); they were then **deliberately** widened to
+add a single scoped `Write` — still no Bash, no edits, no network — once it was clear each reviewer
+should persist its own one-file verdict instead of routing it back through the main session. That is the
+rule done honestly: the *minimum* toolset the task needs, widened on purpose and for a stated reason —
+not a reflexive label.
+
 ## Lab
 
 > **This lab has no automated verifier.** The artifact you produce — a subagent definition — lives in
@@ -173,7 +189,9 @@ ships with `claude --help`.)
 **Starting state:** the clean primary codebase. `cd codebases/primary/taskflow-api`; create your agent
 definition under that project's `.claude/` (e.g. `.claude/agents/explorer.md`) so it's scoped to the
 project. Confirm the path and front-matter format against `claude --help`/the docs rather than
-authoring it from memory.
+authoring it from memory. **One operational catch:** an agent file written directly to disk may not be
+dispatchable until the session *loads* it — start a fresh session (or use the in-session `/agents` flow)
+after creating the file, the same reload caveat hooks have. Confirm the current behavior against the docs.
 
 **Steps:**
 
@@ -231,7 +249,8 @@ and the checklist.
   finish line it can reach alone.
 - **Over-broad tools / permissions.** Handing a subagent edit or bypass permissions it doesn't need
   widens blast radius for no reason ([Operate safely](../03-operate-safely/unit.md)). Fence it to the tools its
-  task requires — read-only for an explorer.
+  task requires — read-only for an explorer. Watch the default: **omitting** the tools list inherits
+  *every* tool, so fence by naming tools explicitly, not by leaving them off.
 - **"Parallelizing" dependent tasks.** Two subagents only run in parallel if neither needs the other's
   output. If task B consumes task A's result, it isn't parallel — it's a sequence.
 - **Authoring the agent format from memory.** The flags, the subcommand, and the on-disk path/front

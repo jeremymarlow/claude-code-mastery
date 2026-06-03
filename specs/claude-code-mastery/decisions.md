@@ -281,7 +281,7 @@ _Format: **decision-id** — the decision; **Why:** the rationale._
 **P5-U13-lab ✅** — U13's lab is a prose-self-check lab — NO `start/`/`solution/` refs, NO `verify.sh` (precedent: U8/U10/U12). The learner defines a **read-only `explorer`** subagent in `taskflow-api`'s own `.claude/agents/`, delegates a context-heavy mapping task (e.g. "where is ownership enforced? file:line + one-line note each"), uses the returned result, then **verifies ≥2 cited sites against the code**. Self-check is an objective checklist (R7.AC3) vs. the worked-example `explorer`; optional parallelism stretch (two independent briefs at once). C14 traces via front matter + the `## Lab` heading.
 **Why:** the artifact (an agent definition) lives in the learner's own `.claude/` and the *quality* of a delegation (well-scoped brief? right fencing? did you verify the result?) is a judgment call no script can grade — the same reasoning as U8/U10/U12. The distinctive C14 skill is the *delegation + verification*, not a diff. Read-only fencing + the verify-the-result step are the woven CV/security (R10.AC7) and the bridge to U15's third-party trust-delegation (R10.AC5).
 
-**P5-U13-example ✅** — Worked example is an illustrative `explorer` agent (read-only `Read`/`Grep`/`Glob`, crisp file:line deliverable) shown in the **`--help`-verified `--agents <json>`** shape and as the `.claude/agents/explorer.md` file convention — **not** a committed repo artifact. U13's table row carries **no dogfood requirement** (unlike U12/U14/U16), and the U12 precedent forbids props: building a real subagent purely for the example would be a prop with no genuine consumer (units here are authored by Claude in one pass; the spec-orientation need is already met by the `prime-context` skill). Built-in agent types are referenced only as "confirm with `claude --help`" — not asserted by name, since those are environment/harness-specific.
+**P5-U13-example ✅** — Worked example is an illustrative `explorer` agent (read-only `Read`/`Grep`/`Glob`, crisp file:line deliverable) shown in the **`--help`-verified `--agents <json>`** shape and as the `.claude/agents/explorer.md` file convention — **not** a committed repo artifact. U13's table row carries **no dogfood requirement** (unlike U12/U14/U16), and the U12 precedent forbids props: building a real subagent purely for the example would be a prop with no genuine consumer (units here are authored by Claude in one pass; the spec-orientation need is already met by the `prime-context` skill). Built-in agent types are referenced only as "confirm with `claude --help`" — not asserted by name, since those are environment/harness-specific. **SUPERSEDED by 9.8 (2026-06-02, decision `P9-9.8`):** the P9 reviewer panel is now a real, committed subagent artifact, so U13 references it as the worked example (the illustrative `explorer` stays as the teaching warm-up). The "no genuine consumer / would be a prop" reasoning no longer holds — the panel exists and is used (R14.AC2).
 **Why:** R14 authenticity means no props; an honest *illustrative* definition the learner reads (clearly framed as such) teaches the form without faking active use. Not naming specific built-in agents keeps the unit version-resilient (R12).
 
 **P5-U13-vd ✅** — U13 consumes only the *verified* `subagents` key (`--agent` / `--agents <json>` / `agents` subcommand, `--help`-verified @ 2.1.158) plus `_verified_version`. Added a `notes` to the key flagging the on-disk `.claude/agents/<name>.md` path + front matter as a filesystem **convention** to confirm via docs (the inline `--agents` form is the verified surface). **No new L1 debt.**
@@ -852,6 +852,25 @@ row). **Spec gate: requirements + design edits reviewed & approved by the user, 
 `make check` green; `check-strict` status unchanged (still only R19). _Tracked in:_ `tasks/P9` §9.7;
 `requirements.md` R14.AC8; `design.md` §10/§11.
 
+**P9-9.8 (2026-06-02) — dogfood wiring + traceability flip; L13 U13 gaps resolved.** Wired the **real
+11-subagent panel** (`.claude/agents/`) into **U13** as the worked subagent example — **retiring decision
+P5-U13-example** (U13 previously used an illustrative-only `explorer` because no authentic subagent
+existed; now one does, R14.AC2). The illustrative `explorer` stays as the teaching warm-up; the panel is
+added as the real in-repo artifact. The same U13 prose pass closed the four **L13** correctness gaps in
+one go: (1) file-form front matter needs a required **`name`** (identity, not the filename) + `description`;
+(2) **omitting `tools` inherits *all* tools** — fencing is opt-out, so a read-only helper must name its
+tools (fixed in Concept §3 + the pitfall); (3) on-disk agents **load at session start** — a file written
+mid-session isn't dispatchable until reload (same watcher caveat as hooks), surfaced in the lab's starting
+state; (4) the panel teaches **least-privilege ≠ always read-only** — it was deliberately widened from pure
+read-only to a single scoped `Write` so each reviewer persists its own leaf (decision `P9-leaf-write`),
+the honest "minimum tools the job needs" lesson. The optional L13 enrichments (project-vs-user scope;
+subagents-can't-spawn-subagents; agents load `CLAUDE.md`) were **left out deliberately** to bound U13's
+reading time (bumped 12→13 min for the additions already made). Also added the panel + retrospective rows
+to `design.md` §10 dogfooding inventory and a **reviewer-panel row to the build case study's extensions
+table** (the parked item). **Traceability flip confirmed:** `check-traceability` finds **R18 referenced**;
+`check-strict` now fails **only on R19** (deferred, L12). `make render` + `make check` green. _Tracked in:_
+`tasks/P9` §9.8; ledger **L13** (struck). Awaiting commit go-ahead.
+
 ## Open loops & deferrals 🔓 (canonical ledger)
 
 **This is the single source of truth for what is deliberately unfinished.** Every deferral made
@@ -996,7 +1015,9 @@ learner-facing docs) is an **approved requirement** but its **design is deferred
 ships**. Shows `PEND` (non-failing) in `make check`. _Resolve in:_ a future design+tasks phase after R18.
 _Also tracked in:_ `requirements.md` R19; `design.md` §11 (R19 ⏳).
 
-**L13 — U13 (subagents) prose gaps found during P9 9.1 doc-refresh (fix later).** Cross-checking U13
+**L13 — ~~U13 (subagents) prose gaps found during P9 9.1 doc-refresh.~~ ✅ RESOLVED (9.8, 2026-06-02,
+decision `P9-9.8`)** — all four correctness gaps fixed in the U13 prose pass; optional enrichments
+deliberately deferred (reading-time budget). Original entry retained below for the record. Cross-checking U13
 against the authoritative subagents docs (`code.claude.com/docs/en/sub-agents`, refreshed 2026-05-31)
 surfaced three **correctness** gaps in the shipped unit — the delegation pedagogy is right, but the
 on-disk authoring details are incomplete, so a learner copying the worked example would hit them:

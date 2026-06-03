@@ -37,7 +37,7 @@ The 16 units, in the default order. Each is self-contained; skim a unit's **Skip
 | # | Unit | Read | Lab |
 |---|------|------|-----|
 | 12 | [Package a repeatable routine as a custom command and a skill](./12-commands-and-skills/unit.md) | 10 min | 20 min |
-| 13 | [Delegate a scoped task to a subagent](./13-subagents/unit.md) | 12 min | 20 min |
+| 13 | [Delegate a scoped task to a subagent](./13-subagents/unit.md) | 13 min | 20 min |
 | 14 | [Enforce a standard automatically with a hook](./14-hooks/unit.md) | 11 min | 22 min |
 | 15 | [Connect an MCP server and vet it before trusting it](./15-mcp-and-vetting/unit.md) | 9 min | 22 min |
 | 16 | [Run Claude unattended — headless, in CI, and in parallel](./16-automate-and-scale/unit.md) | 9 min | 25 min |

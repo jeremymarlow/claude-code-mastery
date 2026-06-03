@@ -7,7 +7,11 @@ engineered deliberately, custom extensions built and used, a real workflow follo
 output verified at every step rather than trusted.
 
 It is also the course's standing dogfooding record: if we teach a feature, we point at the
-real artifact we used, never a prop.
+real artifact we used, never a prop. Its candid companion,
+[an honest retrospective of the collaboration](../case-studies/collaboration-retrospective.md), is a
+panel's self-assessment of how the build *actually* went — the recurring failure modes alongside the
+strengths, flagged as a self-evaluation to weigh rather than trust. Read both: this one for the
+workflow, that one for an honest reckoning with the collaboration.
 
 ## 1. The job
 

@@ -830,6 +830,28 @@ corroborated by the panel's own evidence, while its "largely theatre" framing is
 now fails only on R19 (deferred). Not yet committed (awaiting user go-ahead). _Next:_ 9.7 learner case
 study. _Tracked in:_ `tasks/P9` §9.6; ledger **L11**.
 
+**P9-coi (2026-06-02) — new requirement R14.AC8 (disclose conflicts of interest), surfaced while drafting
+the 9.7 case study.** The first 9.7 draft stated the panel's verdicts in the course's own voice as settled
+fact ("the workflow done well", "genuinely sound", "positive exemplar") and never disclosed the **conflict
+of interest** that the panel is *Claude evaluating a build Claude co-authored* — a flattering self-assessment
+a skeptical reader is right to discount. Confirmed the COI is named **nowhere** in the corpus/design, and that
+the `control` reviewer only neutralizes *persona-scaffolding* bias (one Claude prompt vs. another), **not**
+self-evaluation bias (even `devils-advocate` is Claude) — so the draft's "control proves the verdict robust"
+was an overclaim against the wrong bias. **Decision: formalize the fix as a requirement rather than patch the
+prose ad hoc** — an honesty principle with no spec home is fragile (a future maintainer could delete the
+caveat and no check would catch it). **Chose a new AC on R14 (`R14.AC8`)** — the transparency requirement —
+over a standalone R20 (overkill; overlaps R14; heavy full-playbook path) or an R18-scoped AC (too narrow —
+wouldn't govern the build case study or future self-assessments). It is **soft / prose-satisfiable** (obvious
+in-prose disclosure, placement free — not a rigid top-of-page callout), enforced by traceability (R13.AC5,
+which already passes since R14 is referenced) + human review, **no new mechanical check**. Implementation
+(this pass, riding within 9.7): a dedicated COI passage in the retrospective §1 *before* any verdict + the
+§1 control-overclaim fix + **attribute-don't-assert** recalibration (verdicts framed as the panel's, e.g.
+"genuinely sound" → attributed to outcome-auditor's lens as a checkable claim) + de-self-congratulated the
+`case-studies/README.md` and the build case study cross-link. Design touched (§10 inventory bullet + §11 R14
+row). **Spec gate: requirements + design edits reviewed & approved by the user, then committed** (CLAUDE.md).
+`make check` green; `check-strict` status unchanged (still only R19). _Tracked in:_ `tasks/P9` §9.7;
+`requirements.md` R14.AC8; `design.md` §10/§11.
+
 ## Open loops & deferrals 🔓 (canonical ledger)
 
 **This is the single source of truth for what is deliberately unfinished.** Every deferral made
@@ -964,8 +986,10 @@ fresh subagents per the §9.6 validated contract — user chose direct dispatch 
 verdict **output did-well, process did-okay**, control reached the panel's headline (core read needs no
 scaffolding) while personas added teaching-grade mechanism, devils-advocate's re-grade credited to the
 process axis. `scan-secrets _global/**` clean. `make check-strict` now fails **only on R19** (unreferenced
-— design deferred, L12) — expected. _Remaining P9:_ 9.7 case study → 9.8 dogfood wiring + traceability
-flip → 9.9 close-out. _Also tracked in:_ `tasks/P9-collaboration-retrospective.md`; decision **P9-globals** below.
+— design deferred, L12) — expected. **9.7 ✅ case study DONE & committed (2026-06-02)** — incl. new
+requirement **R14.AC8** (disclose conflicts of interest) surfaced + satisfied in-pass (decision **P9-coi**).
+_Remaining P9:_ 9.8 dogfood wiring + traceability flip → 9.9 close-out. _Also tracked in:_
+`tasks/P9-collaboration-retrospective.md`; decisions **P9-globals** / **P9-coi** below.
 
 **L12 — R19 breadcrumb navigation: approved, design deferred.** R19 (top-of-page breadcrumb trails on
 learner-facing docs) is an **approved requirement** but its **design is deferred by the user until R18

@@ -175,16 +175,23 @@ re-measures the corpus for the attribution map anyway).
 > **Caveat for 9.6:** the syntheses consolidate *what the leaves say*; the recurring cross-session patterns
 > they surface are provisional inputs only — the per-reviewer globals are the authoritative longitudinal view
 > (§13.5) and must be derived fresh, not anchored on the syntheses (or `_observations-provisional.md`).
-- [ ] For each session (incremental, **one at a time** — the maintainer's workflow): run
+- [x] For each session (incremental, **one at a time** — the maintainer's workflow): run
       `/evaluate-session`, caching the 11 leaves; then write `<session>/_synthesis.md` — the cross-cutting
       story, where reviewers **agreed/disagreed**, consolidated per-party/per-axis grades, both parties;
-      cites the leaves.
-- [ ] `tools/scan-secrets log/evaluations/<session>/**` before committing each session's batch (R18.AC10),
+      cites the leaves. **Done — 253/253 leaves + 23/23 syntheses** (`check-evaluations`; independent file
+      count); leaf pass `207c62a`, synthesis pass `1aa3969`.
+- [x] `tools/scan-secrets log/evaluations/<session>/**` before committing each session's batch (R18.AC10),
       human-reviewing any flag. **Commit per session** (cached = immutable once written) — **batch
       commit go-ahead granted** (reconfirm 2026-05-31): commit each clean-scanned session batch
-      uninterrupted; **push remains a separate explicit ask** (CLAUDE.md).
-- [ ] Watch `tools/check-evaluations` (built in 9.2) as the **live progress readout** as sessions
-      accrete; also note status in the 🔓 ledger.
+      uninterrupted; **push remains a separate explicit ask** (CLAUDE.md). **Done — all batches scanned
+      clean and committed** (per-session commits through `1aa3969`; tree clean under `log/evaluations/`).
+- [x] Watch `tools/check-evaluations` (built in 9.2) as the **live progress readout** as sessions
+      accrete; also note status in the 🔓 ledger. **Done — tracked in L11 throughout.**
+
+> **Box hygiene (2026-06-02 audit):** these three were left unchecked when 9.5's header was marked
+> `✅ COMPLETE` — a pre-existing checkbox drift, not a gap. Flipped after verifying the work is present
+> **and committed**: 253 leaves + 23 syntheses on disk (independent `find` + `check-evaluations`), all
+> 290 `log/evaluations/` files tracked, tree clean, commits `207c62a`/`1aa3969` in `git log`.
 
 ### 9.6 Global pass — per-reviewer globals + overall corner  [R18.AC6; §13.5/§13.6]  ✅ DONE (2026-06-02)
 - [x] Re-dispatch **each reviewer over its own ~23 leaves** to write `_global/<reviewer>.md`: the
@@ -199,7 +206,7 @@ re-measures the corpus for the attribution map anyway).
       + top did-well/okay/could-improve themes; notes where the **control** diverged from the personas
       (the experiment's result) and reconciles the devils-advocate valence gap. `scan-secrets`
       `_global/**` clean (12 files); `check-evaluations` → "global tier complete (11 + corner)".
-- [ ] Commit (awaiting user go-ahead).
+- [x] Commit. **Done** — globals + corner committed (`81525b5`; pilot's 3 in `7229fe8`); tree clean under `log/evaluations/`.
 
 > **✅ DONE (2026-06-02).** All 11 globals + corner written; `check-evaluations` passes the global gate;
 > `make check-strict` now fails only on **R19** (deferred, L12). Findings converged hard: **human steady,
@@ -246,16 +253,27 @@ re-measures the corpus for the attribution map anyway).
 >   devils-advocate's stricter did-okay re-grade and the panel's modal did-well (that gap is a real finding,
 >   not an error). Then `scan-secrets log/evaluations/_global/**`; present for commit.
 
-### 9.7 Learner-facing case study  [R18.AC6/AC8; R8.AC2, R14.AC4; §13.5]
-- [ ] `course/case-studies/collaboration-retrospective.md` — the **teaching render** of the corner: an
+### 9.7 Learner-facing case study  [R18.AC6/AC8; R8.AC2, R14.AC4/AC8; §13.5]  ✅ DONE (2026-06-02)
+> **Addendum (2026-06-02, decision `P9-coi`):** drafting this case study surfaced a missing honesty
+> guarantee — the retrospective is a **self-evaluation** (Claude assessing a build Claude co-authored)
+> and must disclose that conflict of interest. Formalized as **new requirement `R14.AC8`** (soft /
+> prose-satisfiable; transparency family) rather than an ad-hoc prose caveat. The case study now carries
+> a dedicated COI passage (in §1, before any verdict), fixes a §1 `control`-overclaim, and recalibrates
+> panel verdicts to **attribute-don't-assert**; the `case-studies/README.md` + build-case-study
+> cross-link were de-self-congratulated. **Spec edits (requirements.md R14.AC8, design.md §10/§11) await
+> the requirements/design gate before commit** (CLAUDE.md).
+- [x] `course/case-studies/collaboration-retrospective.md` — the **teaching render** of the corner: an
       honest, candid account of what effective (and ineffective) human+Claude co-authorship looked like
       across this build, framed for a learner. Cross-reference as capstone-exemplar material alongside the
-      existing build case study (`course/capstone/case-study.md`); link both ways.
-- [ ] Add a **breadcrumb** following the existing learner-doc convention (e.g.
+      existing build case study (`course/capstone/case-study.md`); link both ways. **Done** (+ a
+      `case-studies/README.md` index; both-ways cross-link added). Carries the R14.AC8 COI disclosure.
+- [x] Add a **breadcrumb** following the existing learner-doc convention (e.g.
       `[Claude Code Mastery](../../README.md) › [Case studies](…)`) — matching what units already do, so
       the new doc is forward-compatible with R19 (whose mechanization is deferred). CommonMark; no meaning
-      by emoji/color alone (R15).
-- [ ] `make check` green (the case study now **references R18**, flipping it from PEND toward satisfied).
+      by emoji/color alone (R15). **Done** (`[Claude Code Mastery](../../README.md) › [Case studies](./README.md)`).
+- [x] `make check` green (the case study now **references R18** and **R14**). **Green; committed** —
+      the case study + `case-studies/README.md` index + the R14.AC8 spec edits (requirements + design)
+      landed in this batch (user-approved requirements/design gate).
 
 ### 9.8 Dogfood wiring + traceability flip  [R18.AC4/AC9, R14.AC2; §13.9/§10]
 - [ ] U13 `unit.src.md` — reference the **real persona panel** as the worked subagent example, **retiring

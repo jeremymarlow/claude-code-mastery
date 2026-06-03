@@ -114,7 +114,13 @@ by honest recovery + strong state hygiene). **Corner verdict: output did-well, p
 lens-free `control` reached the same headline as the persona panel (the core read needs no scaffolding),
 while the personas bought teaching-grade *mechanism*; devils-advocate's stricter re-grade was credited to
 the *process* axis (human-as-backstop, self-confirming verification, strict-gate skipped), not averaged away.
-**Next:** 9.7 case study → 9.8 dogfood wiring + traceability flip → 9.9 close-out. R18 **already passes
+**9.7 ✅ case study DONE (2026-06-02):** `course/case-studies/collaboration-retrospective.md`
+(+ `case-studies/README.md` index, both-ways cross-link with the build case study). Drafting it surfaced a
+missing honesty guarantee → **new requirement `R14.AC8`** (disclose conflicts of interest; soft/prose-satisfiable,
+transparency family) — the retrospective carries a dedicated **conflict-of-interest** passage (the panel is
+Claude evaluating a build Claude co-authored), the control-overclaim fixed, verdicts recalibrated to
+attribute-don't-assert. Spec edits (`requirements.md` R14.AC8, `design.md` §10/§11) **approved & committed**
+(decision **P9-coi**). **Next:** 9.8 dogfood wiring + traceability flip → 9.9 close-out. R18 **already passes
 `check-traceability`** (referenced from the 9.2 corpus artifacts — `meta/conventions.md`,
 `tools/check-evaluations`, the `/evaluate-session` command); its binding gate is **corpus completeness**
 via `check-evaluations` (`PEND` in `check`, hard-fail in `check-strict` until the matrix is whole), which

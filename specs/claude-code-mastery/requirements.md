@@ -232,6 +232,7 @@ An elite practitioner can, without hand-holding: select and execute the right wo
 - R14.AC5 — THE COURSE SHALL include a light, honest **AI-authorship transparency note** disclosing that parts were authored with Claude Code, modeling the responsible-output guidance of R10.AC9.
 - R14.AC6 — WHERE the course references its own artifacts as examples, THE COURSE SHALL keep those references accurate to the repository's actual contents (enforced via R13.AC4).
 - R14.AC7 — THE COURSE MAY maintain a **decision/build log** (e.g., the evolution of this spec and key decisions) as an aid to maintainers and optional teaching material.
+- R14.AC8 — WHERE the course presents an assessment of its own quality or conduct — most acutely a **self-evaluation** such as the R18 collaboration retrospective (Claude assessing a build Claude co-authored), and including any self-interested claim about how well the course was built — THE COURSE SHALL **disclose the conflict of interest in an obvious way within the prose**, noting what mitigates the bias and that it is **not eliminated**, so a reader calibrates the claim rather than taking it at face value (the verify-don't-trust thesis applied to the course itself; consistent with R10.AC9 honesty and R18.AC5 candor). The disclosure MAY be placed wherever it reads best — it need **not** be a fixed top-of-document callout. This is a **prose-level** guarantee, enforced by traceability (R13.AC5) and human review, not a new mechanical check.
 
 ### R15 — Accessibility & portability
 **Acceptance criteria**

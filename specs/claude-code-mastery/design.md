@@ -447,6 +447,11 @@ Each is referenced by the unit that teaches its feature (R14.AC2), and reference
   capstone exemplar** (R8.AC2, §6.5).
 - **AI-authorship transparency note (R14.AC5):** a short, honest disclosure that parts were authored
   with Claude Code, modeling the responsible-output guidance of R10.AC9.
+- **Conflict-of-interest disclosure (R14.AC8):** where the course assesses its own quality — most
+  acutely the R18 self-evaluation (Claude assessing a build Claude co-authored) — the prose discloses
+  the conflict of interest, what mitigates it, and that it is not eliminated, so a reader calibrates
+  rather than trusts. Satisfied in `course/case-studies/collaboration-retrospective.md` (and the build
+  case study's framing); a prose-level guarantee, no new check.
 
 ## 11. Traceability table  [§8 of requirements]
 Fill as sections are completed — every R1–R15 → the design component(s) and artifact(s) that satisfy
@@ -468,7 +473,7 @@ it. The R13.AC5 check automates the inverse (every requirement referenced; every
 | R11 ✅ | §6, §8 | doctor (§8), onboarding unit U1, baseline config (R11.AC4) |
 | R12 ✅ | §5, §8 | version-data, version-record (2.1.158), drift check, `{{vd:key}}` convention |
 | R13 ✅ | §8, §9 | check + traceability suite, conventions, maintainer guide |
-| R14 ✅ | §10 | dogfooding inventory, build case study, transparency note |
+| R14 ✅ | §10 | dogfooding inventory, build case study, transparency note, COI disclosure (AC8 → collaboration retrospective) |
 | R15 ✅ | §9 | CommonMark/a11y/portability conventions |
 | R16 ✅ | §12, §8 | `render-cli-reference`, `cli-reference.json` + supplement + schema, `course/reference/` page |
 | R17 ✅ | §12, §8 | `version-changelog.md` + `check-version-changelog`, refresh-process step |

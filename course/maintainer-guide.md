@@ -8,6 +8,9 @@ If you are picking up this repo cold, start by reading
 [`../specs/claude-code-mastery/IMPLEMENTATION.md`](../specs/claude-code-mastery/IMPLEMENTATION.md) and
 running the [`prime-context` skill](../.claude/skills/prime-context/SKILL.md) — see the recipe below.
 
+For how the repo is **branched, versioned, and released** (trunk-based, rebase + fast-forward, semantic
+versioning), see [`../RELEASING.md`](../RELEASING.md) and the [`../CHANGELOG.md`](../CHANGELOG.md).
+
 ## The invariants you must not break
 
 Everything cross-cutting lives **once** and is referenced by key (R13.AC2); duplication rots. The

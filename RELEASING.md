@@ -82,10 +82,16 @@ A CLI refresh (R12.AC7) that only re-verifies version-specifics and bumps `versi
    - *Current state:* `make check-strict` fails **only** on **R19** (breadcrumb navigation, design
      deferred — ledger **L12**). That is the documented release-readiness state, not a blocker.
 2. **Record.** Add the release section to [`CHANGELOG.md`](./CHANGELOG.md).
-3. **Tag** (annotated, on `main`):
+3. **Tag** (annotated, on `main`). The tag message **is** the in-repo release note (`git show`, the
+   Releases UI), so write it **from** the version's [`CHANGELOG.md`](./CHANGELOG.md) section — one
+   authored source, the tag a derived snapshot. Use an editor (no one-line `-m`); sign with `-s` if
+   signing is in use:
    ```
-   git tag -a vX.Y.Z -m "vX.Y.Z — <one-line summary>"
+   git tag -a vX.Y.Z        # editor opens — paste & adapt the CHANGELOG section
    ```
+   - **Subject:** `vX.Y.Z — <concise title>` (≤72 chars).
+   - **Body:** the summary + grouped highlights (Added/Changed/Fixed/…), with breaking changes and
+     upgrade notes called out, wrapped ~72 cols; close with `See CHANGELOG.md for the full entry.`
 4. **Push** the commit and the tag (a push is a separate, explicit step):
    ```
    git push origin main --follow-tags

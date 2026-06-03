@@ -27,14 +27,17 @@ on:
 
 jobs:
   claude:
-    # Run only on github.com (skip on the Gitea mirror) AND only when the triggering
-    # comment / issue / review body or title actually mentions @claude.
+    # Gate the job on three things: (1) only on github.com (skip on the Gitea mirror);
+    # (2) the triggering comment / issue / review must mention @claude; and (3) the author must
+    # be the repo OWNER. (3) is a cheap pre-filter so the job skips for everyone else *before* a
+    # runner spins up (saves CI minutes on a public repo) — the action's own write-access check
+    # stays the authoritative gate; author_association is only a coarse proxy.
     if: |
       github.server_url == 'https://github.com' && (
-        (github.event_name == 'issue_comment' && contains(github.event.comment.body, '@claude')) ||
-        (github.event_name == 'pull_request_review_comment' && contains(github.event.comment.body, '@claude')) ||
-        (github.event_name == 'pull_request_review' && contains(github.event.review.body, '@claude')) ||
-        (github.event_name == 'issues' && (contains(github.event.issue.body, '@claude') || contains(github.event.issue.title, '@claude')))
+        (github.event_name == 'issue_comment' && contains(github.event.comment.body, '@claude') && github.event.comment.author_association == 'OWNER') ||
+        (github.event_name == 'pull_request_review_comment' && contains(github.event.comment.body, '@claude') && github.event.comment.author_association == 'OWNER') ||
+        (github.event_name == 'pull_request_review' && contains(github.event.review.body, '@claude') && github.event.review.author_association == 'OWNER') ||
+        (github.event_name == 'issues' && (contains(github.event.issue.body, '@claude') || contains(github.event.issue.title, '@claude')) && github.event.issue.author_association == 'OWNER')
       )
     runs-on: ubuntu-latest
     permissions:

@@ -917,17 +917,18 @@ may restate an item for local context but point back here. **Maintenance rule:**
 something, add an entry; when you resolve it, strike it through with the commit/phase that closed it.
 Nothing is "remembered" outside this ledger. (Each entry: **status** · _Resolve in_ · _Also tracked in_.)
 
-**L1 (mostly closed, 2026-05-30) — 2 version-data keys remain `unverified: true`** (`ci`,
-`managed-settings`). An interactive `/help` + docs pass closed **5 of the original 7**: `search-refs`,
+**L1 (nearly closed, 2026-06-03) — 1 version-data key remains `unverified: true`** (`managed-settings`).
+An interactive `/help` + docs pass closed **5 of the original 7**: `search-refs`,
 `context-cmds`, `checkpoint-rewind` (rewind command confirmed as `/rewind`), `test-run` (conceptual,
 version-independent), and `output-styles` (Default + Proactive/Explanatory/Learning, selected via
 `/config`; standalone `/output-style` deprecated v2.1.73, removed v2.1.91) — all flipped
-`unverified`→false @ 2026-05-30 (R12.AC3); `version-record.md` bumped with the pass.
-_Resolve the remaining two in:_ an environment with the access the maintainer lacks — `ci` needs a
-GitHub Actions setup to confirm the Action wrapper (this env uses Gitea); `managed-settings` needs an
-enterprise account / official enterprise docs. Their CLI/conceptual parts are already verified; only the
-external-integration surface is unconfirmed. _Also tracked in:_ `meta/version-record.md` →
-"Outstanding to verify".
+`unverified`→false @ 2026-05-30 (R12.AC3); `version-record.md` bumped with the pass. **`ci` closed
+2026-06-03 (decision `P-ci-live` below):** the GitHub Action wrapper was verified **live** — a real
+`anthropics/claude-code-action@v1` `@claude` responder ran end-to-end in this repo (GitHub Actions run
+`26868750876`) + official docs — flipped `unverified`→false and **dogfooded** as
+`.github/workflows/claude.yml` (U16). _Resolve the last one in:_ an environment with the enterprise
+access the maintainer lacks — `managed-settings` needs an enterprise account / official enterprise docs.
+_Also tracked in:_ `meta/version-record.md` → "Outstanding to verify".
 
 **~~L2~~ — ✅ CLOSED (P5/U14, 2026-05-30).** In-session hook wired: `.claude/settings.json` `PostToolUse`/`Write|Edit`
 → `tools/check-on-edit` runs `make check` on `course/`|`meta/` edits (`decision:"block"` on failure). Schema
@@ -1086,8 +1087,37 @@ _Resolve in:_ a U13 prose pass — can ride with **9.8** (which already edits U1
 panel) or a separate doc-accuracy fix. _Also tracked in:_ `tasks/P9` §9.8; the `vd:subagents` `notes`
 now record the authoritative schema (#1/#2) for single-sourcing.
 
+**L14 — `meta/version-data.json` twin has no generator + no drift check.** The JSON twin is a
+hand-regenerated copy of `version-data.yaml` (the YAML is the source of truth the checks actually read);
+there is **no tool** that produces it and **no check** that asserts `json == yaml`, so it drifts silently
+(found 2026-06-03: its `custom-commands` value had been stale vs. the YAML since ~2026-06-01; fixed during
+the `ci` flip — decision `P-ci-jsontwin`). _Resolve in:_ a small follow-up — add a `tools/render-vd-json`
+generator wired into `make render`, or a `check` asserting the twin equals `render(yaml)` (cheap, offline).
+_Also tracked in:_ `meta/version-record.md` refresh step 3 (says "regenerate" but nothing enforces it).
+
 **Decided, not open (do not re-litigate):** tools are no-extension kebab-case (deviation from design
 §7 `.sh`, decision P3-tools); `permission-modes` value per verified CLI (P2-vd); awareness home-unit
 assignments (P2-cov); primary substrate at ~1.65k LOC is accepted below the §7 "~2–4k" band (P4-loc);
 `Comment` added as a 4th entity (P4-comment); the three legacy bugs D1–D3 stay baked into `legacy`
 `main` — do **not** "fix" them (P4-bugs). These are settled calls recorded above in the per-phase sections.
+
+## Post-v1 maintenance — `ci` version-data key verified live (2026-06-03)
+
+**P-ci-live ✅** — Closed the `ci` half of **L1** by standing up a **real** Claude Code GitHub Action in
+this repo and exercising it end-to-end, rather than asserting the wrapper from docs alone.
+`.github/workflows/claude.yml` wires `anthropics/claude-code-action@v1` as a github.com-only `@claude`
+responder (a `github.server_url` guard keeps it inert on the Gitea `origin`; auth via a Max-subscription
+`CLAUDE_CODE_OAUTH_TOKEN` from `claude setup-token`; trigger fenced to author `== 'OWNER'`). A live
+`@claude` run (GitHub Actions run `26868750876`) posted a reply, proving the Claude-Code-in-CI feature
+**U16** documents. Flipped `ci` `unverified: true → false` (`verified_version` 2.1.159, `verified_date`
+2026-06-03); provenance = official docs (`code.claude.com/docs/en/github-actions`) + the live run;
+regenerated U16's `unit.md` (the `{{vd:ci}}` consumer) via `make render`; `make check` green.
+**Why:** R14 authenticity — verify a feature by *using* it (a genuine dogfood artifact), not a prop;
+R12.AC3/AC4 — live provenance beats docs-only. Only `managed-settings` remains in L1.
+
+**P-ci-jsontwin ⚠️ (finding → L14)** — Regenerating `meta/version-data.json` after the flip surfaced that
+the committed twin was **already drifted** — its `custom-commands` value was stale vs. the YAML, never
+regenerated after the 2026-06-01 update. There is **no generator tool and no yaml↔json drift check**, so
+the twin can rot unnoticed. Fixed by manual re-render (`json.dump(..., indent=2, ensure_ascii=True)` +
+trailing newline to match the existing format; asserted `yaml == json`). Logged as ledger **L14** with a
+recommended fix (a generator wired into `make render`, or a drift check).

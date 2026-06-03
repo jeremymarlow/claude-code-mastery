@@ -10,6 +10,7 @@ own `verified_version` + `verified_date` + `provenance`.
 
 | Verified CLI version | Date | Method | By |
 |---|---|---|---|
+| 2.1.159 | 2026-06-03 | **L1 `ci` close**: the Claude-Code-in-CI **GitHub Action wrapper** verified — official docs (`code.claude.com/docs/en/github-actions`) + a **live run in this repo** (`anthropics/claude-code-action@v1` `@claude` responder, GitHub Actions run `26868750876`). `ci` flipped `unverified: false`; dogfooded as `.github/workflows/claude.yml` (U16). Also regenerated `version-data.json`, fixing pre-existing twin drift (stale `custom-commands`). Only `managed-settings` now remains `unverified` | L1 verification |
 | 2.1.159 | 2026-05-31 | version refresh (L9 close): installed CLI advanced 2.1.158→2.1.159 — **internal infrastructure, no user-facing change** per the official CHANGELOG (see `version-changelog.md`). `cli-reference.json` re-introspected byte-stable + command list unchanged (`render-cli-reference --check`, `check-version-drift`), so every `{{vd:key}}` value stands; `_verified_version` bumped. Per-key `verified_version`/dates left at their genuine individual-verification — 2.1.159 added nothing to re-confirm. `ci` + `managed-settings` **remain `unverified`** (still no GitHub Actions / enterprise access) | version refresh |
 | 2.1.158 | 2026-05-30 | in-REPL `/help` + docs pass (L1 close): 5 of 7 `unverified` keys confirmed — `search-refs`, `context-cmds`, `checkpoint-rewind` (rewind = `/rewind`), `test-run`, `output-styles`; `ci` + `managed-settings` stay `unverified` (no GitHub Actions / enterprise account to verify against); also confirmed `review-cmds` slash names (`/code-review`, `/security-review`) in-REPL | L1 verification |
 | 2.1.158 | 2026-05-29 | `claude --version` + `claude --help` (P2 version-data seeding); 19/26 keys confirmed from CLI help, 7 marked `unverified` pending in-REPL `/help` / docs | spec build (P2) |
@@ -40,12 +41,9 @@ own `verified_version` + `verified_date` + `provenance`.
 > Canonical open-loop is **L1** in `specs/claude-code-mastery/decisions.md` → "Open loops &
 > deferrals 🔓". This list is the local detail for that loop.
 
-As of the 2026-05-30 L1 pass, 5 of the original 7 are verified and flipped to `unverified: false`
-(`search-refs`, `context-cmds`, `checkpoint-rewind`, `test-run`, `output-styles`). Two remain
-`unverified: true` in `meta/version-data.yaml`, each blocked by access this environment lacks:
+As of the 2026-05-30 L1 pass, 5 of the original 7 were verified; **`ci` was then verified live on
+2026-06-03** (top row — real `anthropics/claude-code-action@v1` run in this repo). That leaves **one**
+key `unverified: true` in `meta/version-data.yaml`, blocked by access this environment lacks:
 
-- `ci` — the CLI flags (`-p`, `--output-format`, `--max-budget-usd`) are verified; the **GitHub Action
-  wrapper** is not (the maintainer's env uses Gitea, with no GitHub Actions to verify against). Confirm
-  the Action name/setup against official docs in an environment with GitHub Actions.
 - `managed-settings` — the enterprise/managed-settings **file path + precedence** needs an enterprise
   account or official enterprise docs (not available to the maintainer).

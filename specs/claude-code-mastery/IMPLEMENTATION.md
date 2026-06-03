@@ -85,10 +85,12 @@ enhancement" playbook. **Note:** the P8 drift-ahead (`cli-reference.json` @ **2.
 (internal-infra bump, surface byte-stable; ledger **L9** struck). Built on **`feat/cli-reference`**, now
 **merged & on `main`**. See `decisions.md` → "P8 — …" / L9 and `tasks/P8-cli-reference.md`.
 
-**v1 build is complete.** Remaining is **not release-blocking**: **L1** is now mostly closed — the
-interactive `/help`+docs pass (2026-05-30) verified 5 of the 7 keys; only `ci` (GitHub Action wrapper)
-and `managed-settings` (enterprise) stay `unverified`, each blocked by access this environment lacks
-(Gitea instead of GitHub Actions; no enterprise account). See the 🔓 ledger in `decisions.md`.
+**v1 build is complete.** Remaining is **not release-blocking**: **L1** is now nearly closed — the
+interactive `/help`+docs pass (2026-05-30) verified 5 of 7 keys, and **`ci` was verified live on
+2026-06-03** (a real `anthropics/claude-code-action@v1` `@claude` responder run in this repo, dogfooded as
+`.github/workflows/claude.yml`; decision `P-ci-live`). Only `managed-settings` (enterprise) stays
+`unverified`, blocked by enterprise access this environment lacks. (New ledger item **L14**: the
+`version-data.json` twin has no generator/drift-check.) See the 🔓 ledger in `decisions.md`.
 
 **P9 — Collaboration retrospective (R18) ✅ COMPLETE (2026-06-02); breadcrumb nav (R19) deferred.**
 R18 is fully built on `main` (panel + 253-leaf matrix + 23 syntheses + 11 globals + corner + learner case

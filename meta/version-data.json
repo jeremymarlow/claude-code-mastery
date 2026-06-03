@@ -113,10 +113,10 @@
     },
     "custom-commands": {
       "kind": "feature",
-      "value": "Custom slash commands are user-defined skills, invoked as /name; `--disable-slash-commands` turns all skills off.",
-      "provenance": "claude --help (--disable-slash-commands: 'Disable all skills')",
-      "verified_version": "2.1.158",
-      "verified_date": "2026-05-29",
+      "value": "Custom slash commands are user-defined skills, invoked as /name (file `.claude/commands/<name>.md` becomes `/<name>`); `--disable-slash-commands` turns all skills off. Arguments: `$ARGUMENTS` expands to the full argument string; positional access is 0-based \u2014 `$0` is the first argument, `$1` the second (shorthand for `$ARGUMENTS[N]`); declare named args via an `arguments:` frontmatter list for `$name` substitution. Gotcha: `$1` is the SECOND arg, not the first \u2014 a single-arg command must use `$ARGUMENTS` or `$0`.",
+      "provenance": "claude --help (--disable-slash-commands: 'Disable all skills'); official docs code.claude.com/docs/en/skills 'Available string substitutions' (0-based $N = $ARGUMENTS[N]; $name via arguments: frontmatter); confirmed at runtime on 2.1.159 \u2014 a single-arg command's $1 rendered empty (consistent with 0-based indexing)",
+      "verified_version": "2.1.159",
+      "verified_date": "2026-06-01",
       "unverified": false,
       "notes": "The on-disk location (e.g. .claude/commands/) is a filesystem convention \u2014 verify the exact path via docs before hardcoding."
     },
@@ -172,12 +172,12 @@
     },
     "ci": {
       "kind": "feature",
-      "value": "CI runs use headless `-p` with `--output-format json` (and optionally `--max-budget-usd`); a GitHub Action wraps this.",
-      "provenance": "claude --help confirms -p, --output-format, --max-budget-usd; the GitHub Action is an external integration",
-      "verified_version": "2.1.158",
-      "verified_date": "2026-05-29",
-      "unverified": true,
-      "notes": "CLI mechanism verified (-p/--output-format/--max-budget-usd). The GitHub Action wrapper stays unverified: confirm its name/setup against official docs in an environment with GitHub Actions (maintainer's env uses Gitea, no GitHub Action available to verify, 2026-05-30)."
+      "value": "CI runs use headless `-p` with `--output-format json` (and optionally `--max-budget-usd`); the official GitHub Action `anthropics/claude-code-action@v1` wraps this (installed via the Claude GitHub App + an API key or a Pro/Max OAuth token).",
+      "provenance": "CLI flags (-p/--output-format/--max-budget-usd) from claude --help; the GitHub Action wrapper verified against official docs (code.claude.com/docs/en/github-actions; anthropics/claude-code-action examples/claude.yml) AND live-exercised in this repo \u2014 an @claude responder ran end-to-end (GitHub Actions run 26868750876, 2026-06-03).",
+      "verified_version": "2.1.159",
+      "verified_date": "2026-06-03",
+      "unverified": false,
+      "notes": "Previously unverified pending a GitHub Actions environment (this repo's origin is Gitea, no Action to verify against); confirmed live via the github remote on 2026-06-03. Dogfooded as the course's own @claude responder (.github/workflows/claude.yml); taught in U16."
     },
     "worktrees": {
       "kind": "flag",

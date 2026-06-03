@@ -90,8 +90,13 @@ interactive `/help`+docs pass (2026-05-30) verified 5 of the 7 keys; only `ci` (
 and `managed-settings` (enterprise) stay `unverified`, each blocked by access this environment lacks
 (Gitea instead of GitHub Actions; no enterprise account). See the 🔓 ledger in `decisions.md`.
 
-**P9 — Collaboration retrospective (R18) + breadcrumb nav (R19) (post-v1, 🟢 BUILDING — 2026-06-02).**
-Two new requirements via the post-v1 playbook, on branch **`feat/collaboration-retrospective`**. **R18** —
+**P9 — Collaboration retrospective (R18) ✅ COMPLETE (2026-06-02); breadcrumb nav (R19) deferred.**
+R18 is fully built on `main` (panel + 253-leaf matrix + 23 syntheses + 11 globals + corner + learner case
+study + U13 dogfood wiring); **R14.AC8** (disclose conflicts of interest) was added in-pass; **R19 still
+deferred** (design pending a future phase, L12). `make check` green; `make check-strict` fails **only on
+R19**. (Close-out committed + pushed on `main`.) Two new requirements via the post-v1
+playbook (the original plan named branch **`feat/collaboration-retrospective`**, but the build landed on
+`main`). **R18** —
 a multi-agent, self-evaluating retrospective of this build: 11 subjective reviewers (10 fenced read-only
 personas + 1 no-persona control) read the session transcripts into a **session × reviewer matrix** corpus
 (`log/evaluations/`) + a learner case study (`course/case-studies/`). Requirements + design (§13) + tasks

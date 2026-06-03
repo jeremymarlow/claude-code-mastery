@@ -290,16 +290,25 @@ re-measures the corpus for the attribution map anyway).
 - [x] Confirm `check-traceability` now finds **R18 referenced** (case study + U13 + §10); `make check`
       green and **`make check-strict`** no longer fails on R18. **Confirmed** — strict's only PEND is R19.
 
-### 9.9 Close-out  [continuity hygiene]
-- [ ] `make check` **and** `make check-strict` green — strict green now confirms **R18 referenced *and*
-      the corpus complete** (`tools/check-evaluations` passes); `scan-secrets` clean across
-      `log/evaluations/**` + the case study.
-- [ ] `decisions.md` — **P9-complete** entry (the panel roster + the merges, the matrix structure, the
-      independence-vs-economy call, the control's AC5 scope, any 9.4 pilot adjustments); refresh the 🔓
-      ledger (R18 build done; **R19 still deferred**). Add the **P9 index row + status header** to
-      `tasks.md`; mark `IMPLEMENTATION.md` §3 (P9 ✅).
-- [ ] Final commit on `feat/collaboration-retrospective`; then open PR / merge to `main` — **ask before
-      push/merge** (CLAUDE.md). ⟵ awaiting go-ahead.
+### 9.9 Close-out  [continuity hygiene]  ✅ DONE (2026-06-02)
+> **Three plan assumptions corrected at close-out** (decision `P9-complete`):
+> 1. `make check-strict` is **not** green and isn't expected to be — it fails **only** on the deferred
+>    **R19** (L12). R18's binding gate (`check-evaluations` corpus completeness) passes in both modes and
+>    R18 is referenced, so **R18's DoD is met**; the lone strict failure is the deliberately-deferred R19.
+> 2. P9 landed on **`main`**, not `feat/collaboration-retrospective` — no PR/merge; close-out is a final
+>    `main` commit.
+> 3. **No P9 build-session capture** (user decision, 2026-06-02): capture existed only for the case study,
+>    with no near-term plans for more. The evaluated corpus stays **frozen at 23**; `check-evaluations`
+>    does not flip to PEND (there are no uncaptured sessions to add). Supersedes the freeze-note.
+- [x] `make check` green; **`make check-strict` fails only on R19** (deferred, L12) — `tools/check-evaluations`
+      passes (full matrix) and R18 is referenced, so R18's DoD holds; `scan-secrets` clean across the case
+      study + `log/evaluations/**` (corpus scanned clean per-session at commit time). **Done.**
+- [x] `decisions.md` — **P9-complete** entry (panel roster, matrix structure, independence-vs-economy,
+      control's AC5 scope, pilot adjustments, the R14.AC8 in-pass add, the no-capture + on-`main`
+      amendments); 🔓 ledger refreshed (**L11 struck**; **L12/R19 stays deferred**). **P9 row + status header**
+      updated in `tasks.md`; `IMPLEMENTATION.md` §3 marks **R18 ✅** (R19 deferred). **Done.**
+- [x] Final commit on **`main`** (no feature branch / PR — see note above), then push — **committed +
+      pushed on the user's explicit go-ahead** (CLAUDE.md). **P9 closed; R18 complete.**
 
 ## Locked decisions (from the requirements + design gates — do not re-litigate)
 

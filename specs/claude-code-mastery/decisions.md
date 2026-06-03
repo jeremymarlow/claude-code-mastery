@@ -869,7 +869,45 @@ reading time (bumped 12→13 min for the additions already made). Also added the
 to `design.md` §10 dogfooding inventory and a **reviewer-panel row to the build case study's extensions
 table** (the parked item). **Traceability flip confirmed:** `check-traceability` finds **R18 referenced**;
 `check-strict` now fails **only on R19** (deferred, L12). `make render` + `make check` green. _Tracked in:_
-`tasks/P9` §9.8; ledger **L13** (struck). Awaiting commit go-ahead.
+`tasks/P9` §9.8; ledger **L13** (struck). Committed `793ea28`.
+
+**P9-complete (2026-06-02) — R18 collaboration retrospective DONE; phase closed.** The R18 multi-agent
+self-evaluating retrospective is fully built and committed on `main`:
+- **Panel (R18.AC4):** 11 committed subagents in `.claude/agents/` — 10 fenced persona reviewers
+  (5 process / 3 communication / 2 cross-cutting) + 1 lens-free `control`, all `model: opus` (model held
+  constant so the only variable vs. the control is the prompt). `control` deliberately omits the persona
+  lens + candor mandate (R18.AC5 scope — "every reviewer" reads as the 10 personas).
+- **Matrix (R18.AC6):** 253 leaf evals (23 sessions × 11) + 23 per-session syntheses + 11 per-reviewer
+  globals + the `_overall.md` corner; `tools/check-evaluations` gates completeness (PEND in `make check`,
+  hard-fail in `--strict`) and reports the full matrix present.
+- **Independence over economy:** one subagent per reviewer in its own context (≈11× transcript reads
+  accepted) to keep reviews independent + the control valid; reviewers write their own leaves
+  (`P9-leaf-write`, the scoped `+Write` least-privilege call).
+- **Deliverables:** internal corpus (`log/evaluations/`) + the learner case study
+  (`course/case-studies/collaboration-retrospective.md`, R18.AC8); panel wired into U13 (retiring
+  P5-U13-example) + dogfood inventory (§10).
+- **In-pass requirement:** R14.AC8 (disclose conflicts of interest) added when the case study surfaced the
+  self-evaluation COI (decision `P9-coi`).
+- **Findings (the result):** human steady, Claude mixed (10/11); corner verdict **output did-well /
+  process did-okay**; the lens-free control reached the panel's headline (core read needs no scaffolding)
+  and devils-advocate's stricter re-grade was credited to the process axis, not averaged away.
+
+**Amendments to the original plan, recorded:**
+- **No P9 build-session capture (user decision, 2026-06-02).** The plan had P9's own build sessions
+  captured into `log/transcripts/` at close-out; the user decided **not** to — capture existed for the case
+  study and there are no near-term plans for more (possibly future studies). The evaluated corpus stays
+  **frozen at 23**; `check-evaluations` does **not** flip to PEND for uncaptured P9 sessions (there are none
+  to add). Supersedes the freeze-note's "captured at 9.9."
+- **Landed on `main`, not a feature branch.** Despite the plan's `feat/collaboration-retrospective` framing,
+  P9 was built and committed incrementally on `main` (the push-straight-to-`main` habit `safety-steward`
+  flagged). No PR/merge step; close-out is a final `main` commit.
+- **`make check-strict` is not green — and that's expected.** Strict fails **only** on R19 (breadcrumb nav,
+  design deferred, L12). R18's binding completeness gate (`check-evaluations`) passes in both modes and R18
+  is referenced (`check-traceability`), so R18's DoD is met; the sole strict failure is the
+  deliberately-deferred R19, not P9 incompleteness.
+
+**Ledger:** L11 (R18 build) **struck**; **L12 (R19) stays open** — R19 needs its own design+tasks phase
+(post-v1, non-blocking). _Tracked in:_ `tasks/P9` §9.9; `tasks.md` P9 row; `IMPLEMENTATION.md` §3.
 
 ## Open loops & deferrals 🔓 (canonical ledger)
 
@@ -965,7 +1003,10 @@ diff (one `claude --help` call) but no longer maintains a duplicate names-only a
 (`command list unchanged vs cli-reference.json (11 commands)`). _Tracked in:_ decision **P8-L10** below;
 `tasks/P8-cli-reference.md` §8.9; design §5/§12.7.
 
-**L11 — R18 collaboration retrospective: gates done, build pending.** Requirements (R18) + design (§13)
+**L11 — ~~R18 collaboration retrospective: gates done, build pending.~~ ✅ RESOLVED — R18 BUILT & COMPLETE
+(9.9, 2026-06-02, decision `P9-complete`).** Panel + full session×reviewer matrix (253 leaves + 23 syntheses
++ 11 globals + corner) + learner case study + U13 dogfood wiring all on `main`; `check-evaluations` passes
+in both modes. R18 done. (Original entry retained below for the record.) Requirements (R18) + design (§13)
 + tasks plan (`tasks/P9`) ✅ **approved & committed** on `feat/collaboration-retrospective`. **9.1 ✅
 DONE** (2026-05-31): agent schema confirmed against official docs + recorded in `vd:subagents`; the
 **11-reviewer panel authored** under `.claude/agents/` (10 read-only personas + `control`, all

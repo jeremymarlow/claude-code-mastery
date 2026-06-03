@@ -9,9 +9,11 @@ post-v1 learner-experience remediation; no new requirements; all 16 units commit
 capstone/stuck swept, convention docs updated (L8 closed; T2 dir-rename closed as won't-do). **P8 (CLI reference +
 changelog digest) ✅ COMPLETE (2026-05-31)** — two new requirements (R16/R17) built spec-first on
 `feat/cli-reference`; `make check` green. Remaining non-release-blocking (**L1** in-REPL version-key
-refresh; **L9** version-record drift-ahead at 2.1.158 vs artifact 2.1.159; P8 merge to `main`). **P9 (collaboration retrospective R18 + breadcrumb nav R19) 🟨 SPEC'D** —
-requirements + design (§13) + tasks plan committed on `feat/collaboration-retrospective`; build (9.1–9.9)
-pending; R19 design deferred until R18 ships (ledger L11–L12). Open
+refresh; **L9** version-record drift-ahead at 2.1.158 vs artifact 2.1.159; P8 merge to `main`). **P9 (collaboration retrospective R18) ✅ COMPLETE (2026-06-02)** — 11-reviewer panel + full
+session×reviewer matrix (253 leaves + 23 syntheses + 11 globals + corner) + learner case study + U13
+dogfood wiring; built incrementally on `main`. **R14.AC8** (disclose conflicts of interest) added in-pass.
+`make check` green; `make check-strict` fails **only on R19** (deferred). **R19 (breadcrumb nav) still
+deferred** — needs its own design+tasks phase (ledger L12). Open
 loops & deferrals are tracked in `decisions.md` → "Open loops & deferrals 🔓" (the canonical ledger).
 
 > **Chunking for context management.** The full build exceeds one context window. This file is an
@@ -156,19 +158,20 @@ per-version changelog digest) approved + designed (§12) + built spec-first on `
 - [x] 8.8 maintainer-guide "Adding a post-v1 enhancement" playbook [R13.AC3]
 - [x] 8.9 close-out (state sync; `make check` green; merge to `main` gated on user go-ahead)
 
-### P9 — Collaboration retrospective (R18) + breadcrumb nav (R19) 🟢 **BUILDING — 9.1–9.5 done, 9.6 next (2026-06-02)**  → [`tasks/P9-collaboration-retrospective.md`](./tasks/P9-collaboration-retrospective.md)
+### P9 — Collaboration retrospective (R18) ✅ **COMPLETE (2026-06-02)**; breadcrumb nav (R19) deferred  → [`tasks/P9-collaboration-retrospective.md`](./tasks/P9-collaboration-retrospective.md)
 Post-v1, non-release-blocking. **R18** (multi-agent self-evaluating retrospective — 11 persona/control
-subagents → session × reviewer matrix corpus + learner case study) has requirements + design (§13) +
-tasks plan **approved & committed** on `feat/collaboration-retrospective`; build **9.1–9.5 ✅ done** (panel
-+ corpus tooling + **253/253 leaves + 23/23 per-session syntheses**); **9.6–9.9 pending**. **R19** (breadcrumb
-nav) approved, **design deferred** until R18 ships. See `decisions.md` →
-"P9 …" / ledger **L11**–**L12**.
+subagents → session × reviewer matrix corpus + learner case study) is **fully built on `main`**: panel,
+the complete matrix (**253 leaves + 23 syntheses + 11 globals + corner**), the learner case study, and the
+U13 dogfood wiring. **R14.AC8** (disclose conflicts of interest) was added in-pass when the case study
+surfaced the self-evaluation COI. `make check` green; `make check-strict` fails **only on R19**. **R19**
+(breadcrumb nav) approved, **design deferred** — needs its own design+tasks phase. See `decisions.md` →
+"P9-complete" / ledger **L11** (struck) / **L12** (R19, open).
 - [x] 9.1 verify agent format + author 11-reviewer panel (10 personas + control) [R18.AC2/AC4/AC5]
 - [x] 9.2 corpus conventions + `tools/check-evaluations` + model-attribution map + README [R18.AC6/AC7/AC9/AC10]
 - [x] 9.3 leaf format + `/evaluate-session` command [R18.AC2/AC3/AC6]
 - [x] 9.4 pilot one session (de-risk before the full run) [R18.AC2/AC3/AC5]
 - [x] 9.5 leaf pass (253/253) + per-session syntheses (23/23) [R18.AC2/AC6]
-- [ ] 9.6 global pass — per-reviewer globals + overall corner [R18.AC6]
-- [ ] 9.7 learner-facing case study [R18.AC8, R8.AC2, R14.AC4]
-- [ ] 9.8 dogfood wiring (U13 + §10) → flips R18 referenced [R18.AC9, R14.AC2]
-- [ ] 9.9 close-out (state sync; strict green = corpus complete; merge gated on go-ahead)
+- [x] 9.6 global pass — 11 per-reviewer globals + overall corner [R18.AC6]
+- [x] 9.7 learner-facing case study (+ R14.AC8 COI disclosure) [R18.AC8, R8.AC2, R14.AC4/AC8]
+- [x] 9.8 dogfood wiring (U13 panel + §10 + build case study) → R18 referenced [R18.AC9, R14.AC2]
+- [x] 9.9 close-out — state synced; `make check` green / `check-strict` fails only on R19 (expected); committed + pushed on `main`

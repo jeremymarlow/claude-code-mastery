@@ -1087,13 +1087,16 @@ _Resolve in:_ a U13 prose pass — can ride with **9.8** (which already edits U1
 panel) or a separate doc-accuracy fix. _Also tracked in:_ `tasks/P9` §9.8; the `vd:subagents` `notes`
 now record the authoritative schema (#1/#2) for single-sourcing.
 
-**L14 — `meta/version-data.json` twin has no generator + no drift check.** The JSON twin is a
-hand-regenerated copy of `version-data.yaml` (the YAML is the source of truth the checks actually read);
-there is **no tool** that produces it and **no check** that asserts `json == yaml`, so it drifts silently
+**~~L14~~ — ✅ CLOSED (2026-06-03, decision `P-vd-json-gen`).** The JSON twin is now a *generated*
+artifact: `tools/render-vd-json` produces `meta/version-data.json` from `version-data.yaml` (serialization
+pinned to the committed format — `indent=2, ensure_ascii=True`, trailing newline — so `--check` is a true
+equality gate). Wired into `make render` (regenerate) **and** `make check`/`check-strict` (the `vd-json`
+target runs `--check`; PEND-free hard gate), so pre-commit + CI inherit it and the twin can no longer drift
+silently. `version-record.md` refresh step 3 updated to point at the generator. Original entry retained
+below for the record. (Original:) The JSON twin was a hand-regenerated copy of `version-data.yaml`;
+there was **no tool** that produced it and **no check** that asserted `json == yaml`, so it drifted silently
 (found 2026-06-03: its `custom-commands` value had been stale vs. the YAML since ~2026-06-01; fixed during
-the `ci` flip — decision `P-ci-jsontwin`). _Resolve in:_ a small follow-up — add a `tools/render-vd-json`
-generator wired into `make render`, or a `check` asserting the twin equals `render(yaml)` (cheap, offline).
-_Also tracked in:_ `meta/version-record.md` refresh step 3 (says "regenerate" but nothing enforces it).
+the `ci` flip — decision `P-ci-jsontwin`). _Also tracked in:_ `meta/version-record.md` refresh step 3.
 
 **Decided, not open (do not re-litigate):** tools are no-extension kebab-case (deviation from design
 §7 `.sh`, decision P3-tools); `permission-modes` value per verified CLI (P2-vd); awareness home-unit
@@ -1121,3 +1124,19 @@ regenerated after the 2026-06-01 update. There is **no generator tool and no yam
 the twin can rot unnoticed. Fixed by manual re-render (`json.dump(..., indent=2, ensure_ascii=True)` +
 trailing newline to match the existing format; asserted `yaml == json`). Logged as ledger **L14** with a
 recommended fix (a generator wired into `make render`, or a drift check).
+
+**P-vd-json-gen ✅ (closes L14, 2026-06-03)** — Built `tools/render-vd-json` (mirrors the
+`render-checklist` generator-with-`--check` idiom): default mode writes `meta/version-data.json` from
+`version-data.yaml`; `--check` fails if the committed twin != `render(yaml)`. The serialization is pinned
+to the committed format byte-for-byte (`json.dumps(data, indent=2, ensure_ascii=True) + "\n"` — confirmed
+the current twin already matches, so the close is a no-op write, not a reformat). Wired both ways: a new
+`vd-json` target in `make render` (regenerate) **and** in `make check`/`check-strict` (the `--check` gate,
+a hard fail like the other render `--check`s, no PEND). Pre-commit + CI run `make check`, so they inherit
+it for free. Tested all three paths: `--check` green on the clean tree, drift in the twin → exit 1, and
+regenerate restores byte-identical. `version-record.md` refresh step 3 reworded from "regenerate … json"
+(unenforced) to "run `tools/render-vd-json` (or `make render`) — `make check` now gates it." **Both adopted,
+not one-or-the-other:** the generator removes the manual step; the check prevents anyone re-introducing the
+drift by hand-editing the twin.
+**Why:** L14 was a silent-drift hazard (the twin had already rotted once, P-ci-jsontwin). A generated
+artifact + an offline equality gate is the same single-source discipline the rest of `meta/` already uses
+(R12.AC2 / R13.AC4); the YAML stays authoritative, the JSON becomes derived and can't diverge.

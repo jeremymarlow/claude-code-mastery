@@ -21,7 +21,8 @@ own `verified_version` + `verified_date` + `provenance`.
 2. For each changed area, re-verify the affected `{{vd:key}}` values against the installed CLI
    (`claude --help`, subcommand `--help`, in-REPL `/help`, official docs). **Never** copy a value
    from memory (R12.AC3).
-3. Update **only** `meta/version-data.yaml` (then regenerate `meta/version-data.json`) plus any
+3. Update **only** `meta/version-data.yaml` (then run `tools/render-vd-json`, or `make render`, to
+   regenerate the `meta/version-data.json` twin — `make check` gates that they match, L14) plus any
    genuinely affected location. Because version-specifics are quarantined, prose rarely changes
    (R12.AC8).
 4. **Regenerate the CLI reference (R16.AC5):** `tools/render-cli-reference --all` — re-introspects the

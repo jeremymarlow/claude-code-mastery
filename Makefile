@@ -9,14 +9,14 @@ PY ?= $(shell [ -x .venv/bin/python ] && echo .venv/bin/python || echo python3)
 TOOLS := ./tools
 
 .PHONY: check check-strict frontmatter coverage checklist units index links version-refs \
-        cli-reference changelog traceability evaluations drift doctor venv render help
+        vd-json cli-reference changelog traceability evaluations drift doctor venv render help
 
 ## Run the required + traceability checks (PENDING items do not fail; see check-strict).
-check: frontmatter coverage checklist units index links version-refs cli-reference changelog traceability evaluations
+check: frontmatter coverage checklist units index links version-refs vd-json cli-reference changelog traceability evaluations
 	@echo "make check: all checks passed"
 
 ## Release gate: same suite, but PENDING (not-yet-authored coverage) becomes FAIL.
-check-strict: frontmatter coverage checklist units index links version-refs cli-reference changelog
+check-strict: frontmatter coverage checklist units index links version-refs vd-json cli-reference changelog
 	@$(TOOLS)/check-traceability --strict
 	@$(TOOLS)/check-evaluations --strict
 	@echo "make check-strict: all checks passed (strict)"
@@ -44,6 +44,10 @@ links:
 
 version-refs:
 	@$(PY) $(TOOLS)/check-version-refs
+
+## Confirm meta/version-data.json (generated twin) is in sync with version-data.yaml (L14).
+vd-json:
+	@$(PY) $(TOOLS)/render-vd-json --check
 
 ## Offline gate (R16.AC6): cli-reference.json valid vs schema + the page in sync with it.
 cli-reference:
@@ -79,6 +83,7 @@ venv:
 ## Verify all {{vd:key}} references in course/ resolve; refresh generated learner docs.
 render:
 	@$(PY) $(TOOLS)/render-vd
+	@$(PY) $(TOOLS)/render-vd-json
 	@$(PY) $(TOOLS)/render-checklist
 	@$(PY) $(TOOLS)/render-units
 	@$(PY) $(TOOLS)/render-index

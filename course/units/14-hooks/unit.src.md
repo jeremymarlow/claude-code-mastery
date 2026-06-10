@@ -10,7 +10,7 @@ can_do: [C15]
 workflows: []
 coverage_areas: [20]
 prerequisites: [U12]
-reading_time_min: 11
+reading_time_min: 12
 lab_time_min: 22
 ---
 
@@ -141,6 +141,25 @@ Two design choices worth copying:
   [`.githooks/pre-commit`](../../../.githooks/pre-commit) gate (at commit time), and
   [GitHub Actions CI](../../../.github/workflows/checks.yml) (the backstop that doesn't depend on any
   local config). A standard you actually rely on is wired at more than one layer.
+
+**And proven, not assumed.** The hook was verified the way the lab will have you verify yours — by
+piping synthetic events at it and watching both paths:
+
+**Captured** — pipe-testing `tools/check-on-edit` (2026-06-09; second run with a deliberately broken
+file planted under `course/`):
+
+```text
+$ echo '{"tool_input":{"file_path":"/tmp/scratch.py"}}' | tools/check-on-edit
+$ echo $?
+0        # not course/meta content — silent no-op
+
+$ echo '{"tool_input":{"file_path":".../course/.hook-demo.md"}}' | tools/check-on-edit
+{"decision": "block", "reason": "`make check` failed after editing .hook-demo.md.
+Fix this before continuing: ..."}
+```
+
+The first event proves the no-op path; the second proves the block path — and shows the exact JSON a
+blocked session gets fed back. A hook you haven't pipe-tested is config you're hoping works.
 
 That is this unit's move in one artifact: a standard (the checks) that *used to* depend on someone
 remembering to run `make check` is now enforced automatically, the instant the relevant content

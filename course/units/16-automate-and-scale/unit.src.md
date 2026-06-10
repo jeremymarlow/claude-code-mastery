@@ -10,7 +10,7 @@ can_do: [C17]
 workflows: [W9]
 coverage_areas: [6, 23, 24, 25]
 prerequisites: [U8, U14]
-reading_time_min: 9
+reading_time_min: 11
 lab_time_min: 25
 ---
 
@@ -138,6 +138,26 @@ git worktree add ../tf-feature-b -b feature-b
 #   run an agent in each tree; then review each diff on its own before merging
 ```
 
+And a headless run is not hypothetical — here is one, end to end:
+
+**Captured** — `claude -p 'Reply with exactly: OK' --output-format json` (2026-06-09; envelope
+trimmed to the load-bearing fields):
+
+```json
+{
+  "type": "result",
+  "subtype": "success",
+  "is_error": false,
+  "result": "OK",
+  "total_cost_usd": 0.1999,
+  "num_turns": 1
+}
+```
+
+Read it like a script would: a machine-checkable success flag, the result itself, and the spend —
+everything a pipeline needs to gate on, no prose-scraping required. That envelope is what your lab's
+headless run produces and what CI consumes.
+
 ## Lab
 
 > **No `start/`/`solution/` refs** — what you produce is a headless run, two worktrees, and a CI
@@ -208,6 +228,25 @@ the parallel-worktrees discipline. Compare your run + worktrees + review against
   `--output-format json`/`stream-json` — scraping the human-readable text is brittle.
 - **Authoring flags/Action config from memory.** Headless flags, the worktree flag, and the CI Action
   are version-/integration-specific — confirm against `--help` and the docs.
+
+## Stage checkpoint — Autonomy & Scale
+
+You've finished the final stage (**Commands & skills**, **Subagents**, **Hooks**, **MCP & vetting**,
+and this unit). Answer from memory, then check against the unit named in parentheses. Ungraded — and
+this is the last checkpoint before the capstone, which is where these get demonstrated for real.
+
+1. Command, skill, subagent: for each, where does the work run and what triggers it?
+   (**Commands & skills**, **Subagents**)
+2. A subagent returns a tidy file:line report. What must happen before you use it, and why is
+   "an agent ran and said done" not an answer? (**Subagents**)
+3. You've added a hook to `settings.json`. What's the verification move before you rely on it — and
+   what does the block path actually emit? (**Hooks**)
+4. A third-party MCP server wants an API token and broad scope. Name three things you check before
+   connecting, and the posture if any fails. (**MCP & vetting**)
+5. An unattended run has no human gate. Name the layers that replace your interactive judgment — and
+   the one review that still happens before anything integrates. (this unit)
+
+Next stop: the [capstone](../../capstone/README.md).
 
 ## Going deeper
 

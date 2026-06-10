@@ -9,7 +9,7 @@ can_do: [C16]
 workflows: []
 coverage_areas: [21, 22]
 prerequisites: [U3, U13]
-reading_time_min: 9
+reading_time_min: 11
 lab_time_min: 22
 ---
 
@@ -132,7 +132,21 @@ claude mcp get taskflow-local      # → Status: ✓ Connected
 claude mcp remove taskflow-local
 ```
 
-That `✓ Connected` is the **health-check** — proof the handshake worked, captured against this exact CLI
+And here is the health-check succeeding for real — this exact fixture, connected live:
+
+**Captured** — `claude mcp get taskflow-demo` immediately after a live `mcp add` of this fixture
+(2026-06-09):
+
+```text
+taskflow-demo:
+  Scope: Local config (private to you in this project)
+  Status: ✔ Connected
+  Type: stdio
+  Command: python3
+  Args: /home/.../codebases/fixtures/taskflow_mcp.py
+```
+
+That `✔ Connected` is the **health-check** — proof the handshake worked, captured against this exact CLI
 (it's how the [version record](../../../meta/version-record.md) verified the `mcp` surface). The
 project-scoped equivalent is [`codebases/fixtures/taskflow.mcp.json`](../../../codebases/fixtures/taskflow.mcp.json):
 the committed `.mcp.json` form, which is exactly the kind of entry that lands as **`⏸ Pending

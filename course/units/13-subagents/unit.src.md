@@ -128,6 +128,8 @@ your main context if your real job today is adding a feature.
 
 So you fence a read-only explorer and hand it the task. Inline, that's the verified `--agents` shape:
 
+**Illustrative** — your session will differ in wording; verify behavior and diffs, not phrasing.
+
 ```json
 {
   "explorer": {
@@ -166,8 +168,23 @@ ships with `claude --help`.)
 course ships a **panel of 11 subagents** under [`.claude/agents/`](../../../.claude/agents/) — ten
 critique "personas" plus a lens-free control — that read this build's own session transcripts and each
 write one independent evaluation (the [collaboration retrospective](../../case-studies/collaboration-retrospective.md)
-is what they produced). Open one: it's a `.claude/agents/<id>.md` with `name` + `description` front
-matter and an explicit `tools` line — the file form your lab needs. It also corrects a tempting
+is what they produced). One of them, exactly as committed:
+
+**Captured** — `.claude/agents/control.md` (front matter):
+
+```text
+---
+name: control
+description: Baseline control reviewer — no persona lens and no candor mandate, only the
+  evaluation task and the output contract. The experimental control measuring what the
+  persona scaffolding adds to the panel. Dispatch alongside the panel.
+tools: Read, Grep, Glob, Write
+model: opus
+---
+```
+
+That's the file form your lab needs — `name` + `description` front matter and an explicit `tools`
+line. It also corrects a tempting
 half-truth about fencing: **least-privilege means *the tools the job needs*, not "always read-only."**
 The reviewers began pure read-only (`Read`, `Grep`, `Glob`); they were then **deliberately** widened to
 add a single scoped `Write` — still no Bash, no edits, no network — once it was clear each reviewer

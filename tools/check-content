@@ -1,0 +1,94 @@
+#!/usr/bin/env python3
+"""check-content: content hygiene + demonstration-presence gates (design §15.2; R20.AC5, R13.AC4).
+
+Two concerns:
+
+1. RESIDUE LINT (hard fail) — no learner-facing markdown may contain AI tool-call residue
+   (`</invoke>`, `</content>`, …) or, in *rendered* unit.md files, a literal unresolved
+   `{{vd:` token. This class shipped to learners once (U1/U2/U3/U5, found by the 2026-06-09
+   content review) precisely because nothing scanned for it.
+
+2. DEMO PRESENCE (PEND -> strict FAIL) — every core-tier unit's `unit.src.md` must contain at
+   least one demonstration artifact per the §15.1 convention: a line opening with
+   `**Captured** — ` or `**Illustrative** — `. PENDING while P11 authors the units; a hard
+   failure under --strict (the P3-green pattern, same as check-traceability).
+
+Usage:
+  tools/check-content            # residue = FAIL; missing demos = PEND (non-failing)
+  tools/check-content --strict   # missing demos also FAIL
+"""
+import os
+import re
+import sys
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import yaml  # noqa: E402
+
+from _common import COURSE, META, ROOT, UNITS, FRONTMATTER_RE, VD_TOKEN_RE, Reporter  # noqa: E402
+
+LEADING_COMMENT_RE = re.compile(r"^<!--.*?-->\s*", re.DOTALL)
+
+RESIDUE_PATTERNS = [
+    "</invoke>",
+    "</content>",
+    "<function_calls",
+    "<function_results",
+    "<system-reminder",
+    "<tool_use_error",
+]
+
+DEMO_RE = re.compile(r"^\*\*(Captured|Illustrative)\*\* — ", re.MULTILINE)
+
+
+def md_files():
+    yield from sorted(COURSE.rglob("*.md"))
+    yield from sorted((META / "templates").glob("*.md"))
+
+
+def depth_tier(src_text: str):
+    # unit.src.md opens with a SOURCE comment before the front matter — strip it first
+    m = FRONTMATTER_RE.match(LEADING_COMMENT_RE.sub("", src_text, count=1))
+    if not m:
+        return None
+    fm = yaml.safe_load(m.group(1))
+    return (fm or {}).get("depth_tier")
+
+
+def main(argv):
+    strict = "--strict" in argv
+    rep = Reporter("check-content")
+
+    # 1 — residue lint (hard fail; aggregate per file to keep output tight)
+    dirty = 0
+    for path in md_files():
+        rel = path.relative_to(ROOT)
+        text = path.read_text(encoding="utf-8")
+        hits = [p for p in RESIDUE_PATTERNS if p in text]
+        if path.match("course/units/*/unit.md") and VD_TOKEN_RE.search(text):
+            hits.append("{{vd:key}} (unresolved token in rendered output)")
+        if hits:
+            dirty += 1
+            rep.fail(f"{rel}: residue found: {', '.join(hits)}")
+    rep.check(dirty == 0, "no AI tool-call residue in learner-facing markdown")
+
+    # 2 — demonstration presence per core unit (R20.AC5)
+    missing = []
+    for src in sorted(UNITS.glob("*/unit.src.md")):
+        text = src.read_text(encoding="utf-8")
+        if depth_tier(text) != "core":
+            continue
+        if not DEMO_RE.search(text):
+            missing.append(src.parent.name)
+    if missing:
+        rep.pending(
+            f"{len(missing)} core unit(s) lack a demonstration artifact (R20.AC5): "
+            + ", ".join(missing)
+        )
+    else:
+        rep.ok("every core unit carries >=1 demonstration artifact (R20.AC5)")
+
+    return rep.done(strict=strict)
+
+
+if __name__ == "__main__":
+    raise SystemExit(main(sys.argv[1:]))

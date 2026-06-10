@@ -114,7 +114,7 @@ exactly as you verified a subagent's report ([Subagents](../13-subagents/unit.md
 **Version currency.** Verified against Claude Code 2.1.159. The `claude mcp`
 subcommands and the `.mcp.json` shape were confirmed live (a stdlib stdio server connected `✓
 Connected`); confirm them against `claude mcp --help` before relying on a detail. The
-extension-vetting surface: `claude plugin|plugins` manages plugins; `--plugin-dir <path>` / `--plugin-url <url>` load a plugin for one session. Tracked in
+extension-vetting surface: `claude plugin|plugins` (or `--plugin-dir`/`--plugin-url` for one session) Tracked in
 [`meta/version-record.md`](../../../meta/version-record.md).
 
 ## Worked example
@@ -226,7 +226,7 @@ connectable server and its config; compare your connect + vetting run against th
 - **The shipped server** — [`taskflow_mcp.py`](../../../codebases/fixtures/taskflow_mcp.py) and its
   [`.mcp.json`](../../../codebases/fixtures/taskflow.mcp.json); the fixtures
   [README](../../../codebases/fixtures/README.md) shows how to connect and remove it.
-- The `mcp` subcommands and extension-vetting surface: `claude mcp add <name> -- <cmd>` adds a local stdio server (subprocess); `--transport http <url>` adds a remote one. `claude mcp get`/`list` health-check connections; a project `.mcp.json` server shows as `⏸ Pending approval` until approved. `--mcp-config <files>` loads per-session; `--strict-mcp-config` ignores others. `claude plugin|plugins` manages plugins; `--plugin-dir <path>` / `--plugin-url <url>` load a plugin for one session.
+- The `mcp` subcommands and extension-vetting surface: the `claude mcp add`/`get`/`list` subcommands and the project `.mcp.json` `claude plugin|plugins` (or `--plugin-dir`/`--plugin-url` for one session)
   Version-specifics in [`meta/version-record.md`](../../../meta/version-record.md). Confirm with
   `claude mcp --help`.
 - Stuck? [`course/stuck.md`](../../stuck.md) and the

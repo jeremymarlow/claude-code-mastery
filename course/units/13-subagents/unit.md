@@ -117,7 +117,7 @@ question you'll face again when you delegate to *third-party* code (MCP servers)
 flag, the `--agent` selector, and the `agents` subcommand are `--help`-verified; the persistent
 on-disk location (e.g. `.claude/agents/<name>.md`) and its front-matter fields are a filesystem
 **convention** — confirm the exact path and format against `claude --help` and the docs before relying
-on a detail. `--agent <agent>` / `--agents <json>` set session agents; the `agents` subcommand manages background agents. Tracked in [`meta/version-record.md`](../../../meta/version-record.md).
+on a detail. `--agent`/`--agents <json>` plus the `agents` subcommand Tracked in [`meta/version-record.md`](../../../meta/version-record.md).
 
 ## Worked example
 
@@ -269,7 +269,7 @@ and the checklist.
   its result (subagent).
 - **Fencing & verifying delegation** builds directly on [Operate safely](../03-operate-safely/unit.md) (blast
   radius, verify-don't-trust).
-- The flags, `agents` subcommand, and on-disk format: `--agent <agent>` / `--agents <json>` set session agents; the `agents` subcommand manages background agents. Version-specifics in
+- The flags, `agents` subcommand, and on-disk format: `--agent`/`--agents <json>` plus the `agents` subcommand Version-specifics in
   [`meta/version-record.md`](../../../meta/version-record.md). Confirm with `claude --help`.
 - Stuck? [`course/stuck.md`](../../stuck.md) and the
   [progress checklist](../../progress-checklist.md).

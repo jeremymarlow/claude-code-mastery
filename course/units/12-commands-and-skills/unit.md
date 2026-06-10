@@ -94,7 +94,7 @@ is exactly why *this* repo commits `close-unit` and `prime-context`.
 **Version currency.** Verified against Claude Code `2.1.159`. The on-disk locations
 (`.claude/commands/`, `.claude/skills/<name>/SKILL.md`) are filesystem **conventions** — confirm the
 exact paths and the invocation/argument syntax against `claude --help` and the docs before relying on a
-detail. Commands: Custom slash commands are user-defined skills, invoked as /name (file `.claude/commands/<name>.md` becomes `/<name>`); `--disable-slash-commands` turns all skills off. Arguments: `$ARGUMENTS` expands to the full argument string; positional access is 0-based — `$0` is the first argument, `$1` the second (shorthand for `$ARGUMENTS[N]`); declare named args via an `arguments:` frontmatter list for `$name` substitution. Gotcha: `$1` is the SECOND arg, not the first — a single-arg command must use `$ARGUMENTS` or `$0`. Skills: Skills resolve via /skill-name; reusable packaged capabilities. Tracked in
+detail. Commands: custom slash commands (`.claude/commands/<name>.md` becomes `/<name>`) Skills: Skills resolve via /skill-name; reusable packaged capabilities. Tracked in
 [`meta/version-record.md`](../../../meta/version-record.md).
 
 ## Worked example
@@ -214,7 +214,7 @@ against them and the checklist above.
   headlessly and in parallel.
 - **Scope & sources** — project vs. personal `.claude/` is the same distinction as settings sources in
   [Memory & context](../04-memory-and-context/unit.md).
-- The invocation, argument, and resolution surfaces: Custom slash commands are user-defined skills, invoked as /name (file `.claude/commands/<name>.md` becomes `/<name>`); `--disable-slash-commands` turns all skills off. Arguments: `$ARGUMENTS` expands to the full argument string; positional access is 0-based — `$0` is the first argument, `$1` the second (shorthand for `$ARGUMENTS[N]`); declare named args via an `arguments:` frontmatter list for `$name` substitution. Gotcha: `$1` is the SECOND arg, not the first — a single-arg command must use `$ARGUMENTS` or `$0`. Skills resolve via /skill-name; reusable packaged capabilities.
+- The invocation, argument, and resolution surfaces: custom slash commands (`.claude/commands/<name>.md` becomes `/<name>`) Skills resolve via /skill-name; reusable packaged capabilities.
   Version-specifics in [`meta/version-record.md`](../../../meta/version-record.md). Confirm with
   `claude --help`.
 - Stuck? [`course/stuck.md`](../../stuck.md) and the

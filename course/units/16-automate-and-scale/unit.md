@@ -105,7 +105,7 @@ having the guardrails so unattended runs stay safe.
 **Version currency.** Verified against Claude Code 2.1.159. `-p`/`--print`,
 `--output-format`, `--max-budget-usd`, and `--worktree` are `--help`-verified; the GitHub Action
 integration and in-REPL rewind are external/in-REPL surfaces — confirm them against the docs / `--help`
-before relying on a detail, rather than authoring from memory. CI runs use headless `-p` with `--output-format json` (and optionally `--max-budget-usd`); the official GitHub Action `anthropics/claude-code-action@v1` wraps this (installed via the Claude GitHub App + an API key or a Pro/Max OAuth token). In-REPL `/rewind` checkpoints/restores recent changes to undo them; `--no-session-persistence` disables saving sessions.
+before relying on a detail, rather than authoring from memory. headless `-p --output-format json` runs wrapped by the `anthropics/claude-code-action@v1` GitHub Action the in-REPL `/rewind` checkpoint/restore
 Tracked in [`meta/version-record.md`](../../../meta/version-record.md).
 
 ## Worked example
@@ -221,7 +221,7 @@ the parallel-worktrees discipline. Compare your run + worktrees + review against
   [CI](../../../.github/workflows/checks.yml) — are the same suite at widening blast radius.
 - The parallel-agents pattern: [`meta/workflows.md`](../../../meta/workflows.md#w9--running-parallel-agents-git-worktrees).
   Integrating each diff is the [Git & PR](../08-git-and-pr/unit.md) git/PR discipline, per worktree.
-- Headless / CI / worktree surfaces: `-p`/`--print` runs headlessly; `--output-format text|json|stream-json` shapes the output. CI runs use headless `-p` with `--output-format json` (and optionally `--max-budget-usd`); the official GitHub Action `anthropics/claude-code-action@v1` wraps this (installed via the Claude GitHub App + an API key or a Pro/Max OAuth token). `-w`/`--worktree [name]` creates a git worktree for the session; `--tmux` opens it in a tmux session.
+- Headless / CI / worktree surfaces: `-p`/`--print` runs headlessly; `--output-format text|json|stream-json` shapes the output. headless `-p --output-format json` runs wrapped by the `anthropics/claude-code-action@v1` GitHub Action `-w`/`--worktree` session worktrees
   Version-specifics in [`meta/version-record.md`](../../../meta/version-record.md). Confirm with
   `claude --help`.
 - Stuck? [`course/stuck.md`](../../stuck.md) and the

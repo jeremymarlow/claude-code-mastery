@@ -10,6 +10,9 @@
 # Entry schema:
 #   kind: command | flag | path | setting | feature | availability
 #   value: the version-specific detail prose would otherwise hardcode
+#   inline: OPTIONAL short, sentence-embeddable compression of `value` — NEVER an independent
+#     claim (same provenance as `value`). Rendered by {{vd:key:inline}}, and automatically for
+#     repeat uses of a long-value key within one document (design §15.2 dedupe).
 #   provenance: how it was checked (R12.AC4)
 #   verified_version / verified_date: the CLI + date it was confirmed against
 #   unverified: true => rendered with an explicit "unverified" marker (R12.AC3)
@@ -23,6 +26,7 @@ keys:
   cli-basics:
     kind: feature
     value: "`claude` starts an interactive session by default; `-p`/`--print` runs non-interactively (useful for pipes)."
+    inline: "an interactive `claude` session (or a non-interactive `-p` run)"
     provenance: "claude --help (usage line; -p/--print)"
     verified_version: "2.1.158"
     verified_date: "2026-05-29"
@@ -31,6 +35,7 @@ keys:
   search-refs:
     kind: feature
     value: "In-REPL: ask codebase questions in natural language; reference files/dirs with @-mentions (e.g. `@app/main.py`)."
+    inline: "in-REPL codebase questions with `@`-mentions"
     provenance: "in-REPL `/help` + live @-mention test"
     verified_version: "2.1.158"
     verified_date: "2026-05-30"
@@ -48,6 +53,7 @@ keys:
   secrets:
     kind: feature
     value: "API-key auth via the ANTHROPIC_API_KEY env var (or apiKeyHelper); keep secrets out of prompts, CLAUDE.md, and committed files."
+    inline: "`ANTHROPIC_API_KEY`/`apiKeyHelper` auth — secrets stay out of prompts and committed files"
     provenance: "claude --help (--bare: 'Anthropic auth is strictly ANTHROPIC_API_KEY or apiKeyHelper')"
     verified_version: "2.1.158"
     verified_date: "2026-05-29"
@@ -57,6 +63,7 @@ keys:
   untrusted-content:
     kind: feature
     value: "A workspace-trust dialog gates untrusted directories (skipped in non-interactive `-p` mode — only run -p in trusted dirs)."
+    inline: "the workspace-trust dialog (skipped in `-p` mode)"
     provenance: "claude --help (-p/--print trust-dialog note)"
     verified_version: "2.1.158"
     verified_date: "2026-05-29"
@@ -66,6 +73,7 @@ keys:
   checkpoint-rewind:
     kind: feature
     value: "In-REPL `/rewind` checkpoints/restores recent changes to undo them; `--no-session-persistence` disables saving sessions."
+    inline: "the in-REPL `/rewind` checkpoint/restore"
     provenance: "claude --help confirms --no-session-persistence; `/rewind` confirmed via in-REPL `/help`"
     verified_version: "2.1.158"
     verified_date: "2026-05-30"
@@ -74,6 +82,7 @@ keys:
   memory:
     kind: feature
     value: "Project memory via CLAUDE.md, auto-discovered at startup (auto-memory)."
+    inline: "project memory (`CLAUDE.md`, auto-discovered at startup)"
     provenance: "claude --help (--bare lists 'auto-memory' and 'CLAUDE.md auto-discovery')"
     verified_version: "2.1.158"
     verified_date: "2026-05-29"
@@ -82,6 +91,7 @@ keys:
   context-cmds:
     kind: command
     value: "In-REPL slash commands: /context, /compact, /clear (inspect and manage the context window)."
+    inline: "the in-REPL `/context`, `/compact`, and `/clear` commands"
     provenance: "in-REPL `/help` (command names/behavior confirmed)"
     verified_version: "2.1.158"
     verified_date: "2026-05-30"
@@ -90,6 +100,7 @@ keys:
   plan-mode:
     kind: feature
     value: "Plan mode (`--permission-mode plan`): Claude plans without writing changes until you approve."
+    inline: "plan mode (`--permission-mode plan`)"
     provenance: "claude --help (--permission-mode includes 'plan')"
     verified_version: "2.1.158"
     verified_date: "2026-05-29"
@@ -98,6 +109,7 @@ keys:
   thinking:
     kind: flag
     value: "Effort levels low, medium, high, xhigh, max (`--effort <level>`)."
+    inline: "`--effort` levels (low, medium, high, xhigh, max)"
     provenance: "claude --help (--effort choices)"
     verified_version: "2.1.158"
     verified_date: "2026-05-29"
@@ -106,6 +118,7 @@ keys:
   test-run:
     kind: feature
     value: "Tests run through the Bash tool (e.g. `pytest`); no dedicated CLI flag — Claude invokes the project's existing test runner."
+    inline: "tests via the Bash tool and the project's own runner"
     provenance: "no dedicated CLI surface in `claude --help`; mechanism is tool-use (conceptual, version-independent)"
     verified_version: "2.1.158"
     verified_date: "2026-05-30"
@@ -115,6 +128,7 @@ keys:
   git-pr:
     kind: flag
     value: "`--from-pr [value]` resumes a session linked to a PR by number/URL; PR creation uses the `gh` CLI via the Bash tool."
+    inline: "`--from-pr` session resume; PR creation via `gh` in the Bash tool"
     provenance: "claude --help (--from-pr); gh is an external tool"
     verified_version: "2.1.158"
     verified_date: "2026-05-29"
@@ -123,6 +137,7 @@ keys:
   review-cmds:
     kind: command
     value: "`claude ultrareview` runs a cloud multi-agent review of the branch/PR; /code-review and /security-review are in-REPL skills."
+    inline: "`claude ultrareview` plus the in-REPL `/code-review` and `/security-review` skills"
     provenance: "claude --help (ultrareview command); /code-review and /security-review confirmed present in in-REPL `/help` (2026-05-30)"
     verified_version: "2.1.158"
     verified_date: "2026-05-30"
@@ -131,6 +146,7 @@ keys:
   custom-commands:
     kind: feature
     value: "Custom slash commands are user-defined skills, invoked as /name (file `.claude/commands/<name>.md` becomes `/<name>`); `--disable-slash-commands` turns all skills off. Arguments: `$ARGUMENTS` expands to the full argument string; positional access is 0-based — `$0` is the first argument, `$1` the second (shorthand for `$ARGUMENTS[N]`); declare named args via an `arguments:` frontmatter list for `$name` substitution. Gotcha: `$1` is the SECOND arg, not the first — a single-arg command must use `$ARGUMENTS` or `$0`."
+    inline: "custom slash commands (`.claude/commands/<name>.md` becomes `/<name>`)"
     provenance: "claude --help (--disable-slash-commands: 'Disable all skills'); official docs code.claude.com/docs/en/skills 'Available string substitutions' (0-based $N = $ARGUMENTS[N]; $name via arguments: frontmatter); confirmed at runtime on 2.1.159 — a single-arg command's $1 rendered empty (consistent with 0-based indexing)"
     verified_version: "2.1.159"
     verified_date: "2026-06-01"
@@ -140,6 +156,7 @@ keys:
   skills:
     kind: feature
     value: "Skills resolve via /skill-name; reusable packaged capabilities."
+    inline: "skills invoked as `/skill-name`"
     provenance: "claude --help (--bare: 'Skills still resolve via /skill-name')"
     verified_version: "2.1.158"
     verified_date: "2026-05-29"
@@ -148,6 +165,7 @@ keys:
   subagents:
     kind: command
     value: "`--agent <agent>` / `--agents <json>` set session agents; the `agents` subcommand manages background agents."
+    inline: "`--agent`/`--agents <json>` plus the `agents` subcommand"
     provenance: "claude --help (--agent, --agents, `agents` command); on-disk file schema from official docs code.claude.com/docs/en/sub-agents (2026-05-31)"
     verified_version: "2.1.159"
     verified_date: "2026-05-31"
@@ -157,6 +175,7 @@ keys:
   hooks:
     kind: feature
     value: "Hooks run a command on a lifecycle event, configured in settings.json as `hooks.<Event>: [{matcher, hooks:[{type:\"command\", command}]}]`. Common events: PreToolUse (can block), PostToolUse, Stop, SessionStart, PreCompact. `--include-hook-events` streams them; `--bare` skips hooks."
+    inline: "lifecycle hooks in `settings.json` (`hooks.<Event>`)"
     provenance: "claude --help (--include-hook-events; --bare 'skip hooks'); settings.json schema (hooks event enum + {matcher, hooks:[...]} structure, via update-config skill, 2026-05-30)"
     verified_version: "2.1.158"
     verified_date: "2026-05-30"
@@ -166,6 +185,7 @@ keys:
   mcp:
     kind: command
     value: "`claude mcp add <name> -- <cmd>` adds a local stdio server (subprocess); `--transport http <url>` adds a remote one. `claude mcp get`/`list` health-check connections; a project `.mcp.json` server shows as `⏸ Pending approval` until approved. `--mcp-config <files>` loads per-session; `--strict-mcp-config` ignores others."
+    inline: "the `claude mcp add`/`get`/`list` subcommands and the project `.mcp.json`"
     provenance: "claude mcp --help (add/add-json/get/list/remove/serve); verified live 2026-05-30 — a stdlib stdio server registered via `mcp add` reported `✓ Connected` via `mcp get`; `.mcp.json` format captured from `mcp add -s project`."
     verified_version: "2.1.158"
     verified_date: "2026-05-30"
@@ -174,6 +194,7 @@ keys:
   plugins:
     kind: command
     value: "`claude plugin|plugins` manages plugins; `--plugin-dir <path>` / `--plugin-url <url>` load a plugin for one session."
+    inline: "`claude plugin|plugins` (or `--plugin-dir`/`--plugin-url` for one session)"
     provenance: "claude --help (plugin command; --plugin-dir; --plugin-url)"
     verified_version: "2.1.158"
     verified_date: "2026-05-29"
@@ -182,6 +203,7 @@ keys:
   headless:
     kind: flag
     value: "`-p`/`--print` runs headlessly; `--output-format text|json|stream-json` shapes the output."
+    inline: "headless `-p`/`--print` with `--output-format`"
     provenance: "claude --help (-p/--print; --output-format choices)"
     verified_version: "2.1.158"
     verified_date: "2026-05-29"
@@ -190,6 +212,7 @@ keys:
   ci:
     kind: feature
     value: "CI runs use headless `-p` with `--output-format json` (and optionally `--max-budget-usd`); the official GitHub Action `anthropics/claude-code-action@v1` wraps this (installed via the Claude GitHub App + an API key or a Pro/Max OAuth token)."
+    inline: "headless `-p --output-format json` runs wrapped by the `anthropics/claude-code-action@v1` GitHub Action"
     provenance: "CLI flags (-p/--output-format/--max-budget-usd) from claude --help; the GitHub Action wrapper verified against official docs (code.claude.com/docs/en/github-actions; anthropics/claude-code-action examples/claude.yml) AND live-exercised in this repo — an @claude responder ran end-to-end (GitHub Actions run 26868750876, 2026-06-03)."
     verified_version: "2.1.159"
     verified_date: "2026-06-03"
@@ -199,6 +222,7 @@ keys:
   worktrees:
     kind: flag
     value: "`-w`/`--worktree [name]` creates a git worktree for the session; `--tmux` opens it in a tmux session."
+    inline: "`-w`/`--worktree` session worktrees"
     provenance: "claude --help (-w/--worktree; --tmux)"
     verified_version: "2.1.158"
     verified_date: "2026-05-29"
@@ -207,6 +231,7 @@ keys:
   settings:
     kind: setting
     value: "`--settings <file-or-json>` loads settings; `--setting-sources user,project,local` selects which sources load."
+    inline: "settings via `--settings` / `--setting-sources`"
     provenance: "claude --help (--settings; --setting-sources)"
     verified_version: "2.1.158"
     verified_date: "2026-05-29"
@@ -224,6 +249,7 @@ keys:
   output-styles:
     kind: feature
     value: "Output styles customize Claude's response behavior: the Default (standard SWE system prompt) plus three built-in styles — Proactive (acts immediately, prefers action over planning), Explanatory (adds educational 'Insights'), and Learning (collaborative; adds TODO(human) markers for you to implement). Select via `/config` -> Output style (saved to `.claude/settings.local.json`), or set the `outputStyle` settings field directly."
+    inline: "output styles (Default, Proactive, Explanatory, Learning; selected via `/config`)"
     provenance: "official docs (built-in output styles) + user-confirmed via `/config` @ 2.1.158, 2026-05-30"
     verified_version: "2.1.158"
     verified_date: "2026-05-30"

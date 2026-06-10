@@ -243,7 +243,12 @@ def validate_leaf(path: Path, schema=None, expected_session=None, expected_model
 
 # --- version-data resolution ({{vd:key}}) ----------------------------------------------------
 
-VD_TOKEN_RE = re.compile(r"\{\{vd:([A-Za-z0-9_-]+)\}\}")
+VD_TOKEN_RE = re.compile(r"\{\{vd:([A-Za-z0-9_-]+)(:inline)?\}\}")
+
+# Bare tokens whose value is longer than this render in full only on FIRST use per document;
+# later uses fall back to the key's `inline` form (design §15.2 — kills duplicated reference
+# blobs without authors tracking state). Short values always render in place.
+VD_DEDUPE_LEN = 100
 
 
 def load_version_data():
@@ -266,19 +271,39 @@ def resolve_vd(key: str, vd: dict):
 
 
 def render_vd(text: str, vd: dict):
-    """Render every {{vd:key}} in `text`. Returns (rendered_text, unresolved_keys:set).
+    """Render every {{vd:key}} / {{vd:key:inline}} in `text`. Returns (rendered, unresolved:set).
 
     Unverified values are annotated inline with an explicit text marker (R12.AC3).
+    Two forms (design §15.2):
+      - {{vd:key}}        — the full reference `value`; if the value is long (> VD_DEDUPE_LEN)
+                            and the key already appeared in this document, the short `inline`
+                            form is rendered instead (dedupe).
+      - {{vd:key:inline}} — the key's `inline` field, for mid-sentence use. Missing `inline`
+                            is an error (reported via `unresolved` as "key:inline") — no silent
+                            fallback, so the short form stays single-sourced.
     """
     unresolved: set[str] = set()
+    seen: set[str] = set()
 
     def repl(match: re.Match) -> str:
-        key = match.group(1)
+        key, want_inline = match.group(1), bool(match.group(2))
         value, unverified = resolve_vd(key, vd)
         if value is None:
             unresolved.add(key)
             return match.group(0)  # leave token in place; caller decides how to fail
-        return f"{value} (unverified — see meta/version-record.md)" if unverified else value
+        entry = vd.get("keys", {}).get(key) or {}
+        inline = entry.get("inline")
+        if want_inline:
+            if not inline:
+                unresolved.add(f"{key}:inline")
+                return match.group(0)
+            out = inline
+        elif key in seen and len(str(value)) > VD_DEDUPE_LEN:
+            out = inline if inline else "(see the note above)"
+        else:
+            out = str(value)
+        seen.add(key)
+        return f"{out} (unverified — see meta/version-record.md)" if unverified else out
 
     return VD_TOKEN_RE.sub(repl, text), unresolved
 

@@ -237,7 +237,7 @@ and the checklist.
   is the point.
 - **Hooks as the safety thesis automated** — the deterministic enforcement here is the
   [Operate safely](../03-operate-safely/unit.md) guardrail/verification discipline turned into policy-as-code.
-- The event enum, matcher syntax, and output fields: Hooks run a command on a lifecycle event, configured in settings.json as `hooks.<Event>: [{matcher, hooks:[{type:"command", command}]}]`. Common events: PreToolUse (can block), PostToolUse, Stop, SessionStart, PreCompact. `--include-hook-events` streams them; `--bare` skips hooks. Version-specifics in
+- The event enum, matcher syntax, and output fields: lifecycle hooks in `settings.json` (`hooks.<Event>`) Version-specifics in
   [`meta/version-record.md`](../../../meta/version-record.md). Confirm with the settings schema / docs.
 - Stuck? [`course/stuck.md`](../../stuck.md) and the
   [progress checklist](../../progress-checklist.md).

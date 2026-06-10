@@ -193,7 +193,7 @@ behavior, not your structure.)
   reflex is load-bearing for both.
 - [`meta/workflows.md`](../../../meta/workflows.md#w2--test-driven-development) — the generalized
   test-driven-development pattern (and how it connects to the **Ship a feature** loop and **Debugging**).
-- Running tests is ordinary tool-use: Tests run through the Bash tool (e.g. `pytest`); no dedicated CLI flag — Claude invokes the project's existing test runner. Version-specifics live in
+- Running tests is ordinary tool-use: tests via the Bash tool and the project's own runner Version-specifics live in
   [`meta/version-record.md`](../../../meta/version-record.md).
 - The plan-and-diff discipline from [Ship a feature](../05-ship-a-feature/unit.md) and the diff-reading reflex from
   [your first unit](../01-onboarding-first-win/unit.md) are the habits TDD builds on.

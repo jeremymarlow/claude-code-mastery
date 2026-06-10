@@ -93,7 +93,7 @@ a way to come back to an open PR later: `--from-pr [value]` resumes a session li
 > words match the code. An unread AI-drafted PR description is how false claims get your sign-off.
 
 **Version currency.** This unit was verified against Claude Code `2.1.159`. The
-version-specific surface is the `gh` integration and the `--from-pr` flag: `--from-pr [value]` resumes a session linked to a PR by number/URL; PR creation uses the `gh` CLI via the Bash tool. Confirm with
+version-specific surface is the `gh` integration and the `--from-pr` flag: `--from-pr` session resume; PR creation via `gh` in the Bash tool Confirm with
 `claude --help` and see [`meta/version-record.md`](../../../meta/version-record.md) if your version
 differs. `git` and `gh` themselves are external tools Claude drives through the Bash tool.
 
@@ -182,7 +182,7 @@ the checklist above is the rubric. Compare your commit series and description ag
   review**) all assume you can produce reviewable history — and **Code & security review** is the other
   side of this coin: *being* the reviewer. **Automate & scale** drives PRs headlessly in CI.
 - [`meta/workflows.md`](../../../meta/workflows.md#w4--git--pr-workflow) — the generalized Git/PR pattern.
-- The `gh` integration and `--from-pr`: `--from-pr [value]` resumes a session linked to a PR by number/URL; PR creation uses the `gh` CLI via the Bash tool. Version-specifics in
+- The `gh` integration and `--from-pr`: `--from-pr` session resume; PR creation via `gh` in the Bash tool Version-specifics in
   [`meta/version-record.md`](../../../meta/version-record.md).
 - The verify-before-you-ship reflex traces straight back to [Ship a feature](../05-ship-a-feature/unit.md)'s diff
   review and [Debugging](../07-debug-a-failure/unit.md)'s "don't claim it's fixed until it's proven."

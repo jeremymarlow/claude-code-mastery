@@ -9,14 +9,15 @@ PY ?= $(shell [ -x .venv/bin/python ] && echo .venv/bin/python || echo python3)
 TOOLS := ./tools
 
 .PHONY: check check-strict frontmatter coverage checklist units index links version-refs \
-        vd-json cli-reference changelog breadcrumbs traceability evaluations drift doctor venv render help
+        vd-json cli-reference changelog breadcrumbs content traceability evaluations drift doctor venv render help
 
 ## Run the required + traceability checks (PENDING items do not fail; see check-strict).
-check: frontmatter coverage checklist units index links version-refs vd-json cli-reference changelog breadcrumbs traceability evaluations
+check: frontmatter coverage checklist units index links version-refs vd-json cli-reference changelog breadcrumbs content traceability evaluations
 	@echo "make check: all checks passed"
 
 ## Release gate: same suite, but PENDING (not-yet-authored coverage) becomes FAIL.
 check-strict: frontmatter coverage checklist units index links version-refs vd-json cli-reference changelog breadcrumbs
+	@$(PY) $(TOOLS)/check-content --strict
 	@$(TOOLS)/check-traceability --strict
 	@$(TOOLS)/check-evaluations --strict
 	@echo "make check-strict: all checks passed (strict)"
@@ -60,6 +61,10 @@ changelog:
 ## R19.AC5: every learner-facing doc carries the canonical breadcrumb trail (hard fail, no PEND).
 breadcrumbs:
 	@$(PY) $(TOOLS)/check-breadcrumbs
+
+## §15.2: residue lint (hard fail) + per-core-unit demonstration presence (R20.AC5; PEND→strict-fail).
+content:
+	@$(PY) $(TOOLS)/check-content
 
 traceability:
 	@$(PY) $(TOOLS)/check-traceability

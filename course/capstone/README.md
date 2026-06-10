@@ -1,3 +1,5 @@
+[Claude Code Mastery](../../README.md) › Capstone
+
 # Capstone
 
 The capstone is the course's **single graded assessment** — the one place you prove, end to

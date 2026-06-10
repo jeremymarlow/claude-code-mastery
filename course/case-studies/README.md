@@ -1,4 +1,4 @@
-[‹ Claude Code Mastery](../../README.md)
+[Claude Code Mastery](../../README.md) › Case studies
 
 # Case studies
 

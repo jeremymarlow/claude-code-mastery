@@ -1,3 +1,5 @@
+[Claude Code Mastery](../../README.md) › [Capstone](README.md) › Capstone briefs
+
 # Capstone briefs
 
 Pick **one** brief. Each is a realistic, non-trivial, end-to-end job — not a fixed project — so you

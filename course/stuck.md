@@ -1,3 +1,5 @@
+[Claude Code Mastery](../README.md) › When you're stuck
+
 # When you're stuck
 
 You're working through this course **solo** — so getting unstuck without an instructor is a skill

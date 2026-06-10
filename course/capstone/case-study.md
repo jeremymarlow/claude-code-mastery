@@ -1,3 +1,5 @@
+[Claude Code Mastery](../../README.md) › [Capstone](README.md) › Case study: how this course was built and is maintained with Claude Code
+
 # Case study: how this course was built and is maintained with Claude Code
 
 This is the **worked exemplar** for your capstone — and it is real. This course was itself

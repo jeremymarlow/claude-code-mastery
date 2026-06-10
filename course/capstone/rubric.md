@@ -1,3 +1,5 @@
+[Claude Code Mastery](../../README.md) › [Capstone](README.md) › Capstone rubric
+
 # Capstone rubric
 
 <!-- Traceability (R8 — the capstone is the sole graded assessment): brief menu R8.AC2;

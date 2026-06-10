@@ -65,14 +65,17 @@ edits that fix it). Run it standalone between slices to watch the failure list s
       existing `--check` now expects the new trails); `check-breadcrumbs` standalone: 26 → **7**
       failures — all generated docs pass; the remaining 7 are exactly the 10.3 hand-authored set.
 
-### 10.3 Hand-authored docs  [R19.AC1, R19.AC2; §14.1, §14.4]
-- [ ] Add trails to the six trail-less docs: `course/stuck.md`,
+### 10.3 Hand-authored docs  [R19.AC1, R19.AC2; §14.1, §14.4]  ✅
+- [x] Add trails to the six trail-less docs: `course/stuck.md`,
       `course/capstone/{README,briefs,rubric,case-study}.md` — capstone children link through
-      `[Capstone](./README.md)`.
-- [ ] Migrate the two format-divergent case-study docs: `course/case-studies/README.md` (`‹` →
-      canonical) and `collaboration-retrospective.md` (gains its final current-doc segment).
-- [ ] `check-breadcrumbs` standalone: **fully green**. `make check` green (`check-links` revalidates
-      every new relative link for free, R19.AC2).
+      `[Capstone](README.md)` (the helper's relpath form; sibling links carry no `./` prefix).
+- [x] Migrate the two format-divergent case-study docs: `course/case-studies/README.md` (`‹` →
+      canonical) and `collaboration-retrospective.md` (gains its final current-doc segment;
+      `./README.md` → `README.md`).
+- [x] `check-breadcrumbs` standalone: **fully green** (26/26 trail correct). `make check` green
+      (`check-links` revalidates every new relative link for free, R19.AC2). _Note: `rubric.md`'s
+      trail sits above its H1 like everywhere else; its R8 traceability comment stays put below
+      the H1._
 
 ### 10.4 Wire the gate + record the convention  [R19.AC3, R19.AC5; §14.5–§14.6, R13.AC1/AC4/AC6]
 - [ ] `Makefile` — add `check-breadcrumbs` to `check` **and** `check-strict` (hard fail in both;

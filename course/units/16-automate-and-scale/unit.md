@@ -102,7 +102,7 @@ CI, **none of that is there.** So the guardrails have to be built in *beforehand
 Automation amplifies whatever you point it at, including mistakes. The skill isn't typing `-p` — it's
 having the guardrails so unattended runs stay safe.
 
-**Version currency.** Verified against Claude Code 2.1.159. `-p`/`--print`,
+**Version currency.** Verified against Claude Code 2.1.170. `-p`/`--print`,
 `--output-format`, `--max-budget-usd`, and `--worktree` are `--help`-verified; the GitHub Action
 integration and in-REPL rewind are external/in-REPL surfaces — confirm them against the docs / `--help`
 before relying on a detail, rather than authoring from memory. headless `-p --output-format json` runs wrapped by the `anthropics/claude-code-action@v1` GitHub Action the in-REPL `/rewind` checkpoint/restore

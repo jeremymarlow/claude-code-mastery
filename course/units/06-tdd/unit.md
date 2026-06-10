@@ -96,7 +96,7 @@ does it pattern-match the test? If a one-line change to the test would expose a 
 > **Debugging**). It's overhead for genuinely exploratory work where you don't yet know the shape of the answer,
 > or for one-off throwaway scripts. It's a tool you reach for deliberately, not a law.
 
-**Version currency.** This unit was verified against Claude Code `2.1.159`.
+**Version currency.** This unit was verified against Claude Code `2.1.170`.
 Tests run through the Bash tool (e.g. `pytest`); no dedicated CLI flag — Claude invokes the project's existing test runner. Confirm your project's runner (`taskflow-api` uses `pytest`) and see
 [`meta/version-record.md`](../../../meta/version-record.md) if your version differs.
 

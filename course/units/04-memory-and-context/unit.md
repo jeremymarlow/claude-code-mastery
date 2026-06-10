@@ -134,7 +134,7 @@ failure. The recovery ladder, cheapest move first:
 (Stuck mid-task and not sure which rung you're on? [`course/stuck.md`](../../stuck.md) carries this
 ladder as a recovery playbook.)
 
-**Version currency.** This unit was verified against Claude Code `2.1.159`; the
+**Version currency.** This unit was verified against Claude Code `2.1.170`; the
 context-management commands are in-REPL and may shift between releases — confirm them with `/help` and
 see [`meta/version-record.md`](../../../meta/version-record.md) if your version differs.
 

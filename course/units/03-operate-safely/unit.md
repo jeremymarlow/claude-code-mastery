@@ -115,7 +115,7 @@ question — answered deliberately, not assumed — is the single most transfera
 workflow lab from **Ship a feature** on carries an explicit version of it.
 
 **Version currency.** Permission modes and flags are exactly the kind of detail that shifts between
-releases. This unit was verified against Claude Code `2.1.159`; if your
+releases. This unit was verified against Claude Code `2.1.170`; if your
 `claude --version` differs, treat the mode names as indicative and confirm them against your CLI —
 see [`meta/version-record.md`](../../../meta/version-record.md).
 

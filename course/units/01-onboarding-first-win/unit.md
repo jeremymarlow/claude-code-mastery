@@ -79,7 +79,7 @@ Don't edit them yet.
 labs are written for the terminal so they're portable, but the IDE path is fully supported; reach
 for it if that's where you live. (We don't drill it.)
 
-**Version currency.** This content was verified against Claude Code `2.1.159`. If
+**Version currency.** This content was verified against Claude Code `2.1.170`. If
 your installed version differs, `doctor` will say so and point you at
 [`meta/version-record.md`](../../../meta/version-record.md), where any version-specific
 differences are documented.

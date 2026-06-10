@@ -18,8 +18,8 @@
 #   unverified: true => rendered with an explicit "unverified" marker (R12.AC3)
 
 schema_version: 1
-_verified_version: "2.1.159"     # referenced as {{vd:_verified_version}} in callouts
-_verified_date: "2026-05-31"
+_verified_version: "2.1.170"     # referenced as {{vd:_verified_version}} in callouts
+_verified_date: "2026-06-09"
 
 keys:
 

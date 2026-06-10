@@ -5,7 +5,7 @@
 
 > ⚙️ **Generated** from `meta/cli-reference.json` by `tools/render-cli-reference` — do not edit by hand; regenerate with `tools/render-cli-reference --all`.
 >
-> Reflects Claude Code CLI **2.1.159**.
+> Reflects Claude Code CLI **2.1.170**.
 
 The command tree, flags, and arguments below are introspected directly from `claude --help` (recursively over subcommands). The final sections cover doc-only surface `--help` cannot see — in-REPL slash commands and output styles — sourced from the official docs, with the URL and retrieval date shown.
 
@@ -62,13 +62,52 @@ The command tree, flags, and arguments below are introspected directly from `cla
 
 Latest CLI changes — full history in [meta/version-changelog.md](../../meta/version-changelog.md).
 
-**2.1.158 → 2.1.159  (retrieved 2026-05-31 from https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md)**
+**2.1.159 → 2.1.170  (retrieved 2026-06-09 from https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md)**
 
-The course is now verified against **2.1.159** (refresh 2026-05-31, closing the L9 drift-ahead — the
-reference was generated at 2.1.159 during P8 while the recorded anchor was held at 2.1.158 to keep the
-upgrade trigger armed until the feature shipped).
+The course is now verified against **2.1.170** (refresh 2026-06-09). Eleven releases since the last
+anchor. The **top-level command list is unchanged** (`check-version-drift`); the deep surface moved in
+four places, all picked up by the regenerated reference: a new **`--safe-mode`** flag, **`claude
+agents --all`**, **`--fallback-model`** now accepting a comma-separated list, and the **`--model`**
+aliases now including `fable` (Claude Fable 5). Every version-data (`vd`) value was re-checked against the
+reference diff — **none is contradicted**; per-key `verified_version`/dates stand.
 
-- **2.1.159** — Internal infrastructure improvements (no user-facing changes). _Course impact:_ none — the command/flag surface is unchanged (`check-version-drift`: command list unchanged; `render-cli-reference --check` byte-stable), so `cli-reference.json` and every version-data value stand.
+- **2.1.170** — Introduced **Claude Fable 5**; `--model` aliases now `fable`/`opus`/`sonnet` and
+  `--fallback-model` accepts a comma-separated list (retries the primary each turn); fixed transcript
+  saving from IDE-spawned terminals. _Course impact:_ help-text/flag changes carried by the
+  regenerated `cli-reference.{json,md}`; no version-data value affected (model selection isn't a
+  quarantined course fact).
+- **2.1.169** — New **`--safe-mode`** flag (start with all customizations — CLAUDE.md, skills,
+  plugins, hooks, MCP, custom commands/agents — disabled, for troubleshooting; sets
+  `CLAUDE_CODE_SAFE_MODE=1`); `post-session` lifecycle hook for self-hosted runners; `/cd` command;
+  `disableBundledSkills` setting. _Course impact:_ new top-level flag → reference regenerated
+  (auto-flagged `added_in`); a useful complement to U4's recovery ladder but additive — no
+  `version-data` value changed.
+- **2.1.168 / 2.1.167** — Bug fixes and reliability improvements. _Course impact:_ none.
+- **2.1.166** — `fallbackModel` setting (up to three fallbacks); glob patterns in deny-rule tool
+  names; `MAX_THINKING_TOKENS=0` disables thinking; assorted fixes. _Course impact:_ none to
+  version-data values (deny-rule globs are additive to the settings surface; settings via `--settings` / `--setting-sources` names the
+  loading mechanism, not rule syntax).
+- **2.1.165 / 2.1.164** — **Absent from the official changelog** at retrieval time — marked, not
+  fabricated (R17.AC3).
+- **2.1.163** — `requiredMinimumVersion`/`requiredMaximumVersion` managed settings; `/plugin list`;
+  Stop/SubagentStop hooks can return `additionalContext`; skills gain a `\$` escape for a literal `$`
+  before a digit; fixed `claude -p` hanging after its final result. _Course impact:_ all additive —
+  lifecycle hooks in `settings.json` (`hooks.<Event>`) (common-events teaching unchanged), `claude plugin|plugins` (or `--plugin-dir`/`--plugin-url` for one session), custom slash commands (`.claude/commands/<name>.md` becomes `/<name>`) (0-based
+  positional args unchanged; escape syntax is new detail deferred to docs), Enterprise/managed settings are an additional setting source layered above user/project/local. (unverified — see meta/version-record.md)
+  (still `unverified`, L1) — no value contradicted.
+- **2.1.162** — `claude agents --json` gains `waitingFor`; `--tools` with explicit Grep/Glob provides
+  the dedicated search tools; large agents-view/permissions fix wave; quieter startup. _Course
+  impact:_ `--agent`/`--agents <json>` plus the `agents` subcommand re-checked — the `agents` subcommand description stands (the `--all` flag
+  later joins it); none otherwise.
+- **2.1.161** — agents-view polish; parallel Bash failure no longer cancels sibling calls; fixed
+  `claude mcp` list/get/add printing secrets to the terminal; OTEL fixes. _Course impact:_ none (the `claude mcp add`/`get`/`list` subcommands and the project `.mcp.json`
+  surface unchanged; the secrets-printing fix aligns with U3/U15 hygiene teaching).
+- **2.1.160** — Prompts before writing shell-startup files and `~/.config/git/`; `acceptEdits` now
+  prompts before writing build-tool config files that grant code execution; Edit no longer requires a
+  separate Read after `grep`; dynamic-workflow keyword renamed `workflow`→`ultracode`; a large
+  Windows/terminal/agents fix wave. _Course impact:_ acceptEdits, auto, bypassPermissions, default, dontAsk, plan (`--permission-mode <mode>`) re-checked — mode
+  *names* unchanged (the `acceptEdits` tightening is consistent with, and slightly strengthens, U3's
+  posture framing); none otherwise.
 
 ## `claude`
 
@@ -100,7 +139,7 @@ Claude Code - starts an interactive session by default, use -p/--print for non-i
 | `--disallowedTools`, `--disallowed-tools` | `<tools...>` | Comma or space-separated list of tool names to deny (e.g. "Bash(git *) Edit") |
 | `--effort` | `<level>` | Effort level for the current session (low, medium, high, xhigh, max) |
 | `--exclude-dynamic-system-prompt-sections` | — | Move per-machine sections (cwd, env info, memory paths, git status) from the system prompt into the first user message. Improves cross-user prompt-cache reuse. Only applies with the default system prompt (ignored with --system-prompt). — default: `false` |
-| `--fallback-model` | `<model>` | Enable automatic fallback to specified model when the default model is overloaded or not available (only works with --print) |
+| `--fallback-model` | `<model>` | Enable automatic fallback to specified model(s) when the default model is overloaded or not available. Accepts a comma-separated list to try each in order. Re-tries the primary at the start of each user turn. (only works with --print) |
 | `--file` | `<specs...>` | File resources to download at startup. Format: file_id:relative_path (e.g., --file file_abc:doc.txt file_def:img.png) |
 | `--fork-session` | — | When resuming, create a new session ID instead of reusing the original (use with --resume or --continue) |
 | `--from-pr` | `[value]` | Resume a session linked to a PR by PR number/URL, or open interactive picker with optional search term |
@@ -113,7 +152,7 @@ Claude Code - starts an interactive session by default, use -p/--print for non-i
 | `--max-budget-usd` | `<amount>` | Maximum dollar amount to spend on API calls (only works with --print) |
 | `--mcp-config` | `<configs...>` | Load MCP servers from JSON files or strings (space-separated) |
 | `--mcp-debug` | — | [DEPRECATED. Use --debug instead] Enable MCP debug mode (shows MCP server errors) |
-| `--model` | `<model>` | Model for the current session. Provide an alias for the latest model (e.g. 'sonnet' or 'opus') or a model's full name (e.g. 'claude-opus-4-8'). |
+| `--model` | `<model>` | Model for the current session. Provide an alias for the latest model (e.g. 'fable', 'opus', or 'sonnet') or a model's full name (e.g. 'claude-fable-5'). |
 | `-n`, `--name` | `<name>` | Set a display name for this session (shown in the prompt box, /resume picker, and terminal title) |
 | `--no-chrome` | — | Disable Claude in Chrome integration |
 | `--no-session-persistence` | — | Disable session persistence - sessions will not be saved to disk and cannot be resumed (only works with --print) |
@@ -127,6 +166,7 @@ Claude Code - starts an interactive session by default, use -p/--print for non-i
 | `--remote-control-session-name-prefix` | `<prefix>` | Prefix for auto-generated Remote Control session names — default: `hostname` |
 | `--replay-user-messages` | — | Re-emit user messages from stdin back on stdout for acknowledgment (only works with --input-format=stream-json and --output-format=stream-json) |
 | `-r`, `--resume` | `[value]` | Resume a conversation by session ID, or open interactive picker with optional search term |
+| `--safe-mode` | — | Start with all customizations (CLAUDE.md, skills, plugins, hooks, MCP servers, custom commands and agents, output styles, workflows, custom themes, keybindings, and more) disabled — useful for troubleshooting a broken configuration. Admin-managed (policy) settings still apply. Auth, model selection, built-in tools, and permissions work normally. Sets CLAUDE_CODE_SAFE_MODE=1.  🆕 _new in 2.1.170_ |
 | `--session-id` | `<uuid>` | Use a specific session ID for the conversation (must be a valid UUID) |
 | `--setting-sources` | `<sources>` | Comma-separated list of setting sources to load (user, project, local). |
 | `--settings` | `<file-or-json>` | Path to a settings JSON file or a JSON string to load additional settings from |
@@ -148,12 +188,13 @@ Manage background agents
 | --- | --- | --- |
 | `--add-dir` | `<directory>` | Additional directory to allow tool access to in dispatched sessions (repeatable) |
 | `--agent` | `<agent>` | Default agent for sessions dispatched from agent view. Overrides the 'agent' setting. |
+| `--all` | — | With --json: include completed sessions (the full agent view list)  🆕 _new in 2.1.170_ |
 | `--allow-dangerously-skip-permissions` | — | Make bypass-permissions mode available to dispatched sessions without defaulting to it |
 | `--cwd` | `<path>` | Show only background sessions started under <path> |
 | `--dangerously-skip-permissions` | — | Alias for --permission-mode bypassPermissions |
 | `--effort` | `<level>` | Default effort level for sessions dispatched from agent view |
 | `-h`, `--help` | — | Display help for command |
-| `--json` | — | Print live sessions as a JSON array and exit (for scripting; does not require a TTY) |
+| `--json` | — | Print active sessions as a JSON array and exit (for scripting; does not require a TTY) |
 | `--mcp-config` | `<config>` | MCP server configuration to apply to dispatched sessions (repeatable) |
 | `--model` | `<model>` | Default model for sessions dispatched from agent view |
 | `--permission-mode` | `<mode>` | Default permission mode for sessions dispatched from agent view |

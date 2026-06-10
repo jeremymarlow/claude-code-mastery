@@ -95,7 +95,7 @@ put a command/skill the *team* should have in the project; keep your personal sh
 A team scaffolder committed to `.claude/commands/` means every contributor scaffolds the same way — that
 is exactly why *this* repo commits `close-unit` and `prime-context`.
 
-**Version currency.** Verified against Claude Code `2.1.159`. The on-disk locations
+**Version currency.** Verified against Claude Code `2.1.170`. The on-disk locations
 (`.claude/commands/`, `.claude/skills/<name>/SKILL.md`) are filesystem **conventions** — confirm the
 exact paths and the invocation/argument syntax against `claude --help` and the docs before relying on a
 detail. Commands: custom slash commands (`.claude/commands/<name>.md` becomes `/<name>`) Skills: Skills resolve via /skill-name; reusable packaged capabilities. Tracked in

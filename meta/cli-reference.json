@@ -1,5 +1,5 @@
 {
-  "cli_version": "2.1.159",
+  "cli_version": "2.1.170",
   "root": {
     "arguments": [
       {
@@ -33,6 +33,18 @@
             "description": "Default agent for sessions dispatched from agent view. Overrides the 'agent' setting.",
             "names": [
               "--agent"
+            ],
+            "provenance": "claude agents --help",
+            "source": "cli-help"
+          },
+          {
+            "added_in": "2.1.170",
+            "arg": null,
+            "choices": null,
+            "default": null,
+            "description": "With --json: include completed sessions (the full agent view list)",
+            "names": [
+              "--all"
             ],
             "provenance": "claude agents --help",
             "source": "cli-help"
@@ -97,7 +109,7 @@
             "arg": null,
             "choices": null,
             "default": null,
-            "description": "Print live sessions as a JSON array and exit (for scripting; does not require a TTY)",
+            "description": "Print active sessions as a JSON array and exit (for scripting; does not require a TTY)",
             "names": [
               "--json"
             ],
@@ -2155,7 +2167,7 @@
         "arg": "<model>",
         "choices": null,
         "default": null,
-        "description": "Enable automatic fallback to specified model when the default model is overloaded or not available (only works with --print)",
+        "description": "Enable automatic fallback to specified model(s) when the default model is overloaded or not available. Accepts a comma-separated list to try each in order. Re-tries the primary at the start of each user turn. (only works with --print)",
         "names": [
           "--fallback-model"
         ],
@@ -2302,7 +2314,7 @@
         "arg": "<model>",
         "choices": null,
         "default": null,
-        "description": "Model for the current session. Provide an alias for the latest model (e.g. 'sonnet' or 'opus') or a model's full name (e.g. 'claude-opus-4-8').",
+        "description": "Model for the current session. Provide an alias for the latest model (e.g. 'fable', 'opus', or 'sonnet') or a model's full name (e.g. 'claude-fable-5').",
         "names": [
           "--model"
         ],
@@ -2471,6 +2483,18 @@
         "names": [
           "-r",
           "--resume"
+        ],
+        "provenance": "claude --help",
+        "source": "cli-help"
+      },
+      {
+        "added_in": "2.1.170",
+        "arg": null,
+        "choices": null,
+        "default": null,
+        "description": "Start with all customizations (CLAUDE.md, skills, plugins, hooks, MCP servers, custom commands and agents, output styles, workflows, custom themes, keybindings, and more) disabled — useful for troubleshooting a broken configuration. Admin-managed (policy) settings still apply. Auth, model selection, built-in tools, and permissions work normally. Sets CLAUDE_CODE_SAFE_MODE=1.",
+        "names": [
+          "--safe-mode"
         ],
         "provenance": "claude --help",
         "source": "cli-help"

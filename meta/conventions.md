@@ -113,6 +113,33 @@ YAML is authoritative for human-edited artifacts; a generated `.json` twin is pr
 tooling where noted (`capability-map`, `version-data`). Never hand-edit a generated `.json`;
 regenerate it from its `.yaml`. **[R13.AC2]**
 
+## Demonstration artifacts (unit content)
+
+Every **core-tier** unit demonstrates its skill with at least one concrete artifact (design §15.1),
+in one of two forms, each opened by a bold label at the start of a line — the exact strings
+`tools/check-content` greps for:
+
+- `**Captured** — <what it is>, <the exact command/source that produced it> (<date if relevant>):`
+  followed by a fenced block of **real** output. Captures are regenerable: prefer artifacts a
+  maintainer can re-produce on a refresh (diffs from `solution/*` refs, pytest/CLI output, excerpts
+  of committed files). Provenance is part of the label. **[R20.AC1/AC4, R12.AC4]**
+- `**Illustrative** — your session will differ in wording; verify behavior and diffs, not phrasing.`
+  followed by a blockquote dialogue (`**You:**` / `**Claude:**` turns) or a marked example. Used for
+  conversational exchanges, which are non-deterministic. No version-specific surface may be asserted
+  inside one from memory — version facts stay `{{vd:key}}` tokens. **[R20.AC4, R12.AC3]**
+
+Presence is enforced by `tools/check-content` (`PEND` while authoring, hard fail in
+`make check-strict`); the same tool hard-fails on AI tool-call residue in any learner-facing
+markdown. **[R20.AC5, R13.AC4]**
+
+## Stage checkpoints & transfer blocks
+
+The **last unit of each stage** (U4, U8, U11, U16) closes with a `## Stage checkpoint — <Stage>`
+section: 4–6 retrieval prompts answered from memory, each naming the unit that carries the answer,
+explicitly ungraded (capstone-only assessment stands). **[R21.AC4]** The Daily Driver workflow units
+(U5–U8) each carry an **"On your own repo"** transfer block after the lab's verify step, marked
+bring-your-own and non-verifiable. **[R21.AC5, R7.AC8]**
+
 ## Breadcrumb navigation
 
 Every learner-facing document under `course/` carries a breadcrumb trail as its **first content

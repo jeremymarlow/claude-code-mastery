@@ -33,8 +33,13 @@ This is the meta-skill the course is teaching — Claude is also your debugger a
   in the driver's seat.
 - **Reproduce, then narrow:** ask Claude to help you write a minimal failing test (the debugging
   workflow) so "fixed" becomes objective.
-- **Reset and retry:** if a session has gone sideways, `tools/reset-lab uNN-labM` and start the lab
-  clean — a fresh context often beats untangling a confused one.
+- **Session gone sideways?** Don't keep typing corrections into a bad trajectory. Climb the recovery
+  ladder from [Memory & context](./units/04-memory-and-context/unit.md): **interrupt** the current
+  action, give **one precise redirect**, **roll back** what reached disk, or **restart** with the
+  correction baked into the brief or `CLAUDE.md`. The tell that it's restart time: the same
+  misunderstanding survived two corrections.
+- **Reset and retry:** for lab work, `tools/reset-lab uNN-labM` restores the clean starting state —
+  a fresh context plus a clean tree often beats untangling a confused session.
 
 ## 4. Environment problems
 

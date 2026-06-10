@@ -480,7 +480,7 @@ it. The R13.AC5 check automates the inverse (every requirement referenced; every
 | R16 ✅ | §12, §8 | `render-cli-reference`, `cli-reference.json` + supplement + schema, `course/reference/` page |
 | R17 ✅ | §12, §8 | `version-changelog.md` + `check-version-changelog`, refresh-process step |
 | R18 🟨 | §13 | persona panel (`.claude/agents/`), `log/evaluations/**` (matrix: leaf + per-session + per-reviewer globals + overall corner), `course/case-studies/collaboration-retrospective.md`; referenced by U13 + §10 |
-| R19 ⏳ | _design deferred_ | breadcrumb nav — approved requirement; design pending (deferred by user until R18 ships) |
+| R19 ⏳ | §14 | breadcrumb nav — design proposed 2026-06-09 (deferral lifted: R18 shipped); flips ✅ when the P10 build lands |
 
 ## 12. Exhaustive CLI reference & version-change digest  → produces `meta/cli-reference.*`, `course/reference/cli-reference.md`, `meta/version-changelog.md`  [R16, R17]  ✅ AUTHORED (2026-05-31)
 
@@ -907,3 +907,115 @@ tools/check-evaluations                               # corpus completeness gate
 (R14.AC2, R18.AC4); **collaboration retrospective case study** → capstone exemplar (R8.AC2, R14.AC4).
 `meta/conventions.md` gains the `log/evaluations/` layout + `<session>/<reviewer>.md` naming (R13.AC1).
 Build plan: `tasks/P9-collaboration-retrospective.md`.
+
+## 14. Breadcrumb navigation  → produces `tools/check-breadcrumbs`, a shared trail helper in `tools/_common.py`, and trails on every learner-facing doc  [R19]  ✅ APPROVED (2026-06-09)
+
+Top-of-page breadcrumb trails for learner-facing documents (R19), deferred from P9 until R18 shipped
+(ledger L12). **Scoping (same rule as §12):** pure navigation infrastructure — no new can-do, lab, or
+coverage area; §4 / §6.5, `check-coverage`, and traceability part B are untouched.
+
+### 14.1 Current state — generalize what's already half-built, don't invent
+
+Partial trails already exist, in **two inconsistent formats**, from P7 (M5 navigation) and P9:
+
+| Doc | Today | Emitted by |
+|---|---|---|
+| `course/units/*/unit.md` ×16 | `[Claude Code Mastery](…) › [Course units](…)` — **no current-doc segment** | `tools/render-units` |
+| `course/units/README.md` | `[‹ Claude Code Mastery](…)` — back-link style | `tools/render-index` |
+| `course/reference/cli-reference.md` | `[Claude Code Mastery](…) › CLI reference` — full pattern | `tools/render-cli-reference` |
+| `course/case-studies/README.md` | `[‹ Claude Code Mastery](…)` — back-link style | hand |
+| `course/case-studies/collaboration-retrospective.md` | `[Claude Code Mastery](…) › [Case studies](…)` — no current segment | hand |
+| `course/progress-checklist.md`, `course/stuck.md`, `course/capstone/{README,briefs,rubric,case-study}.md` | **none** | checklist generated; rest hand |
+
+The design **canonicalizes the `cli-reference.md` pattern** (it alone satisfies all of R19.AC2) and
+brings every in-scope doc to it; the `‹` back-link style is migrated.
+
+### 14.2 Canonical format & placement  [R19.AC2, R19.AC4]
+
+One line, the **first content line** of the document — after the `<!-- GENERATED … -->` comment
+and/or YAML front matter where present, followed by a blank line, above the H1:
+
+```
+[Claude Code Mastery](<rel>) › [<Ancestor H1>](<rel>) › <current doc's H1 text>
+```
+
+- Every **ancestor** segment is a working relative link (resolution already enforced by
+  `check-links`, which scans `course/**` — R19.AC2 inherits R13.AC4c with zero new link logic).
+- The **final** segment is the current doc's H1 text, **plain text, not a link** (R19.AC2).
+- Separator is ` › ` (U+203A between spaces) — plain CommonMark text; the trail reads correctly as
+  plain text and carries no meaning by color/emoji/formatting (R19.AC4). Long unit titles are
+  accepted in the final segment (single-sourced beats inventing a parallel short-label set).
+
+### 14.3 Hierarchy derivation — filesystem rule, no hand-maintained map  [R19.AC3]
+
+The parent chain is **derived, not declared**: a doc's parent is the **nearest `README.md` walking up
+the directory tree** (a `README.md`'s own parent is the next one further up); the repo-root
+`README.md` is the course home and the chain's terminus. Segment labels are **single-sourced from
+each doc's H1** (first `# ` line outside front matter). Consequences, which all match the intuitive
+hierarchy with zero special cases:
+
+| Doc class | Derived trail |
+|---|---|
+| `course/stuck.md`, `course/progress-checklist.md` | `Home › <H1>` |
+| `course/units/README.md` | `Home › Course units` |
+| `course/units/<slug>/unit.md` | `Home › [Course units] › <unit H1>` |
+| `course/capstone/README.md` | `Home › Capstone` |
+| `course/capstone/{briefs,rubric,case-study}.md` | `Home › [Capstone] › <H1>` |
+| `course/case-studies/README.md` / `…/collaboration-retrospective.md` | `Home › Case studies` / `Home › [Case studies] › <H1>` |
+| `course/reference/cli-reference.md` (no README in `reference/`) | `Home › Claude Code CLI reference` |
+
+A future doc dropped anywhere under `course/` gets the right trail from its location alone —
+hierarchy changes are directory moves, and the check (14.5) recomputes expectations from disk, so a
+stale trail cannot survive a reorganization (R19.AC3, R19.AC5).
+
+### 14.4 Scope roster & exemptions  [R19.AC1]
+
+**In scope (the check's discovery set):** every `*.md` under `course/` **plus** nothing else — with
+these named exemptions, recorded in the tool and in `meta/conventions.md`:
+
+- `course/maintainer-guide.md` — maintainer-facing, explicitly out of scope per R19.AC1.
+- `course/units/*/unit.src.md` — maintainer-facing **source**; its trail is emitted into the
+  generated `unit.md` (R19.AC5), and a trail in the source would duplicate it.
+- `course/labs/u03-lab1/untrusted-bug-report.md` — a **fenced untrusted-input fixture** (P5-U3);
+  navigation chrome would corrupt the artifact learners are taught to treat as payload, not docs.
+  (Labs otherwise ship no learner-facing Markdown — lab instructions live in each unit's `unit.md`,
+  which carries the trail; so "units and their labs" is satisfied at the unit doc.)
+- **The course home `README.md` itself** — discretionary call: R19.AC1 lists the learner-facing
+  README in scope, but home is the **terminus** every trail links *to*; a self-trail would be the
+  single plain-text segment `Claude Code Mastery` duplicating its own H1 one line below. Read as:
+  home *satisfies* AC1 by being the destination (zero ancestors ⇒ empty trail), not by carrying
+  navigation chrome to itself. **Flagged for the design gate.**
+
+### 14.5 Single-sourcing & enforcement  [R19.AC5]
+
+**One helper, two consumers.** A `breadcrumb(path)` helper in `tools/_common.py` computes the trail
+for any doc from the 14.3 rule. Consumers:
+
+1. **Generators emit it** (R19.AC5 single-sourcing for generated docs): `render-units` (replaces its
+   hardcoded `BREADCRUMB` constant — gains the missing current-doc segment), `render-index` (replaces
+   the `‹` back-link), `render-cli-reference` (replaces `MD_BREADCRUMB`), and `render-checklist`
+   (gains a trail). All four regenerate via the existing `make render`; drift is already gated by
+   their existing `--check` modes.
+2. **`tools/check-breadcrumbs` verifies hand-authored docs** (and re-verifies generated ones for
+   free): discovers the 14.4 scope set, computes the expected trail via the same helper, and
+   compares it to the doc's first content line — failing on **missing, stale, or
+   hierarchy-mismatched** trails (R19.AC5). **Hard fail, no PEND phase**: unlike labs/rubric during
+   the v1 build, every in-scope doc already exists, so there is no legitimate incremental state to
+   tolerate. Wired into `make check` and `make check-strict` (pre-commit + CI inherit it, R13.AC6).
+
+`check-traceability` discovers R19 from `requirements.md` automatically (R13.AC5, no edits); it is
+satisfied once the conventions entry, the tool, and the trails land.
+
+### 14.6 Conventions & repo additions  [R19.AC3, R13.AC1]
+
+`meta/conventions.md` gains a **Breadcrumb navigation** subsection: the format line, the placement
+rule, the filesystem-derivation rule, and the exemption list — so a new document adopts the pattern
+by convention and the check enforces it mechanically. Repo additions:
+
+```
+tools/check-breadcrumbs        # expected-vs-actual trail gate (hard fail; make check + check-strict)
+tools/_common.py               # + breadcrumb(path) helper (shared by check + all four generators)
+```
+
+Build plan: `tasks/P10-breadcrumbs.md`. §11 traceability flips R19 ⏳→✅ when the build lands;
+ledger **L12** is struck at close-out.

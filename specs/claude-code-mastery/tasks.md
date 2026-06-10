@@ -175,3 +175,16 @@ surfaced the self-evaluation COI. `make check` green; `make check-strict` fails 
 - [x] 9.7 learner-facing case study (+ R14.AC8 COI disclosure) [R18.AC8, R8.AC2, R14.AC4/AC8]
 - [x] 9.8 dogfood wiring (U13 panel + §10 + build case study) → R18 referenced [R18.AC9, R14.AC2]
 - [x] 9.9 close-out — state synced; `make check` green / `check-strict` fails only on R19 (expected); committed + pushed on `main`
+
+### P10 — Breadcrumb navigation (R19) 📋 **TASKS DRAFTED (2026-06-09)** — awaiting tasks-gate approval  → [`tasks/P10-breadcrumbs.md`](./tasks/P10-breadcrumbs.md)
+Post-v1, non-release-blocking — but it closes the last strict gap: at close-out `make check-strict`
+goes **fully green** for the first time since R19 was approved. Design ✅ APPROVED (§14, 2026-06-09;
+deferral L12 lifted — R18 shipped). One shared trail-derivation helper (`tools/_common.py`,
+hierarchy = nearest-`README.md` filesystem rule, labels = H1s), four generators emit it, eight
+hand-authored docs migrated/added, and a hard-fail `tools/check-breadcrumbs` gate wired into
+`make check`/`check-strict`. See `design.md` §14 / ledger **L12**.
+- [ ] 10.1 shared `breadcrumb` helper in `_common.py` + `tools/check-breadcrumbs` (built first, wired last) [R19.AC3/AC5]
+- [ ] 10.2 generators adopt it: `render-units`/`render-index`/`render-cli-reference`/`render-checklist` + `make render` [R19.AC5]
+- [ ] 10.3 hand-authored docs: 6 trail-less + 2 format-divergent → canonical [R19.AC1/AC2]
+- [ ] 10.4 wire gate into `make check`/`check-strict` + conventions entry → R19 referenced [R19.AC3/AC5, R13.AC1/AC5]
+- [ ] 10.5 close-out — §11 flip, decisions entry, **strike L12**, IMPLEMENTATION §3; `make check-strict` fully green; commit gated on go-ahead

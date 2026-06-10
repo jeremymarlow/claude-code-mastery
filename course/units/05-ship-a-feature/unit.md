@@ -9,8 +9,8 @@ can_do: [C6]
 workflows: [W1]
 coverage_areas: [9, 10]
 prerequisites: [U2, U4]
-reading_time_min: 10
-lab_time_min: 25
+reading_time_min: 14
+lab_time_min: 30
 ---
 
 [Claude Code Mastery](../../../README.md) › [Course units](../README.md) › Ship a feature end-to-end with explore → plan → code → commit
@@ -23,6 +23,8 @@ By the end of this unit you can:
 
 - **Drive a non-trivial feature through the explore → plan → code → commit loop** — orient Claude in
   the code, get an explicit plan, implement against it, and land a verified change.
+- **Write a brief that gives Claude what it needs** — scope, constraints, and a defined deliverable —
+  and revise the brief (not just the output) when the result shows it was underspecified.
 - **Use plan mode as a review gate** — make Claude design *before* it writes, and reject or redirect a
   bad plan while it's still free to change.
 - **Verify at the two points that matter** — review the *plan* before code exists, then read the diff
@@ -36,7 +38,7 @@ By the end of this unit you can:
 > restate the task), **plan** (in plan mode, so nothing is written until you approve), **code** (implement
 > the approved plan in small steps), **commit** (read the diff, run `pytest`, then commit). The lab has you
 > ship a real endpoint — `GET /projects/{id}/stats` — this way, and `tools/verify-lab u05-lab1` proves it.
-> The two verification gates are the *plan* and the *diff*; skip either and you're back to hoping.
+> The two verification gates are the *plan* and the *diff*.
 
 ## Skip-check
 
@@ -57,6 +59,26 @@ everything else, because you've skipped the two moments where a wrong turn is ch
 [`meta/workflows.md`](../../../meta/workflows.md#w1--explore--plan--code--commit); read it there. The
 short version: **explore → plan → code → commit**, with a review gate at the plan and again at the diff.
 The rest of this section is what's specific to *applying* it.
+
+**The brief comes first.** Every run of the loop starts with something you type, and its quality sets a
+ceiling on everything downstream. A working brief carries four things: **scope** (which part of the
+system), **constraints** (the conventions and requirements the change must respect), a **deliverable**
+(what "done" looks like, concretely), and **context** (what you already know that Claude can't guess).
+Compare:
+
+**Illustrative** — your session will differ in wording; verify behavior and diffs, not phrasing.
+
+> **Weak:** "Add a stats endpoint for projects."
+>
+> **Strong:** "Add `GET /projects/{id}/stats` returning per-status task counts, zero-filled for every
+> status. Ownership like the rest of the API: a project I don't own → 404. Follow this repo's
+> convention — logic in a service, thin route. Start by reading the task/project routers and services
+> and restating where the pieces go; don't write code yet."
+
+The weak brief isn't wrong — it's underspecified, and Claude will fill the gaps with plausible guesses
+you then have to review out. When a plan or a result disappoints, the highest-leverage fix is usually
+one step upstream: revise the *brief* and re-run, rather than patching outputs one correction at a
+time.
 
 **1 — Explore before planning.** A plan built on a misread of the code is a confident plan that's wrong.
 Start every feature by having Claude **read the relevant code and restate the task and constraints back
@@ -81,9 +103,9 @@ silently.
 
 **4 — Commit is a verification gate, not a save button (CV).** Before you commit: **read the diff** (does
 it match the plan? does it touch only what it should? did the existing behavior survive?) and **run the
-tests** (`pytest`). Green tests are necessary, not sufficient — they say nothing you didn't already test
-broke; *you* confirm the change is the one you wanted. Only then commit, with a message that says *why*.
-This is the same diff-reading reflex from your first unit, now on a change big enough that it earns its keep.
+tests** (`pytest`). A green suite only says that nothing already-tested broke; *you* confirm the change
+is the one you wanted. Only then commit, with a message that says *why*. This is the diff-reading habit
+from your first unit, now on a change big enough for it to earn its keep.
 
 > **Awareness — extended thinking.** For a genuinely hard plan — a thorny design trade-off, a subtle
 > algorithm — you can have Claude think harder before answering: Effort levels low, medium, high, xhigh, max (`--effort <level>`). It's a dial you reach
@@ -96,18 +118,88 @@ the effort/thinking controls are version-specific surface — confirm with `clau
 
 ## Worked example
 
-This repository is itself a worked example of the loop. It's built **spec-driven** — explore the problem,
-write `requirements.md`, then `design.md`, then `tasks.md`, with a review gate between each phase, *before*
-any unit is authored (that's the heavy-weight cousin of this loop, taught fully in **Spec-driven dev**). The everyday version is
-exactly what you'll do in the lab: when this course's maintainers add an endpoint to `taskflow-api`, they
-have Claude read the existing `tasks`/`projects` routers and services first, propose a plan in plan mode
-(*"new `ProjectStats` schema, a `project_task_stats` service function, one route — ownership via
-`get_project`"*), review that the plan respects the service-layer convention, then implement and verify.
-The plan is the artifact you steer with; the diff is the artifact you trust only after reading.
+Here is the lab's feature — the stats endpoint — driven through the loop, with the artifacts that
+matter shown the way you'd actually see them.
 
-Read the baseline [`CLAUDE.md`](../../../codebases/primary/taskflow-api/CLAUDE.md) before the lab — its
-"new behavior usually belongs in a service, with the router just wiring it up" is precisely the kind of
-constraint a good plan honors and a rushed one violates.
+**Explore.** You open with the strong brief from the concept section. The useful part of what comes
+back is a *checkable* restatement:
+
+**Illustrative** — your session will differ in wording; verify behavior and diffs, not phrasing.
+
+> **You:** Read the task and project routers and services, then restate: where a new
+> `GET /projects/{id}/stats` route belongs, where the counting logic goes, and how ownership is
+> enforced today. Don't write any code yet.
+>
+> **Claude:** Routes live in `app/api/routers/`, one module per resource. Domain logic belongs in
+> `app/services/` per the project `CLAUDE.md` — routers just wire services up. Ownership is enforced
+> in the service layer: `get_project` raises `NotFoundError` (→ 404) unless the project exists and
+> belongs to the current user, and the task services route through it. So this feature wants a
+> `project_task_stats` service function that calls `get_project` first, plus a thin route.
+
+Before building on that answer, open `app/services/projects.py` and confirm `get_project` really does
+what Claude says. It does — but the habit of checking is what makes the next step trustworthy.
+
+**Plan — the gate where you steer.** Two plans Claude could plausibly propose for this feature. The
+first is the kind you reject:
+
+**Illustrative** — your session will differ in wording; verify behavior and diffs, not phrasing.
+
+> **Claude (plan A):** I'll add a `stats` route to the tasks router that queries the task table,
+> counts by status in the route handler, and returns a dict.
+>
+> **You:** Two problems. Counting is domain logic — it belongs in a service, not the route handler
+> (CLAUDE.md). And the plan never says what happens when the project isn't mine. Re-plan: service
+> function with the ownership check first, zero-filled counts for every status, thin route.
+>
+> **Claude (plan B):** (1) `ProjectStats` schema in `app/models/project.py`. (2)
+> `project_task_stats(session, owner, project_id)` in `app/services/tasks.py` — `get_project` first
+> (foreign/missing → 404), then one grouped count query, zero-filled across every `TaskStatus`.
+> (3) Thin route `GET /projects/{project_id}/stats`. (4) Tests: per-status counts, zero-fill,
+> foreign project → 404.
+
+Plan A wasn't wasted — it surfaced both mistakes while each was one sentence to fix. That is the
+whole value of the gate.
+
+**Diff — the gate where you verify.** The reference solution's service hunk, exactly as `git diff`
+shows it:
+
+**Captured** — the solution's service-layer change, `git diff start/u05-lab1..solution/u05-lab1`
+(excerpt; the full diff adds the `ProjectStats` schema, the thin route, and three tests):
+
+```diff
++def project_task_stats(session: Session, owner: User, project_id: int) -> dict[str, int]:
++    """Count an owned project's tasks by status. ..."""
++    get_project(session, owner, project_id)
++
++    counts = {status.value: 0 for status in TaskStatus}
++    rows = session.exec(
++        select(Task.status, func.count())
++        .where(Task.project_id == project_id)
++        .group_by(Task.status)
++    ).all()
++    for status, count in rows:
++        key = status.value if isinstance(status, TaskStatus) else status
++        counts[key] = count
++    return counts
+```
+
+Reading it, you confirm what the plan promised: the ownership check runs *before* any counting (first
+line of the body), every status is zero-filled, and nothing outside the feature moved. Then the suite:
+
+**Captured** — `pytest` on the solution branch (2026-06-09):
+
+```text
+....................................                                   [100%]
+39 passed in 12.06s
+```
+
+Green plus a read diff is the exit condition. (This repository is itself the loop's heavyweight
+cousin — built spec-driven with a review gate per phase, taught in **Spec-driven dev**; its `specs/`
+tree is the provenance behind this example.)
+
+Read the baseline [`CLAUDE.md`](../../../codebases/primary/taskflow-api/CLAUDE.md) before the lab —
+its "new behavior usually belongs in a service, with the router just wiring it up" is the constraint
+plan A violated.
 
 ## Lab
 
@@ -130,13 +222,16 @@ primary codebase with no stats endpoint yet.
 
 1. `tools/reset-lab u05-lab1`, then start a session inside the codebase:
    `cd codebases/primary/taskflow-api && claude`.
-2. **Explore.** Ask Claude to read the task and project routers/services and restate: where a new route
-   goes, where the counting logic belongs, and how ownership is enforced today. Spot-check its answer
-   against the files — the plan is only as good as this.
+2. **Explore — with your own brief.** Write the opening brief yourself (scope, constraints,
+   deliverable, context — don't copy the worked example's): have Claude read the task and project
+   routers/services and restate where the route goes, where the counting logic belongs, and how
+   ownership is enforced. Spot-check its answer against the files — the plan is only as good as this.
 3. **Plan (in plan mode).** Have Claude produce a plan for the feature above *without writing code*: the
    files it'll touch, the response shape, and how it'll be tested. **Review it against the contract and the
    service-layer convention** before approving. Redirect if logic is landing in the router or the 404 path
-   is missing.
+   is missing. **If the plan misses something your brief never mentioned** (the zero-fill, the 404),
+   that's a brief problem, not just a plan problem — revise the brief once and re-plan, and notice the
+   difference upstream wording makes downstream.
 4. **Code.** Approve the plan and implement it in small steps. Have Claude add a test that pins the
    contract (counts by status, zero-fill, 404 for a foreign project).
 5. **Commit (verify first).** Read the diff and run `pytest` (see *Verify* below). Then commit with a
@@ -158,10 +253,17 @@ route. Yours may differ in shape and still pass — the verifier checks the cont
   behavior intact?) and run `pytest`. A green suite plus a read diff — not the green suite alone — is what
   "verified" means.
 
+**On your own repo (transfer — optional, bring-your-own, not verifiable by this course's tooling):**
+pick a small real feature in a codebase you actually work on and run the same loop: your brief, an
+explore restatement you spot-check, a plan you review against *your* project's conventions, a diff you
+read before committing. The loop transfers; the conventions in the brief are the part you supply.
+
 ## Common pitfalls
 
 - **Skipping straight to "code."** Asking for the feature without exploring or planning is how you get a
   confident, wrong implementation. The loop's value is entirely in the two gates you'd be skipping.
+- **A one-line brief for a multi-layer feature.** "Add a stats endpoint" leaves scope, constraints, and
+  the deliverable to be guessed. You'll spend the review gates correcting guesses your brief invited.
 - **Rubber-stamping the plan.** Plan mode only helps if you *read* the plan. Approving a vague or
   wrong-layer plan just defers the problem to a more expensive moment.
 - **Letting logic land in the router.** The baseline `CLAUDE.md` says domain logic lives in the service

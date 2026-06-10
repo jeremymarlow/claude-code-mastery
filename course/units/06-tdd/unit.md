@@ -9,7 +9,7 @@ can_do: [C7]
 workflows: [W2]
 coverage_areas: [11]
 prerequisites: [U5]
-reading_time_min: 9
+reading_time_min: 12
 lab_time_min: 30
 ---
 
@@ -102,16 +102,44 @@ Tests run through the Bash tool (e.g. `pytest`); no dedicated CLI flag — Claud
 
 ## Worked example
 
-This course is itself built test-first where the behavior is mechanical. The enforcement suite under
-`tools/` (`check-frontmatter`, `check-links`, `check-version-refs`, `check-traceability`) is exactly
-the kind of thing TDD fits: each check has a *specifiable* contract (e.g. "a `vd:<key>` reference in a
-unit that resolves to no entry in `version-data.yaml` must fail the build"). The way to add such a
-check is to first write
-the failing case — a fixture with a dangling reference, asserted to make the check exit non-zero — watch
-it fail because the check doesn't catch it yet, then implement the check until that case (and the
-existing green ones) pass. The red proves the check can actually catch the thing it's meant to catch;
-without it you'd have a check that exits 0 on everything and a false sense of safety. That is the same
-loop the lab asks you to run, on this repo's own tooling.
+Here is the lab's behavior at the moment this unit is named for — the red. The reference solution's
+test, run against the clean tree, where no `overdue` filter exists yet:
+
+**Captured** — `pytest tests/test_tasks.py -k overdue` on the start state (2026-06-09):
+
+```text
+        resp = client.get("/tasks?overdue=true", headers=h).json()
+>       assert {t["id"] for t in resp["items"]} == overdue
+E       assert {1, 2, 3, 4, 5, 6} == {1, 2}
+
+tests/test_tasks.py:154: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_tasks.py::test_filter_overdue_tasks - assert {1, 2, 3, 4, 5...
+```
+
+Read that failure the way step 3 of the lab asks you to:
+
+- It is an **assertion** failure — the test ran end to end and the behavior is genuinely missing.
+  This red counts.
+- It fails **informatively**: all six tasks came back (`{1, 2, 3, 4, 5, 6}`) where only the two
+  overdue ones (`{1, 2}`) were expected. The API ignored the unknown `overdue` query parameter
+  entirely — silently, with no error. That detail both proves the red is real and previews the
+  implementation's job.
+
+Now the red that does *not* count:
+
+**Illustrative** — your session will differ in wording; verify behavior and diffs, not phrasing.
+
+> ```text
+> E   ImportError: cannot import name 'TaskFilters' from 'app.services.tasks'
+> ```
+>
+> A test that dies on an import, a typo, or a fixture that never loaded has not exercised the
+> behavior. It can flip to green while the feature is still wrong. If Claude hands you this kind of
+> red, the right move is: *"fix the test until it fails on the assertion, then show me that failure."*
+
+(The same discipline built this repo's own tooling: each `tools/check-*` gate started as a failing
+case — a fixture the check must reject — implemented against until it caught it.)
 
 ## Lab
 
@@ -168,6 +196,11 @@ behavior, not your structure.)
   *computed*, not faked — is what "verified" means here. The verifier's edge cases exist precisely to
   catch a test that was satisfied the wrong way.
 
+**On your own repo (transfer — optional, bring-your-own, not verifiable by this course's tooling):**
+pick one edge-case-bearing rule in a codebase you work on and drive it test-first: have Claude pin the
+edges as a test, watch the red, read why it's red, then read the implementation that turns it green.
+The edges of *your* domain are where this loop pays for itself.
+
 ## Common pitfalls
 
 - **Writing the test after the code.** If Claude implements first and tests after, you've lost the
@@ -180,7 +213,7 @@ behavior, not your structure.)
   `due_date <= today` that wrongly includes today's tasks and finished ones. The edges (`done`,
   due-today, no-due-date) *are* the spec — pin them.
 - **Trusting the green bar without reading the implementation.** TDD's own trap: a hard-coded or
-  too-broad implementation can pass a weak test. Green is necessary, not sufficient — read the diff.
+  too-broad implementation can pass a weak test. A green bar can be earned the wrong way — read the diff.
 - **Letting logic land in the router.** Same convention as in **Ship a feature**: the overdue predicate is domain logic
   and belongs in the service. A route that computes it "works" but violates the baseline `CLAUDE.md`.
 - **Over-implementing past the test.** Adding speculative behavior the spec didn't ask for (a whole

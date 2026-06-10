@@ -9,7 +9,7 @@ can_do: [C8]
 workflows: [W3]
 coverage_areas: [12]
 prerequisites: [U5]
-reading_time_min: 9
+reading_time_min: 12
 lab_time_min: 30
 ---
 
@@ -99,15 +99,48 @@ tool). See [`meta/version-record.md`](../../../meta/version-record.md) if your C
 
 ## Worked example
 
-This course's own build debugged exactly this way. When `check-version-refs` first went in, a unit
-referenced a `vd:` key that didn't resolve — but the *symptom* showed up far away, as a confusing
-"unresolved key: key" failure. The fix wasn't to silence the message; it was to **reproduce** it on the
-offending file, **confirm the root cause** (a unit had written a doubled-brace `vd:` token *literally*,
-as a prose illustration, which the checker can't tell from a real reference), and fix it at the cause —
-reword the illustration —
-rather than weakening the check. The tell was the same one this unit teaches: the first plausible
-explanation ("the checker is too strict") treated the symptom; the real cause was the content, and
-confirming it before editing is what kept the check honest. (That exact failure happened while authoring the **TDD** unit.)
+The lab's bug, walked to its root. First the repro — a real run against the buggy CLI with a
+throwaway database, one task eight days past due and one a month out:
+
+**Captured** — the legacy CLI on its start state (2026-06-09; `TASKFLOW_DB` pointed at a temp file,
+tasks added with `--due 2026-06-01` and `--due 2026-07-01`):
+
+```text
+$ python taskflow.py list --overdue
+(no matching tasks)
+$ python taskflow.py stats
+overdue:     0
+```
+
+A past-due task, and nothing flags it. Deterministic, repeatable, observable — that is a repro. Now
+the step the unit turns on: cause before edit.
+
+**Illustrative** — your session will differ in wording; verify behavior and diffs, not phrasing.
+
+> **You:** Don't change anything yet. Find why overdue never fires and explain the cause — the
+> specific line and why it produces this result.
+>
+> **Claude:** In `taskflow.py`, `is_overdue` builds today's date with
+> `datetime.now().strftime("%m-%d-%Y")` and then evaluates `due < today` — but `due` is stored in
+> ISO form, `YYYY-MM-DD`. That's a plain string comparison across two different formats: `"2026-06-01"`
+> compared against `"06-09-2026"` lexicographically starts with `"2"` vs `"0"`, so it is never less
+> than today. Overdue can never fire.
+>
+> **You:** Convincing — I can see the two formats on that line. Before you fix it: where else does
+> this same comparison live? Search the whole file.
+>
+> **Claude:** Two more sites. The stats path repeats the same inline comparison (same `strftime`
+> format, same string compare, spelled slightly differently), and the display path does it a third
+> time. A fix to `is_overdue` alone would leave `stats` and the listing display still wrong.
+
+That last exchange is the difference between a guesser and a debugger: the first plausible cause was
+*correct* but *incomplete*, and asking "where else?" is what turned a partial fix into a real one.
+You verify Claude's claim the same way as always — open the file at the cited lines and look.
+
+(The course's own build hit the same trap class: a confusing check failure whose first plausible
+explanation — "the checker is too strict" — would have treated the symptom; reproducing it and
+confirming the cause found a prose illustration the checker couldn't distinguish from a real
+reference, and the fix belonged in the content, not the check.)
 
 ## Lab
 
@@ -159,6 +192,12 @@ still pass — the verifier checks behavior, not structure.)
 stays green while the rest of the CLI keeps working — not when the first symptom disappears. The
 verifier deliberately checks the *display* surfaces too, so a fix applied to only one of the three
 copies fails: confirming the root cause means fixing all of it.
+
+**On your own repo (transfer — optional, bring-your-own, not verifiable by this course's tooling):**
+next real bug that lands on you, run this loop deliberately: repro first, capture it as a re-runnable
+check, make Claude show you the cause with evidence (and ask "where else does this live?") before any
+edit, then verify the repro and the neighbors. The discipline transfers unchanged; only the codebase is
+yours.
 
 ## Common pitfalls
 

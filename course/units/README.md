@@ -19,10 +19,10 @@ The 16 units, in the default order. Each is self-contained; skim a unit's **Skip
 
 | # | Unit | Read | Lab |
 |---|------|------|-----|
-| 5 | [Ship a feature end-to-end with explore → plan → code → commit](./05-ship-a-feature/unit.md) | 10 min | 25 min |
-| 6 | [Drive a new behavior test-first (red → green)](./06-tdd/unit.md) | 9 min | 30 min |
-| 7 | [Debug an unfamiliar failure by confirming the root cause](./07-debug-a-failure/unit.md) | 9 min | 30 min |
-| 8 | [Turn a body of work into clean commits and a reviewable PR](./08-git-and-pr/unit.md) | 9 min | 25 min |
+| 5 | [Ship a feature end-to-end with explore → plan → code → commit](./05-ship-a-feature/unit.md) | 14 min | 30 min |
+| 6 | [Drive a new behavior test-first (red → green)](./06-tdd/unit.md) | 12 min | 30 min |
+| 7 | [Debug an unfamiliar failure by confirming the root cause](./07-debug-a-failure/unit.md) | 12 min | 30 min |
+| 8 | [Turn a body of work into clean commits and a reviewable PR](./08-git-and-pr/unit.md) | 12 min | 25 min |
 
 ## Force Multiplier
 

@@ -9,7 +9,7 @@ can_do: [C9]
 workflows: [W4]
 coverage_areas: [13]
 prerequisites: [U5]
-reading_time_min: 9
+reading_time_min: 12
 lab_time_min: 25
 ---
 
@@ -99,15 +99,39 @@ differs. `git` and `gh` themselves are external tools Claude drives through the 
 
 ## Worked example
 
-This repository is built exactly this way, and its history is the worked example. The design phase
-landed on `main` through a single reviewed merge once the design gate passed (not a trickle of
-unreviewed commits to `main`); each unit since lands as a focused commit whose message names the unit
-and explains the *why*, with the reference solution kept on its own `solution/uNN-labM` branch rather
-than mixed into the teaching commit. Run `git log --oneline` in this repo and you'll see the pattern
-the lab asks you to produce: one logical change per commit, messages you can read a year later, and
-work separated into branches a reviewer can take in at a glance. (That separation — teaching commit
-vs. solution branch — is itself a "stage deliberately" decision: the two are unrelated audiences, so
-they don't share a commit.)
+Two artifacts: a real commit series, and the catch the self-review step exists for.
+
+**The history.** This repository is built the way the unit teaches, and you can read it directly.
+One of its features (breadcrumb navigation) landed as this series:
+
+**Captured** — `git log --oneline` in this repo (one feature's slices, oldest last):
+
+```text
+abf2f38 P10 10.5 — close-out: R19 breadcrumb navigation COMPLETE; strike L12 [R19]
+3cc08b8 P10 10.4 — wire check-breadcrumbs into check/check-strict + record the convention [...]
+038dc33 P10 10.3 — hand-authored docs carry the canonical trail [R19.AC1/AC2]
+017bdb3 P10 10.2 — generators emit the canonical trail via the shared helper [R19.AC5]
+```
+
+Each commit is one reviewable step (the generator change, then the hand-authored docs, then the
+enforcement wiring), and each message says what the slice *accomplished* — a reviewer or a future
+maintainer can navigate this without opening a single diff. That's the shape the lab asks of you.
+
+**The catch.** Now the failure mode this unit's step 4 exists for — the aspirational description:
+
+**Illustrative** — your session will differ in wording; verify behavior and diffs, not phrasing.
+
+> **Claude (draft PR body):** Adds an `archived` flag to projects with an `include_archived` list
+> filter (default: excluded). Includes model + schema changes, the filter, and **tests covering the
+> default-exclusion contract**.
+>
+> **You** *(reading `git diff main...HEAD` next to the draft)*: The diff has the model, schema, and
+> filter — but there's no test in it. The body claims a test I never wrote. Either I add the test
+> or the description stops claiming it.
+
+The draft wasn't malicious; it was generated from your *intent* (the prompt) rather than the *diff*.
+Reading the two side by side is the whole self-review move — and it's why the lab has Claude draft
+the body from `git diff main...HEAD`, never from memory of what you asked for.
 
 ## Lab
 
@@ -161,6 +185,11 @@ clone — nothing here gets pushed for you).
 **Reference:** there's no `solution/` branch for this lab — the artifact is *your* history and PR, and
 the checklist above is the rubric. Compare your commit series and description against it directly.
 
+**On your own repo (transfer — optional, bring-your-own, not verifiable by this course's tooling):**
+take work currently in flight in your real codebase — the messier the better — and apply exactly this
+lab's moves: split it into atomic commits with why-messages, have Claude draft the PR body *from the
+diff*, and self-review with the checklist above before you request review from a human.
+
 ## Common pitfalls
 
 - **`git commit -am "updates"`.** One giant commit with a contentless message is the default failure.
@@ -175,6 +204,24 @@ the checklist above is the rubric. Compare your commit series and description ag
   the diff and make the words true before you commit or open the PR.
 - **Skipping self-review.** "The reviewer will catch it" wastes a round-trip on things you'd have seen
   in thirty seconds reading your own diff.
+
+## Stage checkpoint — Daily Driver
+
+You've finished the Daily Driver stage (**Ship a feature**, **TDD**, **Debugging**, and this unit).
+Before moving on, answer these from memory — then check yourself against the unit named in
+parentheses. Ungraded; the capstone remains the course's only graded instrument. If one draws a
+blank, skim that unit's fast path before continuing.
+
+1. What four things does a working brief carry, and what do you revise when a plan disappoints?
+   (**Ship a feature**)
+2. What are the two verification gates in the daily loop, and what does each one catch that the other
+   can't? (**Ship a feature**)
+3. What distinguishes a red that counts from a red that doesn't, and why does the distinction matter?
+   (**TDD**)
+4. Your fix made the symptom disappear. What two things must still be true before "fixed" is honest?
+   (**Debugging**)
+5. What's the defining defect of an AI-drafted PR description, and what's the mechanical habit that
+   catches it? (this unit)
 
 ## Going deeper
 

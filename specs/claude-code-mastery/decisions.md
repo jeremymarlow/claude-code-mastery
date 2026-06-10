@@ -1102,7 +1102,7 @@ there was **no tool** that produced it and **no check** that asserted `json == y
 (found 2026-06-03: its `custom-commands` value had been stale vs. the YAML since ~2026-06-01; fixed during
 the `ci` flip — decision `P-ci-jsontwin`). _Also tracked in:_ `meta/version-record.md` refresh step 3.
 
-**L15 — P11 content enhancement (R20/R21): requirements approved, design + build pending.** The
+**~~L15~~ — ✅ CLOSED (P11 build complete, 2026-06-09).** All 8 slices executed and committed per-slice; `make check-strict` fully green (zero PEND). Spot review verdict: S1 closed with evidence (decision P11-spotreview). (Original:) P11 content enhancement (R20/R21): requirements approved, design + build pending. The
 five-persona content review (2026-06-09, `log/content-review/`) converged on five findings; the
 maintainer accepted the full enhancement slate E1–E5. **Current state:** E0 residue hotfix applied;
 **R20** (demonstration artifacts) + **R21** (operator craft / consolidation / transfer) **✅ APPROVED
@@ -1277,3 +1277,30 @@ verbatim capture would pin versions and need trimming that undermines the verbat
 varied paragraph shapes) while keeping the voice and the earned lines. Punch list = the
 technical-editor review. Light touch (worst-only) rejected as leaving the fatigue finding open;
 deep rewrite rejected as risking what the panel praised.
+
+**P11-build ✅ (2026-06-09)** — Slices 11.2–11.7 executed in one delegated session. E2: 23 `inline`
+fields + `{{vd:key:inline}}` + per-document long-value dedupe (>100 chars) in `_common.render_vd`;
+`tools/check-content` (residue hard-fail, verified red on a seeded fixture; R20.AC5 demo-presence
+PEND→strict). All 16 units passed once each (E1 demos + E3 register + E4/E5 inserts woven). **Every
+"Captured" artifact is genuinely real and regenerable:** u01/u05 solution diffs from the actual refs;
+the u06 red run live against the clean tree (the solution's test appended, then restored); the u07 D1
+repro run live on the legacy CLI; the P10 commit series from real history; the u09 diffstat from the
+real solution; R19.AC2 quoted verbatim; the u11 IDOR hunk from `git show start/u11-lab1`; the real
+`close-unit.md` and `control.md` heads; a live pipe-test of `check-on-edit` (incl. the real
+`decision:block` JSON); a live `claude mcp add/get/remove` (`✔ Connected`, config restored); a real
+`claude -p --output-format json` envelope. Conversational exchanges are marked-illustrative per
+`P11-demo-realism`; convention recorded in `meta/conventions.md`.
+**Why:** R20.AC4's honesty bar — capture what can be captured, mark what can't, never assert version
+surface from memory inside a demo.
+
+**P11-spotreview ✅ (2026-06-09)** — The 11.8 fresh-eyes re-review (examples-critic persona, unanchored,
+over rendered U5–U8) verified the captures against the actual branches and returned **U5/U6/U8 CLOSED,
+U7 PARTIALLY CLOSED**: my U7 dialogue claimed the stats path duplicated the overdue comparison, but
+`cmd_stats` routes through `is_overdue` — the real duplicates are the display paths (`fmt_due`,
+`print_task_full`). **Fixed** (dialogue now names the right sites and the honest consequence split),
+plus U6's capture carried a line number that drifts vs the solution branch (trimmed). The reviewer's
+third note (the Illustrative banner repeating per artifact) is **accepted as convention cost** — one
+marker per artifact is what the lint can enforce; prose elegance loses to mechanical checkability.
+**Why kept:** a factual error in the one demo whose lesson is "verify the cited claim" was exactly the
+class of defect the spot review existed to catch — the panel→fix→re-verify loop closed S1 with
+evidence, not assertion.

@@ -128,9 +128,11 @@ the step the unit turns on: cause before edit.
 > **You:** Convincing — I can see the two formats on that line. Before you fix it: where else does
 > this same comparison live? Search the whole file.
 >
-> **Claude:** Two more sites. The stats path repeats the same inline comparison (same `strftime`
-> format, same string compare, spelled slightly differently), and the display path does it a third
-> time. A fix to `is_overdue` alone would leave `stats` and the listing display still wrong.
+> **Claude:** Two more sites — both in the *display* path. `fmt_due` repeats the comparison inline
+> (same `strftime` format, same string compare, spelled slightly differently), and `print_task_full`
+> does it a third time. `list --overdue` and `stats` both route through `is_overdue`, so fixing that
+> one function would fix the counts — but the listing and `show` output would still never mark a task
+> overdue.
 
 That last exchange is the difference between a guesser and a debugger: the first plausible cause was
 *correct* but *incomplete*, and asking "where else?" is what turned a partial fix into a real one.

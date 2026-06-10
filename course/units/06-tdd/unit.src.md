@@ -111,7 +111,6 @@ test, run against the clean tree, where no `overdue` filter exists yet:
 >       assert {t["id"] for t in resp["items"]} == overdue
 E       assert {1, 2, 3, 4, 5, 6} == {1, 2}
 
-tests/test_tasks.py:154: AssertionError
 =========================== short test summary info ============================
 FAILED tests/test_tasks.py::test_filter_overdue_tasks - assert {1, 2, 3, 4, 5...
 ```

@@ -10,7 +10,7 @@ can_do: [C1, C2]
 workflows: []
 coverage_areas: [1, 27]
 prerequisites: []
-reading_time_min: 8
+reading_time_min: 10
 lab_time_min: 15
 ---
 
@@ -106,6 +106,36 @@ tools/doctor --manual     # also print the manual checklist fallback
 
 If any check can't run, the same script prints a **manual checklist** so you are never blocked by
 the tool meant to unblock you.
+
+**Your first exchange, shown.** Here is the shape of the lab's interaction — orient, ask, then read
+before accepting:
+
+**Illustrative** — your session will differ in wording; verify behavior and diffs, not phrasing.
+
+> **You:** What does the `/health` endpoint return today, and which file defines it?
+>
+> **Claude:** `GET /health` is defined in `app/main.py`, inside `create_app()` — it returns
+> `{"status": "ok"}`.
+>
+> **You** *(after opening `app/main.py` and confirming that's true)*: Add a `service` field set to
+> `taskflow-api` to the `/health` response, as a one-line change.
+>
+> **Claude:** *(proposes an edit to `app/main.py` and waits for your approval)*
+
+What you're approving is a diff, and this one is small enough to verify completely. The reference
+solution's version of it, exactly as `git diff` shows it:
+
+**Captured** — `git diff start/u01-lab1..solution/u01-lab1`:
+
+```diff
+     @app.get("/health", tags=["meta"])
+     def health() -> dict[str, str]:
+-        return {"status": "ok"}
++        return {"status": "ok", "service": "taskflow-api"}
+```
+
+One line changed, the existing `"status": "ok"` preserved, nothing else touched — the three things
+the *Verify* step below has you confirm with your own eyes before accepting.
 
 ## Lab
 

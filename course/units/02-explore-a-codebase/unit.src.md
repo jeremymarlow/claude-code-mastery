@@ -75,6 +75,8 @@ that you can check against the real tree (see its
 [`README.md`](../../../codebases/primary/taskflow-api/README.md) and
 [`CLAUDE.md`](../../../codebases/primary/taskflow-api/CLAUDE.md)):
 
+**Illustrative** — your session will differ in wording; verify behavior and diffs, not phrasing.
+
 > **TaskFlow API** is a layered FastAPI service. Requests enter through thin **routers**
 > (`app/api/routers/`), which delegate to a **services** layer (`app/services/`) that holds all
 > domain logic and is deliberately HTTP-agnostic. Services raise domain exceptions

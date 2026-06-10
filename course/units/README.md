@@ -10,10 +10,10 @@ The 16 units, in the default order. Each is self-contained; skim a unit's **Skip
 
 | # | Unit | Read | Lab |
 |---|------|------|-----|
-| 1 | [Set up Claude Code and make your first verified change](./01-onboarding-first-win/unit.md) | 8 min | 15 min |
+| 1 | [Set up Claude Code and make your first verified change](./01-onboarding-first-win/unit.md) | 10 min | 15 min |
 | 2 | [Explore and explain an unfamiliar codebase](./02-explore-a-codebase/unit.md) | 8 min | 20 min |
-| 3 | [Operate safely while letting Claude act on your code](./03-operate-safely/unit.md) | 10 min | 20 min |
-| 4 | [Steer Claude with project memory and deliberate context](./04-memory-and-context/unit.md) | 9 min | 18 min |
+| 3 | [Operate safely while letting Claude act on your code](./03-operate-safely/unit.md) | 12 min | 20 min |
+| 4 | [Steer Claude with project memory and deliberate context](./04-memory-and-context/unit.md) | 14 min | 18 min |
 
 ## Daily Driver
 

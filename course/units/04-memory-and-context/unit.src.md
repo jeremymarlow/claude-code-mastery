@@ -10,7 +10,7 @@ can_do: [C5]
 workflows: []
 coverage_areas: [7, 8, 26, 28]
 prerequisites: [U1]
-reading_time_min: 9
+reading_time_min: 14
 lab_time_min: 18
 ---
 
@@ -85,6 +85,16 @@ conversation so far. Two consequences:
   session, or clear it to start clean when you switch tasks. A session that's been wandering for an
   hour is carrying a lot of irrelevant context — clearing it is often the fastest fix for "Claude
   seems confused."
+- **Sessions have a lifecycle — manage it.** Long sessions degrade in recognizable ways: Claude
+  re-asks things you settled, drifts from instructions given an hour ago, reaches for files from a
+  previous task. When you see those signals, choose deliberately among four moves: **keep going**
+  (the loaded context is still earning its keep), **compact** (reclaim room mid-task once the early
+  detail stopped mattering), **clear** (new task, nothing worth carrying over), or **restart the
+  session** (cleanest when the thread is polluted by a misunderstanding). And plan for work that
+  outlives one window: persist decisions to files — `CLAUDE.md`, a progress note, a spec — *before*
+  they scroll away, so the next session reads state from disk instead of relying on conversational
+  memory. Files survive; context doesn't. (You'll feel this in **Refactor legacy**, the course's
+  longest single piece of work.)
 
 **3 — Settings (`settings.json`) — where config (incl. permissions) lives.** {{vd:settings}} The
 permission allow/deny rules you *chose* postures for in **Operate safely** are *configured* here. The baseline
@@ -104,6 +114,24 @@ through-line applies: don't assume, confirm. The classic failure is editing the 
 over why Claude "ignored" it. Before you trust a behavior change, **inspect the context to confirm
 your file is actually loaded.** That 10-second check is the difference between steering Claude and
 imagining you are.
+
+**5 — When a session goes sideways, recover deliberately.** Sooner or later a session derails: Claude
+is editing the wrong thing, pursuing a misunderstanding, or compounding an early mistake. Don't keep
+typing corrections into a bad trajectory — that spends your time *and* fills the window with the
+failure. The recovery ladder, cheapest move first:
+
+- **Interrupt** — stop the current action before more of it lands.
+- **Redirect** — one precise correction beats three vague nudges: name the misunderstanding and state
+  what you want instead.
+- **Roll back** — {{vd:checkpoint-rewind}} for the session's changes; `git restore` and the
+  checkpoint discipline from **Operate safely** for anything that reached disk.
+- **Start over** — a fresh session with a better brief. The tell that it's time: you've corrected the
+  same misunderstanding twice and it came back. At that point steering costs more than restarting —
+  restart with the correction baked into the brief or `CLAUDE.md`, so the new session can't make the
+  old mistake.
+
+(Stuck mid-task and not sure which rung you're on? [`course/stuck.md`](../../stuck.md) carries this
+ladder as a recovery playbook.)
 
 **Version currency.** This unit was verified against Claude Code `{{vd:_verified_version}}`; the
 context-management commands are in-REPL and may shift between releases — confirm them with `/help` and
@@ -125,6 +153,24 @@ The codebase baseline ([`taskflow-api/CLAUDE.md`](../../../codebases/primary/tas
 is the same idea scoped to one app: what it is, where logic lives, the services→exceptions→main
 convention, how to run tests. When you ask Claude "where does this new logic go?", *that* file is why
 it answers "the service layer" instead of guessing.
+
+**The lever, demonstrated.** The lab's A/B moment looks like this:
+
+**Illustrative** — your session will differ in wording; verify behavior and diffs, not phrasing.
+
+> **You** *(baseline `CLAUDE.md`)*: How should I signal a validation failure from a service?
+>
+> **Claude:** Raise an exception from the service and handle it at the API boundary — or raise
+> FastAPI's `HTTPException` directly in the service; both patterns appear in codebases like this.
+>
+> **You** *(after adding one line to `CLAUDE.md`: "Validation failures must raise the domain
+> `ValidationError`; never raise `HTTPException` from a service")*: Same question.
+>
+> **Claude:** Raise the project's `ValidationError` from the service — never `HTTPException` there;
+> the handler in `main.py` maps it to the HTTP response.
+
+One written line turned a hedged answer into the house rule. That's the loop you'll run in the lab —
+including the step most people skip, confirming the file actually loaded.
 
 ## Lab
 
@@ -180,6 +226,26 @@ memory "doesn't work," and it's invisible unless you look.
   relevant; `/clear` between unrelated tasks instead of letting one session accrete.
 - **Assuming the change worked.** A behavior that didn't change usually means the file didn't load —
   diagnose that first, don't keep rewording the convention.
+- **Steering a derailed session forever.** If the same misunderstanding survives two corrections,
+  more corrections aren't the fix. Climb the recovery ladder — and bake the correction into the brief
+  or `CLAUDE.md` before you restart.
+
+## Stage checkpoint — First Wins
+
+You've finished the First Wins stage (**Onboarding**, **Explore a codebase**, **Operate safely**, and
+this unit). Answer these from memory, then check yourself against the unit named in parentheses.
+Ungraded — the capstone remains the course's only graded instrument. If one draws a blank, skim that
+unit's fast path before moving on.
+
+1. Why is reading the diff your job even when the tests pass? (**Onboarding**)
+2. Before letting Claude propose a change in unfamiliar code, what do you have it do first — and how
+   do you check what comes back? (**Explore a codebase**)
+3. What are the three permission postures, and which one fits triaging an untrusted bug report?
+   (**Operate safely**)
+4. Memory vs context: which is which — and what's the 10-second check before concluding a
+   `CLAUDE.md` edit "didn't work"? (this unit)
+5. A long session starts drifting. Name the four lifecycle moves you choose among, and what you do
+   *before* clearing so the work survives. (this unit)
 
 ## Going deeper
 

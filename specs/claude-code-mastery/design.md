@@ -481,6 +481,8 @@ it. The R13.AC5 check automates the inverse (every requirement referenced; every
 | R17 ✅ | §12, §8 | `version-changelog.md` + `check-version-changelog`, refresh-process step |
 | R18 ✅ | §13 | persona panel (`.claude/agents/`), `log/evaluations/**` (matrix complete: 253 leaves + 23 syntheses + 11 globals + corner; `check-evaluations` passes both modes), `course/case-studies/collaboration-retrospective.md`; referenced by U13 + §10 |
 | R19 ✅ | §14 | breadcrumb nav — built (P10, 2026-06-09): trails on every learner-facing doc, single-sourced via `_common.breadcrumb`; `tools/check-breadcrumbs` hard gate |
+| R20 ✅ | §15 | demonstration artifacts in every core unit (captured + illustrative forms, §15.2 convention), reworked worked-example sections, `tools/check-content` presence gate |
+| R21 ✅ | §15 | operator-craft content (U5 brief loop, U4 lifecycle + recovery, U9 reinforcement), stage checkpoints (U4/U8/U11/U16), Daily-Driver transfer blocks, stuck.md cross-link |
 
 ## 12. Exhaustive CLI reference & version-change digest  → produces `meta/cli-reference.*`, `course/reference/cli-reference.md`, `meta/version-changelog.md`  [R16, R17]  ✅ AUTHORED (2026-05-31)
 
@@ -1019,3 +1021,106 @@ tools/_common.py               # + breadcrumb(path) helper (shared by check + al
 
 Build plan: `tasks/P10-breadcrumbs.md`. §11 traceability flips R19 ⏳→✅ when the build lands;
 ledger **L12** is struck at close-out.
+
+## 15. Content enhancement: demonstrations, rendering correctness, register, operator craft  [R20, R21 + R12/R13/R15 work]
+
+Serves the P11 slate (decisions `P11-scope`): **E1** demonstration layer [R20], **E2** rendering
+correctness [R12.AC2/AC8, R13.AC4, R15], **E3** register de-intensification [R5/R15, no new R],
+**E4** operator craft [R21.AC1–AC3], **E5** consolidation & transfer [R21.AC4–AC5]. Findings basis:
+`log/content-review/_synthesis.md` (S1–S5).
+
+### 15.1 Demonstration artifacts — hybrid realism  [R20.AC1–AC4]
+
+Two artifact forms, per decision `P11-demo-realism` (real wherever mechanically producible;
+marked-illustrative for conversational exchanges, which are non-deterministic anyway):
+
+- **Captured** — real output with provenance, regenerable by a maintainer. Opens with a bold label
+  naming what it is and the exact command/source that produced it, then a fenced block:
+  `**Captured** — the solution diff: \`git diff start/u05-lab1..solution/u05-lab1\` (taskflow-api).`
+  Eligible: diffs from `solution/*` branches, pytest/CLI output from the lab codebases, excerpts of
+  real repo artifacts (this spec, the panel agents, hook pipe-tests). Provenance satisfies R12.AC4;
+  a capture is re-runnable, so a version refresh can re-verify it (R12.AC7).
+- **Illustrative** — a crafted interaction (plan, steering exchange, redirect message), opening with
+  the standing marker: `**Illustrative** — your session will differ in wording; verify behavior and
+  diffs, not phrasing.` Dialogue turns use `**You:**` / `**Claude:**`. No version-specific surface
+  may be asserted inside one from memory — version facts stay `{{vd:*}}` tokens (R12.AC3); CLI/UI
+  chrome is referenced, not mimicked, so the artifact survives version drift (R20.AC4).
+
+Both are plain CommonMark (label line + fenced block / blockquote) and degrade as text [R20.AC6].
+The two label regexes (`^\*\*Captured\*\* — `, `^\*\*Illustrative\*\* — `) are the machine-checkable
+convention surface, recorded in `meta/conventions.md` [R20.AC5, R13.AC1].
+
+**Coverage plan** [R20.AC1/AC2]: every core unit gets ≥1 conforming artifact; the named-central
+skills land as: weak-plan vs good-plan + the redirect message (U5, illustrative), a diff being read
+with observations (U1 captured + U5 captured), test output interpreted red-for-the-right-reason and
+green-but-insufficient (U6 captured), a multi-turn steering exchange (U2 or U5, illustrative).
+The six provenance-only worked examples (U5–U9, U11) are reworked to walk an interaction; dogfood
+references remain as complements [R20.AC3]. U2/U13 are the in-house models (review finding) and get
+the lightest touch.
+
+### 15.2 Rendering correctness — `{{vd:*}}` grammar + dedupe + residue lint  [R12.AC2/AC8, R13.AC4, R15]
+
+Fixes S2 (mid-sentence reference-blob splices; one blob pasted 3× in U12; committed tool-call
+residue no check caught).
+
+- **`inline` field** (optional, per key, `meta/version-data.yaml`): a short, sentence-embeddable
+  phrase distinct from the reference-card `value`. Schema-additive; the JSON twin regenerates.
+- **Token forms** (`_common.render_vd`): bare `{{vd:key}}` keeps rendering the full `value` (+
+  unverified marker). New `{{vd:key:inline}}` renders the `inline` field and **fails render if the
+  key lacks one** (forces single-sourcing; no silent fallback).
+- **Per-document dedupe**: a bare token whose `value` exceeds ~100 chars renders in full only on
+  **first** occurrence per document; later occurrences render the `inline` form (or a short
+  "(see the note above)" pointer if no `inline` exists). Short values (versions, mode lists) always
+  render in place. Deterministic, position-based; kills the U12 triple-blob class without authors
+  tracking state.
+- **`tools/check-content`** (new, wired into `make check` **and** `check-strict`): (a) **residue
+  lint, hard fail** — scans `course/**/*.md` + `meta/templates/*.md` for AI tool-call residue
+  patterns (`</invoke>`, `</content>`, `<function_calls`, `<system-reminder`, unresolved `{{vd:`
+  in rendered output); (b) **demo presence** [R20.AC5] — every core-tier unit's `unit.src.md`
+  must contain ≥1 demonstration label; `PEND` in default mode while P11 is mid-build, hard fail in
+  `--strict` (the P3-green pattern, same as traceability).
+
+### 15.3 Register pass — moderate de-intensification  [R5, R15; no new R]
+
+Per decision `P11-e3-depth` and the technical-editor punch list (`log/content-review/`): cut the
+", not X" antithesis where reflexive (keep earned ones), cap each catchphrase at one canonical use
+per unit ("green tests are necessary, not sufficient" appears verbatim 5× across the course), vary
+paragraph/sentence shapes (not every paragraph ends in an epigram), bold/em-dash diet, prune
+cross-reference pile-ups (U16 carries 22 inline unit links). Executed **woven into the same
+per-unit edit as 15.1** so each unit is touched once; voice survives, saturation goes. Not
+mechanically gated (editorial judgment); the review corpus is the punch list.
+
+### 15.4 Operator craft  [R21.AC1–AC3]
+
+- **Brief craft → U5** (the loop's home): a new concept subsection teaching what makes a brief work
+  (scope, constraints, deliverable, context) via a weak/strong contrast pair (15.1 illustrative
+  form), and the lab gains a **compose→observe→revise** step — the learner writes their own explore
+  + plan prompts, compares what comes back against the contract, and revises once [R21.AC1]. Lab
+  stays verifier-compatible (the verifier checks the contract, not the prompts).
+- **Session lifecycle → U4** (home): degradation signals (stale instructions, re-asking, drifting
+  edits), the continue / compact / clear / restart decision, and resuming work across sessions —
+  taught with the version-specific surface via `{{vd:context-cmds}}`; **reinforced in U9's lab**
+  (the long refactor gains an explicit mid-lab lifecycle checkpoint step) [R21.AC2].
+- **Recovery → U4** (with the lifecycle content, where "restart" lives): recognizing a derailed
+  session; interrupt, redirect, roll back ({{vd:checkpoint-rewind}}), or start over; when steering
+  costs more than restarting. `course/stuck.md` gains a "session went sideways" entry pointing here
+  [R21.AC3].
+
+### 15.5 Consolidation & transfer  [R21.AC4–AC5, R7.AC8]
+
+- **Stage checkpoints**: the last unit of each stage (U4 first-wins, U8 daily-driver, U11
+  force-multiplier, U16 autonomy-scale) gains a short closing **"Stage checkpoint"** section: 4–6
+  retrieval prompts answered from memory (answers are pointers to the units, not an answer key),
+  explicitly ungraded (capstone-only assessment stands, R8/D0.3) [R21.AC4].
+- **Transfer blocks**: the Daily Driver workflow units (U5–U8) each gain a 3–5-line **"On your own
+  repo"** block — repeat the unit's core move on the learner's own codebase, marked bring-your-own
+  and non-verifiable per R7.AC8 [R21.AC5].
+
+### 15.6 Execution order & enforcement
+
+Slices (see `tasks/P11-content-enhancement.md`): **15.2 first** (E2 gates E1's new prose from
+shipping garbled), then per-stage unit passes (E1+E3+E4/E5 woven, one touch per unit: U5–U8 →
+U1–U4 → U9–U12 → U13–U16), then stuck.md/conventions/close-out. Front-matter `reading_time_min`
+is re-estimated per touched unit (L2 precedent). R20/R21 enforcement: `check-traceability`
+discovers them with zero edits (playbook rule); `tools/check-content` carries the R20.AC5 gate;
+`make check` green after every slice, `make check-strict` green at close-out.

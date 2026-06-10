@@ -1256,3 +1256,24 @@ for the Daily Driver workflow units; within-taxonomy constraint) drafted in `req
 **approved as written at the requirements gate** (user, 2026-06-09 — same session as the review).
 E2/E3 carry no new requirement (P7 precedent: they trace existing R12/R13/R15 and R5/R15
 respectively). **Next gate:** design §15.
+
+**P11-delegation ✅ (user, 2026-06-09)** — For the P11 build run the user **pre-authorized**: execute
+design §15 → tasks → all slices without per-gate pauses, **commit each slice** as it lands, **never
+push**, stop on anomaly / preference-dependent design fork / >70% context. The two preference forks
+were asked up front and resolved before work began (below). This supersedes the per-change commit
+agreement **for this run only**; the default rule resumes after P11.
+**Why:** explicit instruction; the questions a gate would catch were extracted in advance.
+
+**P11-demo-realism ✅ (user, 2026-06-09)** — Demonstration artifacts are **hybrid**: real captures
+with provenance wherever mechanically producible (diffs from `solution/*` branches, pytest/CLI
+output, real repo artifact excerpts — regenerable on refresh), **marked-illustrative** for
+conversational exchanges (plans, steering), which are non-deterministic anyway. Convention + the two
+label forms in design §15.1.
+**Why:** R14 "no props" honesty at minimum cost — real where real is free, honest marking where
+verbatim capture would pin versions and need trimming that undermines the verbatim claim.
+
+**P11-e3-depth ✅ (user, 2026-06-09)** — Register pass is **moderate**: de-saturate the formula
+(reflexive ", not X" cut, catchphrases capped at one canonical use, epigram/bold/em-dash diet,
+varied paragraph shapes) while keeping the voice and the earned lines. Punch list = the
+technical-editor review. Light touch (worst-only) rejected as leaving the fatigue finding open;
+deep rewrite rejected as risking what the panel praised.

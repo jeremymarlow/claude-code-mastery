@@ -13,13 +13,19 @@ import os
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from _common import COURSE, META, load_yaml  # noqa: E402
+from _common import COURSE, META, breadcrumb, load_yaml  # noqa: E402
 
 OUT = COURSE / "progress-checklist.md"
 
-HEADER = """\
+# Canonical trail (R19.AC5): emitted by the same helper check-breadcrumbs verifies with;
+# the title must match the H1 below.
+TRAIL = breadcrumb(OUT, "Progress checklist")
+
+HEADER = f"""\
 <!-- GENERATED from meta/capability-map.yaml — do not hand-edit (R9.AC5).
      Regenerate with tools/render-checklist. -->
+{TRAIL}
+
 # Progress checklist
 
 Tick a box when you can do it **unaided** and have proven it (a lab passed, or you

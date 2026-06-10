@@ -13,7 +13,7 @@ reading_time_min: 11
 lab_time_min: 35
 ---
 
-[Claude Code Mastery](../../../README.md) › [Course units](../README.md)
+[Claude Code Mastery](../../../README.md) › [Course units](../README.md) › Build a feature spec-first: requirements → design → tasks
 
 # Build a feature spec-first: requirements → design → tasks
 

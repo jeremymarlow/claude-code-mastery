@@ -13,7 +13,7 @@ reading_time_min: 10
 lab_time_min: 20
 ---
 
-[Claude Code Mastery](../../../README.md) › [Course units](../README.md)
+[Claude Code Mastery](../../../README.md) › [Course units](../README.md) › Operate safely while letting Claude act on your code
 
 # Operate safely while letting Claude act on your code
 

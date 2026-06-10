@@ -13,7 +13,7 @@ reading_time_min: 8
 lab_time_min: 15
 ---
 
-[Claude Code Mastery](../../../README.md) › [Course units](../README.md)
+[Claude Code Mastery](../../../README.md) › [Course units](../README.md) › Set up Claude Code and make your first verified change
 
 # Set up Claude Code and make your first verified change
 

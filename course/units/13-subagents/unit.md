@@ -13,7 +13,7 @@ reading_time_min: 13
 lab_time_min: 20
 ---
 
-[Claude Code Mastery](../../../README.md) › [Course units](../README.md)
+[Claude Code Mastery](../../../README.md) › [Course units](../README.md) › Delegate a scoped task to a subagent
 
 # Delegate a scoped task to a subagent
 

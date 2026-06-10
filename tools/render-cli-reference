@@ -26,7 +26,8 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from _common import (  # noqa: E402
-    COURSE, META, Reporter, cli_version, introspect_cli, load_version_data, load_yaml, render_vd,
+    COURSE, META, Reporter, breadcrumb, cli_version, introspect_cli, load_version_data,
+    load_yaml, render_vd,
 )
 
 REF_JSON = META / "cli-reference.json"
@@ -41,8 +42,9 @@ MD_HEADER = (
     "<!-- GENERATED from meta/cli-reference.json by tools/render-cli-reference — do not hand-edit. "
     "Run `tools/render-cli-reference --all` (or `make render`). -->\n"
 )
-# Up-navigation, like the units' breadcrumb (course/reference/cli-reference.md -> repo root).
-MD_BREADCRUMB = "[Claude Code Mastery](../../README.md) › CLI reference\n"
+# Canonical trail (R19.AC5): emitted by the same helper check-breadcrumbs verifies with;
+# the title must match the H1 render_page writes ("# Claude Code CLI reference").
+MD_BREADCRUMB = breadcrumb(REF_MD, "Claude Code CLI reference") + "\n"
 
 
 def build_supplement_sections():

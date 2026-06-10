@@ -13,7 +13,7 @@ reading_time_min: 9
 lab_time_min: 30
 ---
 
-[Claude Code Mastery](../../../README.md) › [Course units](../README.md)
+[Claude Code Mastery](../../../README.md) › [Course units](../README.md) › Debug an unfamiliar failure by confirming the root cause
 
 # Debug an unfamiliar failure by confirming the root cause
 

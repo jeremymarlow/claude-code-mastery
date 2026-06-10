@@ -1,6 +1,6 @@
 <!-- GENERATED from each unit's front matter by tools/render-index — do not hand-edit. Run `make render`. -->
 
-[‹ Claude Code Mastery](../../README.md)
+[Claude Code Mastery](../../README.md) › Course units
 
 # Course units
 

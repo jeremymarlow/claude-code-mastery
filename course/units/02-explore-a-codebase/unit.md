@@ -13,7 +13,7 @@ reading_time_min: 8
 lab_time_min: 20
 ---
 
-[Claude Code Mastery](../../../README.md) › [Course units](../README.md)
+[Claude Code Mastery](../../../README.md) › [Course units](../README.md) › Explore and explain an unfamiliar codebase
 
 # Explore and explain an unfamiliar codebase
 

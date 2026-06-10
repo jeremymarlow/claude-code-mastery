@@ -13,7 +13,7 @@ reading_time_min: 11
 lab_time_min: 22
 ---
 
-[Claude Code Mastery](../../../README.md) › [Course units](../README.md)
+[Claude Code Mastery](../../../README.md) › [Course units](../README.md) › Enforce a standard automatically with a hook
 
 # Enforce a standard automatically with a hook
 

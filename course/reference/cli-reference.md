@@ -1,5 +1,5 @@
 <!-- GENERATED from meta/cli-reference.json by tools/render-cli-reference — do not hand-edit. Run `tools/render-cli-reference --all` (or `make render`). -->
-[Claude Code Mastery](../../README.md) › CLI reference
+[Claude Code Mastery](../../README.md) › Claude Code CLI reference
 
 # Claude Code CLI reference
 

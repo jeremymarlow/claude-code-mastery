@@ -1,5 +1,7 @@
 <!-- GENERATED from meta/capability-map.yaml — do not hand-edit (R9.AC5).
      Regenerate with tools/render-checklist. -->
+[Claude Code Mastery](../README.md) › Progress checklist
+
 # Progress checklist
 
 Tick a box when you can do it **unaided** and have proven it (a lab passed, or you

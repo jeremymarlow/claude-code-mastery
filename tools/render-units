@@ -18,16 +18,16 @@ import re
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from _common import ROOT, UNITS, FRONTMATTER_RE, Reporter, load_version_data, render_vd  # noqa: E402
+from _common import (  # noqa: E402
+    ROOT, UNITS, FRONTMATTER_RE, Reporter, breadcrumb, load_version_data, render_vd,
+)
 
 HEADER = (
     "<!-- GENERATED from unit.src.md by tools/render-units — do not hand-edit. "
     "Edit unit.src.md, then run `make render`. -->\n"
 )
-# Up-navigation, injected above each unit's H1 so a learner can climb back to the index and the
-# course root. Paths are relative to course/units/<slug>/unit.md and identical for every unit.
-BREADCRUMB = "[Claude Code Mastery](../../../README.md) › [Course units](../README.md)\n"
 LEADING_COMMENT_RE = re.compile(r"^<!--.*?-->\s*", re.DOTALL)
+H1_RE = re.compile(r"^# (.+)$", re.MULTILINE)
 
 
 def sources():
@@ -38,15 +38,19 @@ def sources():
 
 def render_source(src, vd):
     """Return (generated_text, unresolved_keys). Strips any leading source comment, prepends the
-    GENERATED header, and injects the up-navigation breadcrumb after the front matter (before the
-    H1) — so editing unit.md directly is always caught as drift, and every unit links back to the
-    index and the course root without the author maintaining it by hand."""
+    GENERATED header, and injects the canonical breadcrumb trail after the front matter (before
+    the H1) — so editing unit.md directly is always caught as drift, and every unit carries its
+    place in the hierarchy without the author maintaining it by hand (R19.AC5). The trail comes
+    from _common.breadcrumb (the same rule check-breadcrumbs verifies); the final plain-text
+    segment is the unit's H1."""
     text = LEADING_COMMENT_RE.sub("", src.read_text(encoding="utf-8"), count=1)
     rendered, unresolved = render_vd(text, vd)
     m = FRONTMATTER_RE.match(rendered)
     if m:
         fm, body = rendered[: m.end()], rendered[m.end() :]
-        rendered = f"{fm}\n{BREADCRUMB}{body}"
+        h1 = H1_RE.search(body)
+        trail = breadcrumb(src.with_name("unit.md"), h1.group(1).strip() if h1 else None)
+        rendered = f"{fm}\n{trail}\n{body}"
     return HEADER + rendered, unresolved
 
 

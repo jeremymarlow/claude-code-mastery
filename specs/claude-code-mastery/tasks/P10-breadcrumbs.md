@@ -49,20 +49,21 @@ edits that fix it). Run it standalone between slices to watch the failure list s
       `Claude Code CLI reference`; fixed by its generator adopting the helper in 10.2 (as §14.5
       already specifies)._
 
-### 10.2 Generators adopt the helper  [R19.AC5 single-sourcing; §14.5.1]
-- [ ] `tools/render-units` — replace the hardcoded `BREADCRUMB` constant with the helper; the trail
-      gains the missing final segment (the unit's H1 / front-matter title, plain text).
-- [ ] `tools/render-index` — replace the `[‹ Claude Code Mastery]` back-link with the canonical
+### 10.2 Generators adopt the helper  [R19.AC5 single-sourcing; §14.5.1]  ✅
+- [x] `tools/render-units` — replace the hardcoded `BREADCRUMB` constant with the helper; the trail
+      gains the missing final segment (the unit's H1, plain text — taken from the rendered body so
+      it can't diverge from what the reader sees).
+- [x] `tools/render-index` — replace the `[‹ Claude Code Mastery]` back-link with the canonical
       trail (`… › Course units`).
-- [ ] `tools/render-cli-reference` — replace `MD_BREADCRUMB` with the helper (label becomes the
+- [x] `tools/render-cli-reference` — replace `MD_BREADCRUMB` with the helper (label becomes the
       page's actual H1, `Claude Code CLI reference`).
-- [ ] `tools/render-checklist` — emit a trail (`… › Progress checklist`), placed after the
+- [x] `tools/render-checklist` — emit a trail (`… › Progress checklist`), placed after the
       GENERATED comment, before the H1.
-- [ ] `make render` — regenerate all four surfaces (16 × `unit.md`, `course/units/README.md`,
+- [x] `make render` — regenerate all four surfaces (16 × `unit.md`, `course/units/README.md`,
       `course/reference/cli-reference.md`, `course/progress-checklist.md`); diffs are
-      breadcrumb-line-only (eyeball one of each class). `make check` green (each generator's
-      existing `--check` now expects the new trails); `check-breadcrumbs` standalone: generated
-      docs all pass.
+      breadcrumb-line-only (eyeballed one of each class). `make check` green (each generator's
+      existing `--check` now expects the new trails); `check-breadcrumbs` standalone: 26 → **7**
+      failures — all generated docs pass; the remaining 7 are exactly the 10.3 hand-authored set.
 
 ### 10.3 Hand-authored docs  [R19.AC1, R19.AC2; §14.1, §14.4]
 - [ ] Add trails to the six trail-less docs: `course/stuck.md`,

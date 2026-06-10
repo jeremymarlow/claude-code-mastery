@@ -13,7 +13,7 @@ reading_time_min: 11
 lab_time_min: 40
 ---
 
-[Claude Code Mastery](../../../README.md) › [Course units](../README.md)
+[Claude Code Mastery](../../../README.md) › [Course units](../README.md) › Onboard a legacy codebase and refactor it without changing behavior
 
 # Onboard a legacy codebase and refactor it without changing behavior
 

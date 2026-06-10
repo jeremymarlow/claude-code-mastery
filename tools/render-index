@@ -11,7 +11,7 @@ import re
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from _common import ROOT, UNITS, Reporter, parse_frontmatter, unit_files  # noqa: E402
+from _common import ROOT, UNITS, Reporter, breadcrumb, parse_frontmatter, unit_files  # noqa: E402
 
 # Canonical stage order + learner-facing labels (mirrors meta/glossary.md "Stages").
 STAGES = [
@@ -49,7 +49,9 @@ def build() -> str:
         )
     rows.sort(key=lambda r: r[0])
 
-    out = [HEADER, "[‹ Claude Code Mastery](../../README.md)\n", "# Course units\n"]
+    # Canonical trail (R19.AC5): emitted by the same helper check-breadcrumbs verifies with;
+    # the title must match the H1 this generator writes two lines below.
+    out = [HEADER, breadcrumb(UNITS / "README.md", "Course units") + "\n", "# Course units\n"]
     out.append(
         "The 16 units, in the default order. Each is self-contained; skim a unit's **Skip-check** "
         "and skip deliberately if you already know it. Track yourself on the "

@@ -13,7 +13,7 @@ reading_time_min: 9
 lab_time_min: 22
 ---
 
-[Claude Code Mastery](../../../README.md) › [Course units](../README.md)
+[Claude Code Mastery](../../../README.md) › [Course units](../README.md) › Connect an MCP server and vet it before trusting it
 
 # Connect an MCP server and vet it before trusting it
 

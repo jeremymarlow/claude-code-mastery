@@ -113,6 +113,32 @@ YAML is authoritative for human-edited artifacts; a generated `.json` twin is pr
 tooling where noted (`capability-map`, `version-data`). Never hand-edit a generated `.json`;
 regenerate it from its `.yaml`. **[R13.AC2]**
 
+## Breadcrumb navigation
+
+Every learner-facing document under `course/` carries a breadcrumb trail as its **first content
+line** (after any generated-file comment and/or front matter), followed by a blank line, above the
+H1 — see `design.md` §14. **[R19]**
+
+- **Format:** linked ancestor segments joined by ` › `, ending with the document's own H1 as
+  **plain text** (the current location is identified, not linked) — ancestor links are relative
+  to the document itself. Live example: the first line of `course/capstone/briefs.md`
+  (home › Capstone › Capstone briefs). Plain CommonMark; the trail reads correctly as text with
+  no meaning by formatting alone. **[R19.AC2/AC4, R15]**
+- **Hierarchy is derived from the filesystem, never declared:** a document's ancestor chain is
+  every `README.md` found walking up its directory tree; the repo-root `README.md` is the course
+  home and the terminus. Segment labels are each ancestor's H1. Place a new doc correctly and its
+  trail follows; nothing to register. **[R19.AC3]**
+- **Generated docs get their trail from their generator** (`render-units`, `render-index`,
+  `render-cli-reference`, `render-checklist`), all via the single `breadcrumb()` helper in
+  `tools/_common.py`; hand-authored docs follow this convention directly. **[R19.AC5]**
+- **Enforcement:** `tools/check-breadcrumbs` (in `make check` and `check-strict`, hard fail)
+  recomputes every expected trail from disk and fails on missing/stale/mismatched ones;
+  `check-links` separately verifies the ancestor links resolve. **[R19.AC5, R13.AC4]**
+- **Deliberately trail-less:** `course/maintainer-guide.md` (maintainer-facing),
+  `course/units/*/unit.src.md` (source files — the trail is emitted into the generated `unit.md`),
+  `course/labs/u03-lab1/untrusted-bug-report.md` (fenced untrusted-input fixture), and the course
+  home `README.md` (the trail terminus carries no self-trail). **[R19.AC1]**
+
 ## Accessibility & portability
 
 - Author core meaning in **CommonMark**; GitHub callouts / Mermaid only as graceful-degrading

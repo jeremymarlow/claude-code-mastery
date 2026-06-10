@@ -77,14 +77,19 @@ edits that fix it). Run it standalone between slices to watch the failure list s
       trail sits above its H1 like everywhere else; its R8 traceability comment stays put below
       the H1._
 
-### 10.4 Wire the gate + record the convention  [R19.AC3, R19.AC5; §14.5–§14.6, R13.AC1/AC4/AC6]
-- [ ] `Makefile` — add `check-breadcrumbs` to `check` **and** `check-strict` (hard fail in both;
-      pre-commit + CI inherit it for free).
-- [ ] `meta/conventions.md` — new **Breadcrumb navigation** subsection: the format line, placement
+### 10.4 Wire the gate + record the convention  [R19.AC3, R19.AC5; §14.5–§14.6, R13.AC1/AC4/AC6]  ✅
+- [x] `Makefile` — add `check-breadcrumbs` to `check` **and** `check-strict` (hard fail in both;
+      pre-commit + CI inherit it for free) — new `breadcrumbs` target between `changelog` and
+      `traceability`.
+- [x] `meta/conventions.md` — new **Breadcrumb navigation** subsection: the format line, placement
       rule, filesystem-derivation rule, exemption list (mirrors §14.2–§14.4) — cites **R19** (this
       plus the tool satisfies `check-traceability`'s dynamic discovery, R13.AC5, zero check edits).
-- [ ] `make check` green end-to-end; confirm `check-traceability` now reports **no pending
-      requirements** (R19 referenced).
+      _Gotcha caught by the in-session hook: a literal example trail in the convention text broke
+      `check-links` (its regex resolves any `[…](…)` in `meta/**` as a real link, code spans
+      included). Replaced with a pointer to the live example (`course/capstone/briefs.md`) rather
+      than special-casing the link check._
+- [x] `make check` green end-to-end; `check-traceability` reports **"all 19 discovered
+      requirements are referenced by a course artifact"** (R19 referenced — no pending).
 
 ### 10.5 Close-out — state sync + the strict gate
 - [ ] `design.md` §11 — flip the R19 row ⏳→✅ (→ §14); §14 heading 🟨 PROPOSED → ✅ BUILT.

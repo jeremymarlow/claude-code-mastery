@@ -10,7 +10,7 @@ can_do: [C10]
 workflows: [W5, W8]
 coverage_areas: [14]
 prerequisites: [U2, U7]
-reading_time_min: 11
+reading_time_min: 13
 lab_time_min: 40
 ---
 
@@ -131,6 +131,28 @@ done so a change to "how we parse front matter" happens in one place instead of 
 and any one `check-*` that imports it and you'll see the shape the lab produces — duplication pulled up
 into a shared module, callers thinned to the part that's actually unique to them.
 
+And here is what the lab's whole refactor looks like at the diff level — the reference solution's
+shape, real and inspectable:
+
+**Captured** — `git diff start/u09-lab1..solution/u09-lab1 --stat` (excerpt):
+
+```text
+ taskflow.py                          | 709 +-------------------
+ taskflow_app/cli.py                  | 110 ++++
+ taskflow_app/commands.py             | 343 ++++++++++
+ taskflow_app/constants.py            |   6 +
+ taskflow_app/domain.py               |  42 ++
+ taskflow_app/formatting.py           |  60 ++
+ taskflow_app/lookups.py              |  10 +
+ taskflow_app/storage.py              |  69 ++
+ test_characterization.py             |  74 +++
+ 10 files changed, 735 insertions(+), 701 deletions(-)
+```
+
+Read the two load-bearing numbers: the monolith lost ~700 lines while the *net* change is close to
+zero — code moved, behavior didn't — and the one genuinely *new* artifact is `test_characterization.py`,
+the safety net that proves it. That's a refactor's signature in a diffstat.
+
 ## Lab
 
 > **What's automated vs. what's judgment.** The verifier proves the hard, objective half — that your
@@ -166,7 +188,14 @@ code, and no tests.
    approve *before* code moves. Then execute it one increment at a time — extract a module / collapse a
    duplicate pair, **run the characterization tests, confirm green**, repeat. Keep `python taskflow.py`
    working as the entry point throughout (that's part of the behavior you're preserving).
-5. **Hold the line on scope (CV).** When you reach the three overdue copies, **collapse them to one —
+5. **Manage the session across the long haul.** This is the course's longest single piece of work,
+   and it will outlive a context window's usefulness. Work the **Memory & context** lifecycle
+   deliberately: at each increment boundary, persist state to a file — the module map, what's done,
+   what's next — in a short `REFACTOR-NOTES.md` (delete it at the end). If Claude starts drifting
+   (re-asking settled questions, reaching for already-moved code), that's your signal: compact or
+   clear, then re-prime from the notes file and the characterization tests rather than from
+   conversational memory. Files survive; context doesn't.
+6. **Hold the line on scope (CV).** When you reach the three overdue copies, **collapse them to one —
    but keep that one as buggy as it was.** Do **not** fix the overdue bug here. Diff-review each
    increment for any behavior that moved. Commit the refactor as its own clean history (the **Git & PR** habit).
 

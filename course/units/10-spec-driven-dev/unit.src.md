@@ -10,7 +10,7 @@ can_do: [C11]
 workflows: [W7]
 coverage_areas: [15]
 prerequisites: [U5]
-reading_time_min: 11
+reading_time_min: 13
 lab_time_min: 35
 ---
 
@@ -130,6 +130,32 @@ tasks — the same rule step 2 asks of you. And the repo's own [`CLAUDE.md`](../
 the spec as the source of truth and tells every session to read
 [`IMPLEMENTATION.md`](../../../specs/claude-code-mastery/IMPLEMENTATION.md) first. Read these before the
 lab: they're what a *good* small spec is scaled up from, and the shape you're imitating.
+
+**What a testable requirement actually looks like.** One line from this repo's spec, verbatim:
+
+**Captured** — `specs/claude-code-mastery/requirements.md`, R19.AC2:
+
+```text
+R19.AC2 — Each ancestor breadcrumb segment SHALL be a working relative link that
+resolves to an existing document (enforced by the link check, R13.AC4); the final
+segment SHALL identify the current document and need not be a link.
+```
+
+A stable ID, an observable behavior, and a named enforcement hook — you could write the check for it
+without asking a single follow-up question (the repo did: `tools/check-breadcrumbs`). Compare that
+with the kind of line a first draft produces for the lab's feature, and the revision the gate review
+should force:
+
+**Illustrative** — your session will differ in wording; verify behavior and diffs, not phrasing.
+
+> **Weak:** "Tasks should support dependencies, and blocked tasks shouldn't be completable."
+>
+> **Strong:** "R1.AC2 — WHEN a task is marked `done` WHILE it has ≥1 blocking task not yet `done`,
+> THE API SHALL reject the request with **409** and identify the blocking task ids in the error body."
+
+The weak line hides four decisions (what's "blocked"? rejected how? told why? what status code?) that
+would otherwise get made silently at implementation time — which is exactly the failure spec-driven
+work exists to prevent.
 
 ## Lab
 

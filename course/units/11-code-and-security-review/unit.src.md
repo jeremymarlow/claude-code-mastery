@@ -10,7 +10,7 @@ can_do: [C12, CV]
 workflows: [W6]
 coverage_areas: [16]
 prerequisites: [U3, U5]
-reading_time_min: 11
+reading_time_min: 14
 lab_time_min: 35
 ---
 
@@ -123,6 +123,39 @@ right, or is the content?* The check was wrong about that line; the fix was to r
 to "satisfy" the check by mangling a real reference. That is the review reflex in miniature — an automated
 reviewer is a lead you confirm, and sometimes the right call is to overrule it with a reason.
 
+**The lab's real defect, shown.** Here is the actual planted code on the review branch — the archive
+service, exactly as the lab hands it to you:
+
+**Captured** — `git show start/u11-lab1`, `app/services/projects.py` (excerpt):
+
+```python
+def archive_project(session: Session, owner: User, project_id: int) -> Project:
+    project = session.get(Project, project_id)
+    if project is None:
+        raise NotFoundError(f"Project {project_id} not found")
+    project.archived = True
+    ...
+```
+
+Every other mutation in this codebase resolves the project through `get_project(session, owner, id)` —
+the ownership gate. This one calls `session.get` bare: any authenticated user can archive any user's
+project. The tests are green because no test ever tries. That *deviation from the local pattern* is
+what a security review is hunting, and here is the triage that turns the leads into verdicts:
+
+**Illustrative** — your session will differ in wording; verify behavior and diffs, not phrasing.
+
+> **Review output (two of the findings):**
+> 1. `archive_project` fetches the project without an ownership check — possible IDOR.
+> 2. `Project.archived == False` — comparison to `False` should use `is False` (style, E712).
+>
+> **You** *(triaging #1)*: Plausible — it breaks the codebase's own pattern. Prove it: write the
+> test — user B archives user A's project — and run it. *Result: `200 OK`, archived. Confirmed
+> real; the fix is routing through `get_project`, and the test stays as the regression guard.*
+>
+> **You** *(triaging #2)*: This is a SQLAlchemy filter expression — `== False` builds SQL; `is False`
+> would silently break the query. **Dismissed, with that reason.** The finding was a lead; the local
+> idiom wins.
+
 ## Lab
 
 **Goal:** review a real feature branch for `taskflow-api` for correctness **and** security, **triage**
@@ -194,6 +227,24 @@ false positive is dismissed with a reason, and nothing regressed.
   not against generic advice.
 - **Confirming a finding by re-asking the AI.** "Are you sure?" isn't confirmation — the model will often
   fold or double down regardless. Confirm with a repro/test, dismiss with a reason from the code.
+
+## Stage checkpoint — Force Multiplier
+
+You've finished the Force Multiplier stage (**Refactor legacy**, **Spec-driven dev**, and this unit).
+Answer from memory, then check against the unit named in parentheses. Ungraded — the capstone remains
+the only graded instrument. If one draws a blank, skim that unit's fast path before moving on.
+
+1. What is a refactor's correctness criterion, and what do you build first when the code has no
+   tests at all? (**Refactor legacy**)
+2. Mid-refactor you find a real bug. What do you do with it, and why would fixing it on the spot
+   destroy your safety argument? (**Refactor legacy**)
+3. What goes wrong when requirements, design, and implementation happen in one ungated pass — and
+   what does a held gate actually buy? (**Spec-driven dev**)
+4. What separates a testable requirement from a wish? Name the ingredients. (**Spec-driven dev**)
+5. A review tool hands you five findings. What must happen to a finding before you act on it — in
+   both directions? (this unit)
+6. A long session starts re-asking settled questions mid-refactor. Which lifecycle move do you make,
+   and from what do you re-prime? (**Refactor legacy**, via **Memory & context**)
 
 ## Going deeper
 

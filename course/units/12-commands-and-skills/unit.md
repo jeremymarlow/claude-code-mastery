@@ -9,7 +9,7 @@ can_do: [C13]
 workflows: []
 coverage_areas: [17, 18]
 prerequisites: [U4]
-reading_time_min: 10
+reading_time_min: 11
 lab_time_min: 20
 ---
 
@@ -61,15 +61,19 @@ into the conversation exactly as if you'd typed them — including any arguments
 the whole string, or by position — and positions are 0-based, so `$0` is the *first* argument, `$1` the
 second). That's the whole model: a *prompt template you trigger deliberately*. Reach for a command
 when you catch yourself re-typing the same paragraph — a scaffolder, a "draft release notes from the
-diff," a "review this against our checklist" pass. The invocation surface (how it's called, argument
-syntax, how to disable them) is the version-specific part: Custom slash commands are user-defined skills, invoked as /name (file `.claude/commands/<name>.md` becomes `/<name>`); `--disable-slash-commands` turns all skills off. Arguments: `$ARGUMENTS` expands to the full argument string; positional access is 0-based — `$0` is the first argument, `$1` the second (shorthand for `$ARGUMENTS[N]`); declare named args via an `arguments:` frontmatter list for `$name` substitution. Gotcha: `$1` is the SECOND arg, not the first — a single-arg command must use `$ARGUMENTS` or `$0`.
+diff," a "review this against our checklist" pass. The invocation and argument syntax is the
+version-specific part:
+
+> **Version surface (commands):** Custom slash commands are user-defined skills, invoked as /name (file `.claude/commands/<name>.md` becomes `/<name>`); `--disable-slash-commands` turns all skills off. Arguments: `$ARGUMENTS` expands to the full argument string; positional access is 0-based — `$0` is the first argument, `$1` the second (shorthand for `$ARGUMENTS[N]`); declare named args via an `arguments:` frontmatter list for `$name` substitution. Gotcha: `$1` is the SECOND arg, not the first — a single-arg command must use `$ARGUMENTS` or `$0`.
 
 **2 — A skill is a packaged capability Claude can reach for.** It's a `SKILL.md` under
 `.claude/skills/<name>/`, with front matter carrying a `name` and — critically — a `description`. You
 can still invoke it explicitly (`/skill-name`), but the description is what lets Claude recognize *when
 the skill applies* and pull it in on its own. Reach for a skill when a routine has enough structure to
 be worth naming: several steps, conditions, references to specific tools or files — a capability you
-want available across many tasks rather than triggered by one keystroke. The resolution surface: Skills resolve via /skill-name; reusable packaged capabilities.
+want available across many tasks rather than triggered by one keystroke.
+
+> **Version surface (skills):** Skills resolve via /skill-name; reusable packaged capabilities.
 
 **3 — Choosing between them.** Same goal — stop re-typing — so the line is about *trigger* and
 *structure*:
@@ -113,8 +117,23 @@ then report a tight "where we are / what's next." It's a *capability* ("orient o
 and described so it can fire on a situation — which is what makes it a skill rather than a one-off
 prompt.
 
-**The command — [`.claude/commands/close-unit.md`](../../../.claude/commands/close-unit.md).** Its front
-matter is a `description` and an `argument-hint: <NN>`. The body is a prompt that uses that argument
+**The command — [`.claude/commands/close-unit.md`](../../../.claude/commands/close-unit.md).** Here is
+its actual head, so you can see how little ceremony a command needs:
+
+**Captured** — `.claude/commands/close-unit.md` (first lines):
+
+```text
+---
+description: Sync every project state file after a unit's prose is authored, then run the checks
+argument-hint: <NN>
+---
+
+Close out unit **U$0** — bring every state-tracking file in sync now that
+`course/units/$0-*/unit.src.md` is authored ..., then verify. Pull specifics
+from the files, not memory; follow `meta/conventions.md`.
+```
+
+Its front matter is a `description` and an `argument-hint: <NN>`. The body is a prompt that uses that argument
 (`$0` — the first positional argument; `$1` would be the *second*) and walks Claude through the chore of
 *closing out a finished unit*: update `IMPLEMENTATION.md`
 §3, check the `tasks.md` box and its detail bullet, add the `decisions.md` rationale + refresh the

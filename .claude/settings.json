@@ -23,7 +23,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "tools/check-on-edit",
+            "command": "\"$CLAUDE_PROJECT_DIR/tools/check-on-edit\"",
             "statusMessage": "make check (edited course/meta content)"
           }
         ]

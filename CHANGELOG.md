@@ -9,6 +9,26 @@ Versions are the **course** version, independent of the Claude Code CLI version 
 backfilled from the build's phase checkpoints; the `0.x` line is pre-release development (the rapid
 same-day phase builds share a date).
 
+## [1.3.1] — 2026-06-10
+Rendering fix for the learner-facing units (no new requirements).
+
+### Fixed
+- **Rendered units no longer carry YAML front matter.** The raw front-matter block rendered broken
+  and inconsistently across GitHub, Gitea, and VS Code (the generated-file comment above the `---`
+  defeats every renderer's first-line rule) and exposed maintainer codes (`can_do`, `coverage_areas`)
+  on each unit's first screen. The machine-readable front matter now lives only in the authored
+  `unit.src.md`, where the enforcement suite reads it; the generated `unit.md` is plain CommonMark
+  that renders identically everywhere.
+
+### Added
+- **A one-line learner digest under each unit's title** — reading/lab time estimates and
+  prerequisites as unit-title links — generated from the source front matter under the same drift
+  gate as the breadcrumb, so the ordering graph and time budgets are finally legible to the reader.
+
+### Changed
+- Conventions, design §6, the maintainer guide, the stuck-guide FAQ, and the unit templates updated
+  for the source-only front-matter rule; the missing P11 section backfilled into the tasks index.
+
 ## [1.3.0] — 2026-06-09
 Content-enhancement release: every unit now *shows* its skill with concrete demonstration artifacts
 (new requirements R20/R21, born from a five-persona fresh-eyes content review), plus breadcrumb

@@ -78,9 +78,8 @@ A CLI refresh (R12.AC7) that only re-verifies version-specifics and bumps `versi
 
 1. **Gate.** `make check` is green, **and** `make check-strict` is green *except* for requirements that
    are **explicitly deferred in the open-loops ledger** (`specs/claude-code-mastery/decisions.md`). A
-   release may proceed with a ledgered deferral, called out in the changelog.
-   - *Current state:* `make check-strict` fails **only** on **R19** (breadcrumb navigation, design
-     deferred — ledger **L12**). That is the documented release-readiness state, not a blocker.
+   release may proceed with a ledgered deferral, called out in the changelog. (Since v1.3.0,
+   `make check-strict` passes fully — the ledger holds no strict-gated deferrals.)
 2. **Record.** Add the release section to [`CHANGELOG.md`](./CHANGELOG.md).
 3. **Tag** (annotated, on `main`). The tag message **is** the in-repo release note (`git show`, the
    Releases UI), so write it **from** the version's [`CHANGELOG.md`](./CHANGELOG.md) section — one
@@ -112,3 +111,4 @@ table below is an **illustrative snapshot** of how the scheme maps to the build 
 | `v1.1.0` | CLI reference + version-change digest (new requirements R16/R17) and version-resilience maintenance. |
 | `v1.2.0` | Collaboration retrospective (new requirement R18) + conflict-of-interest disclosure (R14.AC8). |
 | `v1.3.0` | Content enhancement — demonstrations + operator craft (new requirements R20/R21), breadcrumb navigation (R19), CLI refresh to 2.1.170. |
+| `v1.3.1` | Rendering fix: front matter out of the rendered units (source-only), learner digest line in. |

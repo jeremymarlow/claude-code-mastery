@@ -6,10 +6,10 @@ canonical format, and a hard-fail `tools/check-breadcrumbs` gate so trails can't
 Post-v1, **not release-blocking** — but it closes the last `make check-strict` gap (R19 unreferenced),
 so at close-out **strict goes fully green for the first time since R19 was approved**.
 
-**Status:** 📋 **DRAFT — awaiting tasks-gate approval** (not yet executed). Requirements ✅ (R19,
-2026-05-31). Design ✅ **APPROVED** (§14, 2026-06-09). Execute top-to-bottom on `main` in slices
-(P9 precedent); `make check` green after each slice; **present each slice for review — ask before
-any commit, never push without explicit confirmation** (CLAUDE.md working agreement).
+**Status:** ✅ **COMPLETE (2026-06-09)** — all 5 slices executed on `main`, committed per-slice on
+explicit go-ahead. Requirements ✅ (R19, 2026-05-31). Design ✅ (§14, approved & built 2026-06-09).
+`make check` green after every slice; **`make check-strict` fully green** at close-out (the last
+strict gap, R19, closed — ledger L12 struck).
 
 **Inputs:** `design.md` §14 (the authoritative HOW) · `requirements.md` R19 (+ R13/R15/R6 anchors) ·
 existing artifacts to extend: `tools/_common.py`, `tools/render-units` (its hardcoded `BREADCRUMB`),
@@ -91,12 +91,12 @@ edits that fix it). Run it standalone between slices to watch the failure list s
 - [x] `make check` green end-to-end; `check-traceability` reports **"all 19 discovered
       requirements are referenced by a course artifact"** (R19 referenced — no pending).
 
-### 10.5 Close-out — state sync + the strict gate
-- [ ] `design.md` §11 — flip the R19 row ⏳→✅ (→ §14); §14 heading 🟨 PROPOSED → ✅ BUILT.
-- [ ] `decisions.md` — append the P10 entry (non-obvious calls: home-README exemption as designed,
-      filesystem-derived hierarchy, H1-as-label, hard-fail-no-PEND); **strike ledger L12**.
-- [ ] `tasks.md` — check the P10 index entry; update the status header.
-- [ ] `IMPLEMENTATION.md` §3 — add the P10 line at the phase boundary.
-- [ ] **`make check-strict` — fully green** (first time since R19 was approved; the post-R18
-      Definition-of-Done gate). Present the complete diff for review; commit/push only on explicit
-      go-ahead.
+### 10.5 Close-out — state sync + the strict gate  ✅
+- [x] `design.md` §11 — flip the R19 row ⏳→✅ (→ §14); §14 heading → ✅ BUILT.
+- [x] `decisions.md` — append the P10 entry (P10-canon, P10-derived, P10-home, P10-hardfail,
+      P10-linkcheck); **strike ledger L12**.
+- [x] `tasks.md` — check the P10 index entry; update the status header.
+- [x] `IMPLEMENTATION.md` §3 — add the P10 line at the phase boundary (and correct the P9
+      paragraph's now-stale "strict fails only on R19" clauses).
+- [x] **`make check-strict` — fully green** (first time since R19 was approved; the post-R18
+      Definition-of-Done gate). Committed in slices on explicit per-slice go-ahead; push pending.

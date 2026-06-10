@@ -21,9 +21,12 @@ spec doubles as a worked teaching example (requirements R3.AC2 / R12.AC1 / R14).
 
 | Phase | File | Status |
 |---|---|---|
-| 1. Requirements | `requirements.md` | ✅ **APPROVED** (2026-05-29) — reviewed turn-by-turn, internally consistent, gap-free IDs |
-| 2. Design | `design.md` | ✅ **Authored** (2026-05-29) — §0–§11 complete; map/catalog/matrix approved; ready for review |
-| 3. Tasks / Impl | `tasks.md` | 🟨 **Planned** — per-phase task files (`tasks/P1–P6*.md`) authored; P1 ✅; build (P2→P6) not started |
+| 1. Requirements | `requirements.md` | ✅ **APPROVED** (2026-05-29) — reviewed turn-by-turn; post-v1 additions R16–R19 each gated the same way |
+| 2. Design | `design.md` | ✅ **APPROVED** (2026-05-29) — §0–§11; post-v1 §12 (R16/R17), §13 (R18), §14 (R19) each gate-approved & built |
+| 3. Tasks / Impl | `tasks.md` | ✅ **v1 COMPLETE** (2026-05-30, P1–P6; `make check-strict` green) — post-v1 phases P7–P10 all ✅ COMPLETE (latest: P10 breadcrumbs, 2026-06-09; strict fully green) |
+
+> Live phase-by-phase status (the dashboard a fresh session reads) is `IMPLEMENTATION.md` **§3**;
+> this table is just the gate summary.
 
 **Why gates?** Each phase is reviewed before the next begins — design built on wrong requirements,
 and tasks built on wrong design, are the waste this workflow eliminates. Requirement IDs are stable

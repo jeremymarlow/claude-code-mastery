@@ -186,7 +186,7 @@ conventions. `make check` stays green.
 | P4-bugs ✅ | **Three independent, reproducible legacy bugs**, each baked into `legacy` `main` (not a branch): **D1** naive date/overdue (string-compare of mismatched formats), **D2** off-by-one `--limit` slice, **D3** swallowed save exception. Inventoried in `SEEDED.md` with locations + expected fixes. Primary defects stay branch-only (P5). | The legacy repo *is* meant to be buggy (U7 debug / U9 refactor); keeping the three independent and documented makes them teachable and prevents silent scatter (design §7). |
 | P4-fixtures ✅ | **Offline pattern = `codebases/fixtures/mock_api.py`**, a stdlib-only deterministic HTTP mock; external-dependent labs (esp. U15 MCP) point at it instead of a real service (R7.AC7). | No network/credentials on any required lab path; deterministic responses let `verify.sh` assert. The U15 lab builds on this in P5. |
 
-## P5 — Units executed (2026-05-30, in progress)
+## P5 — Units executed (2026-05-30, COMPLETE — all 16 units; see the closing note)
 
 Authoring units one slice at a time (IMPLEMENTATION.md §5). **U1 `01-onboarding-first-win`**:
 `unit.md` (core template, C1/C2), lab `u01-lab1`, baseline config. **U2 `02-explore-a-codebase`**:
@@ -477,7 +477,7 @@ content change). Two logs moved across a day boundary, correctly — `requiremen
 they *started* on 05-29; the old mtime had mis-sorted them. **Why:** decided with the user after watching
 the mtime drift live; a name that changes while you work can't identify a session.
 
-## P8 — Version-resilience enhancements: CLI reference + changelog digest (post-v1, in progress)
+## P8 — Version-resilience enhancements: CLI reference + changelog digest (post-v1, COMPLETE 2026-05-31)
 
 **P8-requirements ✅ (2026-05-31)** — New requirement **R16** approved at the requirements gate: an
 exhaustive, generated, version-resilient CLI reference. Added **additively** (R1–R15 untouched); it
@@ -1052,10 +1052,14 @@ requirement **R14.AC8** (disclose conflicts of interest) surfaced + satisfied in
 _Remaining P9:_ 9.8 dogfood wiring + traceability flip → 9.9 close-out. _Also tracked in:_
 `tasks/P9-collaboration-retrospective.md`; decisions **P9-globals** / **P9-coi** below.
 
-**L12 — R19 breadcrumb navigation: approved, design deferred.** R19 (top-of-page breadcrumb trails on
-learner-facing docs) is an **approved requirement** but its **design is deferred by the user until R18
-ships**. Shows `PEND` (non-failing) in `make check`. _Resolve in:_ a future design+tasks phase after R18.
-_Also tracked in:_ `requirements.md` R19; `design.md` §11 (R19 ⏳).
+**~~L12~~ — ✅ CLOSED (P10, 2026-06-09).** R19 built end-to-end: design **§14** + `tasks/P10-breadcrumbs.md`
+executed in 5 slices on `main`. Canonical trails on every learner-facing doc — the four generators emit
+them via the single `_common.breadcrumb` helper, the hand-authored set migrated/added — hard-gated by
+`tools/check-breadcrumbs` in `make check`/`check-strict`, convention recorded in `meta/conventions.md`.
+**`make check-strict` is fully green** — the only deferral left anywhere is L1's enterprise-blocked
+`managed-settings`. _Tracked in:_ `tasks/P10-breadcrumbs.md`; decisions **P10-\*** below. (Original:)
+R19 (top-of-page breadcrumb trails on learner-facing docs) is an **approved requirement** but its
+**design is deferred by the user until R18 ships**. Shows `PEND` (non-failing) in `make check`.
 
 **L13 — ~~U13 (subagents) prose gaps found during P9 9.1 doc-refresh.~~ ✅ RESOLVED (9.8, 2026-06-02,
 decision `P9-9.8`)** — all four correctness gaps fixed in the U13 prose pass; optional enrichments
@@ -1140,3 +1144,49 @@ drift by hand-editing the twin.
 **Why:** L14 was a silent-drift hazard (the twin had already rotted once, P-ci-jsontwin). A generated
 artifact + an offline equality gate is the same single-source discipline the rest of `meta/` already uses
 (R12.AC2 / R13.AC4); the YAML stays authoritative, the JSON becomes derived and can't diverge.
+
+## P10 — Breadcrumb navigation (R19) executed (2026-06-09)
+
+Built R19 spec-first via the post-v1 playbook: design **§14** (gated, approved 2026-06-09) →
+`tasks/P10-breadcrumbs.md` (gated) → 5 slices on `main`. Closes **L12** and the last strict gap —
+**`make check-strict` is fully green** for the first time since R19 was approved.
+
+_Format: **decision-id** — the decision; **Why:** the rationale._
+
+**P10-canon ✅** — Canonicalized the existing `cli-reference.md` trail pattern rather than inventing a
+new one: linked ancestors ` › ` plain-text current-doc H1, first content line. The two pre-existing
+variants (the `[‹ …]` back-link in the units/case-studies indexes; segment-less unit trails) were
+migrated, not grandfathered.
+**Why:** P7/P9 had half-built this three different ways; one format recorded in `meta/conventions.md`
+is what R19.AC3 actually asks for, and the cli-reference variant was the only one satisfying R19.AC2
+(current doc identified, ancestors all linked).
+
+**P10-derived ✅** — Hierarchy is **derived from the filesystem** (a doc's ancestor chain = every
+`README.md` walking up to the repo-root README = home; labels = each ancestor's H1), never declared in
+a map. One `breadcrumb()` helper in `tools/_common.py` is consumed by all four generators **and**
+`tools/check-breadcrumbs`.
+**Why:** no hand-maintained nav map to rot (R19.AC3); expected and emitted trails share one
+implementation so they cannot diverge (R19.AC5); a future doc gets the right trail from its location
+alone, and a reorganization fails the check until regenerated.
+
+**P10-home ✅ (discretionary, approved at the design gate)** — The course home `README.md` carries
+**no self-trail** despite R19.AC1 listing the learner-facing README in scope: home is the terminus
+every trail links *to*; a self-trail would be a single plain-text segment duplicating its own H1 one
+line below. Recorded as a named exemption alongside `maintainer-guide.md`, `unit.src.md` sources, and
+the u03 untrusted-input fixture (navigation chrome would corrupt a fenced payload artifact).
+**Why:** AC1's intent (never lose your place) is satisfied by home being the destination with zero
+ancestors; the exemptions are enumerated in the tool + `meta/conventions.md`, not silent.
+
+**P10-hardfail ✅** — `check-breadcrumbs` is a **hard fail in both `make check` and `check-strict`**
+(no PEND mode), unlike the labs/rubric/evaluations gates that phase PEND→strict-fail.
+**Why:** PEND exists to tolerate legitimately not-yet-authored content during an incremental build;
+every in-scope doc already existed when the gate landed, so any failure is a real regression. The
+mid-build window was handled by ordering instead (tool built first, wired last — `tasks/P10` §ordering).
+
+**P10-linkcheck ⚠️ (gotcha, resolved)** — The conventions entry originally embedded a literal example
+trail; `check-links` (regex-based, scans `meta/**`, doesn't skip code spans) resolved the example's
+relative links against `meta/` and failed — caught in-session by the `check-on-edit` hook. Fixed by
+pointing at the live example (`course/capstone/briefs.md` line 1) instead of special-casing the link
+checker.
+**Why:** weakening `check-links` to skip code spans would false-negative real broken links elsewhere;
+a pointer to a real, gate-verified trail is more honest than a literal that needs escaping anyway.

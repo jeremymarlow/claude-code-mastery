@@ -124,7 +124,7 @@ capability map — no changes needed. Workflows are taught *inside* their use ca
 - Output: `meta/workflows.md` (this table + the generalized pattern write-up per workflow), referenced
   by the units rather than re-explained (R5.AC5).
 
-## 4. Feature-coverage matrix  → produces `meta/coverage-matrix.yaml`  [R4]  🟨 SEEDED (2026-05-29)
+## 4. Feature-coverage matrix  → produces `meta/coverage-matrix.yaml`  [R4]  ✅ COMPLETE (seeded 2026-05-29; TBD home-unit rows resolved in P2, cross-validated by `check-coverage`)
 
 **Canonical source of truth** for the capability-area set (R4.AC1 — prose does not re-list features).
 Tiering by *frequency × leverage*: **high-leverage ⇒ ≥1 hands-on lab; awareness ⇒ named/shown once
@@ -479,8 +479,8 @@ it. The R13.AC5 check automates the inverse (every requirement referenced; every
 | R15 ✅ | §9 | CommonMark/a11y/portability conventions |
 | R16 ✅ | §12, §8 | `render-cli-reference`, `cli-reference.json` + supplement + schema, `course/reference/` page |
 | R17 ✅ | §12, §8 | `version-changelog.md` + `check-version-changelog`, refresh-process step |
-| R18 🟨 | §13 | persona panel (`.claude/agents/`), `log/evaluations/**` (matrix: leaf + per-session + per-reviewer globals + overall corner), `course/case-studies/collaboration-retrospective.md`; referenced by U13 + §10 |
-| R19 ⏳ | §14 | breadcrumb nav — design proposed 2026-06-09 (deferral lifted: R18 shipped); flips ✅ when the P10 build lands |
+| R18 ✅ | §13 | persona panel (`.claude/agents/`), `log/evaluations/**` (matrix complete: 253 leaves + 23 syntheses + 11 globals + corner; `check-evaluations` passes both modes), `course/case-studies/collaboration-retrospective.md`; referenced by U13 + §10 |
+| R19 ✅ | §14 | breadcrumb nav — built (P10, 2026-06-09): trails on every learner-facing doc, single-sourced via `_common.breadcrumb`; `tools/check-breadcrumbs` hard gate |
 
 ## 12. Exhaustive CLI reference & version-change digest  → produces `meta/cli-reference.*`, `course/reference/cli-reference.md`, `meta/version-changelog.md`  [R16, R17]  ✅ AUTHORED (2026-05-31)
 
@@ -678,7 +678,7 @@ tools/render-cli-reference           # generate | render | all | check (§12.1)
 tools/check-version-changelog        # digest-entry-exists check (R17.AC5)
 ```
 
-## 13. Collaboration retrospective  → produces `.claude/agents/*`, `log/evaluations/**`, `course/case-studies/collaboration-retrospective.md`  [R18]  🟨 PROPOSED (2026-05-31)
+## 13. Collaboration retrospective  → produces `.claude/agents/*`, `log/evaluations/**`, `course/case-studies/collaboration-retrospective.md`  [R18]  ✅ BUILT (P9, 2026-06-02)
 
 A multi-perspective, self-evaluating retrospective of how this course was actually built with Claude
 Code: a panel of **subjective persona subagents** (plus a no-persona control) reads the real session transcripts and renders
@@ -908,7 +908,7 @@ tools/check-evaluations                               # corpus completeness gate
 `meta/conventions.md` gains the `log/evaluations/` layout + `<session>/<reviewer>.md` naming (R13.AC1).
 Build plan: `tasks/P9-collaboration-retrospective.md`.
 
-## 14. Breadcrumb navigation  → produces `tools/check-breadcrumbs`, a shared trail helper in `tools/_common.py`, and trails on every learner-facing doc  [R19]  ✅ APPROVED (2026-06-09)
+## 14. Breadcrumb navigation  → produces `tools/check-breadcrumbs`, a shared trail helper in `tools/_common.py`, and trails on every learner-facing doc  [R19]  ✅ BUILT (P10, 2026-06-09)
 
 Top-of-page breadcrumb trails for learner-facing documents (R19), deferred from P9 until R18 shipped
 (ledger L12). **Scoping (same rule as §12):** pure navigation infrastructure — no new can-do, lab, or

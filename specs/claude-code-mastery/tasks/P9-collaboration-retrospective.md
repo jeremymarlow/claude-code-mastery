@@ -7,12 +7,13 @@ cells → per-session synthesis + per-reviewer global → overall corner), deliv
 evaluation corpus (`log/evaluations/`) and a learner-facing case study (`course/case-studies/`). Post-v1,
 **not release-blocking**. R19 (breadcrumbs) is a **separate** requirement, design deferred — not built here.
 
-**Status:** 🟢 **APPROVED & EXECUTING** — tasks-gate approved & committed; **9.1–9.6 ✅ done** (253/253
-leaves + 23/23 per-session syntheses + 11/11 per-reviewer globals + the `_overall.md` corner;
-`check-evaluations` reports "global tier complete"), **9.7 case study next** (see `IMPLEMENTATION.md` §3 / ledger **L11**). Requirements ✅
-(R18, incl. the AC6 matrix amendment, `82e4a8b`). Design ✅ **APPROVED & committed** (§13 + §11 row, `ef7fc05`).
-Branch **`feat/collaboration-retrospective`** (pushed). Execute top-to-bottom; `make check` green after
-each slice; commit in slices; **ask before push/merge** (CLAUDE.md working agreement).
+**Status:** ✅ **COMPLETE (2026-06-02)** — all slices 9.1–9.9 done: full matrix (253/253 leaves +
+23/23 per-session syntheses + 11/11 per-reviewer globals + the `_overall.md` corner;
+`check-evaluations` passes in both modes), case study (9.7, + R14.AC8 added in-pass), U13 dogfood
+wiring (9.8, L13 struck), close-out (9.9, ledger **L11** struck). Requirements ✅ (R18, incl. the AC6
+matrix amendment, `82e4a8b`). Design ✅ **APPROVED & committed** (§13 + §11 row, `ef7fc05`). The plan
+named branch `feat/collaboration-retrospective`, but the build landed incrementally on **`main`**
+(committed + pushed at close-out).
 
 **Inputs:** `design.md` §13 (the authoritative HOW) · `requirements.md` R18 (+ R3/R8/R10/R14 anchors) ·
 `decisions.md` → "P9 …" (locked calls; written at close-out) · the corpus to evaluate:

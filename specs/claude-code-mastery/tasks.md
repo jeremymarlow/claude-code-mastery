@@ -12,8 +12,10 @@ changelog digest) ✅ COMPLETE (2026-05-31)** — two new requirements (R16/R17)
 refresh; **L9** version-record drift-ahead at 2.1.158 vs artifact 2.1.159; P8 merge to `main`). **P9 (collaboration retrospective R18) ✅ COMPLETE (2026-06-02)** — 11-reviewer panel + full
 session×reviewer matrix (253 leaves + 23 syntheses + 11 globals + corner) + learner case study + U13
 dogfood wiring; built incrementally on `main`. **R14.AC8** (disclose conflicts of interest) added in-pass.
-`make check` green; `make check-strict` fails **only on R19** (deferred). **R19 (breadcrumb nav) still
-deferred** — needs its own design+tasks phase (ledger L12). Open
+`make check` green. **P10 (breadcrumb navigation R19) ✅ COMPLETE (2026-06-09)** — canonical trails on
+every learner-facing doc (four generators via the shared `_common.breadcrumb` helper + the hand-authored
+set), hard-gated by `tools/check-breadcrumbs`; **`make check-strict` fully green** (the last strict gap,
+R19, closed — ledger L12 struck). Open
 loops & deferrals are tracked in `decisions.md` → "Open loops & deferrals 🔓" (the canonical ledger).
 
 > **Chunking for context management.** The full build exceeds one context window. This file is an
@@ -176,15 +178,15 @@ surfaced the self-evaluation COI. `make check` green; `make check-strict` fails 
 - [x] 9.8 dogfood wiring (U13 panel + §10 + build case study) → R18 referenced [R18.AC9, R14.AC2]
 - [x] 9.9 close-out — state synced; `make check` green / `check-strict` fails only on R19 (expected); committed + pushed on `main`
 
-### P10 — Breadcrumb navigation (R19) 📋 **TASKS DRAFTED (2026-06-09)** — awaiting tasks-gate approval  → [`tasks/P10-breadcrumbs.md`](./tasks/P10-breadcrumbs.md)
-Post-v1, non-release-blocking — but it closes the last strict gap: at close-out `make check-strict`
-goes **fully green** for the first time since R19 was approved. Design ✅ APPROVED (§14, 2026-06-09;
+### P10 — Breadcrumb navigation (R19) ✅ **COMPLETE (2026-06-09)**  → [`tasks/P10-breadcrumbs.md`](./tasks/P10-breadcrumbs.md)
+Post-v1, non-release-blocking — and it closed the last strict gap: `make check-strict` is **fully
+green** for the first time since R19 was approved. Design ✅ §14 (approved & built 2026-06-09;
 deferral L12 lifted — R18 shipped). One shared trail-derivation helper (`tools/_common.py`,
 hierarchy = nearest-`README.md` filesystem rule, labels = H1s), four generators emit it, eight
 hand-authored docs migrated/added, and a hard-fail `tools/check-breadcrumbs` gate wired into
-`make check`/`check-strict`. See `design.md` §14 / ledger **L12**.
-- [ ] 10.1 shared `breadcrumb` helper in `_common.py` + `tools/check-breadcrumbs` (built first, wired last) [R19.AC3/AC5]
-- [ ] 10.2 generators adopt it: `render-units`/`render-index`/`render-cli-reference`/`render-checklist` + `make render` [R19.AC5]
-- [ ] 10.3 hand-authored docs: 6 trail-less + 2 format-divergent → canonical [R19.AC1/AC2]
-- [ ] 10.4 wire gate into `make check`/`check-strict` + conventions entry → R19 referenced [R19.AC3/AC5, R13.AC1/AC5]
-- [ ] 10.5 close-out — §11 flip, decisions entry, **strike L12**, IMPLEMENTATION §3; `make check-strict` fully green; commit gated on go-ahead
+`make check`/`check-strict`. See `design.md` §14 / `decisions.md` → "P10 …" / ledger **L12** (struck).
+- [x] 10.1 shared `breadcrumb` helper in `_common.py` + `tools/check-breadcrumbs` (built first, wired last) [R19.AC3/AC5]
+- [x] 10.2 generators adopt it: `render-units`/`render-index`/`render-cli-reference`/`render-checklist` + `make render` [R19.AC5]
+- [x] 10.3 hand-authored docs: 6 trail-less + 2 format-divergent → canonical [R19.AC1/AC2]
+- [x] 10.4 wire gate into `make check`/`check-strict` + conventions entry → R19 referenced [R19.AC3/AC5, R13.AC1/AC5]
+- [x] 10.5 close-out — §11 flip, decisions entry, **L12 struck**, IMPLEMENTATION §3 refreshed; `make check-strict` fully green

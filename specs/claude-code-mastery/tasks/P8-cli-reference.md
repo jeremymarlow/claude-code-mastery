@@ -5,10 +5,10 @@ generated CLI option reference** (R16) and a **per-version changelog digest** ca
 plus the R13 robustness improvement (dynamic requirement discovery) and the maintainer-guide enhancement
 playbook. Post-v1, **not release-blocking**.
 
-**Status:** 📋 **DRAFT — awaiting tasks-gate approval** (not yet executed). Requirements ✅ (R16, R17,
-2026-05-31). Design ✅ **APPROVED & committed** (§12 + §5/§8/§9/§10/§11 amendments, `de3dcaa`). Branch
-**`feat/cli-reference`** (pushed). Execute top-to-bottom; `make check` green after each slice; commit in
-slices; **ask before push/merge** (CLAUDE.md working agreement).
+**Status:** ✅ **COMPLETE (2026-05-31)** — all 9 slices (8.1–8.9) executed on `feat/cli-reference`,
+**merged to `main`** on user go-ahead. Requirements ✅ (R16, R17, 2026-05-31). Design ✅ **APPROVED &
+committed** (§12 + §5/§8/§9/§10/§11 amendments, `de3dcaa`). `make check` green throughout; the
+P8 drift-ahead (L9) was closed by the 2026-05-31 version refresh.
 
 **Inputs:** `design.md` §12 (the authoritative HOW) + §5 (version architecture it extends) ·
 `requirements.md` R16, R17 (+ R12/R13/R14 anchors) · `decisions.md` → "P8 …" (P8-design-directions:
@@ -146,8 +146,8 @@ Until 8.7, R16/R17 are invisible to the current hardcoded `R1–R15` check (harm
 - [x] **L10 closed (2026-05-31):** folded `check-version-drift`'s command-list diff onto the committed
       `cli-reference.json` (top-level command names = the recorded surface) and retired
       `meta/cli-commands.snapshot` + the `make snapshot` target. `make drift` / `make check` green.
-- [ ] Final commit (this close-out slice) on `feat/cli-reference`; then open PR / merge to `main` —
-      **ask before push/merge** (CLAUDE.md). ⟵ awaiting go-ahead.
+- [x] Final commit (this close-out slice) on `feat/cli-reference`; **merged to `main`** on explicit
+      user go-ahead (2026-05-31).
 
 ## Locked decisions (from the design gate — do not re-litigate)
 

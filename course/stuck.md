@@ -53,7 +53,7 @@ This is the meta-skill the course is teaching — Claude is also your debugger a
   (`meta/version-record.md`). Check the version-detail callout near it; report drift via
   `tools/check-version-drift`.
 - **"My lab won't reset cleanly."** Commit or stash your work first, then `tools/reset-lab uNN-labM`.
-- **"Do I have to do the labs in order?"** No — follow the prerequisites in each unit's front matter
-  (the authoritative ordering); the numeric path is just the default.
+- **"Do I have to do the labs in order?"** No — follow the prerequisites listed at the top of each
+  unit, just under its title (the authoritative ordering); the numeric path is just the default.
 - **"I'm not sure I've actually learned it."** Track yourself against
   [`progress-checklist.md`](./progress-checklist.md); the capstone rubric is the final proof.

@@ -1,21 +1,10 @@
 <!-- GENERATED from unit.src.md by tools/render-units — do not hand-edit. Edit unit.src.md, then run `make render`. -->
----
-id: U5
-title: "Ship a feature end-to-end with explore → plan → code → commit"
-stage: daily-driver
-depth_tier: core
-use_case: "Ship a new feature in taskflow-api"
-can_do: [C6]
-workflows: [W1]
-coverage_areas: [9, 10]
-prerequisites: [U2, U4]
-reading_time_min: 14
-lab_time_min: 30
----
 
 [Claude Code Mastery](../../../README.md) › [Course units](../README.md) › Ship a feature end-to-end with explore → plan → code → commit
 
 # Ship a feature end-to-end with explore → plan → code → commit
+
+*Reading: ~14 min · Lab: ~30 min · Prerequisites: [Explore and explain an unfamiliar codebase](../02-explore-a-codebase/unit.md), [Steer Claude with project memory and deliberate context](../04-memory-and-context/unit.md)*
 
 ## Learning objectives
 

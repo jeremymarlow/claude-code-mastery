@@ -1,21 +1,10 @@
 <!-- GENERATED from unit.src.md by tools/render-units — do not hand-edit. Edit unit.src.md, then run `make render`. -->
----
-id: U2
-title: "Explore and explain an unfamiliar codebase"
-stage: first-wins
-depth_tier: core
-use_case: "Understand a codebase I've never seen"
-can_do: [C3]
-workflows: [W8]
-coverage_areas: [2]
-prerequisites: [U1]
-reading_time_min: 8
-lab_time_min: 20
----
 
 [Claude Code Mastery](../../../README.md) › [Course units](../README.md) › Explore and explain an unfamiliar codebase
 
 # Explore and explain an unfamiliar codebase
+
+*Reading: ~8 min · Lab: ~20 min · Prerequisites: [Set up Claude Code and make your first verified change](../01-onboarding-first-win/unit.md)*
 
 ## Learning objectives
 

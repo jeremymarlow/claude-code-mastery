@@ -87,10 +87,14 @@ def parse_frontmatter(path: Path):
 
 
 def unit_files():
-    """Authored unit files: course/units/NN-slug/unit.md (excludes templates in meta/)."""
+    """Authored unit sources: course/units/NN-slug/unit.src.md (excludes templates in meta/).
+
+    The machine-readable front matter lives only here; the generated learner-facing unit.md
+    carries none (P12) — so every front-matter consumer must read the source, not the render.
+    """
     if not UNITS.exists():
         return []
-    return sorted(UNITS.glob("*/unit.md"))
+    return sorted(UNITS.glob("*/unit.src.md"))
 
 
 # --- breadcrumb navigation (R19; design.md §14) -----------------------------------------------

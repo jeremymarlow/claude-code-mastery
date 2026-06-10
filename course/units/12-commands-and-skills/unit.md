@@ -1,21 +1,10 @@
 <!-- GENERATED from unit.src.md by tools/render-units — do not hand-edit. Edit unit.src.md, then run `make render`. -->
----
-id: U12
-title: "Package a repeatable routine as a custom command and a skill"
-stage: autonomy-scale
-depth_tier: core
-use_case: "Eliminate repetitive prompting"
-can_do: [C13]
-workflows: []
-coverage_areas: [17, 18]
-prerequisites: [U4]
-reading_time_min: 11
-lab_time_min: 20
----
 
 [Claude Code Mastery](../../../README.md) › [Course units](../README.md) › Package a repeatable routine as a custom command and a skill
 
 # Package a repeatable routine as a custom command and a skill
+
+*Reading: ~11 min · Lab: ~20 min · Prerequisites: [Steer Claude with project memory and deliberate context](../04-memory-and-context/unit.md)*
 
 ## Learning objectives
 

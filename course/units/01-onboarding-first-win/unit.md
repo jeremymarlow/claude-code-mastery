@@ -1,21 +1,10 @@
 <!-- GENERATED from unit.src.md by tools/render-units — do not hand-edit. Edit unit.src.md, then run `make render`. -->
----
-id: U1
-title: "Set up Claude Code and make your first verified change"
-stage: first-wins
-depth_tier: core
-use_case: "Get set up and make a first verified win against taskflow-api"
-can_do: [C1, C2]
-workflows: []
-coverage_areas: [1, 27]
-prerequisites: []
-reading_time_min: 10
-lab_time_min: 15
----
 
 [Claude Code Mastery](../../../README.md) › [Course units](../README.md) › Set up Claude Code and make your first verified change
 
 # Set up Claude Code and make your first verified change
+
+*Reading: ~10 min · Lab: ~15 min · Prerequisites: none*
 
 ## Learning objectives
 

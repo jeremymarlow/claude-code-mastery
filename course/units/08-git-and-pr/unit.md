@@ -1,21 +1,10 @@
 <!-- GENERATED from unit.src.md by tools/render-units — do not hand-edit. Edit unit.src.md, then run `make render`. -->
----
-id: U8
-title: "Turn a body of work into clean commits and a reviewable PR"
-stage: daily-driver
-depth_tier: core
-use_case: "Turn my work into a clean, reviewable PR"
-can_do: [C9]
-workflows: [W4]
-coverage_areas: [13]
-prerequisites: [U5]
-reading_time_min: 12
-lab_time_min: 25
----
 
 [Claude Code Mastery](../../../README.md) › [Course units](../README.md) › Turn a body of work into clean commits and a reviewable PR
 
 # Turn a body of work into clean commits and a reviewable PR
+
+*Reading: ~12 min · Lab: ~25 min · Prerequisites: [Ship a feature end-to-end with explore → plan → code → commit](../05-ship-a-feature/unit.md)*
 
 ## Learning objectives
 

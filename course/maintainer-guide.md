@@ -16,11 +16,15 @@ versioning), see [`../RELEASING.md`](../RELEASING.md) and the [`../CHANGELOG.md`
 Everything cross-cutting lives **once** and is referenced by key (R13.AC2); duplication rots. The
 [checks](../tools/) enforce these — run `make check` and keep it green:
 
-- **Front matter** — every `course/units/NN-slug/unit.md` (generated from `unit.src.md`) validates
-  against [`unit-frontmatter.schema.json`](../meta/unit-frontmatter.schema.json) (`check-frontmatter`).
+- **Front matter** — every unit's machine-readable front matter lives **only** in its authored
+  `unit.src.md` and validates against
+  [`unit-frontmatter.schema.json`](../meta/unit-frontmatter.schema.json) (`check-frontmatter`).
+  The generated `unit.md` carries none — raw YAML renders inconsistently across GitHub/Gitea/
+  VS Code and its keys are maintainer codes.
 - **Rendered units** — each unit is **authored** as `unit.src.md` (front matter + `{{vd:<key>}}` version tokens);
   the committed, learner-facing `unit.md` is **generated** from it by
-  [`render-units`](../tools/render-units) (which resolves the tokens), and the unit index
+  [`render-units`](../tools/render-units) (which resolves the tokens, drops the front matter, and
+  emits a one-line digest of reading/lab time + prerequisite links under the H1), and the unit index
   `course/units/README.md` by [`render-index`](../tools/render-index). `make check` fails if either is
   out of sync — regenerate with `make render`. **Edit `unit.src.md`, never `unit.md`.**
 - **Coverage** — every can-do (C1–C17 + CV) is advanced by ≥1 unit, every coverage-matrix area is

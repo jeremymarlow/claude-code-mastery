@@ -165,6 +165,15 @@ caught one factual error in U7's dialogue (fixed; decision `P11-spotreview`). **
 fully green, zero PEND; L15 struck.** Remaining deferral anywhere: only L1's enterprise-blocked
 `managed-settings`. See `decisions.md` → "P11 — …" and `tasks/P11-content-enhancement.md`.
 
+**P12 — Learner-clean rendered units ✅ BUILT (2026-06-10).** The rendered `unit.md` no longer carries
+YAML front matter (raw front matter rendered broken/inconsistently on GitHub/Gitea/VS Code and exposed
+maintainer codes); machine truth lives only in `unit.src.md`, every consumer repointed via
+`_common.unit_files()`, and `render-units` emits a one-line learner digest under the H1 (reading/lab
+time + prerequisite title links). No new requirement (P7/E2 precedent); traces
+R6.AC3/R13.AC4a/R15/R5.AC6/R9.AC2/R19.AC5. User eyeballed VS Code + Gitea and approved; `make
+check-strict` fully green. Also backfilled the missing P11 section in `tasks.md` (a P11 close-out
+miss). See `decisions.md` → "P12 —" and `tasks/P12-frontmatter-render.md`.
+
 **Where the detail lives** (don't restate it here):
 - Per-unit build notes (what each unit/lab is, its refs, its traceability) → [`tasks.md`](./tasks.md) §P5.
 - Design decisions, rationale, and the 🔓 open-loops ledger → [`decisions.md`](./decisions.md).

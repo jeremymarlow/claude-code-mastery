@@ -1,21 +1,10 @@
 <!-- GENERATED from unit.src.md by tools/render-units — do not hand-edit. Edit unit.src.md, then run `make render`. -->
----
-id: U10
-title: "Build a feature spec-first: requirements → design → tasks"
-stage: force-multiplier
-depth_tier: core
-use_case: "Build a feature spec-first"
-can_do: [C11]
-workflows: [W7]
-coverage_areas: [15]
-prerequisites: [U5]
-reading_time_min: 13
-lab_time_min: 35
----
 
 [Claude Code Mastery](../../../README.md) › [Course units](../README.md) › Build a feature spec-first: requirements → design → tasks
 
 # Build a feature spec-first: requirements → design → tasks
+
+*Reading: ~13 min · Lab: ~35 min · Prerequisites: [Ship a feature end-to-end with explore → plan → code → commit](../05-ship-a-feature/unit.md)*
 
 ## Learning objectives
 

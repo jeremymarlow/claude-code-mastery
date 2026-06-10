@@ -1,21 +1,10 @@
 <!-- GENERATED from unit.src.md by tools/render-units — do not hand-edit. Edit unit.src.md, then run `make render`. -->
----
-id: U13
-title: "Delegate a scoped task to a subagent"
-stage: autonomy-scale
-depth_tier: core
-use_case: "Delegate focused / parallel sub-tasks"
-can_do: [C14]
-workflows: []
-coverage_areas: [19]
-prerequisites: [U12]
-reading_time_min: 13
-lab_time_min: 20
----
 
 [Claude Code Mastery](../../../README.md) › [Course units](../README.md) › Delegate a scoped task to a subagent
 
 # Delegate a scoped task to a subagent
+
+*Reading: ~13 min · Lab: ~20 min · Prerequisites: [Package a repeatable routine as a custom command and a skill](../12-commands-and-skills/unit.md)*
 
 ## Learning objectives
 

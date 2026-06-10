@@ -1,21 +1,10 @@
 <!-- GENERATED from unit.src.md by tools/render-units — do not hand-edit. Edit unit.src.md, then run `make render`. -->
----
-id: U3
-title: "Operate safely while letting Claude act on your code"
-stage: first-wins
-depth_tier: core
-use_case: "Operate safely while letting Claude act on my code"
-can_do: [C4, CV]
-workflows: []
-coverage_areas: [3, 4, 5, 6, 29]
-prerequisites: [U1]
-reading_time_min: 12
-lab_time_min: 20
----
 
 [Claude Code Mastery](../../../README.md) › [Course units](../README.md) › Operate safely while letting Claude act on your code
 
 # Operate safely while letting Claude act on your code
+
+*Reading: ~12 min · Lab: ~20 min · Prerequisites: [Set up Claude Code and make your first verified change](../01-onboarding-first-win/unit.md)*
 
 ## Learning objectives
 

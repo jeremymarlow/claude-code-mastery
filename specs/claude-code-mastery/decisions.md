@@ -1304,3 +1304,48 @@ marker per artifact is what the lint can enforce; prose elegance loses to mechan
 **Why kept:** a factual error in the one demo whose lesson is "verify the cited claim" was exactly the
 class of defect the spot review existed to catch — the panel→fix→re-verify loop closed S1 with
 evidence, not assertion.
+
+## P12 — Learner-clean rendered units: front matter out of `unit.md`, digest line in (2026-06-10, BUILT)
+
+Trigger: the maintainer observed the rendered units' YAML front matter renders differently in
+Gitea vs GitHub vs VS Code — "all ugly and distracting for a human learner." Diagnosis confirmed
+worse: the GENERATED comment sits *above* the `---`, and every renderer special-cases front matter
+only on line 1, so none even recognized ours (GitHub/Gitea degraded it to thematic breaks + stray
+prose). A best-practice survey (GitHub Docs authoring guide, MyST, Front Matter CMS, Gitea docs)
+was uniform: front matter is machine input to a build pipeline; readers see it stripped or
+transformed, never raw. Plan: `tasks/P12-frontmatter-render.md` (approved 2026-06-09).
+
+_Format: **decision-id** — the decision; **Why:** the rationale._
+
+**P12-fm-source ✅** — The machine-readable front matter lives **only** in `unit.src.md`; the
+generated `unit.md` drops it entirely. All four consumers (`check-frontmatter`, `check-coverage`,
+`check-traceability`, `render-index`) repointed in one move via `_common.unit_files()` →
+`*/unit.src.md`. No new requirement (P7/E2 precedent — a learner-facing rendering defect closed in
+the render pipeline); R6.AC3 doesn't pin which file carries the schema, and the *authored* artifact
+has been `unit.src.md` since the P7 split. Rejected: moving the GENERATED comment below the front
+matter (renderers still disagree, maintainer codes still leak); HTML-comment-wrapped metadata
+(nonstandard, `--` fragile); a sidecar `unit.meta.yaml` (third file per unit, no gain over the
+existing source). **Why:** the committed-rendered pattern already separates machine truth from the
+learner view — this finishes the job.
+
+**P12-digest ✅** — In place of the metadata, `render-units` emits a one-line digest under the H1:
+`*Reading: ~N min · Lab: ~N min · Prerequisites: <title links | none>*` — time estimates (R5.AC6)
+and the prerequisite graph (R9.AC2) as **unit-title links, never bare U# codes** (P7 de-coding
+rule); Lab segment omitted at `lab_time_min: 0`; plain CommonMark (R15). Generated from the source
+front matter under the same byte-compare drift gate as the breadcrumb, so single-sourcing holds;
+`check-links` covers the prerequisite links for free. **Why:** the YAML carried two fields a
+learner actually uses — now they're surfaced legibly instead of buried in maintainer syntax.
+
+**P12-verify ✅** — Acceptance was staged: suite green after 12.1 alone (consumers repointed while
+front matter still present), then post-render checks (no `---` blocks remain; the two grep hits in
+U12/U13 are fenced demo captures of *command/agent* front matter — intentional), `make
+check-strict` green, render idempotent, and a **human eyeball in VS Code + Gitea (user, approved)**
+— the render-and-eyeball lesson from P7's M4 garbles applied deliberately. Docs swept:
+conventions (new "Rendered units & the learner digest" section + layout/naming rows), design §6
+amendment, maintainer-guide invariants, `stuck.md` FAQ (told learners to read "front matter" they
+can no longer see), both templates.
+
+**P12-p11-backfill ✅** — While syncing state, found `tasks.md` had **no P11 section** (P11's
+close-out updated `IMPLEMENTATION.md` §3 and `decisions.md` but missed the index header + phase
+list). Backfilled both, marked as a backfill. **Why recorded:** exactly the parallel-lists drift
+the working agreements warn about; noting it keeps the state-file contract honest.

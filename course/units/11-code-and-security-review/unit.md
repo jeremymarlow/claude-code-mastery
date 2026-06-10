@@ -1,21 +1,10 @@
 <!-- GENERATED from unit.src.md by tools/render-units — do not hand-edit. Edit unit.src.md, then run `make render`. -->
----
-id: U11
-title: "Review a change for correctness and security — and triage the findings"
-stage: force-multiplier
-depth_tier: core
-use_case: "Review a change for correctness and security"
-can_do: [C12, CV]
-workflows: [W6]
-coverage_areas: [16]
-prerequisites: [U3, U5]
-reading_time_min: 14
-lab_time_min: 35
----
 
 [Claude Code Mastery](../../../README.md) › [Course units](../README.md) › Review a change for correctness and security — and triage the findings
 
 # Review a change for correctness and security — and triage the findings
+
+*Reading: ~14 min · Lab: ~35 min · Prerequisites: [Operate safely while letting Claude act on your code](../03-operate-safely/unit.md), [Ship a feature end-to-end with explore → plan → code → commit](../05-ship-a-feature/unit.md)*
 
 ## Learning objectives
 

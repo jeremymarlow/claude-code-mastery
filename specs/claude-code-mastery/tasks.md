@@ -15,7 +15,11 @@ dogfood wiring; built incrementally on `main`. **R14.AC8** (disclose conflicts o
 `make check` green. **P10 (breadcrumb navigation R19) ✅ COMPLETE (2026-06-09)** — canonical trails on
 every learner-facing doc (four generators via the shared `_common.breadcrumb` helper + the hand-authored
 set), hard-gated by `tools/check-breadcrumbs`; **`make check-strict` fully green** (the last strict gap,
-R19, closed — ledger L12 struck). Open
+R19, closed — ledger L12 struck). **P11 (content enhancement R20/R21) ✅ COMPLETE (2026-06-09)** —
+five-persona fresh-eyes review → demonstration layer (all-real captures), rendering-correctness gate
+(`tools/check-content`), register pass, operator craft, consolidation/transfer; L15 struck.
+**P12 (learner-clean rendered units) ✅ BUILT (2026-06-10)** — rendered `unit.md` drops its YAML front
+matter (machine truth stays in `unit.src.md`) and gains a learner digest line; no new requirement. Open
 loops & deferrals are tracked in `decisions.md` → "Open loops & deferrals 🔓" (the canonical ledger).
 
 > **Chunking for context management.** The full build exceeds one context window. This file is an
@@ -190,3 +194,25 @@ hand-authored docs migrated/added, and a hard-fail `tools/check-breadcrumbs` gat
 - [x] 10.3 hand-authored docs: 6 trail-less + 2 format-divergent → canonical [R19.AC1/AC2]
 - [x] 10.4 wire gate into `make check`/`check-strict` + conventions entry → R19 referenced [R19.AC3/AC5, R13.AC1/AC5]
 - [x] 10.5 close-out — §11 flip, decisions entry, **L12 struck**, IMPLEMENTATION §3 refreshed; `make check-strict` fully green
+
+### P11 — Content enhancement (R20/R21) ✅ **COMPLETE (2026-06-09)**  → [`tasks/P11-content-enhancement.md`](./tasks/P11-content-enhancement.md)
+*(Section backfilled 2026-06-10 — P11's close-out updated `IMPLEMENTATION.md` §3 and `decisions.md`
+but missed this index.)* Post-v1, via the playbook with a diagnostic five-persona fresh-eyes review
+first (`log/content-review/`). R20 (show-don't-tell demonstrations, all captures real + regenerable)
++ R21 (operator craft, session lifecycle, stage checkpoints, transfer blocks); E2 rendering
+correctness (`{{vd}}` inline form + `tools/check-content` residue/demo gate) + E3 register pass woven
+one-touch-per-unit. Pre-authorized delegated run (`P11-delegation`); 11.8 spot review fixed a U7
+factual error. `make check-strict` fully green, zero PEND; **L15 struck**. See `decisions.md` → "P11 —".
+- [x] 11.1–11.8 executed per the plan file (committed on `main`, 2026-06-09)
+
+### P12 — Learner-clean rendered units ✅ **BUILT (2026-06-10)**  → [`tasks/P12-frontmatter-render.md`](./tasks/P12-frontmatter-render.md)
+Post-v1, no new requirement (P7/E2 precedent — learner-facing rendering defect closed in the render
+pipeline). Rendered `unit.md` carries **no YAML front matter** (raw front matter renders broken/ugly
+and inconsistently on GitHub/Gitea/VS Code; its keys are maintainer codes): machine truth stays in
+`unit.src.md`, all consumers repointed via `_common.unit_files()`, and `render-units` emits a
+one-line digest under the H1 (reading/lab time R5.AC6 + prerequisite title links R9.AC2). User
+eyeballed VS Code + Gitea rendering and approved. Traces R6.AC3/R13.AC4a/R15/R5.AC6/R9.AC2/R19.AC5.
+- [x] 12.1 repoint machine consumers to `unit.src.md` (`unit_files()`)
+- [x] 12.2 `render-units`: strip front matter, inject digest line; 16 units regenerated; **user eyeball PASS**
+- [x] 12.3 docs sweep (conventions, design §6 amendment, maintainer guide, stuck.md, templates)
+- [x] 12.4 close-out — decisions entry, IMPLEMENTATION §3, this index (+ P11 backfill); commit per approval gate

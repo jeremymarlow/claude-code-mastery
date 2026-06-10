@@ -236,6 +236,15 @@ reading_time_min: 25         # R5.AC6
 lab_time_min: 40             # R5.AC6
 ```
 
+**Where the front matter lives (P12 amendment, 2026-06-10):** only in the authored
+`unit.src.md`; R6.AC3 validation (`check-frontmatter`) and every other machine consumer read it
+there. The generated learner-facing `unit.md` omits it entirely — raw YAML front matter renders
+inconsistently and poorly across GitHub/Gitea/VS Code, and its keys are maintainer codes —
+and instead surfaces the learner-relevant fields as a one-line digest under the H1
+(reading/lab time per R5.AC6; prerequisites as unit-title links per R9.AC2), emitted by
+`render-units` from the source front matter under the same drift gate as the breadcrumb.
+Convention: `meta/conventions.md` → "Rendered units & the learner digest".
+
 **Tier-adaptive templates** (R6.AC1/AC2) — files `meta/templates/unit-core.md`, `unit-awareness.md`:
 
 | Section (in order) | Core | Awareness |

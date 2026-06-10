@@ -1,21 +1,10 @@
 <!-- GENERATED from unit.src.md by tools/render-units — do not hand-edit. Edit unit.src.md, then run `make render`. -->
----
-id: U16
-title: "Run Claude unattended — headless, in CI, and in parallel"
-stage: autonomy-scale
-depth_tier: core
-use_case: "Run Claude unattended and in parallel"
-can_do: [C17]
-workflows: [W9]
-coverage_areas: [6, 23, 24, 25]
-prerequisites: [U8, U14]
-reading_time_min: 11
-lab_time_min: 25
----
 
 [Claude Code Mastery](../../../README.md) › [Course units](../README.md) › Run Claude unattended — headless, in CI, and in parallel
 
 # Run Claude unattended — headless, in CI, and in parallel
+
+*Reading: ~11 min · Lab: ~25 min · Prerequisites: [Turn a body of work into clean commits and a reviewable PR](../08-git-and-pr/unit.md), [Enforce a standard automatically with a hook](../14-hooks/unit.md)*
 
 ## Learning objectives
 

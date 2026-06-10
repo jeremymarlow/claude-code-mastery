@@ -11,7 +11,7 @@ See `design.md` §9 for the canonical tree. Top level:
 | Path | Holds |
 |---|---|
 | `specs/claude-code-mastery/` | The spec (requirements, design, tasks, decisions, this project's `IMPLEMENTATION.md`). |
-| `course/units/NN-slug/unit.md` | One curriculum unit per directory. |
+| `course/units/NN-slug/unit.md` | One curriculum unit per directory (generated from its authored `unit.src.md`; see "Rendered units & the learner digest"). |
 | `course/capstone/` | Capstone briefs, exemplar (build case study), rubric. |
 | `course/` (files) | `progress-checklist.md`, `stuck.md`, `maintainer-guide.md`. |
 | `codebases/primary/` | `taskflow-api` lab substrate. |
@@ -31,8 +31,8 @@ See `design.md` §9 for the canonical tree. Top level:
 | Thing | Convention | Example |
 |---|---|---|
 | Unit directory | `course/units/NN-slug/` — zero-padded two-digit `NN` (01–16), kebab-case slug | `course/units/05-ship-a-feature/` |
-| Unit file | always `unit.md` inside its directory | `course/units/03-operate-safely/unit.md` |
-| Unit ID (in front matter / refs) | `U` + integer, matching catalog | `U5` |
+| Unit file | authored `unit.src.md` → generated `unit.md`, inside its directory | `course/units/03-operate-safely/unit.md` |
+| Unit ID (in front matter / refs) | `U` + integer, matching catalog; front matter lives in `unit.src.md` only | `U5` |
 | Capability ID | `C` + integer, or `CV` (cross-cutting verification) | `C6`, `CV` |
 | Use-case ID | `U` + integer (1:1 with its unit) | `U5` |
 | Workflow ID | `W` + integer | `W1` |
@@ -112,6 +112,21 @@ key and reference it as `{{vd:key}}`. The `check-version-refs` tool fails the bu
 YAML is authoritative for human-edited artifacts; a generated `.json` twin is produced for
 tooling where noted (`capability-map`, `version-data`). Never hand-edit a generated `.json`;
 regenerate it from its `.yaml`. **[R13.AC2]**
+
+## Rendered units & the learner digest
+
+Each unit is **authored** as `unit.src.md` (YAML front matter + `{{vd:key}}` tokens) and
+**generated** as the learner-facing `unit.md` by `tools/render-units`; `make check` fails on
+drift. The generated file carries **no front matter** — raw YAML renders inconsistently and
+poorly across GitHub/Gitea/VS Code, and its keys are maintainer codes. The machine-readable
+front matter lives only in `unit.src.md`, where the enforcement suite reads it (R6.AC3,
+R13.AC4a). In its place the generator emits a one-line **digest** under the H1:
+
+> `*Reading: ~N min · Lab: ~N min · Prerequisites: <title links | none>*`
+
+— the time estimates (R5.AC6) and the prerequisite graph (R9.AC2) as **unit-title links, never
+bare `U#` codes** (the P7 de-coding rule); the Lab segment is omitted when `lab_time_min` is 0.
+Plain CommonMark, no meaning by symbol alone (R15). **Edit `unit.src.md`, never `unit.md`.**
 
 ## Demonstration artifacts (unit content)
 

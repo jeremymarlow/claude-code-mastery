@@ -1,21 +1,10 @@
 <!-- GENERATED from unit.src.md by tools/render-units — do not hand-edit. Edit unit.src.md, then run `make render`. -->
----
-id: U6
-title: "Drive a new behavior test-first (red → green)"
-stage: daily-driver
-depth_tier: core
-use_case: "Add behavior safely, test-first"
-can_do: [C7]
-workflows: [W2]
-coverage_areas: [11]
-prerequisites: [U5]
-reading_time_min: 12
-lab_time_min: 30
----
 
 [Claude Code Mastery](../../../README.md) › [Course units](../README.md) › Drive a new behavior test-first (red → green)
 
 # Drive a new behavior test-first (red → green)
+
+*Reading: ~12 min · Lab: ~30 min · Prerequisites: [Ship a feature end-to-end with explore → plan → code → commit](../05-ship-a-feature/unit.md)*
 
 ## Learning objectives
 

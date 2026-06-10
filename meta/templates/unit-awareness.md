@@ -6,7 +6,8 @@ going deeper. Fast-path, skip-check, lab, and pitfalls are OPTIONAL at this tier
 NOTE: all 16 v1 units are core-tier; awareness tiering is applied at the FEATURE level inside
 meta/coverage-matrix.yaml, not by demoting whole units (design §6). This template exists so a
 future awareness-tier unit has a conforming shape. Front matter still validates against
-meta/unit-frontmatter.schema.json. Delete these comments when authoring.
+meta/unit-frontmatter.schema.json and stays SOURCE-ONLY — the generated unit.md drops it and
+emits the digest line instead (P12; see unit-core.md). Delete these comments when authoring.
 -->
 ---
 id: U0

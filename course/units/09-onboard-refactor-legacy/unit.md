@@ -1,21 +1,10 @@
 <!-- GENERATED from unit.src.md by tools/render-units — do not hand-edit. Edit unit.src.md, then run `make render`. -->
----
-id: U9
-title: "Onboard a legacy codebase and refactor it without changing behavior"
-stage: force-multiplier
-depth_tier: core
-use_case: "Map an unfamiliar legacy codebase and refactor it safely"
-can_do: [C10]
-workflows: [W5, W8]
-coverage_areas: [14]
-prerequisites: [U2, U7]
-reading_time_min: 13
-lab_time_min: 40
----
 
 [Claude Code Mastery](../../../README.md) › [Course units](../README.md) › Onboard a legacy codebase and refactor it without changing behavior
 
 # Onboard a legacy codebase and refactor it without changing behavior
+
+*Reading: ~13 min · Lab: ~40 min · Prerequisites: [Explore and explain an unfamiliar codebase](../02-explore-a-codebase/unit.md), [Debug an unfamiliar failure by confirming the root cause](../07-debug-a-failure/unit.md)*
 
 ## Learning objectives
 

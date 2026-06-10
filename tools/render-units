@@ -5,6 +5,10 @@ by resolving {{vd:key}} tokens (R12.AC2 single-source rule).
 This mirrors the render-checklist pattern (a committed generated artifact + a drift gate):
   - `unit.src.md` is authored — front matter + {{vd:key}} version-data tokens. Maintainers edit it.
   - `unit.md` is generated — the resolved prose a learner reads, with a leading GENERATED comment.
+    It carries NO front matter (P12): raw YAML renders inconsistently and ugly on GitHub/Gitea/
+    VS Code, and its keys are maintainer codes. The learner-relevant fields (time estimates,
+    prerequisites) are emitted instead as a one-line digest under the H1; the machine-readable
+    front matter lives only in unit.src.md, where the enforcement suite reads it.
 
 Usage:
   tools/render-units            # (re)write every unit.md from its unit.src.md
@@ -17,9 +21,12 @@ import os
 import re
 import sys
 
+import yaml
+
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from _common import (  # noqa: E402
-    ROOT, UNITS, FRONTMATTER_RE, Reporter, breadcrumb, load_version_data, render_vd,
+    ROOT, UNITS, FRONTMATTER_RE, Reporter, breadcrumb, load_version_data, parse_frontmatter,
+    render_vd,
 )
 
 HEADER = (
@@ -36,21 +43,43 @@ def sources():
     return sorted(UNITS.glob("*/unit.src.md"))
 
 
-def render_source(src, vd):
-    """Return (generated_text, unresolved_keys). Strips any leading source comment, prepends the
-    GENERATED header, and injects the canonical breadcrumb trail after the front matter (before
-    the H1) — so editing unit.md directly is always caught as drift, and every unit carries its
-    place in the hierarchy without the author maintaining it by hand (R19.AC5). The trail comes
+def digest(fm, units_by_id):
+    """The one-line learner digest emitted under the H1 in place of the stripped front matter:
+    the time estimates (R5.AC6) and the prerequisites (R9.AC2) — as title links, never bare
+    U# codes (the P7 de-coding rule). Lab segment omitted when lab_time_min is 0."""
+    parts = [f"Reading: ~{fm['reading_time_min']} min"]
+    if fm.get("lab_time_min"):
+        parts.append(f"Lab: ~{fm['lab_time_min']} min")
+    if fm.get("prerequisites"):
+        links = ", ".join(
+            f"[{units_by_id[p][1]}](../{units_by_id[p][0]}/unit.md)"
+            for p in fm["prerequisites"]
+        )
+    else:
+        links = "none"
+    parts.append(f"Prerequisites: {links}")
+    return "*" + " · ".join(parts) + "*"
+
+
+def render_source(src, vd, units_by_id):
+    """Return (generated_text, unresolved_keys). Strips any leading source comment AND the YAML
+    front matter (machine truth stays in unit.src.md — P12), prepends the GENERATED header, emits
+    the canonical breadcrumb trail as the first content line (R19.AC5), and inserts the digest
+    line under the H1 — so editing unit.md directly is always caught as drift, and every unit
+    carries its place in the hierarchy without the author maintaining it by hand. The trail comes
     from _common.breadcrumb (the same rule check-breadcrumbs verifies); the final plain-text
     segment is the unit's H1."""
     text = LEADING_COMMENT_RE.sub("", src.read_text(encoding="utf-8"), count=1)
     rendered, unresolved = render_vd(text, vd)
     m = FRONTMATTER_RE.match(rendered)
     if m:
-        fm, body = rendered[: m.end()], rendered[m.end() :]
+        fm = yaml.safe_load(m.group(1))
+        body = rendered[m.end() :]
         h1 = H1_RE.search(body)
         trail = breadcrumb(src.with_name("unit.md"), h1.group(1).strip() if h1 else None)
-        rendered = f"{fm}\n{trail}\n{body}"
+        if h1:
+            body = body[: h1.end()] + "\n\n" + digest(fm, units_by_id) + body[h1.end() :]
+        rendered = f"\n{trail}\n{body}"
     return HEADER + rendered, unresolved
 
 
@@ -64,10 +93,17 @@ def main(argv):
         rep.ok("no unit.src.md sources yet — nothing to render")
         return rep.done()
 
+    # U# -> (dir slug, title) across all sources, so digest prerequisites resolve as title links.
+    units_by_id = {}
+    for src in srcs:
+        fm = parse_frontmatter(src)
+        if fm:
+            units_by_id[fm["id"]] = (src.parent.name, str(fm["title"]).strip())
+
     for src in srcs:
         out = src.with_name("unit.md")
         rel = out.relative_to(ROOT)
-        rendered, unresolved = render_source(src, vd)
+        rendered, unresolved = render_source(src, vd, units_by_id)
         if unresolved:
             rep.fail(f"{rel}: unresolved {{vd:key}} in source: {', '.join(sorted(unresolved))}")
             continue

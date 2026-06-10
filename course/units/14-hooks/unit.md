@@ -1,21 +1,10 @@
 <!-- GENERATED from unit.src.md by tools/render-units — do not hand-edit. Edit unit.src.md, then run `make render`. -->
----
-id: U14
-title: "Enforce a standard automatically with a hook"
-stage: autonomy-scale
-depth_tier: core
-use_case: "Enforce my standards automatically"
-can_do: [C15]
-workflows: []
-coverage_areas: [20]
-prerequisites: [U12]
-reading_time_min: 12
-lab_time_min: 22
----
 
 [Claude Code Mastery](../../../README.md) › [Course units](../README.md) › Enforce a standard automatically with a hook
 
 # Enforce a standard automatically with a hook
+
+*Reading: ~12 min · Lab: ~22 min · Prerequisites: [Package a repeatable routine as a custom command and a skill](../12-commands-and-skills/unit.md)*
 
 ## Learning objectives
 

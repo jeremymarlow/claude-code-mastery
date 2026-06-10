@@ -6,6 +6,8 @@ Author in CommonMark; no meaning by color/emoji alone (R15.AC6). Reference versi
 values only as {{vd:key}} — never hardcode them (R12.AC2).
 The committed, learner-facing unit.md is GENERATED from unit.src.md by tools/render-units (which
 resolves the {{vd:key}} tokens); run `make render` after editing. Edit unit.src.md, never unit.md.
+The front matter below stays SOURCE-ONLY: the generated unit.md drops it and emits a one-line
+digest (reading/lab time + prerequisite title links) under the H1 instead (P12).
 -->
 ---
 id: U0

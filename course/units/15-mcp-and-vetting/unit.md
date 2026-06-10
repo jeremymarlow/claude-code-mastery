@@ -1,21 +1,10 @@
 <!-- GENERATED from unit.src.md by tools/render-units — do not hand-edit. Edit unit.src.md, then run `make render`. -->
----
-id: U15
-title: "Connect an MCP server and vet it before trusting it"
-stage: autonomy-scale
-depth_tier: core
-use_case: "Give Claude access to my tools & data — safely"
-can_do: [C16]
-workflows: []
-coverage_areas: [21, 22]
-prerequisites: [U3, U13]
-reading_time_min: 11
-lab_time_min: 22
----
 
 [Claude Code Mastery](../../../README.md) › [Course units](../README.md) › Connect an MCP server and vet it before trusting it
 
 # Connect an MCP server and vet it before trusting it
+
+*Reading: ~11 min · Lab: ~22 min · Prerequisites: [Operate safely while letting Claude act on your code](../03-operate-safely/unit.md), [Delegate a scoped task to a subagent](../13-subagents/unit.md)*
 
 ## Learning objectives
 

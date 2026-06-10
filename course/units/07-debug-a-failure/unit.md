@@ -1,21 +1,10 @@
 <!-- GENERATED from unit.src.md by tools/render-units — do not hand-edit. Edit unit.src.md, then run `make render`. -->
----
-id: U7
-title: "Debug an unfamiliar failure by confirming the root cause"
-stage: daily-driver
-depth_tier: core
-use_case: "A test/endpoint is broken — find and fix it"
-can_do: [C8]
-workflows: [W3]
-coverage_areas: [12]
-prerequisites: [U5]
-reading_time_min: 12
-lab_time_min: 30
----
 
 [Claude Code Mastery](../../../README.md) › [Course units](../README.md) › Debug an unfamiliar failure by confirming the root cause
 
 # Debug an unfamiliar failure by confirming the root cause
+
+*Reading: ~12 min · Lab: ~30 min · Prerequisites: [Ship a feature end-to-end with explore → plan → code → commit](../05-ship-a-feature/unit.md)*
 
 ## Learning objectives
 

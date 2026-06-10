@@ -1,21 +1,10 @@
 <!-- GENERATED from unit.src.md by tools/render-units — do not hand-edit. Edit unit.src.md, then run `make render`. -->
----
-id: U4
-title: "Steer Claude with project memory and deliberate context"
-stage: first-wins
-depth_tier: core
-use_case: "Make Claude reliably follow my project's conventions"
-can_do: [C5]
-workflows: []
-coverage_areas: [7, 8, 26, 28]
-prerequisites: [U1]
-reading_time_min: 14
-lab_time_min: 18
----
 
 [Claude Code Mastery](../../../README.md) › [Course units](../README.md) › Steer Claude with project memory and deliberate context
 
 # Steer Claude with project memory and deliberate context
+
+*Reading: ~14 min · Lab: ~18 min · Prerequisites: [Set up Claude Code and make your first verified change](../01-onboarding-first-win/unit.md)*
 
 ## Learning objectives
 

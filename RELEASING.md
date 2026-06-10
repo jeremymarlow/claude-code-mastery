@@ -111,3 +111,4 @@ table below is an **illustrative snapshot** of how the scheme maps to the build 
 | `v1.0.1` | Quality/learner-experience pass (committed-rendered units, breadcrumbs, transcript-capture tooling). |
 | `v1.1.0` | CLI reference + version-change digest (new requirements R16/R17) and version-resilience maintenance. |
 | `v1.2.0` | Collaboration retrospective (new requirement R18) + conflict-of-interest disclosure (R14.AC8). |
+| `v1.3.0` | Content enhancement — demonstrations + operator craft (new requirements R20/R21), breadcrumb navigation (R19), CLI refresh to 2.1.170. |

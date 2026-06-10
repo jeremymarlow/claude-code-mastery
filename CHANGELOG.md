@@ -9,6 +9,48 @@ Versions are the **course** version, independent of the Claude Code CLI version 
 backfilled from the build's phase checkpoints; the `0.x` line is pre-release development (the rapid
 same-day phase builds share a date).
 
+## [1.3.0] — 2026-06-09
+Content-enhancement release: every unit now *shows* its skill with concrete demonstration artifacts
+(new requirements R20/R21, born from a five-persona fresh-eyes content review), plus breadcrumb
+navigation (R19, closing the v1.2.0 deferral) and a CLI refresh to 2.1.170.
+
+### Added
+- **Breadcrumb navigation (R19):** a canonical trail atop every learner-facing document, derived from
+  the filesystem hierarchy, single-sourced in the generators via a shared helper, and hard-gated by
+  the new `tools/check-breadcrumbs` (ledger L12 closed).
+- **Show-don't-tell demonstrations (R20):** every core unit now carries at least one concrete
+  demonstration artifact under a recorded **Captured / Illustrative** convention — real captured
+  solution diffs, live test output (red and green), real CLI runs (`mcp get` `✔ Connected`, a headless
+  `claude -p` JSON envelope, a hook pipe-test) plus clearly-marked illustrative dialogues (a weak plan
+  vs a good plan and the redirect that fixes it, root-cause confirmation, review triage). Six
+  provenance-only worked examples reworked into walked interactions. Presence and an AI-residue lint
+  are enforced by the new `tools/check-content`.
+- **Operator craft, consolidation & transfer (R21):** brief composition with a
+  compose→observe→revise lab step (U5); session-lifecycle judgment and a derailed-session recovery
+  ladder (U4, reinforced mid-lab in U9, surfaced in the stuck guide); ungraded stage checkpoints with
+  retrieval prompts (U4/U8/U11/U16); bring-your-own "On your own repo" transfer blocks (U5–U8).
+- **Version-data `inline` form:** a short sentence-embeddable variant per key, a new `:inline` token
+  form, and automatic per-document dedupe of long reference values.
+- **Five-persona content review corpus** (`log/content-review/`): the unanchored fresh-eyes review
+  that motivated this release, kept as a maintainer-facing artifact.
+
+### Changed
+- **Register pass across all 16 units:** the saturated antithesis/epigram formula de-intensified,
+  catchphrases capped, paragraph shapes varied; reading times re-estimated per unit.
+- **CLI target refreshed 2.1.159 → 2.1.170:** reference regenerated (new `--safe-mode`,
+  `claude agents --all`, `--fallback-model` list form, `fable` model alias); cumulative digest
+  recorded with provenance; **no version-data value contradicted** (2.1.164/165 are absent from the
+  official changelog and are marked as such).
+
+### Fixed
+- Committed AI tool-call residue (`</content>`/`</invoke>`) stripped from four units — including the
+  learner's first page — and now permanently lint-gated.
+- Version-token rendering defects: mid-sentence reference-blob splices and a blob pasted three times
+  within one unit.
+- A factual error in U7's new demonstration dialogue (wrong duplicate-bug sites), caught by a
+  fresh-eyes spot re-review before release.
+- `tools/check-on-edit` hook made working-directory-independent.
+
 ## [1.2.0] — 2026-06-02
 Collaboration retrospective (post-v1 enhancement R18) + a conflict-of-interest disclosure requirement.
 

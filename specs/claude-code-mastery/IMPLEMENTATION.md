@@ -151,6 +151,17 @@ plain text — emitted by all four generators (`render-units`/`render-index`/`re
 **L12 struck — `make check-strict` is fully green**; the only deferral left anywhere is L1's
 enterprise-blocked `managed-settings`. See `decisions.md` → "P10 …" and `tasks/P10-breadcrumbs.md`.
 
+**P11 — Content enhancement (R20/R21) ⏳ OPEN (2026-06-09): requirements ✅ APPROVED; design next.**
+A five-persona fresh-eyes review of all 16 units (`log/content-review/`, method + synthesis there)
+converged on five findings — headline: the course never *shows* the tool in use (no diffs, no plans,
+no transcripts), plus shipped rendering defects, missing operator craft, register saturation, no
+consolidation/transfer arc. User accepted the full enhancement slate (E1–E5; ledger **L15**).
+Residue hotfix (E0) applied. **R20** (demonstration artifacts) + **R21** (operator craft /
+consolidation / transfer) **approved at the requirements gate** (2026-06-09). **Next:** design §15
+→ gate → `tasks/P11-content-enhancement.md` → build in slices (E2 first; E3 woven into E1's
+per-unit pass). `check-traceability`: R20/R21 `PEND` until built (strict will fail on them
+mid-build — expected, like R19 during P9/P10). See `decisions.md` → "P11 — …" / **L15**.
+
 **Where the detail lives** (don't restate it here):
 - Per-unit build notes (what each unit/lab is, its refs, its traceability) → [`tasks.md`](./tasks.md) §P5.
 - Design decisions, rationale, and the 🔓 open-loops ledger → [`decisions.md`](./decisions.md).

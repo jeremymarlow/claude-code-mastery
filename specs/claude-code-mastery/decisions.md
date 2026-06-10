@@ -1102,6 +1102,16 @@ there was **no tool** that produced it and **no check** that asserted `json == y
 (found 2026-06-03: its `custom-commands` value had been stale vs. the YAML since ~2026-06-01; fixed during
 the `ci` flip — decision `P-ci-jsontwin`). _Also tracked in:_ `meta/version-record.md` refresh step 3.
 
+**L15 — P11 content enhancement (R20/R21): requirements approved, design + build pending.** The
+five-persona content review (2026-06-09, `log/content-review/`) converged on five findings; the
+maintainer accepted the full enhancement slate E1–E5. **Current state:** E0 residue hotfix applied;
+**R20** (demonstration artifacts) + **R21** (operator craft / consolidation / transfer) **✅ APPROVED
+at the requirements gate** (user, 2026-06-09). Next: design §15 → gate →
+`tasks/P11-content-enhancement.md` → build in slices. `check-traceability` reports R20/R21 `PEND`
+(non-strict) until artifacts land — expected; `make check-strict` will fail on them mid-build, same
+as R19 during P9/P10. _Resolve in:_ P11. _Also tracked in:_ `log/content-review/_synthesis.md`
+(the findings + slate); P11 decisions below.
+
 **Decided, not open (do not re-litigate):** tools are no-extension kebab-case (deviation from design
 §7 `.sh`, decision P3-tools); `permission-modes` value per verified CLI (P2-vd); awareness home-unit
 assignments (P2-cov); primary substrate at ~1.65k LOC is accepted below the §7 "~2–4k" band (P4-loc);
@@ -1190,3 +1200,59 @@ pointing at the live example (`course/capstone/briefs.md` line 1) instead of spe
 checker.
 **Why:** weakening `check-links` to skip code spans would false-negative real broken links elsewhere;
 a pointer to a real, gate-verified trail is more honest than a literal that needs escaping anyway.
+
+## P11 — Content enhancement: holistic unit-content review → R20/R21 (2026-06-09, requirements APPROVED)
+
+The maintainer's instinct — "labs are good, but the unit learning content is missing something I
+can't name" — was taken as the trigger for a post-v1 enhancement via the playbook, with a diagnostic
+review stage *before* the requirements gate (you can't write the requirement until the review names
+the gap).
+
+_Format: **decision-id** — the decision; **Why:** the rationale._
+
+**P11-review ✅** — Stage-A diagnostic ran as a **five-persona fresh-eyes panel** (target-learner,
+curriculum-designer, technical-editor, examples-critic, elite-practitioner), dispatched directly as
+subagents (the P9-globals direct-dispatch pattern; no saved agent files for a one-off), each reading
+all 16 **rendered** units + the audience definition, unanchored (the brief carried the maintainer's
+raw concern, not the orchestrator's hypotheses). Findings: one file per reviewer in
+`log/content-review/` + `_synthesis.md`. Chosen by the user over an inline sweep, on the
+conflict-of-interest argument (the prose was authored by Claude; Claude re-reviewing its own writing
+shares its blind spots — the R14.AC8 disclosure habit applied to reviewing).
+**Why:** vindicated immediately — the orchestrator had read U1/U5 in full *before* dispatch and
+missed the committed `</content>`/`</invoke>` tool-call residue all five reviewers caught. Recorded
+in `_synthesis.md` as live evidence the blind spot is real.
+
+**P11-residue ✅** — The four units shipping literal AI tool-call residue (U1/U2/U3/U5, in both
+`unit.src.md` and rendered `unit.md`) were **hotfixed immediately in the working tree** (E0: strip
+the lines, `make render`, suite green) rather than waiting for the P11 build.
+**Why:** an unambiguous defect on the learner's first page, trivially reversible, no design choice
+involved. The *gate* that should have caught it (a residue/garble lint) is deliberately **not**
+bolted on ad hoc — it lands as part of E2 in the specced build (R13.AC4 family).
+
+**P11-scope ✅ (user, 2026-06-09)** — The **full slate accepted**: E1 demonstration layer (flagship),
+E2 rendering correctness ({{vd}} inline grammar + dedupe + residue lint), E3 register
+de-intensification, E4 operator craft, E5 consolidation & transfer. Packaging: **one phase (P11)**,
+E2 first (it gates E1's new prose), E3 woven into E1's per-unit pass so each unit is touched once.
+**Why:** the five findings converged 5/5 and each slate item maps to one; E1+E2 alone would have
+covered only the two highest-severity findings, and the user chose completeness.
+
+**P11-taxonomy ✅ (user, 2026-06-09)** — The can-do taxonomy (C1–C17+CV) **stays closed** for P11.
+Resolution of the "decide after findings" posture: the panel found no missing *outcome* — S3's
+operator-craft gaps (brief composition, session lifecycle, recovery) are teachable within
+C5/C6/C14; pinned as **R21.AC6**. Revisit only if the capstone rubric later feels blind to operator
+craft — that would be a curriculum change through the R1/R2 gate, not a P11 item.
+**Why:** the ripple cost of a new can-do (new lab + verifier, new rubric dimension extending the
+capstone's assessment contract, two reopened gates) buys nothing the within-taxonomy treatment
+doesn't, on the panel's own evidence.
+
+**P11-requirements ✅ APPROVED (user, 2026-06-09)** — **R20** (show-don't-tell demonstration guarantee, 6 ACs:
+per-core-unit interaction artifact; the named-central skills each shown once incl. weak-plan+redirect;
+worked-example sections must demonstrate, provenance may only complement; illustrative-marked +
+non-determinism-safe + no version surface from memory; convention recorded + mechanically enforced;
+CommonMark degradation) and **R21** (operator craft + consolidation + transfer, 6 ACs: compose→
+observe→revise brief loop; session-lifecycle judgment reinforced beyond its home unit; derailment
+recovery cross-linked from stuck.md; stage-boundary retrieval checkpoints; BYO transfer exercises
+for the Daily Driver workflow units; within-taxonomy constraint) drafted in `requirements.md` and
+**approved as written at the requirements gate** (user, 2026-06-09 — same session as the review).
+E2/E3 carry no new requirement (P7 precedent: they trace existing R12/R13/R15 and R5/R15
+respectively). **Next gate:** design §15.

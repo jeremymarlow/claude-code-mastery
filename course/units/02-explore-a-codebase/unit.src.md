@@ -153,4 +153,3 @@ summary is wrong *there* — note it and re-ask.
   instinct applied here to prose.
 - Stuck? [`course/stuck.md`](../../stuck.md) and the
   [progress checklist](../../progress-checklist.md).
-</content>

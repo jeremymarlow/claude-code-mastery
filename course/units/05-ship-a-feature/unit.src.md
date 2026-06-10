@@ -186,5 +186,3 @@ route. Yours may differ in shape and still pass — the verifier checks the cont
   [Memory & context](../04-memory-and-context/unit.md) are the inputs that make a *good* plan possible.
 - Stuck? [`course/stuck.md`](../../stuck.md) and the
   [progress checklist](../../progress-checklist.md).
-</content>
-</invoke>

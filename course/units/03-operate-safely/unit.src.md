@@ -211,5 +211,3 @@ stated the check in advance, that's the gap this unit exists to close — redo s
   version-specific details are recorded and their provenance tracked.
 - Stuck? [`course/stuck.md`](../../stuck.md) and the
   [progress checklist](../../progress-checklist.md).
-</content>
-</invoke>

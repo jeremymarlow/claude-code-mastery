@@ -169,5 +169,3 @@ self-check. This 30-second habit — not the passing check — is the actual ski
   your CLI differs from the verified version.
 - Stuck? [`course/stuck.md`](../../stuck.md) and the
   [progress checklist](../../progress-checklist.md).
-</content>
-</invoke>

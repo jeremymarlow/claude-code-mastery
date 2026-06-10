@@ -93,6 +93,66 @@ def unit_files():
     return sorted(UNITS.glob("*/unit.md"))
 
 
+# --- breadcrumb navigation (R19; design.md §14) -----------------------------------------------
+#
+# One implementation of the trail rule, consumed by every generator that emits a breadcrumb and
+# by tools/check-breadcrumbs that verifies them — so the expected and the emitted trail cannot
+# diverge (R19.AC5). The hierarchy is derived from the filesystem (§14.3): a doc's ancestor chain
+# is every README.md found walking up its directory tree, terminating at the repo-root README.md
+# (the course home); segment labels are single-sourced from each ancestor's H1.
+
+_LEADING_COMMENTS_RE = re.compile(r"^(?:\s*<!--.*?-->\s*)+", re.DOTALL)
+_H1_RE = re.compile(r"^# (.+)$", re.MULTILINE)
+
+
+def doc_h1(path: Path) -> str | None:
+    """A doc's title: the first `# ` heading after any leading comment block / front matter."""
+    text = _LEADING_COMMENTS_RE.sub("", path.read_text(encoding="utf-8"), count=1)
+    m = FRONTMATTER_RE.match(text)
+    if m:
+        text = text[m.end():]
+    h = _H1_RE.search(text)
+    return h.group(1).strip() if h else None
+
+
+def breadcrumb_parents(path: Path) -> list[Path]:
+    """Ancestor chain for a doc, home first (design §14.3).
+
+    Walking up from the doc's directory (a README.md starts one level higher so it doesn't
+    parent itself), every directory that holds a README.md contributes it to the chain; the
+    repo-root README.md is the course home and the terminus.
+    """
+    parents: list[Path] = []
+    d = path.parent.parent if path.name == "README.md" else path.parent
+    while True:
+        readme = d / "README.md"
+        if readme.exists():
+            parents.append(readme)
+        if d == ROOT:
+            break
+        d = d.parent
+    parents.reverse()
+    return parents
+
+
+def breadcrumb(path: Path, title: str | None = None) -> str:
+    """The canonical trail line for a doc (design §14.2).
+
+    Linked ancestor segments joined by ` › `, final segment the doc's own title as plain text
+    (R19.AC2). Pass `title` when the file doesn't exist in final form yet (generators); omit it
+    to read the doc's H1 from disk (the check).
+    """
+    if title is None:
+        title = doc_h1(path) or path.name
+    segments = []
+    for ancestor in breadcrumb_parents(path):
+        label = doc_h1(ancestor) or ancestor.parent.name
+        rel = os.path.relpath(ancestor, start=path.parent).replace(os.sep, "/")
+        segments.append(f"[{label}]({rel})")
+    segments.append(title)
+    return " › ".join(segments)
+
+
 # --- collaboration-retrospective leaves (R18; design.md §13) ---------------------------------
 #
 # A leaf cell is YAML front matter (validated against meta/evaluation-leaf.schema.json) over a

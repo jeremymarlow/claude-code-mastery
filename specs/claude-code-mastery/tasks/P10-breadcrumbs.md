@@ -27,22 +27,27 @@ edits that fix it). Run it standalone between slices to watch the failure list s
 
 ## Tasks
 
-### 10.1 Shared helper + the gate  [R19.AC3, R19.AC5; §14.3, §14.5]
-- [ ] `tools/_common.py` — add the trail derivation: parent chain = nearest `README.md` walking up
+### 10.1 Shared helper + the gate  [R19.AC3, R19.AC5; §14.3, §14.5]  ✅
+- [x] `tools/_common.py` — add the trail derivation: parent chain = nearest `README.md` walking up
       the directory tree (a `README.md`'s parent is the next one up; repo-root `README.md` = home,
       terminus); segment labels from each ancestor's H1 (first `# ` line outside front matter /
       leading comment); relative-link computation. Expose it so both the check and the generators
       consume one implementation (the generators pass the current doc's title themselves where the
       final file doesn't exist yet at render time).
-- [ ] `tools/check-breadcrumbs` — discovery-based scope per §14.4: every `*.md` under `course/`
+      → `doc_h1()` + `breadcrumb_parents()` + `breadcrumb(path, title=None)`.
+- [x] `tools/check-breadcrumbs` — discovery-based scope per §14.4: every `*.md` under `course/`
       **minus** the named exemptions (`maintainer-guide.md`, `units/*/unit.src.md`,
       `labs/u03-lab1/untrusted-bug-report.md`); expected trail via the shared helper; actual = the
       doc's first content line (after generated-comment and/or front matter). **Hard fail** on
       missing/stale/mismatched — no PEND mode (§14.5). Reporter idiom + exit codes like the other
       `check-*` tools. Exemption list lives in the tool with a pointer to `meta/conventions.md`.
-- [ ] Run it standalone: confirm it's **red on exactly the expected set** (the 6 trail-less docs +
-      the format-divergent ones) and green on `cli-reference.md` (already canonical). That listing
-      is 10.2/10.3's worklist. `make check` still green (gate not yet wired).
+- [x] Run it standalone: confirm it's **red on exactly the expected set** (the 6 trail-less docs +
+      the format-divergent ones). That listing is 10.2/10.3's worklist. `make check` still green
+      (gate not yet wired). _Result: 26 fails = the full expected set; exemptions correctly
+      skipped. One deviation from this plan's prediction: `cli-reference.md` is **not** already
+      canonical — its hand-shortened label `CLI reference` differs from the H1-derived
+      `Claude Code CLI reference`; fixed by its generator adopting the helper in 10.2 (as §14.5
+      already specifies)._
 
 ### 10.2 Generators adopt the helper  [R19.AC5 single-sourcing; §14.5.1]
 - [ ] `tools/render-units` — replace the hardcoded `BREADCRUMB` constant with the helper; the trail

@@ -1,0 +1,73 @@
+#!/usr/bin/env python3
+"""check-breadcrumbs (R19; design.md §14): every learner-facing doc carries the canonical trail.
+
+Scope is discovered, not listed: every `*.md` under course/ minus the named exemptions below
+(§14.4). The expected trail is computed from the filesystem hierarchy + H1s by `_common.breadcrumb`
+— the same helper the generators emit with — so a doc that is moved or retitled fails here until
+it is regenerated (`make render`) or re-authored. The actual trail is the doc's first content line
+(after any leading generated-comment and/or front matter).
+
+Hard fail, no PEND mode (§14.5): every in-scope doc already exists, so there is no legitimate
+incremental state to tolerate. Trail *links* are additionally resolved by check-links (R19.AC2).
+"""
+import os
+import sys
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from _common import (  # noqa: E402
+    COURSE,
+    FRONTMATTER_RE,
+    ROOT,
+    Reporter,
+    _LEADING_COMMENTS_RE,
+    breadcrumb,
+    iter_markdown,
+)
+
+# Deliberately trail-less (design §14.4; recorded in meta/conventions.md → Breadcrumb navigation):
+# maintainer-facing docs, unit sources (their trail is emitted into the generated unit.md), and
+# the fenced untrusted-input lab fixture (navigation chrome would corrupt the payload artifact).
+# The course home README.md is the trail terminus and is outside course/ entirely.
+EXEMPT = {
+    "course/maintainer-guide.md",
+    "course/labs/u03-lab1/untrusted-bug-report.md",
+}
+
+
+def in_scope(path):
+    if str(path.relative_to(ROOT)) in EXEMPT:
+        return False
+    return path.name != "unit.src.md"
+
+
+def first_content_line(path):
+    """The doc's first non-blank line after any leading comment block / front matter."""
+    text = _LEADING_COMMENTS_RE.sub("", path.read_text(encoding="utf-8"), count=1)
+    m = FRONTMATTER_RE.match(text)
+    if m:
+        text = text[m.end():]
+    for line in text.splitlines():
+        if line.strip():
+            return line
+    return ""
+
+
+def main(argv):
+    rep = Reporter("check-breadcrumbs")
+    for path in iter_markdown(COURSE):
+        if not in_scope(path):
+            continue
+        rel = path.relative_to(ROOT)
+        expected = breadcrumb(path)
+        actual = first_content_line(path)
+        if actual == expected:
+            rep.ok(f"{rel}: trail correct")
+        elif actual.startswith("["):
+            rep.fail(f"{rel}: trail stale/mismatched — expected: {expected}")
+        else:
+            rep.fail(f"{rel}: trail missing — expected: {expected}")
+    return rep.done()
+
+
+if __name__ == "__main__":
+    raise SystemExit(main(sys.argv[1:]))

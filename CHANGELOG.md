@@ -9,6 +9,34 @@ Versions are the **course** version, independent of the Claude Code CLI version 
 backfilled from the build's phase checkpoints; the `0.x` line is pre-release development (the rapid
 same-day phase builds share a date).
 
+## [1.3.2] — 2026-06-26
+CLI version-data refresh (2.1.170 → 2.1.195) plus a quarantine-discipline fix — no change to course
+scope, units, or requirements (a PATCH per [`RELEASING.md`](./RELEASING.md)).
+
+### Added
+- **Four version-data keys**, closing quarantine gaps where version-specific facts were typed
+  *literally* in prose — which `check-version-refs` cannot catch, since it only proves authored
+  `{{vd:key}}` tokens *resolve*: `skip-permissions` (`--dangerously-skip-permissions`, a safety
+  surface), `hook-output` (the hook `decision`/`block`/`reason` output contract, docs-verified against
+  `code.claude.com/docs/en/hooks`), `cli-help`, and an extended `mcp` value (`login`/`logout`,
+  `✓ Connected`).
+
+### Changed
+- **CLI target refreshed to 2.1.195** (25 releases on from 2.1.170): `cli-reference.{json,md}`
+  re-introspected (new `gateway` command + flags); a cumulative `version-changelog.md` entry cites the
+  official CHANGELOG, with 9 absent-upstream versions and 4 introspection-only surface changes
+  (`gateway`, `--allowed`/`--disallowed`, `--ax-screen-reader`, removed
+  `--allowedTools`/`--disallowedTools`/`--mcp-debug`) **marked, not fabricated**; `version-record.md`
+  row added. Every `{{vd:key}}` was re-checked against the installed CLI — **none contradicted**
+  (`--permission-mode`/`--effort`/`--output-format` byte-identical); `mcp` re-verified live.
+
+### Fixed
+- **Literal-beside-token leakage** across U3/U11/U13/U14/U15/U16 — prose that spelled a flag or
+  subcommand out *and* carried the matching `{{vd:key}}` token, so the literal copy would silently go
+  stale on a CLI drift while the token updated. Re-tokenized; pedagogical surface mentions (permission
+  modes, `PreToolUse`/`PostToolUse` event names, single narrative mentions) deliberately preserved and
+  recorded in the decision log so a future audit doesn't re-fix them.
+
 ## [1.3.1] — 2026-06-10
 Rendering fix for the learner-facing units (no new requirements).
 

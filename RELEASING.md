@@ -112,3 +112,4 @@ table below is an **illustrative snapshot** of how the scheme maps to the build 
 | `v1.2.0` | Collaboration retrospective (new requirement R18) + conflict-of-interest disclosure (R14.AC8). |
 | `v1.3.0` | Content enhancement — demonstrations + operator craft (new requirements R20/R21), breadcrumb navigation (R19), CLI refresh to 2.1.170. |
 | `v1.3.1` | Rendering fix: front matter out of the rendered units (source-only), learner digest line in. |
+| `v1.3.2` | CLI version-data refresh to 2.1.195; quarantine-gap closure — 4 new vd keys + literal-beside-token leakage re-tokenized. |

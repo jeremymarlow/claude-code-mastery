@@ -89,9 +89,7 @@ event names and the exact shape are the version-specific surface — confirm the
 
 **3 — How a hook communicates.** When it fires, the hook receives the event as JSON on **stdin** — the
 tool name, the `tool_input` (including `file_path` for an edit), and, for `PostToolUse`, the
-`tool_response`. It steers what happens next through its **output**: a `PreToolUse` hook can deny the
-call; a `PostToolUse` hook can return `{"decision": "block", "reason": "..."}` to push a failure back
-into the conversation so Claude addresses it. A hook
+`tool_response`. It steers what happens next through its **output**. {{vd:hook-output}} A hook
 that reads `file_path` and exits quietly when the file is irrelevant is the normal shape — react only
 to what matters.
 
@@ -111,7 +109,8 @@ into policy-as-code.
 **Version currency.** Verified against Claude Code {{vd:_verified_version}}. The hook **event-name
 enum** and the `settings.json` `{matcher, hooks:[{type, command}]}` structure are verified against the
 settings schema; the full event list is large and grows, so this unit teaches the common events and
-defers the authoritative enum and output-field details to the docs. {{vd:hooks}} Tracked in
+defers the authoritative enum to the docs (the output/decision contract is keyed and docs-verified:
+{{vd:hook-output:inline}}). {{vd:hooks}} Tracked in
 [`meta/version-record.md`](../../../meta/version-record.md); confirm event names against the docs
 before wiring an uncommon one — don't author them from memory.
 

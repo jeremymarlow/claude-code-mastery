@@ -10,8 +10,8 @@
 
 By the end of this unit you can:
 
-- **Run Claude headlessly** with `-p`/`--print` and a structured `--output-format`, so it executes a
-  task non-interactively — scriptable, pipeable, and runnable in automation.
+- **Run Claude headlessly** with structured output, so it executes a task non-interactively —
+  scriptable, pipeable, and runnable in automation.
 - **Run Claude in CI** — wire a headless invocation (or your enforcement suite) into a pipeline that
   runs on every push, the way this repo's own checks do.
 - **Coordinate parallel agents with git worktrees** — give each independent task its own worktree
@@ -23,20 +23,20 @@ By the end of this unit you can:
 
 ## Fast path (TL;DR)
 
-> Three moves to run Claude without babysitting it. **Headless:** `claude -p "<task>"
-> --output-format json` runs non-interactively and prints structured output you can pipe or parse;
-> cap spend with `--max-budget-usd`. **CI:** run that — or your check suite — on
-> every push; this repo's [`.github/workflows/checks.yml`](../../../.github/workflows/checks.yml) is
-> the worked example. **Parallel:** give each independent task its own **git
-> worktree** (`claude --worktree`, or `git worktree add`), run agents concurrently, and **review each
-> diff separately** before merging. The catch: unattended means **no interactive
+> Three moves to run Claude without babysitting it. **Headless:** run a task non-interactively and
+> print structured output you can pipe or parse (headless `-p`/`--print` with `--output-format`); cap spend with a budget flag.
+> **CI:** run that — or your check suite — on every push (headless `-p --output-format json` runs wrapped by the `anthropics/claude-code-action@v1` GitHub Action); this repo's
+> [`.github/workflows/checks.yml`](../../../.github/workflows/checks.yml) is the worked example.
+> **Parallel:** give each independent task its own **git worktree** (`-w`/`--worktree` session worktrees, or plain
+> `git worktree add`), run agents concurrently, and **review each diff separately** before merging. The
+> catch: unattended means **no interactive
 > approval**, so the safety net is the hooks of [Hooks](../14-hooks/unit.md), the blast-radius discipline
 > of [Operate safely](../03-operate-safely/unit.md), and reviewing every diff.
 
 ## Skip-check
 
-**Skip this unit if you can already:** run Claude headlessly (`-p` with a structured `--output-format`,
-bounded by `--max-budget-usd`) and consume its output in a script; wire a headless run or a check suite
+**Skip this unit if you can already:** run Claude headlessly (structured output, bounded spend) and
+consume its output in a script; wire a headless run or a check suite
 into CI so it runs on every push; use git worktrees to run two or more agents on independent tasks in
 parallel and review each diff before integrating; and explain what keeps an unattended run safe when no
 one is there to approve each step.
@@ -56,16 +56,16 @@ an unattended run. This is the primitive everything else here is built from — 
 not a *session*. `-p`/`--print` runs headlessly; `--output-format text|json|stream-json` shapes the output.
 
 **2 — CI.** Once Claude (or a check suite) runs headlessly, it runs in a pipeline. The pattern: a CI
-job invokes `claude -p … --output-format json` on every push/PR — to triage an issue, draft a fix,
+job invokes a headless run on every push/PR — to triage an issue, draft a fix,
 review a diff — or, as in *this* repo, runs the enforcement suite as a backstop. The official GitHub
-Action wraps the headless invocation; the version-/integration-specific details: CI runs use headless `-p` with `--output-format json` (and optionally `--max-budget-usd`); the official GitHub Action `anthropics/claude-code-action@v1` wraps this (installed via the Claude GitHub App + an API key or a Pro/Max OAuth token). The key
-shift is that CI is **unattended**: there's no one to answer a permission prompt, so what runs must be
+Action wraps the headless invocation; the version-/integration-specific details: headless `-p --output-format json` runs wrapped by the `anthropics/claude-code-action@v1` GitHub Action. The
+key shift is that CI is **unattended**: there's no one to answer a permission prompt, so what runs must be
 safe to run without one (see §5).
 
 **3 — Parallel agents via worktrees.** When several **independent** tasks can proceed at once,
 running them in one working tree means they trample each other's edits. A **git worktree** gives each
 agent its own checked-out tree (and branch) on the same repo, so they don't collide. Claude can create
-one with `--worktree`, or use plain `git worktree add`. `-w`/`--worktree [name]` creates a git worktree for the session; `--tmux` opens it in a tmux session. The
+one for you (`-w`/`--worktree` session worktrees), or you use plain `git worktree add`. The
 [parallel-worktrees pattern](../../../meta/workflows.md#w9--running-parallel-agents-git-worktrees) is: isolate each task
 in a worktree → run them concurrently → **review and integrate each agent's diff independently**. The
 independence test is the same as for subagents ([Subagents](../13-subagents/unit.md)): if task B needs task
@@ -91,10 +91,11 @@ CI, **none of that is there.** So the guardrails have to be built in *beforehand
 Automation amplifies whatever you point it at, including mistakes. The skill isn't typing `-p` — it's
 having the guardrails so unattended runs stay safe.
 
-**Version currency.** Verified against Claude Code 2.1.170. `-p`/`--print`,
+**Version currency.** Verified against Claude Code 2.1.195. `-p`/`--print`,
 `--output-format`, `--max-budget-usd`, and `--worktree` are `--help`-verified; the GitHub Action
 integration and in-REPL rewind are external/in-REPL surfaces — confirm them against the docs / `--help`
-before relying on a detail, rather than authoring from memory. headless `-p --output-format json` runs wrapped by the `anthropics/claude-code-action@v1` GitHub Action the in-REPL `/rewind` checkpoint/restore
+before relying on a detail, rather than authoring from memory (headless `-p --output-format json` runs wrapped by the `anthropics/claude-code-action@v1` GitHub Action;
+the in-REPL `/rewind` checkpoint/restore).
 Tracked in [`meta/version-record.md`](../../../meta/version-record.md).
 
 ## Worked example

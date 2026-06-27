@@ -928,7 +928,10 @@ version-independent), and `output-styles` (Default + Proactive/Explanatory/Learn
 `26868750876`) + official docs — flipped `unverified`→false and **dogfooded** as
 `.github/workflows/claude.yml` (U16). _Resolve the last one in:_ an environment with the enterprise
 access the maintainer lacks — `managed-settings` needs an enterprise account / official enterprise docs.
-_Also tracked in:_ `meta/version-record.md` → "Outstanding to verify".
+**(2.1.170→2.1.195 refresh, 2026-06-26:** new _adjacent_ enterprise surface appeared — the `gateway`
+command (auth/telemetry) and the `enforceAvailableModels`/`availableModels` managed settings — but none
+reveals the managed-settings file path or precedence, so **L1 stays open.)** _Also tracked in:_
+`meta/version-record.md` → "Outstanding to verify".
 
 **~~L2~~ — ✅ CLOSED (P5/U14, 2026-05-30).** In-session hook wired: `.claude/settings.json` `PostToolUse`/`Write|Edit`
 → `tools/check-on-edit` runs `make check` on `course/`|`meta/` edits (`decision:"block"` on failure). Schema
@@ -1349,3 +1352,18 @@ can no longer see), both templates.
 close-out updated `IMPLEMENTATION.md` §3 and `decisions.md` but missed the index header + phase
 list). Backfilled both, marked as a backfill. **Why recorded:** exactly the parallel-lists drift
 the working agreements warn about; noting it keeps the state-file contract honest.
+
+## Version refresh 2.1.170 → 2.1.195 + quarantine-gap closure (2026-06-26)
+
+Triggered by a drift check (installed CLI had advanced 25 releases to `2.1.195`). Ran the R12.AC7
+refresh **and** closed quarantine gaps an audit surfaced. `_verified_version`→`2.1.195`; all 15
+checks green; drift clean.
+
+| # | Decision | Rationale |
+|---|---|---|
+| VR-195 ✅ | **Verified CLI `2.1.195`** (2026-06-26). `cli-reference.{json,md}` re-introspected; cumulative `version-changelog.md` entry cites the official CHANGELOG. Every `{{vd:key}}` re-checked vs the installed CLI — **none contradicted** (`--permission-mode`/`--effort`/`--output-format` byte-identical to 2.1.170). `mcp` re-verified live and extended (`login`/`logout`, `✓ Connected`). | R12.AC7 refresh; latest-targeting/verified-anchored (R12.AC1). |
+| VR-introspect ✅ | **Introspection ≠ changelog, recorded both ways (R17.AC3).** `gateway` (new command), `--allowed`/`--disallowed`, `--ax-screen-reader`, and the removal of `--allowedTools`/`--disallowedTools`/`--mcp-debug` are in the installed CLI but **absent from the official CHANGELOG** — recorded from `--help` introspection, marked not fabricated. `--bg`/`--background` were a fixed `--help` omission (2.1.186), not new. 9 versions absent upstream, marked. | Provenance discipline: never fabricate a source; surface the divergence honestly. |
+| VR-keys ✅ | **Added 4 version-data keys closing audit-found quarantine gaps:** `skip-permissions` (`--dangerously-skip-permissions`, was literal in U3 — a *safety* surface, worst place to go stale), `hook-output` (the hook `decision`/`block`/`reason` contract, was literal in U14 — docs-verified against `code.claude.com/docs/en/hooks`), `cli-help` (`claude --version`/`--help`/`/help`), and an extended `mcp` value. | The passing `check-version-refs` proves authored tokens *resolve* but is blind to version-specific facts typed *literally* in prose — the spirit-vs-letter gap the user flagged. |
+| VR-tokenize ✅ | **Re-tokenized literal-beside-token leakage** across U3/U11/U13/U14/U15/U16: prose that spelled a flag/subcommand out *and* carried the matching `{{vd:}}` token (so the literal copy would silently go stale on drift). | The audit's dominant finding; closes the leak the check can't see. |
+| VR-pedagogy ✅ | **Deliberately *did not* tokenize every surface mention.** Permission-mode names in U3, `PreToolUse`/`PostToolUse` event names in U14, and single narrative mentions in the capstone/rubric are kept literal: the canonical *set* is tokenized once, and the unit explicitly frames the rest as "confirm against your CLI." Mechanically tokenizing these would harm teaching. | **Recorded so a future audit doesn't "re-fix" them** — this is the same judgment U14's version-currency note already documents. |
+| VR-changelog-tokens ✅ | **The `version-changelog.md` entry names affected keys in backticks (`` `mcp` ``), not as live `{{vd:}}` tokens.** The newest entry is surfaced learner-facing as cli-reference's "What's new", which *renders* tokens — full tokens there expand mid-sentence and garble the prose. A point-in-time changelog should name keys, not display their current values. | Caught by the cli-reference sync check after the first render; a relative `cli-reference.json` link was likewise de-linked (breaks when surfaced into `course/reference/`). |

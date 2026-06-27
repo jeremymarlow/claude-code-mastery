@@ -28,7 +28,7 @@ By the end of this unit you can:
 > *result* (a summary, an answer, a diff), not its entire transcript. You delegate for three reasons:
 > **context isolation** (its 30-file search stays in *its* context, only the conclusion lands in
 > yours), **parallelism** (independent tasks run at once), and **fencing** (a read-only explorer can't
-> write). Define a custom agent inline with `--agents <json>` or as a file under `.claude/agents/`,
+> write). Define a custom agent inline for a session or as a file under `.claude/agents/`,
 > each with a `description` that tells the main agent when to reach for it. The
 > catch: delegation is *trust delegation* — **verify the result**, don't merge a diff or quote a claim
 > you didn't check. The lab has you fence a read-only explorer, delegate a real mapping task on
@@ -71,7 +71,7 @@ report.
 
 **3 — How it works in Claude Code.** The main agent invokes a subagent through its task/agent tool;
 you rarely call it by hand, you *describe a task* and let the main agent dispatch it. You can define
-**custom** agents two ways: inline for a session with `--agents <json>` (the `--help` example is
+**custom** agents two ways: inline for a session (the `--help` example is
 `{"reviewer": {"description": "Reviews ..."}}`), or persistently as a file under `.claude/agents/`. A
 file-form agent's front matter needs a **`name`** (its identity — *not* the filename) and a
 **`description`** (*when* the main agent should reach for it), plus optionally an allowed-tools list and
@@ -80,7 +80,7 @@ main session has** — so fencing a read-only helper means naming its tools expl
 `Glob`), never just leaving them off. The `description` is the trigger, exactly as it was for a skill in
 [Commands & skills](../12-commands-and-skills/unit.md): vague description, never dispatched at the right moment;
 sharp description naming the situation, picked up when it fits. Background/dispatched agents are managed
-with the `agents` subcommand. The version-specific surface is the flags, the subcommand, and the on-disk
+with a dedicated subcommand. The version-specific surface is the flags, the subcommand, and the on-disk
 format: `--agent <agent>` / `--agents <json>` set session agents; the `agents` subcommand manages background agents.
 
 **4 — Subagent vs. skill.** Both package work; they differ in *where the work runs*:
@@ -102,8 +102,8 @@ ran and reported success" is not verification — it's the thing you verify. Thi
 verify-don't-trust habit from [Operate safely](../03-operate-safely/unit.md), and it's the bridge to the trust
 question you'll face again when you delegate to *third-party* code (MCP servers) later in this stage.
 
-**Version currency.** Verified against Claude Code 2.1.170. The inline `--agents`
-flag, the `--agent` selector, and the `agents` subcommand are `--help`-verified; the persistent
+**Version currency.** Verified against Claude Code 2.1.195. The inline flag form,
+the agent selector, and the background-agents subcommand are `--help`-verified; the persistent
 on-disk location (e.g. `.claude/agents/<name>.md`) and its front-matter fields are a filesystem
 **convention** — confirm the exact path and format against `claude --help` and the docs before relying
 on a detail. `--agent`/`--agents <json>` plus the `agents` subcommand Tracked in [`meta/version-record.md`](../../../meta/version-record.md).
@@ -116,7 +116,7 @@ what it guards."* That's a genuinely context-heavy question — the honest way t
 the services, the routes, and the dependency wiring. You do **not** want all of that reading sitting in
 your main context if your real job today is adding a feature.
 
-So you fence a read-only explorer and hand it the task. Inline, that's the verified `--agents` shape:
+So you fence a read-only explorer and hand it the task. Inline, that's the verified shape:
 
 **Illustrative** — your session will differ in wording; verify behavior and diffs, not phrasing.
 
@@ -275,7 +275,7 @@ and the checklist.
   its result (subagent).
 - **Fencing & verifying delegation** builds directly on [Operate safely](../03-operate-safely/unit.md) (blast
   radius, verify-don't-trust).
-- The flags, `agents` subcommand, and on-disk format: `--agent`/`--agents <json>` plus the `agents` subcommand Version-specifics in
+- The flags, the subcommand, and on-disk format: `--agent`/`--agents <json>` plus the `agents` subcommand Version-specifics in
   [`meta/version-record.md`](../../../meta/version-record.md). Confirm with `claude --help`.
 - Stuck? [`course/stuck.md`](../../stuck.md) and the
   [progress checklist](../../progress-checklist.md).

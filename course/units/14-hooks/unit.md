@@ -79,9 +79,7 @@ event names and the exact shape are the version-specific surface — confirm the
 
 **3 — How a hook communicates.** When it fires, the hook receives the event as JSON on **stdin** — the
 tool name, the `tool_input` (including `file_path` for an edit), and, for `PostToolUse`, the
-`tool_response`. It steers what happens next through its **output**: a `PreToolUse` hook can deny the
-call; a `PostToolUse` hook can return `{"decision": "block", "reason": "..."}` to push a failure back
-into the conversation so Claude addresses it. A hook
+`tool_response`. It steers what happens next through its **output**. A hook returns control to Claude via JSON on stdout (exit 0) or via exit code 2 (its stderr becomes the feedback). A top-level `{"decision": "block", "reason": "..."}` blocks the action and pushes the reason back to Claude (PostToolUse, UserPromptSubmit, Stop, …); `PreToolUse` instead sets `hookSpecificOutput.permissionDecision` to `allow`/`deny`/`ask`. A hook
 that reads `file_path` and exits quietly when the file is irrelevant is the normal shape — react only
 to what matters.
 
@@ -98,10 +96,11 @@ depends on the model remembering will eventually be forgotten; a standard wired 
 Hooks are how you turn "we always run the checks / we never touch the generated file" from an intention
 into policy-as-code.
 
-**Version currency.** Verified against Claude Code 2.1.170. The hook **event-name
+**Version currency.** Verified against Claude Code 2.1.195. The hook **event-name
 enum** and the `settings.json` `{matcher, hooks:[{type, command}]}` structure are verified against the
 settings schema; the full event list is large and grows, so this unit teaches the common events and
-defers the authoritative enum and output-field details to the docs. Hooks run a command on a lifecycle event, configured in settings.json as `hooks.<Event>: [{matcher, hooks:[{type:"command", command}]}]`. Common events: PreToolUse (can block), PostToolUse, Stop, SessionStart, PreCompact. `--include-hook-events` streams them; `--bare` skips hooks. Tracked in
+defers the authoritative enum to the docs (the output/decision contract is keyed and docs-verified:
+a hook's `{"decision":"block","reason":...}` output, or a non-zero exit). Hooks run a command on a lifecycle event, configured in settings.json as `hooks.<Event>: [{matcher, hooks:[{type:"command", command}]}]`. Common events: PreToolUse (can block), PostToolUse, Stop, SessionStart, PreCompact. `--include-hook-events` streams them; `--bare` skips hooks. Tracked in
 [`meta/version-record.md`](../../../meta/version-record.md); confirm event names against the docs
 before wiring an uncommon one — don't author them from memory.
 

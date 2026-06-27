@@ -21,7 +21,7 @@ lab_time_min: 35
 By the end of this unit you can:
 
 - **Run a structured review over a diff for both correctness *and* security** — using
-  `/code-review` and `/security-review` as a first pass, not the last word.
+  {{vd:review-cmds:inline}} as a first pass, not the last word.
 - **Triage findings instead of trusting them** — confirm a real bug is real (reproduce it), and
   dismiss a confident false positive with a reason.
 - **Catch the security issues an AI is prone to introduce** — broken object-level authorization
@@ -35,7 +35,7 @@ By the end of this unit you can:
 
 > Before a significant or security-sensitive change merges, run a structured review
 > ([code & security review](../../../meta/workflows.md#w6--code--security-review)) over the diff — correctness **and**
-> security. Claude gives you two first-pass tools — `/code-review` and `/security-review` — but the
+> security. Claude gives you first-pass review tools, but the
 > workflow's own rule is **the review is a lead, not a verdict**: it both *misses* real issues and *raises* false
 > positives, so you cross-check every finding against the code. The lab hands you a feature branch
 > that adds project archiving to `taskflow-api` and has you review it: it contains a real **security
@@ -47,7 +47,7 @@ By the end of this unit you can:
 ## Skip-check
 
 **Skip this unit if you can already:** take a diff and run a disciplined correctness-and-security
-review — drive `/code-review` and `/security-review`, then **triage**: reproduce and confirm the real
+review — drive the review tools, then **triage**: reproduce and confirm the real
 findings (including an authorization hole an automated pass might word vaguely), dismiss false
 positives with a reason, and verify the result with a test you wrote — rather than pasting the review
 output into a PR as if the tool's say-so settled it.
@@ -66,9 +66,9 @@ things that aren't true, so your job is to *triage*, not to trust.
 version: **run a structured correctness+security review over the diff, treat findings as leads,
 triage them, and fix or justify each.** The rest is what's specific to doing it with Claude.
 
-**1 — Use the review tools as a first pass.** {{vd:review-cmds}} Run them over the change to get a
-structured list of candidate issues — correctness from `/code-review`, security from
-`/security-review`. This is genuinely valuable: a second set of eyes that never gets bored reading a
+**1 — Use the review tools as a first pass.** {{vd:review-cmds:inline}}. Run them over the change to get a
+structured list of candidate issues — correctness from one, security from the other. This is
+genuinely valuable: a second set of eyes that never gets bored reading a
 diff. But it is the *start* of the review, not the end.
 
 **2 — Security review is about what the code *lets* happen, not what it does.** The bugs that matter
@@ -101,13 +101,13 @@ lesson of CV: a green suite only proves the things you already tested still work
 of a security-sensitive change is the diff review **plus** the review tools **plus** a test you write
 from the finding. Any one alone leaves a hole.
 
-> **The review is a lead, not a verdict.** Both `/code-review` and `/security-review` miss real issues
+> **The review is a lead, not a verdict.** Both review passes miss real issues
 > and raise false ones. Cross-check every finding against the code — confirm the real ones with a
 > repro, dismiss the false ones with a reason. An unread review pasted into a PR is the same anti-pattern
 > as an unread AI diff: authority you didn't earn.
 
 **Version currency.** This unit was verified against Claude Code `{{vd:_verified_version}}`. The review
-commands are the version-specific surface: {{vd:review-cmds}} Confirm the exact names with `/help`
+commands are the version-specific surface: {{vd:review-cmds:inline}}. Confirm the exact names with `/help`
 and see [`meta/version-record.md`](../../../meta/version-record.md) if your version differs. The review
 *method* (triage findings, confirm with a test) is version-independent.
 
@@ -216,7 +216,7 @@ false positive is dismissed with a reason, and nothing regressed.
 
 ## Common pitfalls
 
-- **Pasting the review in as the verdict.** `/code-review` / `/security-review` output is a list of
+- **Pasting the review in as the verdict.** The review output is a list of
   *leads*. Merging on it unread is the unread-AI-diff anti-pattern wearing a reviewer's badge.
 - **"Tests pass, so it's secure."** The suite never tried to archive someone else's project. Green proves
   the old behavior survived, not that the new behavior is safe. Write the missing test.
@@ -254,7 +254,7 @@ the only graded instrument. If one draws a blank, skim that unit's fast path bef
 - This is [Operate safely](../03-operate-safely/unit.md)'s "define verification as more than green tests" turned into a
   workflow, and the same diff-reading reflex from [Ship a feature](../05-ship-a-feature/unit.md) and
   [Git & PR](../08-git-and-pr/unit.md)'s self-review — now pointed at *someone else's* change before merge.
-- The review commands: {{vd:review-cmds}} Version-specifics in
+- The review commands: {{vd:review-cmds:inline}}. Version-specifics in
   [`meta/version-record.md`](../../../meta/version-record.md).
 - Stuck? [`course/stuck.md`](../../stuck.md) and the
   [progress checklist](../../progress-checklist.md).

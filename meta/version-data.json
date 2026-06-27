@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "_verified_version": "2.1.170",
-  "_verified_date": "2026-06-09",
+  "_verified_version": "2.1.195",
+  "_verified_date": "2026-06-26",
   "keys": {
     "cli-basics": {
       "kind": "feature",
@@ -11,6 +11,16 @@
       "verified_version": "2.1.158",
       "verified_date": "2026-05-29",
       "unverified": false
+    },
+    "cli-help": {
+      "kind": "command",
+      "value": "`claude --version` prints the installed CLI version; `claude --help` (and the in-REPL `/help`) list the current commands and flags \u2014 the source of truth to confirm any surface against, rather than trusting memory.",
+      "inline": "`claude --version`, `claude --help`, or in-REPL `/help`",
+      "provenance": "claude --help (--version, --help flags present); /help is the in-REPL listing",
+      "verified_version": "2.1.195",
+      "verified_date": "2026-06-26",
+      "unverified": false,
+      "notes": "Stable boilerplate surface, but keyed so the 'confirm against your own CLI' instruction in prose stops restating --version/--help/--help literally (Fix B, 2026-06-26)."
     },
     "search-refs": {
       "kind": "feature",
@@ -29,6 +39,16 @@
       "verified_date": "2026-05-29",
       "unverified": false,
       "notes": "Verified set is broader than the design's illustrative example \u2014 confirms the value of verifying vs memory."
+    },
+    "skip-permissions": {
+      "kind": "flag",
+      "value": "`--dangerously-skip-permissions` bypasses ALL permission checks (recommended only for sandboxes with no internet access); `--allow-dangerously-skip-permissions` makes that bypass *available* to a session without enabling it by default.",
+      "inline": "`--dangerously-skip-permissions` (bypass every check)",
+      "provenance": "claude --help (--dangerously-skip-permissions: 'Bypass all permission checks. Recommended only for sandboxes with no internet access'; --allow-dangerously-skip-permissions)",
+      "verified_version": "2.1.195",
+      "verified_date": "2026-06-26",
+      "unverified": false,
+      "notes": "Distinct from the `--permission-mode bypassPermissions` mode in permission-modes \u2014 this is the global, top-level escape hatch. A safety-critical surface, so it is keyed rather than typed literally in U3 (Fix A, 2026-06-26)."
     },
     "secrets": {
       "kind": "feature",
@@ -162,13 +182,23 @@
       "unverified": false,
       "notes": "Event-name enum verified against the settings.json schema @ 2.1.158 (~30 events). Teach the common ones (PreToolUse/PostToolUse/Stop/SessionStart/PreCompact); defer the full, growing enum to the docs rather than hardcoding it."
     },
+    "hook-output": {
+      "kind": "feature",
+      "value": "A hook returns control to Claude via JSON on stdout (exit 0) or via exit code 2 (its stderr becomes the feedback). A top-level `{\"decision\": \"block\", \"reason\": \"...\"}` blocks the action and pushes the reason back to Claude (PostToolUse, UserPromptSubmit, Stop, \u2026); `PreToolUse` instead sets `hookSpecificOutput.permissionDecision` to `allow`/`deny`/`ask`.",
+      "inline": "a hook's `{\"decision\":\"block\",\"reason\":...}` output, or a non-zero exit",
+      "provenance": "official docs code.claude.com/docs/en/hooks (retrieved 2026-06-26): PostToolUse & top-level decision pattern accept `decision:\"block\"`+`reason`; PreToolUse uses `hookSpecificOutput.permissionDecision` (allow/deny/ask); exit code 2 = blocking error with stderr as feedback.",
+      "verified_version": "2.1.195",
+      "verified_date": "2026-06-26",
+      "unverified": false,
+      "notes": "Companion to the `hooks` key (which carries the settings.json CONFIG shape) \u2014 this is the hook OUTPUT/decision contract that U14 teaches concretely and previously typed literally (Fix A, 2026-06-26). Full field set (hookSpecificOutput variants per event) is broader; teach the common block/decision path and defer the rest to the docs."
+    },
     "mcp": {
       "kind": "command",
-      "value": "`claude mcp add <name> -- <cmd>` adds a local stdio server (subprocess); `--transport http <url>` adds a remote one. `claude mcp get`/`list` health-check connections; a project `.mcp.json` server shows as `\u23f8 Pending approval` until approved. `--mcp-config <files>` loads per-session; `--strict-mcp-config` ignores others.",
+      "value": "`claude mcp add <name> -- <cmd>` adds a local stdio server (subprocess); `--transport http <url>` adds a remote one. `claude mcp login`/`logout` authenticate (or clear OAuth for) an HTTP/SSE/connector server. `claude mcp get`/`list` health-check connections \u2014 an approved server shows `\u2713 Connected`, while a project `.mcp.json` server shows `\u23f8 Pending approval` until approved. `--mcp-config <files>` loads per-session; `--strict-mcp-config` ignores others.",
       "inline": "the `claude mcp add`/`get`/`list` subcommands and the project `.mcp.json`",
-      "provenance": "claude mcp --help (add/add-json/get/list/remove/serve); verified live 2026-05-30 \u2014 a stdlib stdio server registered via `mcp add` reported `\u2713 Connected` via `mcp get`; `.mcp.json` format captured from `mcp add -s project`.",
-      "verified_version": "2.1.158",
-      "verified_date": "2026-05-30",
+      "provenance": "claude mcp --help @2.1.195 (add/add-json/get/list/login/logout/remove/serve \u2014 `login`/`logout` added 2.1.186; `get`/`list` help text states the `\u2713 Connected` vs `\u23f8 Pending approval` states); \u2713 Connected also live-verified 2026-05-30 (stdlib stdio server via `mcp add` \u2192 `\u2713 Connected` from `mcp get`); `.mcp.json` format captured from `mcp add -s project`.",
+      "verified_version": "2.1.195",
+      "verified_date": "2026-06-26",
       "unverified": false
     },
     "plugins": {

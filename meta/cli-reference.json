@@ -1,5 +1,5 @@
 {
-  "cli_version": "2.1.170",
+  "cli_version": "2.1.195",
   "root": {
     "arguments": [
       {
@@ -522,6 +522,46 @@
         "usage": "claude doctor [options]"
       },
       {
+        "added_in": "2.1.195",
+        "arguments": [],
+        "commands": [],
+        "description": "Run the enterprise auth/telemetry gateway",
+        "flags": [
+          {
+            "added_in": "2.1.195",
+            "arg": "<path>",
+            "choices": null,
+            "default": null,
+            "description": "Path to gateway YAML config",
+            "names": [
+              "--config"
+            ],
+            "provenance": "claude gateway --help",
+            "source": "cli-help"
+          },
+          {
+            "added_in": "2.1.195",
+            "arg": null,
+            "choices": null,
+            "default": null,
+            "description": "Display help for command",
+            "names": [
+              "-h",
+              "--help"
+            ],
+            "provenance": "claude gateway --help",
+            "source": "cli-help"
+          }
+        ],
+        "name": "gateway",
+        "path": [
+          "gateway"
+        ],
+        "provenance": "claude gateway --help",
+        "source": "cli-help",
+        "usage": "claude gateway [options]"
+      },
+      {
         "arguments": [],
         "commands": [],
         "description": "Install Claude Code native build. Use [target] to specify version (stable, latest, or specific version)",
@@ -811,6 +851,76 @@
             "provenance": "claude mcp list --help",
             "source": "cli-help",
             "usage": "claude mcp list [options]"
+          },
+          {
+            "added_in": "2.1.195",
+            "arguments": [],
+            "commands": [],
+            "description": "Authenticate with an MCP server (HTTP, SSE, or claude.ai connector)",
+            "flags": [
+              {
+                "added_in": "2.1.195",
+                "arg": null,
+                "choices": null,
+                "default": null,
+                "description": "Display help for command",
+                "names": [
+                  "-h",
+                  "--help"
+                ],
+                "provenance": "claude mcp login --help",
+                "source": "cli-help"
+              },
+              {
+                "added_in": "2.1.195",
+                "arg": null,
+                "choices": null,
+                "default": null,
+                "description": "Print the authorization URL instead of opening a browser (for SSH/headless sessions — paste the redirect URL back when prompted)",
+                "names": [
+                  "--no-browser"
+                ],
+                "provenance": "claude mcp login --help",
+                "source": "cli-help"
+              }
+            ],
+            "name": "login",
+            "path": [
+              "mcp",
+              "login"
+            ],
+            "provenance": "claude mcp login --help",
+            "source": "cli-help",
+            "usage": "claude mcp login [options] <name>"
+          },
+          {
+            "added_in": "2.1.195",
+            "arguments": [],
+            "commands": [],
+            "description": "Clear stored OAuth credentials for an MCP server",
+            "flags": [
+              {
+                "added_in": "2.1.195",
+                "arg": null,
+                "choices": null,
+                "default": null,
+                "description": "Display help for command",
+                "names": [
+                  "-h",
+                  "--help"
+                ],
+                "provenance": "claude mcp logout --help",
+                "source": "cli-help"
+              }
+            ],
+            "name": "logout",
+            "path": [
+              "mcp",
+              "logout"
+            ],
+            "provenance": "claude mcp logout --help",
+            "source": "cli-help",
+            "usage": "claude mcp logout [options] <name>"
           },
           {
             "arguments": [],
@@ -2029,6 +2139,31 @@
         "source": "cli-help"
       },
       {
+        "added_in": "2.1.195",
+        "arg": null,
+        "choices": null,
+        "default": null,
+        "description": "Render screen-reader friendly output (flat text, no decorative borders or animations).",
+        "names": [
+          "--ax-screen-reader"
+        ],
+        "provenance": "claude --help",
+        "source": "cli-help"
+      },
+      {
+        "added_in": "2.1.195",
+        "arg": null,
+        "choices": null,
+        "default": null,
+        "description": "Start the session as a background agent and return immediately (manage with `claude agents`)",
+        "names": [
+          "--bg",
+          "--background"
+        ],
+        "provenance": "claude --help",
+        "source": "cli-help"
+      },
+      {
         "arg": null,
         "choices": null,
         "default": null,
@@ -2295,17 +2430,6 @@
         "description": "Load MCP servers from JSON files or strings (space-separated)",
         "names": [
           "--mcp-config"
-        ],
-        "provenance": "claude --help",
-        "source": "cli-help"
-      },
-      {
-        "arg": null,
-        "choices": null,
-        "default": null,
-        "description": "[DEPRECATED. Use --debug instead] Enable MCP debug mode (shows MCP server errors)",
-        "names": [
-          "--mcp-debug"
         ],
         "provenance": "claude --help",
         "source": "cli-help"

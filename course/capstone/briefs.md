@@ -93,8 +93,8 @@ trust-but-verify matters most — an unvetted extension is a real risk.
 **Shape.**
 - **Workflow:** review-and-vet the extension, then use it; coordinate the run if you go
   headless or parallel.
-- **Custom extension:** the **MCP connection** itself is the extension (configure it, confirm
-  `✓ Connected`); optionally add a command that wraps the task you repeat with it.
+- **Custom extension:** the **MCP connection** itself is the extension (configure it, then confirm it
+  actually health-checks as connected); optionally add a command that wraps the task you repeat with it.
 - **Context engineering:** decide deliberately what the tool may see and do (least privilege).
 - **Verification:** confirm the connection health-checks, **verify a tool result** against known data
   (don't assume the server is honest), and produce an explicit **vetting verdict** (source, scope,

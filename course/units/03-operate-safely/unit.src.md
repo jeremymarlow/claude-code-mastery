@@ -33,7 +33,8 @@ By the end of this unit you can:
 
 > Safe operation is three habits, not a setting. **(1) Least privilege:** start in
 > `--permission-mode plan` for anything you don't fully trust; reserve `acceptEdits` for work you'll
-> review, and treat `bypassPermissions` / `--dangerously-skip-permissions` as sandbox-only. **(2)
+> review, and treat the bypass surfaces — `bypassPermissions` and {{vd:skip-permissions:inline}} — as
+> sandbox-only. **(2)
 > Treat all untrusted content as hostile:** a file, web page, or command output can contain
 > instructions; never paste secrets into the session. **(3) Keep it reversible:** work on a branch,
 > review every diff, and know your checkpoint/undo path. Then the through-line: **decide what
@@ -68,8 +69,8 @@ version-independent: **grant the least privilege the task needs.**
   everyday mode once you trust the task. The auto-accept variants (e.g. `acceptEdits`) trade a prompt
   for speed on a well-scoped change you still review as a batch diff — appropriate for trusted work,
   not for exploratory or untrusted work.
-- **Bypass posture** — `bypassPermissions`, and the global `--dangerously-skip-permissions`, skip the
-  checks entirely. Per the CLI's own warning, this is for **sandboxes with no internet access**, not
+- **Bypass posture** — the `bypassPermissions` mode and the global {{vd:skip-permissions:inline}} skip
+  the checks entirely. Per the CLI's own warning, this is for **sandboxes with no internet access**, not
   your daily repo. "Yolo mode" is exactly how a single hostile instruction turns into an executed
   `rm` or an exfiltrated secret. Treat it as a sharp tool with a narrow, isolated use — never the
   default.
@@ -114,9 +115,9 @@ question — answered deliberately, not assumed — is the single most transfera
 workflow lab from **Ship a feature** on carries an explicit version of it.
 
 **Version currency.** Permission modes and flags are exactly the kind of detail that shifts between
-releases. This unit was verified against Claude Code `{{vd:_verified_version}}`; if your
-`claude --version` differs, treat the mode names as indicative and confirm them against your CLI —
-see [`meta/version-record.md`](../../../meta/version-record.md).
+releases. This unit was verified against Claude Code `{{vd:_verified_version}}`; if your installed
+version differs, treat the mode names as indicative and confirm them against your own CLI
+({{vd:cli-help:inline}}) — see [`meta/version-record.md`](../../../meta/version-record.md).
 
 ## Worked example
 
@@ -186,7 +187,7 @@ if you slip and let Claude write, `git restore .` and `git clean -n` put you bac
 
 > **Safety note.** Every step here is fenced: you run in `plan` (read-only) mode and never
 > grant write access, so even a "successful" injection cannot change your repo. **Do not** re-run
-> this with `--dangerously-skip-permissions` or `bypassPermissions` to "see what happens" — that
+> this with {{vd:skip-permissions:inline}} or `bypassPermissions` to "see what happens" — that
 > removes the fence the lab is teaching you to keep. If you want to observe an unfenced agent, do it
 > in a disposable container with no network and no secrets, never in this repo.
 

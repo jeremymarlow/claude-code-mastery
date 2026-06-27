@@ -33,9 +33,9 @@ By the end of this unit you can:
 ## Fast path (TL;DR)
 
 > **MCP** (Model Context Protocol) lets Claude Code connect to external **servers** that expose tools
-> and data. Add a local one (runs as a subprocess) with `claude mcp add <name> -- <command>`, or a
-> remote one with `claude mcp add --transport http <name> <url>`; `claude mcp get`/`list` health-check
-> them, and a project `.mcp.json` server stays **`⏸ Pending approval`** until you approve it.
+> and data. Add a local one (runs as a subprocess) or a remote one over HTTP, health-check that it
+> connected, and hold a project-scoped server at **`⏸ Pending approval`** until you approve it —
+> {{vd:mcp:inline}}.
 > The catch: connecting a server — or installing a plugin/marketplace item — is a **trust-delegation
 > decision**. It runs code or sees data for you, so **vet it first**: source, scope, transport,
 > secrets. This repo ships a real, offline stdio server you connect in the lab
@@ -63,15 +63,15 @@ It's how you give Claude access to *your* world beyond the files in the repo.
 
 **2 — How you connect one.** Two transports:
 
-- **Local (stdio)** — the server is a subprocess on your machine: `claude mcp add <name> -- <command>`.
-  It runs with *your* privileges but needs no network. Good for wrapping local tools/data.
-- **Remote (HTTP)** — the server lives elsewhere: `claude mcp add --transport http <name> <url>`. It
-  sees whatever you send it, over the network.
+- **Local (stdio)** — the server is a subprocess on your machine. It runs with *your* privileges but
+  needs no network. Good for wrapping local tools/data.
+- **Remote (HTTP)** — the server lives elsewhere, reached over the network. It sees whatever you send
+  it.
 
-`claude mcp get`/`list` **health-check** a connection (so you can confirm it actually connected, not
-just that you typed a command), and a project-scoped server in a committed **`.mcp.json`** shows as
+A **health-check** subcommand confirms a connection actually came up (so you know it connected, not
+just that you typed a command), and a project-scoped server in a committed `.mcp.json` shows as
 **`⏸ Pending approval`** until you approve it. The exact commands and config shape are the
-version-specific surface: {{vd:mcp}}
+version-specific surface: {{vd:mcp:inline}}.
 
 **3 — Connecting is a trust-delegation decision.** This is the unit's thesis. An MCP server,
 a plugin, a marketplace item — each one **runs code or sees data on your behalf**:
@@ -113,7 +113,7 @@ exactly as you verified a subagent's report ([Subagents](../13-subagents/unit.md
 **Version currency.** Verified against Claude Code {{vd:_verified_version}}. The `claude mcp`
 subcommands and the `.mcp.json` shape were confirmed live (a stdlib stdio server connected `✓
 Connected`); confirm them against `claude mcp --help` before relying on a detail. The
-extension-vetting surface: {{vd:plugins}} Tracked in
+extension-vetting surface: {{vd:plugins:inline}}. Tracked in
 [`meta/version-record.md`](../../../meta/version-record.md).
 
 ## Worked example
@@ -239,7 +239,7 @@ connectable server and its config; compare your connect + vetting run against th
 - **The shipped server** — [`taskflow_mcp.py`](../../../codebases/fixtures/taskflow_mcp.py) and its
   [`.mcp.json`](../../../codebases/fixtures/taskflow.mcp.json); the fixtures
   [README](../../../codebases/fixtures/README.md) shows how to connect and remove it.
-- The `mcp` subcommands and extension-vetting surface: {{vd:mcp}} {{vd:plugins}}
+- The `mcp` subcommands and extension-vetting surface: {{vd:mcp:inline}}; {{vd:plugins:inline}}.
   Version-specifics in [`meta/version-record.md`](../../../meta/version-record.md). Confirm with
   `claude mcp --help`.
 - Stuck? [`course/stuck.md`](../../stuck.md) and the

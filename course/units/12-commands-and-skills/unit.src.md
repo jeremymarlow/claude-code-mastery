@@ -56,9 +56,8 @@ prompting; they differ in how they're triggered and how much structure they carr
 
 **1 — A custom slash command is a saved prompt.** It's a markdown file under `.claude/commands/`; the
 filename is the command, so `close-unit.md` becomes `/close-unit`. Invoking it expands the file's contents
-into the conversation exactly as if you'd typed them — including any arguments you pass (`$ARGUMENTS` for
-the whole string, or by position — and positions are 0-based, so `$0` is the *first* argument, `$1` the
-second). That's the whole model: a *prompt template you trigger deliberately*. Reach for a command
+into the conversation exactly as if you'd typed them — including any arguments you pass. That's the whole
+model: a *prompt template you trigger deliberately*. Reach for a command
 when you catch yourself re-typing the same paragraph — a scaffolder, a "draft release notes from the
 diff," a "review this against our checklist" pass. The invocation and argument syntax is the
 version-specific part:
@@ -132,8 +131,7 @@ Close out unit **U$0** — bring every state-tracking file in sync now that
 from the files, not memory; follow `meta/conventions.md`.
 ```
 
-Its front matter is a `description` and an `argument-hint: <NN>`. The body is a prompt that uses that argument
-(`$0` — the first positional argument; `$1` would be the *second*) and walks Claude through the chore of
+Its front matter is a `description` and an `argument-hint: <NN>`. The body is a prompt that uses that positional argument and walks Claude through the chore of
 *closing out a finished unit*: update `IMPLEMENTATION.md`
 §3, check the `tasks.md` box and its detail bullet, add the `decisions.md` rationale + refresh the
 open-loops ledger, verify version currency, and run `make check`. You run it deliberately —

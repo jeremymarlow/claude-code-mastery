@@ -5,7 +5,7 @@
 
 > ⚙️ **Generated** from `meta/cli-reference.json` by `tools/render-cli-reference` — do not edit by hand; regenerate with `tools/render-cli-reference --all`.
 >
-> Reflects Claude Code CLI **2.1.170**.
+> Reflects Claude Code CLI **2.1.195**.
 
 The command tree, flags, and arguments below are introspected directly from `claude --help` (recursively over subcommands). The final sections cover doc-only surface `--help` cannot see — in-REPL slash commands and output styles — sourced from the official docs, with the URL and retrieval date shown.
 
@@ -23,6 +23,7 @@ The command tree, flags, and arguments below are introspected directly from `cla
     - [`claude auto-mode critique`](#claude-auto-mode-critique)
     - [`claude auto-mode defaults`](#claude-auto-mode-defaults)
   - [`claude doctor`](#claude-doctor)
+  - [`claude gateway`](#claude-gateway)
   - [`claude install`](#claude-install)
   - [`claude mcp`](#claude-mcp)
     - [`claude mcp add`](#claude-mcp-add)
@@ -30,6 +31,8 @@ The command tree, flags, and arguments below are introspected directly from `cla
     - [`claude mcp add-json`](#claude-mcp-add-json)
     - [`claude mcp get`](#claude-mcp-get)
     - [`claude mcp list`](#claude-mcp-list)
+    - [`claude mcp login`](#claude-mcp-login)
+    - [`claude mcp logout`](#claude-mcp-logout)
     - [`claude mcp remove`](#claude-mcp-remove)
     - [`claude mcp reset-project-choices`](#claude-mcp-reset-project-choices)
     - [`claude mcp serve`](#claude-mcp-serve)
@@ -62,52 +65,54 @@ The command tree, flags, and arguments below are introspected directly from `cla
 
 Latest CLI changes — full history in [meta/version-changelog.md](../../meta/version-changelog.md).
 
-**2.1.159 → 2.1.170  (retrieved 2026-06-09 from https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md)**
+**2.1.170 → 2.1.195  (retrieved 2026-06-26 from https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md)**
 
-The course is now verified against **2.1.170** (refresh 2026-06-09). Eleven releases since the last
-anchor. The **top-level command list is unchanged** (`check-version-drift`); the deep surface moved in
-four places, all picked up by the regenerated reference: a new **`--safe-mode`** flag, **`claude
-agents --all`**, **`--fallback-model`** now accepting a comma-separated list, and the **`--model`**
-aliases now including `fable` (Claude Fable 5). Every version-data (`vd`) value was re-checked against the
-reference diff — **none is contradicted**; per-key `verified_version`/dates stand.
+The course is now verified against **2.1.195** (refresh 2026-06-26) — 25 releases on from the prior
+anchor, a larger jump than usual. One **new top-level command** appeared (`gateway`, the enterprise
+auth/telemetry gateway) plus a cluster of deeper-surface additions; the regenerated
+`cli-reference.json` carries them all. Every existing version-data (`vd`) value
+was re-checked against the installed CLI — **none is contradicted** (the `--permission-mode`, `--effort`,
+and `--output-format` choice sets are byte-identical to 2.1.170). This refresh also **added four keys**
+to close quarantine gaps an audit surfaced, and re-verified `mcp` live (see _Course impact_ below).
 
-- **2.1.170** — Introduced **Claude Fable 5**; `--model` aliases now `fable`/`opus`/`sonnet` and
-  `--fallback-model` accepts a comma-separated list (retries the primary each turn); fixed transcript
-  saving from IDE-spawned terminals. _Course impact:_ help-text/flag changes carried by the
-  regenerated `cli-reference.{json,md}`; no version-data value affected (model selection isn't a
-  quarantined course fact).
-- **2.1.169** — New **`--safe-mode`** flag (start with all customizations — CLAUDE.md, skills,
-  plugins, hooks, MCP, custom commands/agents — disabled, for troubleshooting; sets
-  `CLAUDE_CODE_SAFE_MODE=1`); `post-session` lifecycle hook for self-hosted runners; `/cd` command;
-  `disableBundledSkills` setting. _Course impact:_ new top-level flag → reference regenerated
-  (auto-flagged `added_in`); a useful complement to U4's recovery ladder but additive — no
-  `version-data` value changed.
-- **2.1.168 / 2.1.167** — Bug fixes and reliability improvements. _Course impact:_ none.
-- **2.1.166** — `fallbackModel` setting (up to three fallbacks); glob patterns in deny-rule tool
-  names; `MAX_THINKING_TOKENS=0` disables thinking; assorted fixes. _Course impact:_ none to
-  version-data values (deny-rule globs are additive to the settings surface; settings via `--settings` / `--setting-sources` names the
-  loading mechanism, not rule syntax).
-- **2.1.165 / 2.1.164** — **Absent from the official changelog** at retrieval time — marked, not
-  fabricated (R17.AC3).
-- **2.1.163** — `requiredMinimumVersion`/`requiredMaximumVersion` managed settings; `/plugin list`;
-  Stop/SubagentStop hooks can return `additionalContext`; skills gain a `\$` escape for a literal `$`
-  before a digit; fixed `claude -p` hanging after its final result. _Course impact:_ all additive —
-  lifecycle hooks in `settings.json` (`hooks.<Event>`) (common-events teaching unchanged), `claude plugin|plugins` (or `--plugin-dir`/`--plugin-url` for one session), custom slash commands (`.claude/commands/<name>.md` becomes `/<name>`) (0-based
-  positional args unchanged; escape syntax is new detail deferred to docs), Enterprise/managed settings are an additional setting source layered above user/project/local. (unverified — see meta/version-record.md)
-  (still `unverified`, L1) — no value contradicted.
-- **2.1.162** — `claude agents --json` gains `waitingFor`; `--tools` with explicit Grep/Glob provides
-  the dedicated search tools; large agents-view/permissions fix wave; quieter startup. _Course
-  impact:_ `--agent`/`--agents <json>` plus the `agents` subcommand re-checked — the `agents` subcommand description stands (the `--all` flag
-  later joins it); none otherwise.
-- **2.1.161** — agents-view polish; parallel Bash failure no longer cancels sibling calls; fixed
-  `claude mcp` list/get/add printing secrets to the terminal; OTEL fixes. _Course impact:_ none (the `claude mcp add`/`get`/`list` subcommands and the project `.mcp.json`
-  surface unchanged; the secrets-printing fix aligns with U3/U15 hygiene teaching).
-- **2.1.160** — Prompts before writing shell-startup files and `~/.config/git/`; `acceptEdits` now
-  prompts before writing build-tool config files that grant code execution; Edit no longer requires a
-  separate Read after `grep`; dynamic-workflow keyword renamed `workflow`→`ultracode`; a large
-  Windows/terminal/agents fix wave. _Course impact:_ acceptEdits, auto, bypassPermissions, default, dontAsk, plan (`--permission-mode <mode>`) re-checked — mode
-  *names* unchanged (the `acceptEdits` tightening is consistent with, and slightly strengthens, U3's
-  posture framing); none otherwise.
+Content-affecting highlights (newest first):
+
+- **2.1.195** — hook matchers with hyphens (e.g. `code-reviewer`) now exact-match instead of
+  substring-matching; background-job reliability fixes. _Course impact:_ none beyond the cli-reference regen.
+- **2.1.191** — `/rewind` can now resume from before a `/clear`; managed-settings
+  `forceRemoteSettingsRefresh` fix. _Course impact:_ `checkpoint-rewind` stays accurate (additive).
+- **2.1.187** — `sandbox.credentials` setting; org-configured model restrictions across the model
+  picker / `--model` / `/model` / `ANTHROPIC_MODEL`. _Course impact:_ enterprise/managed surface —
+  relevant to `managed-settings` (L1), still blocked on enterprise access.
+- **2.1.186** — `claude mcp login`/`logout` (CLI MCP auth); `/review <pr>` now uses the
+  `/code-review medium` engine; `!` bash commands auto-trigger a response (`respondToBashCommands:
+  false` reverts); skill frontmatter accepts kebab/snake/camelCase. _Course impact:_ `mcp` value
+  updated (login/logout added; re-verified live @2.1.195); `review-cmds`, `skills` stay accurate.
+- **2.1.178** — agent-team `TeamCreate`/`TeamDelete` tools removed (implicit team); `Tool(param:value)`
+  permission-rule syntax (e.g. `Agent(model:opus)`); nested `.claude/` closest-wins resolution.
+  _Course impact:_ `permission-modes` / `subagents` stay accurate (additive).
+- **2.1.175** — `enforceAvailableModels` managed setting. _Course impact:_ `managed-settings` (L1).
+- **2.1.172** — sub-agents can spawn sub-agents (up to 5 levels deep). _Course impact:_ `subagents`
+  stays accurate (additive depth).
+
+**Introspection vs. changelog (R17.AC3).** Four surface changes are present in the installed CLI but
+**absent from the official changelog**; they are recorded here from `claude --help` / `claude mcp
+--help` introspection, **not fabricated**: the new **`gateway`** command; new root flags **`--allowed`**
+/ **`--disallowed`** (short aliases) and **`--ax-screen-reader`**; and the removal of the camelCase
+**`--allowedTools`** / **`--disallowedTools`** and **`--mcp-debug`** (the kebab-case `--allowed-tools` /
+`--disallowed-tools` remain). Note **`--bg`/`--background` are not new** — 2.1.186 fixed a bug where
+`claude --help` omitted them, so they now surface in the regenerated reference.
+
+**Absent upstream (R17.AC3):** 2.1.171, 2.1.177, 2.1.180, 2.1.182, 2.1.184, 2.1.188, 2.1.189, 2.1.192,
+and 2.1.194 have no entry in the official CHANGELOG — marked, not fabricated.
+
+**New version-data keys this refresh (quarantine-gap closure).** Four keys were added so version-specific
+facts that were typed literally in prose now resolve through version-data: `skip-permissions`
+(`--dangerously-skip-permissions`, was literal in U3), `hook-output` (the hook `decision`/`block`/
+`reason` output contract, was literal in U14 — docs-verified against `code.claude.com/docs/en/hooks`),
+`cli-help` (the `claude --version`/`--help`/`/help` "confirm against your own CLI" surface), plus an
+extended `mcp` value (`login`/`logout` + the `✓ Connected` status). _Course impact:_ literal-beside-token
+leakage re-tokenized across U3/U11/U13/U14/U15/U16; `cli-reference.{json,md}` and `version-data.json` regenerated.
 
 ## `claude`
 
@@ -127,6 +132,8 @@ Claude Code - starts an interactive session by default, use -p/--print for non-i
 | `--allow-dangerously-skip-permissions` | — | Enable bypassing all permission checks as an option, without it being enabled by default. Recommended only for sandboxes with no internet access. |
 | `--allowedTools`, `--allowed-tools` | `<tools...>` | Comma or space-separated list of tool names to allow (e.g. "Bash(git *) Edit") |
 | `--append-system-prompt` | `<prompt>` | Append a system prompt to the default system prompt |
+| `--ax-screen-reader` | — | Render screen-reader friendly output (flat text, no decorative borders or animations).  🆕 _new in 2.1.195_ |
+| `--bg`, `--background` | — | Start the session as a background agent and return immediately (manage with `claude agents`)  🆕 _new in 2.1.195_ |
 | `--bare` | — | Minimal mode: skip hooks, LSP, plugin sync, attribution, auto-memory, background prefetches, keychain reads, and CLAUDE.md auto-discovery. Sets CLAUDE_CODE_SIMPLE=1. Anthropic auth is strictly ANTHROPIC_API_KEY or apiKeyHelper via --settings (OAuth and keychain are never read). 3P providers (Bedrock/Vertex/Foundry) use their own credentials. Skills still resolve via /skill-name. Explicitly provide context via: --system-prompt[-file], --append-system-prompt[-file], --add-dir (CLAUDE.md dirs), --mcp-config, --settings, --agents, --plugin-dir. |
 | `--betas` | `<betas...>` | Beta headers to include in API requests (API key users only) |
 | `--brief` | — | Enable SendUserMessage tool for agent-to-user communication |
@@ -151,7 +158,6 @@ Claude Code - starts an interactive session by default, use -p/--print for non-i
 | `--json-schema` | `<schema>` | JSON Schema for structured output validation. Example: {"type":"object","properties":{"name":{"type":"string"}},"required":["name"]} |
 | `--max-budget-usd` | `<amount>` | Maximum dollar amount to spend on API calls (only works with --print) |
 | `--mcp-config` | `<configs...>` | Load MCP servers from JSON files or strings (space-separated) |
-| `--mcp-debug` | — | [DEPRECATED. Use --debug instead] Enable MCP debug mode (shows MCP server errors) |
 | `--model` | `<model>` | Model for the current session. Provide an alias for the latest model (e.g. 'fable', 'opus', or 'sonnet') or a model's full name (e.g. 'claude-fable-5'). |
 | `-n`, `--name` | `<name>` | Set a display name for this session (shown in the prompt box, /resume picker, and terminal title) |
 | `--no-chrome` | — | Disable Claude in Chrome integration |
@@ -300,6 +306,17 @@ Check the health of your Claude Code auto-updater. Note: The workspace trust dia
 | --- | --- | --- |
 | `-h`, `--help` | — | Display help for command |
 
+### `claude gateway`  🆕 _new in 2.1.195_
+
+Run the enterprise auth/telemetry gateway
+
+**Usage:** `claude gateway [options]`
+
+| Flag | Value | Description |
+| --- | --- | --- |
+| `--config` | `<path>` | Path to gateway YAML config  🆕 _new in 2.1.195_ |
+| `-h`, `--help` | — | Display help for command  🆕 _new in 2.1.195_ |
+
 ### `claude install`
 
 Install Claude Code native build. Use [target] to specify version (stable, latest, or specific version)
@@ -380,6 +397,27 @@ List configured MCP servers. Unapproved .mcp.json servers are shown as ⏸ Pendi
 | Flag | Value | Description |
 | --- | --- | --- |
 | `-h`, `--help` | — | Display help for command |
+
+#### `claude mcp login`  🆕 _new in 2.1.195_
+
+Authenticate with an MCP server (HTTP, SSE, or claude.ai connector)
+
+**Usage:** `claude mcp login [options] <name>`
+
+| Flag | Value | Description |
+| --- | --- | --- |
+| `-h`, `--help` | — | Display help for command  🆕 _new in 2.1.195_ |
+| `--no-browser` | — | Print the authorization URL instead of opening a browser (for SSH/headless sessions — paste the redirect URL back when prompted)  🆕 _new in 2.1.195_ |
+
+#### `claude mcp logout`  🆕 _new in 2.1.195_
+
+Clear stored OAuth credentials for an MCP server
+
+**Usage:** `claude mcp logout [options] <name>`
+
+| Flag | Value | Description |
+| --- | --- | --- |
+| `-h`, `--help` | — | Display help for command  🆕 _new in 2.1.195_ |
 
 #### `claude mcp remove`
 

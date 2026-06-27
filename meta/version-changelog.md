@@ -26,6 +26,55 @@ Entry shape (newest first):
 
 ---
 
+## 2.1.170 → 2.1.195  (retrieved 2026-06-26 from https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md)
+
+The course is now verified against **2.1.195** (refresh 2026-06-26) — 25 releases on from the prior
+anchor, a larger jump than usual. One **new top-level command** appeared (`gateway`, the enterprise
+auth/telemetry gateway) plus a cluster of deeper-surface additions; the regenerated
+`cli-reference.json` carries them all. Every existing version-data (`vd`) value
+was re-checked against the installed CLI — **none is contradicted** (the `--permission-mode`, `--effort`,
+and `--output-format` choice sets are byte-identical to 2.1.170). This refresh also **added four keys**
+to close quarantine gaps an audit surfaced, and re-verified `mcp` live (see _Course impact_ below).
+
+Content-affecting highlights (newest first):
+
+- **2.1.195** — hook matchers with hyphens (e.g. `code-reviewer`) now exact-match instead of
+  substring-matching; background-job reliability fixes. _Course impact:_ none beyond the cli-reference regen.
+- **2.1.191** — `/rewind` can now resume from before a `/clear`; managed-settings
+  `forceRemoteSettingsRefresh` fix. _Course impact:_ `checkpoint-rewind` stays accurate (additive).
+- **2.1.187** — `sandbox.credentials` setting; org-configured model restrictions across the model
+  picker / `--model` / `/model` / `ANTHROPIC_MODEL`. _Course impact:_ enterprise/managed surface —
+  relevant to `managed-settings` (L1), still blocked on enterprise access.
+- **2.1.186** — `claude mcp login`/`logout` (CLI MCP auth); `/review <pr>` now uses the
+  `/code-review medium` engine; `!` bash commands auto-trigger a response (`respondToBashCommands:
+  false` reverts); skill frontmatter accepts kebab/snake/camelCase. _Course impact:_ `mcp` value
+  updated (login/logout added; re-verified live @2.1.195); `review-cmds`, `skills` stay accurate.
+- **2.1.178** — agent-team `TeamCreate`/`TeamDelete` tools removed (implicit team); `Tool(param:value)`
+  permission-rule syntax (e.g. `Agent(model:opus)`); nested `.claude/` closest-wins resolution.
+  _Course impact:_ `permission-modes` / `subagents` stay accurate (additive).
+- **2.1.175** — `enforceAvailableModels` managed setting. _Course impact:_ `managed-settings` (L1).
+- **2.1.172** — sub-agents can spawn sub-agents (up to 5 levels deep). _Course impact:_ `subagents`
+  stays accurate (additive depth).
+
+**Introspection vs. changelog (R17.AC3).** Four surface changes are present in the installed CLI but
+**absent from the official changelog**; they are recorded here from `claude --help` / `claude mcp
+--help` introspection, **not fabricated**: the new **`gateway`** command; new root flags **`--allowed`**
+/ **`--disallowed`** (short aliases) and **`--ax-screen-reader`**; and the removal of the camelCase
+**`--allowedTools`** / **`--disallowedTools`** and **`--mcp-debug`** (the kebab-case `--allowed-tools` /
+`--disallowed-tools` remain). Note **`--bg`/`--background` are not new** — 2.1.186 fixed a bug where
+`claude --help` omitted them, so they now surface in the regenerated reference.
+
+**Absent upstream (R17.AC3):** 2.1.171, 2.1.177, 2.1.180, 2.1.182, 2.1.184, 2.1.188, 2.1.189, 2.1.192,
+and 2.1.194 have no entry in the official CHANGELOG — marked, not fabricated.
+
+**New version-data keys this refresh (quarantine-gap closure).** Four keys were added so version-specific
+facts that were typed literally in prose now resolve through version-data: `skip-permissions`
+(`--dangerously-skip-permissions`, was literal in U3), `hook-output` (the hook `decision`/`block`/
+`reason` output contract, was literal in U14 — docs-verified against `code.claude.com/docs/en/hooks`),
+`cli-help` (the `claude --version`/`--help`/`/help` "confirm against your own CLI" surface), plus an
+extended `mcp` value (`login`/`logout` + the `✓ Connected` status). _Course impact:_ literal-beside-token
+leakage re-tokenized across U3/U11/U13/U14/U15/U16; `cli-reference.{json,md}` and `version-data.json` regenerated.
+
 ## 2.1.159 → 2.1.170  (retrieved 2026-06-09 from https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md)
 
 The course is now verified against **2.1.170** (refresh 2026-06-09). Eleven releases since the last
